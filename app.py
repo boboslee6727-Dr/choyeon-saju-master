@@ -841,7 +841,7 @@ class UniversalPrintableGunghap:
 # 4. 사이드바 UI (Top-Down 동적 레이아웃)
 # ==============================================================================
 with st.sidebar:
-    st.title("🏮초연 시공명리 연구소")
+    st.title("🏮초연 사주명리 연구소")
     st.caption(f"{APP_VERSION} Master (Base + Gunghap)")
     st.markdown("---")
 
