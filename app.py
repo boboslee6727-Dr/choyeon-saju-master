@@ -392,6 +392,7 @@ def call_claude_api(prompt_text, max_tokens=8000):
         return response.text.strip()
     except Exception as e:
         return f"<div style='color:red;'>🚨 Gemini AI 서버 통신 장애: {e}</div>"
+
 JIJANGGAN = {'子': ['壬', '-', '癸'], '丑': ['癸', '辛', '己'], '寅': ['戊', '丙', '甲'], '卯': ['甲', '-', '乙'], '辰': ['乙', '癸', '戊'], '巳': ['戊', '庚', '丙'], '午': ['丙', '己', '丁'], '未': ['丁', '乙', '己'], '申': ['戊', '壬', '庚'], '酉': ['庚', '-', '辛'], '戌': ['辛', '丁', '戊'], '亥': ['戊', '甲', '壬'] }
 
 def get_color(c):
@@ -586,47 +587,57 @@ def check_vault_status(base_gans, base_jjis, attacker_ji):
     return results
 
 def get_gyukgook_detailed(ds, ys, ms, hs, mb):
-    ds, ys, ms, hs, mb = _to_hanja(ds), _to_hanja(ys), _to_hanja(ms), _to_hanja(hs), _to_hanja(mb)
+    """월지 지장간 및 천간 투출 기반 정밀 격국 판정 함수 (비견/겁재격 예외 교정본)"""
     jg = JIJANGGAN.get(mb, [])
-    if not jg: return "알수없음격", "지장간 정보가 없습니다."
+    if not jg: 
+        return "알수없음격", "지장간 정보가 없습니다."
 
+    def safe_get_ss(day_gan, target_char):
+        if not target_char or target_char == "?": 
+            return "무명"
+        return get_ss(day_gan, target_char)
+
+    # 1. 양간(甲丙戊庚壬) 일간의 양인격 및 건록격 예외 판정
     if ds in ['甲', '丙', '戊', '庚', '壬']:
         if mb == '卯' and ds == '甲': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
         if mb == '午' and ds == '丙': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
         if mb == '酉' and ds == '庚': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
         if mb == '子' and ds == '壬': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
-        if mb == {'甲':'寅', '丙':'巳', '戊':'巳', '庚':'申', '壬':'亥'}.get(ds, ""):
+        
+        gunlok_map = {'甲': '寅', '丙': '巳', '戊': '巳', '庚': '申', '壬': '亥'}
+        if mb == gunlok_map.get(ds, ""):
             return "건록격", f"월지 {mb}가 일간 {ds}의 건록(建祿)에 해당하여 건록격으로 정합니다."
 
-    def safe_get_ss(day_gan, target_char):
-        if not target_char or target_char == "?": return "무명"
-        return get_ss(day_gan, target_char)
-
+    # 2. 자오묘유(子午卯酉) 왕지격 판정 (비견/겁재일 경우 건록/월겁격 처리)
     if mb in ["子", "午", "卯", "酉"]:
         core_ss = safe_get_ss(ds, mb)
         if core_ss in ["비견", "겁재"]:
             return "건록(월겁)격", f"월지 {mb}가 일간 {ds}와 같은 기운이므로 건록(월겁)격으로 삼습니다."
         return core_ss + "격", f"월지 {mb}의 순수한 기운인 {core_ss}을 그대로 격으로 삼습니다."
     
+    # 3. 지장간 천간 투출 우선순위 검사 (비견/겁재는 격으로 취용하지 않음)
     target_gans = [ys, ms, hs] 
     main_qi = jg[-1]
     
     def is_valid_gyuk(char):
         return safe_get_ss(ds, char) not in ["비견", "겁재"]
     
+    # 본기(정기) 투출
     if main_qi in target_gans and is_valid_gyuk(main_qi):
         return safe_get_ss(ds, main_qi) + "격", f"월지 {mb}의 정기(본기)인 {main_qi}이 천간에 투출하여 {safe_get_ss(ds, main_qi)}격이 되었습니다."
+    # 중기 투출
     if len(jg) >= 2 and jg[1] in target_gans and is_valid_gyuk(jg[1]):
         return safe_get_ss(ds, jg[1]) + "격", f"월지 {mb}의 중기인 {jg[1]}이 천간에 투출하여 {safe_get_ss(ds, jg[1])}격이 되었습니다."
+    # 여기 투출
     if len(jg) >= 1 and jg[0] in target_gans and is_valid_gyuk(jg[0]):
         return safe_get_ss(ds, jg[0]) + "격", f"월지 {mb}의 여기인 {jg[0]}이 천간에 투출하여 {safe_get_ss(ds, jg[0])}격이 되었습니다."
         
+    # 4. 투출이 없을 때의 대체(Fallback) 처리
     fallback_ss = safe_get_ss(ds, main_qi)
     if fallback_ss in ["비견", "겁재"]:
         return "건록(월겁)격", f"월지 {mb}의 본기가 {fallback_ss}이므로 건록(월겁)격으로 정합니다."
     
-    return fallback_ss + "격", f"월지 {mb}의 지장간(비겁 제외)이 투출하지 않아 정기(본기)인 {main_qi}를 기준으로 {fallback_ss}격으로 정합니다."
-
+    return fallback_ss + "격", f"월지 {mb}의 지장간이 투출하지 않아 정기(본기)인 {main_qi}를 기준으로 {fallback_ss}격으로 정합니다."
 def calculate_gongmang(ilgan, ilji):
     if ilgan in ["?"," ","-"] or ilji in ["?"," ","-"]: return "-"
     try:
