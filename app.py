@@ -2306,4 +2306,36 @@ if st.session_state.get('app_running', False):
                     
                     del_content = f"<h2 style='text-align:center;'>👶 새 생명 마중 길일 추천</h2>\n<p>부모님의 사주와 조화를 이루는 길일입니다.</p>\n"
                     for day_info in delivery_days:
-                        del_content += f"<div>✅ {I encountered an error doing what you asked. Could you try again?
+                        del_content += f"<div>✅ {day_info['date']} (합 점수: {day_info['score']})</div>\n"
+                    
+                    del_content += f"<br><hr>\n<p style='font-size:14px; line-height:1.6; color:#333;'><b>💡 부부를 위한 임신 계획 가이드:</b><br>위의 출산 길일은 아이의 사주 기운을 우선으로 선정한 것입니다. 의학적 평균 임신 기간(약 280일)을 고려할 때, <b>합궁 시기는 출산 예정일로부터 약 9개월 10일 전후</b>가 됩니다. 부인분의 생리 주기와 배란일을 면밀히 고려하시어, 부부께서 상의하에 가장 건강한 시기를 계획하시길 바랍니다.</p>"
+                    
+                    delivery_prompt = f"""
+당신은 명리심리상담사 및 출산택일 최고 권위자인 초연 박사입니다. 아래 제공된 부모의 사주 기운을 바탕으로, 요청된 탐색 기간 내에서 태어날 아이의 선천적 명식과 부모간의 오행 상생 조화가 가장 극대화되는 '최고의 프리미엄 출산 희망일 및 시간'을 선정하여 전통 명리 에세이로 풀어내십시오.
+
+[부모의 사주 정보]
+- 신청인: {u_gender} / 원국: {m_gans_str}{"".join(m_jjis)}
+- 상대방: 원국: {f_gans_str}{"".join(f_jjis)}
+- 탐색 지정 기간: {start_date} ~ {end_date} / 선호 태아 성별: {baby_gender}
+
+🚨 [출력 절대 규칙]
+선정된 상위 추천 일자별로 반드시 아래 규격화된 분리 통변 포맷을 100% 준수하여 작성하십시오.
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 추천 일자: OOOO년 OO월 OO일 (OO시)</span>
+<br><b>1) 일반 명리 풀이:</b> (선정된 날짜와 시간의 오행 분포, 아이가 가질 선천적 격국의 강점 및 부모 사주와의 끈끈한 육친적 정서 조화 상태를 구어체로 상세 기술)
+<br><b>2) 시공 명리 풀이:</b> (해당 시공간의 기운이 아이의 성장기 학업, 향후 성인이 되었을 때의 직업적/사회적 성취 및 자산 안정성에 미치는 장기적 운명의 궤도를 세련된 에세이로 기술)
+"""
+                    del_res = model.generate_content(delivery_prompt)
+                    ai_delivery_html = del_res.text.strip().replace("\n", "<br>")
+                    del_content += f"<div class='content-box-loose' style='font-size:15px; line-height:1.8; margin-top:20px;'>\n{ai_delivery_html}\n</div>"
+
+                    def wrap_a4_del(content, title_color="#4A148C", title="초연 시공명리 출산택일"):
+                        return f"<div class='report-page'>\n<div class='vip-inset-frame' style='border-color:{title_color}; padding:20px;'>\n<div style='border-bottom:4px double {title_color}; padding-bottom:20px; margin-bottom:40px;'>\n<h1 style='text-align:center; font-size: 32px; color:{title_color}; font-weight: 900; margin:0; font-family:\"Malgun Gothic\", sans-serif;'>👶 {title}</h1>\n</div>\n{content}\n</div>\n</div>"
+
+                    st.session_state['saved_report_del'] = wrap_a4_del(del_content, "#4A148C", "초연 시공명리 출산택일")
+                    st.rerun()
+                except Exception as e:
+                    st.error(f"출산택일 연산 장애: {e}")
+
+        if st.session_state.get('saved_report_del'):
+            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+            st.markdown(st.session_state.get('saved_report_del', ''), unsafe_allow_html=True)
