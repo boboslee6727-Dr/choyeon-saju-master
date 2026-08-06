@@ -1375,6 +1375,18 @@ if st.session_state.get('need_calc', False):
                     f"5. HTML 훼손 금지: </div> 태그를 임의로 닫거나 마크다운 기호를 남발하지 마십시오.\n"
                 )
 
+                # 🚨 [오류 해결] 합충형파해 팩트 변수 미리 생성
+                rels_list = []
+                for i in range(4):
+                    rel_g = get_gan_rel_all(i, gans)
+                    if rel_g != "-":
+                        rels_list.append(f"천간({gans[i]}):{rel_g}")
+                    for j in range(i + 1, 4):
+                        rel_j = get_ji_rel_set(jjis[i], jjis[j])
+                        if rel_j != "-":
+                            rels_list.append(f"지지({jjis[i]}-{jjis[j]}):{rel_j}")
+                hap_chung_hyoung_pa_hae = ", ".join(list(dict.fromkeys(rels_list))) if rels_list else "특이 합충형파해 없음"
+
                 if u_gender == '남성':
                     yukchin_rule = f"""
 🚨 [육친 통변 특수부대 절대 규칙 (남성용)]: 
@@ -1501,40 +1513,38 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>11. 운의 흐름</h3>
 <div class='content-box-loose'>
+(※ 🚨이원화 분석 지시: 모든 대운/세운/월운 통변 시 1)과 2)를 엄격히 구분하여 작성하십시오.
+ 1) 일반(전통) 명리 풀이: 오직 '일간(日干)과 운의 십성(정재, 편관 등) 및 십이운성'만을 기준으로 한 단식 판단 결과를 작성하십시오.
+ 2) 시공 명리 풀이: 일주 하위 십성(체)과 운의 십성(용)의 5x5 체용 파동, 묘고(진술축미) 입고/개고, 삼형살 팩트를 결합하여 실제 터지는 사건·사고 중심으로 정밀 분석하십시오.)
+
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 대운의 흐름</span>
 [DAEWUN_TABLE_HERE]
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 대운 분석</span>
-{past_daewun_html}
-
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 현재 대운 전반기 상세 분석 ({dw_start_age}세~{dw_mid_age}세)</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
+    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 현재 대운 후반기 상세 분석 ({dw_mid2_age}세~{dw_end_age}세)</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
+    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 세운의 흐름</span>
 [SEWUN_TABLE_HERE]
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 세운 분석</span>
-{past_sewun_html}
-
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 올해 세운 전반기 상세 분석</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
+    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 올해 세운 후반기 상세 분석</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
+    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 월운의 흐름</span>
@@ -1542,18 +1552,25 @@ if st.session_state.get('need_calc', False):
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 월운 분석</span>
 {past_months_html}
+(※ 🚨AI 절대 지시: 파이썬 시스템이 제공한 지나온 월운 텍스트를 100% 원문 그대로 복사하여 출력한 후, 각 월별로 아래 템플릿에 따라 1) 일반(전통) 명리 풀이와 2) 시공 명리 풀이를 칼같이 구분하여 작성하십시오.)
+
+[지나온 과거 각 월운 출력 템플릿]
+• <b>(파이썬 제공 월/간지/절기 텍스트):</b> 
+<div style='padding-left: 20px; margin-top: 5px;'>
+    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
+    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
+</div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>{prompt_first_half}</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
+    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>{prompt_second_half}</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
-</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
+    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>12. 삶을 바꾸는 지혜로운 조언</h3>
