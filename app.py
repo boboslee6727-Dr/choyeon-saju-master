@@ -1374,6 +1374,18 @@ if st.session_state.get('need_calc', False):
                     f"5. HTML 훼손 금지: </div> 태그를 임의로 닫거나 마크다운 기호를 남발하지 마십시오.\n"
                 )
 
+                # 🚨 [오류 해결] 합충형파해 팩트 변수 및 삼형살/묘고 변수 선언 추가 구역
+                rels_list = []
+                for i in range(4):
+                    rel_g = get_gan_rel_all(i, gans)
+                    if rel_g != "-":
+                        rels_list.append(f"천간({gans[i]}:{rel_g})")
+                    for j in range(i + 1, 4):
+                        rel_j = get_ji_rel_set(jjis[i], jjis[j])
+                        if rel_j != "-":
+                            rels_list.append(f"지지({jjis[i]}-{jjis[j]}:{rel_j})")
+                hap_chung_hyoung_pa_hae = ", ".join(list(dict.fromkeys(rels_list))) if rels_list else "특이 합충형파해 없음"
+
                 if u_gender == '남성':
                     yukchin_rule = f"""
 🚨 [육친 통변 특수부대 절대 규칙 (남성용)]: 
