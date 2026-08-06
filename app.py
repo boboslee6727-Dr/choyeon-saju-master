@@ -392,7 +392,6 @@ def call_claude_api(prompt_text, max_tokens=8000):
         return response.text.strip()
     except Exception as e:
         return f"<div style='color:red;'>🚨 Gemini AI 서버 통신 장애: {e}</div>"
-
 JIJANGGAN = {'子': ['壬', '-', '癸'], '丑': ['癸', '辛', '己'], '寅': ['戊', '丙', '甲'], '卯': ['甲', '-', '乙'], '辰': ['乙', '癸', '戊'], '巳': ['戊', '庚', '丙'], '午': ['丙', '己', '丁'], '未': ['丁', '乙', '己'], '申': ['戊', '壬', '庚'], '酉': ['庚', '-', '辛'], '戌': ['辛', '丁', '戊'], '亥': ['戊', '甲', '壬'] }
 
 def get_color(c):
@@ -587,57 +586,29 @@ def check_vault_status(base_gans, base_jjis, attacker_ji):
     return results
 
 def get_gyukgook_detailed(ds, ys, ms, hs, mb):
-    """월지 지장간 및 천간 투출 기반 정밀 격국 판정 함수 (비견/겁재격 예외 교정본)"""
     jg = JIJANGGAN.get(mb, [])
-    if not jg: 
-        return "알수없음격", "지장간 정보가 없습니다."
+    if not jg: return "알수없음격", "지장간 정보가 없습니다."
 
     def safe_get_ss(day_gan, target_char):
-        if not target_char or target_char == "?": 
-            return "무명"
+        if not target_char or target_char == "?": return "무명"
         return get_ss(day_gan, target_char)
 
-    # 1. 양간(甲丙戊庚壬) 일간의 양인격 및 건록격 예외 판정
-    if ds in ['甲', '丙', '戊', '庚', '壬']:
-        if mb == '卯' and ds == '甲': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
-        if mb == '午' and ds == '丙': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
-        if mb == '酉' and ds == '庚': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
-        if mb == '子' and ds == '壬': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
-        
-        gunlok_map = {'甲': '寅', '丙': '巳', '戊': '巳', '庚': '申', '壬': '亥'}
-        if mb == gunlok_map.get(ds, ""):
-            return "건록격", f"월지 {mb}가 일간 {ds}의 건록(建祿)에 해당하여 건록격으로 정합니다."
-
-    # 2. 자오묘유(子午卯酉) 왕지격 판정 (비견/겁재일 경우 건록/월겁격 처리)
     if mb in ["子", "午", "卯", "酉"]:
         core_ss = safe_get_ss(ds, mb)
-        if core_ss in ["비견", "겁재"]:
-            return "건록(월겁)격", f"월지 {mb}가 일간 {ds}와 같은 기운이므로 건록(월겁)격으로 삼습니다."
         return core_ss + "격", f"월지 {mb}의 순수한 기운인 {core_ss}을 그대로 격으로 삼습니다."
     
-    # 3. 지장간 천간 투출 우선순위 검사 (비견/겁재는 격으로 취용하지 않음)
     target_gans = [ys, ms, hs] 
     main_qi = jg[-1]
     
-    def is_valid_gyuk(char):
-        return safe_get_ss(ds, char) not in ["비견", "겁재"]
-    
-    # 본기(정기) 투출
-    if main_qi in target_gans and is_valid_gyuk(main_qi):
+    if main_qi in target_gans:
         return safe_get_ss(ds, main_qi) + "격", f"월지 {mb}의 정기(본기)인 {main_qi}이 천간에 투출하여 {safe_get_ss(ds, main_qi)}격이 되었습니다."
-    # 중기 투출
-    if len(jg) >= 2 and jg[1] in target_gans and is_valid_gyuk(jg[1]):
+    if len(jg) >= 2 and jg[1] in target_gans:
         return safe_get_ss(ds, jg[1]) + "격", f"월지 {mb}의 중기인 {jg[1]}이 천간에 투출하여 {safe_get_ss(ds, jg[1])}격이 되었습니다."
-    # 여기 투출
-    if len(jg) >= 1 and jg[0] in target_gans and is_valid_gyuk(jg[0]):
+    if len(jg) >= 1 and jg[0] in target_gans:
         return safe_get_ss(ds, jg[0]) + "격", f"월지 {mb}의 여기인 {jg[0]}이 천간에 투출하여 {safe_get_ss(ds, jg[0])}격이 되었습니다."
         
-    # 4. 투출이 없을 때의 대체(Fallback) 처리
-    fallback_ss = safe_get_ss(ds, main_qi)
-    if fallback_ss in ["비견", "겁재"]:
-        return "건록(월겁)격", f"월지 {mb}의 본기가 {fallback_ss}이므로 건록(월겁)격으로 정합니다."
-    
-    return fallback_ss + "격", f"월지 {mb}의 지장간이 투출하지 않아 정기(본기)인 {main_qi}를 기준으로 {fallback_ss}격으로 정합니다."
+    return safe_get_ss(ds, main_qi) + "격", f"월지 {mb}의 지장간이 투출하지 않아 정기(본기)인 {main_qi}를 기준으로 {safe_get_ss(ds, main_qi)}격으로 정합니다."
+
 def calculate_gongmang(ilgan, ilji):
     if ilgan in ["?"," ","-"] or ilji in ["?"," ","-"]: return "-"
     try:
@@ -1570,7 +1541,23 @@ if st.session_state.get('need_calc', False):
 - 일반신살: {shinsal_str} / 12신살: {s12_str}
 - 입고/개고 팩트: 사주팔자의 역동적 관계 분석에 반드시 묘고 작용을 포함하십시오.
 
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 사주팔자 구조 분석</h3>
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 성격</h3>
+<div class='content-box-loose'>
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 겉으로 드러난 성격</span>
+(※ 🚨AI 절대 준수 규칙: 일간과 일지의 십성(十星), 십이운성(十二運星), 그리고 배정된 십이신살의 에너지 강약을 바탕으로 표면적인 성격과 기질을 구체적이고 현대적인 구어체 에세이로 작성하십시오. 통변 전개 시 다음의 2대 조건을 반드시 결합하여 서술해야 합니다.
+
+1. [일지 지장간 좌법(座法) 해부]: 일지 지장간 내부에 내장된 천간 성분들이 해당 왕궁(王宮) 내부에서 가지는 십이운성 리듬, 즉 **좌법(座法)**을 기준으로 분석하십시오. 이를 통해 내담자가 외부 사회와 상호작용할 때 꺼내 쓰는 페르소나와 현실적 행동 메커니즘을 냉철한 팩트 기반으로 도출하십시오.
+2. [배우자궁(일지)의 3대 관점 풀이]: 일지는 내담자의 가장 내밀한 안방이자 배우자 영역입니다. 이곳의 기운이 실제 사생활에서 어떻게 발현되는지 1) 육친적 관점, 2) 심리적 관점, 3) 사회적 관점이라는 3대 입체적 시각을 유기적으로 융합하여 상세히 풀어내십시오.
+🚨 [용어 표기 절대 규칙]: 모든 전문 명리 용어(예: 간여지동, 음인, 장성살 등)는 절대로 전면에 노출하지 마십시오. 현대적인 구어체로 현실 현상을 먼저 쉽게 풀이한 뒤, 문장 끝에 간단한 설명과 함께 괄호 `()` 안에만 기재해야 합니다.)
+   
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 감추어진 내 속마음</span>
+(※ 🚨AI 절대 연산 규칙: 감상적인 위로나 뜬구름 잡는 문학적 묘사를 엄격히 금지하며, 철저히 **인종법(引從法)**과 **육친·오행 공망의 현실적 조건**이라는 2대 명리적 팩트 연산에만 기반하여 내담자의 무의식 세계를 타격하십시오.
+
+1. [인종법(引從法)을 통한 무의식 추적]: 사주 원국 지장간에 드러나지 않은 천간 오행들을 일지로 인종(引從)하여 포태법 상태를 계산하십시오. 겉으로 드러나지 않았기에 내담자가 무의식 깊은 곳에서 갈망하거나 심리적으로 취약할 수 있는 본질적 정신 영역을 현대 심리학 관점의 구어체로 분석하십시오.
+2. [공망(空亡)의 물리적 제약 타격]: 공망을 단순한 심리적 쓸쓸함이나 외로움으로 뭉개지 마십시오. 공망이 걸린 오행과 육친이 실제 생활 환경에서 어떤 구체적인 공백, 결핍, 궤도 수정을 유발하는지 환경적 한계 조건을 날카로운 팩트로 기술하십시오. (예: 비겁 공망에 따른 자력갱생 노선, 관성 공망에 따른 규격화된 조직 이탈 및 특수 전문 영역 추구 등))
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조 분석</h3>
 <div class='content-box-loose'>
 [CHOYEON_GOLDEN_TEXT_HERE]
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
@@ -1588,22 +1575,6 @@ if st.session_state.get('need_calc', False):
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>4) 내 삶의 숨겨진 강점과 잠재적 에너지</span>
 (※ AI 지시: 제공된 12신살({s12_str})과 일반신살({shinsal_str}), 그리고 삼재 정보({cur_samjae}) 등을 유기적으로 분석하여 내담자가 가진 고유한 강점과 주의해야 할 타이밍을 설명하십시오. 🚨단, 전통 명리의 길흉화복이나 살(煞)의 공포를 조장하지 말고, 현대 심리상담 관점에서 부드러운 에세이로 풀어내십시오.)
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 성격</h3>
-<div class='content-box-loose'>
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 겉으로 드러난 성격</span>
-(※ 🚨AI 절대 준수 규칙: 일간과 일지의 십성(十星), 십이운성(十二運星), 그리고 배정된 십이신살의 에너지 강약을 바탕으로 표면적인 성격과 기질을 구체적이고 현대적인 구어체 에세이로 작성하십시오. 통변 전개 시 다음의 2대 조건을 반드시 결합하여 서술해야 합니다.
-
-1. [일지 지장간 좌법(座法) 해부]: 일지 지장간 내부에 내장된 천간 성분들이 해당 왕궁(王宮) 내부에서 가지는 십이운성 리듬, 즉 **좌법(座法)**을 기준으로 분석하십시오. 이를 통해 내담자가 외부 사회와 상호작용할 때 꺼내 쓰는 페르소나와 현실적 행동 메커니즘을 냉철한 팩트 기반으로 도출하십시오.
-2. [배우자궁(일지)의 3대 관점 풀이]: 일지는 내담자의 가장 내밀한 안방이자 배우자 영역입니다. 이곳의 기운이 실제 사생활에서 어떻게 발현되는지 1) 육친적 관점, 2) 심리적 관점, 3) 사회적 관점이라는 3대 입체적 시각을 유기적으로 융합하여 상세히 풀어내십시오.
-🚨 [용어 표기 절대 규칙]: 모든 전문 명리 용어(예: 간여지동, 음인, 장성살 등)는 절대로 전면에 노출하지 마십시오. 현대적인 구어체로 현실 현상을 먼저 쉽게 풀이한 뒤, 문장 끝에 간단한 설명과 함께 괄호 `()` 안에만 기재해야 합니다.)
-   
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 감추어진 내 속마음</span>
-(※ 🚨AI 절대 연산 규칙: 감상적인 위로나 뜬구름 잡는 문학적 묘사를 엄격히 금지하며, 철저히 **인종법(引從法)**과 **육친·오행 공망의 현실적 조건**이라는 2대 명리적 팩트 연산에만 기반하여 내담자의 무의식 세계를 타격하십시오.
-
-1. [인종법(引從法)을 통한 무의식 추적]: 사주 원국 지장간에 드러나지 않은 천간 오행들을 일지로 인종(引從)하여 포태법 상태를 계산하십시오. 겉으로 드러나지 않았기에 내담자가 무의식 깊은 곳에서 갈망하거나 심리적으로 취약할 수 있는 본질적 정신 영역을 현대 심리학 관점의 구어체로 분석하십시오.
-2. [공망(空亡)의 물리적 제약 타격]: 공망을 단순한 심리적 쓸쓸함이나 외로움으로 뭉개지 마십시오. 공망이 걸린 오행과 육친이 실제 생활 환경에서 어떤 구체적인 공백, 결핍, 궤도 수정을 유발하는지 환경적 한계 조건을 날카로운 팩트로 기술하십시오. (예: 비겁 공망에 따른 자력갱생 노선, 관성 공망에 따른 규격화된 조직 이탈 및 특수 전문 영역 추구 등))
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 부모·형제운</h3><div class='content-box-loose'>
