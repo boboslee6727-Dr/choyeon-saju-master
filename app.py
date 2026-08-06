@@ -586,6 +586,10 @@ def check_vault_status(base_gans, base_jjis, attacker_ji):
     return results
 
 def get_gyukgook_detailed(ds, ys, ms, hs, mb):
+    """
+    일간(ds)과 월지(mb), 그리고 년/월/시 천간(ys, ms, hs)의 투출 여부를 정밀 분석하여
+    정통 명리학 기준의 격국과 상세 설명 문자열을 반환하는 함수
+    """
     jg = JIJANGGAN.get(mb, [])
     if not jg: return "알수없음격", "지장간 정보가 없습니다."
 
@@ -593,21 +597,43 @@ def get_gyukgook_detailed(ds, ys, ms, hs, mb):
         if not target_char or target_char == "?": return "무명"
         return get_ss(day_gan, target_char)
 
+    # 1. 양인격 및 건록격 특수 판정 (왕지 월지 기준)
+    if ds in ['甲', '丙', '戊', '庚', '壬']:
+        if mb == '卯' and ds == '甲': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
+        if mb == '午' and ds == '丙': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
+        if mb == '酉' and ds == '庚': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
+        if mb == '子' and ds == '壬': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
+        if mb == {'甲':'寅', '丙':'巳', '戊':'巳', '庚':'申', '壬':'亥'}.get(ds, ""):
+            return "건록격", f"월지 {mb}가 일간 {ds}의 건록(建祿)에 해당하여 건록격으로 정합니다."
+
+    # 2. 사정지(子, 午, 卯, 酉) 월지 기본 판정 (본기가 비견/겁재가 아닐 때)
     if mb in ["子", "午", "卯", "酉"]:
         core_ss = safe_get_ss(ds, mb)
+        if core_ss in ["비견", "겁재"]:
+            return "건록(월겁)격", f"월지 {mb}가 일간 {ds}와 같은 기운이므로 건록(월겁)격으로 삼습니다."
         return core_ss + "격", f"월지 {mb}의 순수한 기운인 {core_ss}을 그대로 격으로 삼습니다."
     
-    target_gans = [ys, ms, hs] 
-    main_qi = jg[-1]
+    target_gans = [ys, ms, hs] # 년간, 월간, 시간 투출 천간 리스트
+    main_qi = jg[-1] # 월지 본기(정기)
     
-    if main_qi in target_gans:
+    def is_valid_gyuk(char):
+        # 격국은 가급적 비견/겁재 외의 육친(식, 재, 관, 인)을 우선시함
+        return safe_get_ss(ds, char) not in ["비견", "겁재"]
+    
+    # 3. 투출 천간 우선순위 검사 (본기 -> 중기 -> 여기)
+    if main_qi in target_gans and is_valid_gyuk(main_qi):
         return safe_get_ss(ds, main_qi) + "격", f"월지 {mb}의 정기(본기)인 {main_qi}이 천간에 투출하여 {safe_get_ss(ds, main_qi)}격이 되었습니다."
-    if len(jg) >= 2 and jg[1] in target_gans:
+    if len(jg) >= 2 and jg[1] in target_gans and is_valid_gyuk(jg[1]):
         return safe_get_ss(ds, jg[1]) + "격", f"월지 {mb}의 중기인 {jg[1]}이 천간에 투출하여 {safe_get_ss(ds, jg[1])}격이 되었습니다."
-    if len(jg) >= 1 and jg[0] in target_gans:
+    if len(jg) >= 1 and jg[0] in target_gans and is_valid_gyuk(jg[0]):
         return safe_get_ss(ds, jg[0]) + "격", f"월지 {mb}의 여기인 {jg[0]}이 천간에 투출하여 {safe_get_ss(ds, jg[0])}격이 되었습니다."
         
-    return safe_get_ss(ds, main_qi) + "격", f"월지 {mb}의 지장간이 투출하지 않아 정기(본기)인 {main_qi}를 기준으로 {safe_get_ss(ds, main_qi)}격으로 정합니다."
+    # 4. 미투출 시 폴백(Fallback) 연산: 월지 본기(정기) 기준
+    fallback_ss = safe_get_ss(ds, main_qi)
+    if fallback_ss in ["비견", "겁재"]:
+        return "건록(월겁)격", f"월지 {mb}의 본기가 {fallback_ss}이므로 건록(월겁)격으로 정합니다."
+    
+    return fallback_ss + "격", f"월지 {mb}의 지장간(비겁 제외)이 투출하지 않아 정기(본기)인 {main_qi}를 기준으로 {fallback_ss}격으로 정합니다."
 
 def calculate_gongmang(ilgan, ilji):
     if ilgan in ["?"," ","-"] or ilji in ["?"," ","-"]: return "-"
