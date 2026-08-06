@@ -902,7 +902,7 @@ with st.sidebar:
                                 found = True
                                 is_leap = getattr(klc_find, 'isIntercalary', False)
                                 leap_str = "윤달" if is_leap else "평달"
-                                st.success(f"✅ [양력] {curr_dt.year}년 {curr_dt.month:02d}월 {curr_dt.day:02d}일 / [음력] {klc_find.lunarYear}년 {klc_find.lunarMonth:02d}월 {klc_find.lunarDay:02d}일 ({leap_str}) 입력완료!")
+                                st.success(f"✅ 양력{curr_dt.year}년 {curr_dt.month:02d}월 {curr_dt.day:02d}일 음력{klc_find.lunarYear}년 {klc_find.lunarMonth:02d}월 {klc_find.lunarDay:02d}일 ({leap_str})")
                                 break
                             curr_dt -= dt_mod.timedelta(days=1)
                         if found: break
