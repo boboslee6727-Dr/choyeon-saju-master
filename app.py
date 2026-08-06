@@ -1047,6 +1047,10 @@ if st.session_state.get('need_calc', False):
     spinner_msg = f"⏳ [초연 시공명리 개인 사주풀이 분석({APP_VERSION}) 중....]"
     with st.spinner(spinner_msg):
         try:
+            # 🚨 [핵심 추가] name 변수 정의 누락 방지 방탄 코드
+            name = u_name if u_name.strip() else "홍길동"
+            disp_name = name
+
             # 1. 시스템 날짜 및 사용자 날짜 기초 변수 정의
             kst = pytz.timezone('Asia/Seoul')
             curr_dt_sys = dt_mod.datetime.now(kst)
