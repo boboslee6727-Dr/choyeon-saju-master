@@ -1573,6 +1573,7 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 성격 분석</h3>
 <div class='content-box-loose'>
+
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
 - 격국({gyukgook_detail})과 월지/일간의 결합을 바탕으로 {name}님이 타고난 삶의 무대와 기본 성향을 깊이 있게 서술하십시오.
 
@@ -1586,7 +1587,6 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조분석</h3>
 <div class='content-box-loose'>
-[CHOYEON_GOLDEN_TEXT_HERE]
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
 (※ AI 지시: 내담자의 사주구조(격국: {gyukgook_detail})를 반드시 핵심 뼈대로 삼아 에세이를 작성하십시오. 이 격국의 특성이 어떤 시기에, 어느 정도 규모의 무대에서 어떻게 발현되는지 구체적으로 조언하십시오.)
@@ -1607,7 +1607,7 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 부모·형제운</h3><div class='content-box-loose'>
 (※ AI 지시: 사주 원국의 연주·월주 및 인성과 비겁의 상태를 분석하여 에세이를 작성하십시오. 
-1) 육친적으로 부모·형제와의 정서적 유대감과 덕의 유무를 살피고, 
+1) 육친적으로 부모·형제와의 정서적 유대감과 덕의 유무를 살 피고, 
 2) 심리적으로 이들이 내담자 내면의 자양분 혹은 결핍에 미친 영향을 진단하며, 
 3) 사회적으로 유년기 환경이 삶의 기반에 어떤 작용을 했는지 현대적 구어체로 친절하게 풀어내십시오.)
 </div>
