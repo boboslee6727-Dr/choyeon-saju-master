@@ -14,7 +14,7 @@ import streamlit.components.v1 as components
 import re
 
 # 🎯 [버전 컨트롤 타워]
-APP_VERSION = "Ver 46.7"
+APP_VERSION = "Ver 47.0 Master"
 
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS
@@ -58,7 +58,6 @@ st.markdown("""
     .color-수 { background-color: #212121 !important; color: white !important; }
     
     .content-box-loose { line-height: 1.8; font-size: 15px; color: #111; text-align: justify; word-break: keep-all; font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif !important; padding: 0 !important; }
-    
     .content-box-loose .sub-title { text-indent: 0px !important; margin-top: 25px !important; margin-bottom: 10px !important; font-weight: 900 !important; display: block; color: #111 !important; }
     
     div[data-testid="stSidebar"] div.stButton > button:first-child,
@@ -235,7 +234,7 @@ choyeon_db = {
         "壬午": ["재관구조", "실리추구형", "현실적 이익과 명예를 추구하는 계산된 실속파"],
         "癸未": ["식재관구조", "현실타파형", "원칙타파 및 현상개선의 자유주의"],
         "甲申": ["재관인구조", "출세지향형", "편법적 사고와 신속한 결과를 추구하며 앞서가는 경향"],
-        "乙酉": ["관성구조", "자기억제형", "주변 의식하고 내면의 갈등을 억제하여 정제된 삶 추구"],
+        "乙酉": ["관성구조", "자기억制형", "주변 의식하고 내면의 갈등을 억제하여 정제된 삶 추구"],
         "丙戌": ["비식재구조", "분주다망형", "목표추구의 자기주도와 적극적 대외활동"],
         "丁亥": ["식관인구조", "현실동조형", "일처리에 능숙하고 변동과 변화에 초연한 심리"],
         "戊子": ["재성구조", "이재추구형", "결과의 명확성을 추구하며 기민하고 분주하게 활동"],
@@ -547,7 +546,6 @@ def get_jijanggan_full(dg, ji):
             res += "<div style='flex-grow:1; display:flex; align-items:center; justify-content:center; background:#f9f9f9; width:95%; margin:0 auto; color:#bbb; border-radius:3px; border:1px dashed #ddd;'>-</div>"
     return res + "</div>"
 
-# 🌟 [보완 및 정밀화] 진술축미 입고/개고 정밀 연산 엔진
 def check_vault_status(base_gans, base_jjis, attacker_ji):
     vaults = ['辰', '戌', '丑', '未']
     clash_map = {'辰':'戌', '戌':'辰', '丑':'未', '未':'丑'}
@@ -562,12 +560,11 @@ def check_vault_status(base_gans, base_jjis, attacker_ji):
                 is_trapped = any(g in targets for g in base_gans)
                 if is_trapped:
                     trapped_chars = [g for g in targets if g in base_gans]
-                    results.append(f"🚨 <b style='color:#C62828;'>[입고(入庫) 주의]</b> {ji} 무덤이 열려 천간의 {','.join(trapped_chars)} 기운이 수렴·입고됩니다.")
+                    results.append(f"🚨 <b style='color:#C62828;'>[입고(入庫) 주의]</b> {ji} 무덤이 열려 천간의 {','.join(trapped_chars)} 기운이 빨려 들어갑니다.")
                 else:
-                    results.append(f"💎 <b style='color:#2E7D32;'>[개고(開庫) 발현]</b> {ji} 금고가 충·형으로 열려 지장간 속 자산과 보물이 드러납니다.")
+                    results.append(f"💎 <b style='color:#2E7D32;'>[개고(開庫) 발현]</b> {ji} 금고가 열려 지장간의 숨은 보물이 세상에 드러납니다.")
     return results
 
-# 🌟 [보완 및 정밀화] 사주 원국 및 투출 정밀 격국 연산 함수
 def get_gyukgook_detailed(ds, ys, ms, hs, mb):
     jg = JIJANGGAN.get(mb, [])
     if not jg: return "알수없음격", "지장간 정보가 없습니다."
@@ -582,7 +579,7 @@ def get_gyukgook_detailed(ds, ys, ms, hs, mb):
         if mb == '酉' and ds == '庚': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
         if mb == '子' and ds == '壬': return "양인격", "월지 겁재 및 제왕으로 폭발적 에너지인 양인격입니다."
         if mb == {'甲':'寅', '丙':'巳', '戊':'巳', '庚':'申', '壬':'亥'}.get(ds, ""):
-            return "건록격", f"월지 {mb}가 일간 {ds}의 건록에 해당하여 건록격으로 정합니다."
+            return "건록격", f"월지 {mb}가 일간 {ds}의 건록(建祿)에 해당하여 건록격으로 정합니다."
 
     if mb in ["子", "午", "卯", "酉"]:
         core_ss = safe_get_ss(ds, mb)
@@ -590,14 +587,14 @@ def get_gyukgook_detailed(ds, ys, ms, hs, mb):
             return "건록(월겁)격", f"월지 {mb}가 일간 {ds}와 같은 기운이므로 건록(월겁)격으로 삼습니다."
         return core_ss + "격", f"월지 {mb}의 순수한 기운인 {core_ss}을 그대로 격으로 삼습니다."
     
-    target_gans = [ys, ms, hs]
-    main_qi = jg[-1]
+    target_gans = [ys, ms, hs] 
+    main_qi = jg[-1] 
     
     def is_valid_gyuk(char):
         return safe_get_ss(ds, char) not in ["비견", "겁재"]
     
     if main_qi in target_gans and is_valid_gyuk(main_qi):
-        return safe_get_ss(ds, main_qi) + "격", f"월지 {mb}의 정기인 {main_qi}이 천간에 투출하여 {safe_get_ss(ds, main_qi)}격이 되었습니다."
+        return safe_get_ss(ds, main_qi) + "격", f"월지 {mb}의 정기(본기)인 {main_qi}이 천간에 투출하여 {safe_get_ss(ds, main_qi)}격이 되었습니다."
     if len(jg) >= 2 and jg[1] in target_gans and is_valid_gyuk(jg[1]):
         return safe_get_ss(ds, jg[1]) + "격", f"월지 {mb}의 중기인 {jg[1]}이 천간에 투출하여 {safe_get_ss(ds, jg[1])}격이 되었습니다."
     if len(jg) >= 1 and jg[0] in target_gans and is_valid_gyuk(jg[0]):
@@ -607,7 +604,7 @@ def get_gyukgook_detailed(ds, ys, ms, hs, mb):
     if fallback_ss in ["비견", "겁재"]:
         return "건록(월겁)격", f"월지 {mb}의 본기가 {fallback_ss}이므로 건록(월겁)격으로 정합니다."
     
-    return fallback_ss + "격", f"월지 {mb}의 지장간이 투출하지 않아 정기인 {main_qi}를 기준으로 {fallback_ss}격으로 정합니다."
+    return fallback_ss + "격", f"월지 {mb}의 지장간이 투출하지 않아 정기(본기)인 {main_qi}를 기준으로 {fallback_ss}격으로 정합니다."
 
 def calculate_gongmang(ilgan, ilji):
     if ilgan in ["?"," ","-"] or ilji in ["?"," ","-"]: return "-"
@@ -739,7 +736,6 @@ class UniversalPrintableGunghap:
 
     def run_universal_logic(self):
         m_g, m_j, f_g, f_j = self.m_g, self.m_j, self.f_g, self.f_j
-        
         il_rel = self.get_ji_rel(m_j[2], f_j[2])
         
         if il_rel == "육합": s1 = 25
@@ -896,6 +892,7 @@ with st.sidebar:
     run_delivery_calc = False  
     start_date, end_date = None, None
     baby_gender = "미정"
+    compare_mode = "자동대조"
 
     run_iljin_calc = False
     
@@ -912,8 +909,11 @@ with st.sidebar:
 
     elif u_product == "타 감명서":
         st.markdown("<hr style='border:1px dashed #2E7D32; margin:15px 0;'>", unsafe_allow_html=True)
-        st.markdown("<div style='font-weight:900; color:#2E7D32; margin-bottom:5px;'>📄 타 감명서 원문 입력</div>", unsafe_allow_html=True)
-        other_reading_text = st.text_area("타 감명서 원문", height=150, placeholder="여기에 내용을 붙여넣기 하세요...", key="other_reading")
+        st.markdown("<div style='font-weight:900; color:#2E7D32; margin-bottom:5px;'>⚖️ 대조 분석 모드 선택</div>", unsafe_allow_html=True)
+        compare_mode = st.radio("비교 유형", ["전통 명리학과 1:1 자동 대조", "외부 타 감명서 원문 대조"], index=0, key="comp_mode_radio")
+        
+        if compare_mode == "외부 타 감명서 원문 대조":
+            other_reading_text = st.text_area("타 감명서 원문", height=150, placeholder="여기에 타 감명서 내용을 붙여넣기 하세요...", key="other_reading")
 
     elif u_product == "궁합":
         st.markdown("<hr style='border:1px dashed #C62828; margin:15px 0;'>", unsafe_allow_html=True)
@@ -964,7 +964,7 @@ with st.sidebar:
     if btn_single:
         if not u_name.strip(): 
             st.warning("⚠️ 신청인의 이름을 입력해 주세요.")
-        elif u_product == "타 감명서" and not other_reading_text.strip():
+        elif u_product == "타 감명서" and compare_mode == "외부 타 감명서 원문 대조" and not other_reading_text.strip():
             st.warning("⚠️ 타 감명서 원문을 입력해 주세요.")
         elif u_product == "궁합" and not p_name.strip(): 
             st.warning("⚠️ 상대방의 이름을 입력해 주세요.")
@@ -1123,7 +1123,6 @@ if st.session_state.get('need_calc', False):
                 s12_list = [get_12_shinsal(yb, j) for j in jjis if get_12_shinsal(yb, j) != "-"]
                 s12_str = ", ".join(list(dict.fromkeys(s12_list))) if s12_list else "특이 12신살 없음"
           
-                # 🌟 [보완] 삼형살(인사신/축술미) 정밀 가형 및 완성형 연산
                 samhyung_warn_list = []
                 jjis_set = set(jjis)
                 if len({'寅', '巳', '申'}.intersection(jjis_set)) == 3:
@@ -1375,18 +1374,6 @@ if st.session_state.get('need_calc', False):
                     f"5. HTML 훼손 금지: </div> 태그를 임의로 닫거나 마크다운 기호를 남발하지 마십시오.\n"
                 )
 
-                # 🚨 [오류 해결] 합충형파해 팩트 변수 미리 생성
-                rels_list = []
-                for i in range(4):
-                    rel_g = get_gan_rel_all(i, gans)
-                    if rel_g != "-":
-                        rels_list.append(f"천간({gans[i]}):{rel_g}")
-                    for j in range(i + 1, 4):
-                        rel_j = get_ji_rel_set(jjis[i], jjis[j])
-                        if rel_j != "-":
-                            rels_list.append(f"지지({jjis[i]}-{jjis[j]}):{rel_j}")
-                hap_chung_hyoung_pa_hae = ", ".join(list(dict.fromkeys(rels_list))) if rels_list else "특이 합충형파해 없음"
-
                 if u_gender == '남성':
                     yukchin_rule = f"""
 🚨 [육친 통변 특수부대 절대 규칙 (남성용)]: 
@@ -1513,38 +1500,40 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>11. 운의 흐름</h3>
 <div class='content-box-loose'>
-(※ 🚨이원화 분석 지시: 모든 대운/세운/월운 통변 시 1)과 2)를 엄격히 구분하여 작성하십시오.
- 1) 일반(전통) 명리 풀이: 오직 '일간(日干)과 운의 십성(정재, 편관 등) 및 십이운성'만을 기준으로 한 단식 판단 결과를 작성하십시오.
- 2) 시공 명리 풀이: 일주 하위 십성(체)과 운의 십성(용)의 5x5 체용 파동, 묘고(진술축미) 입고/개고, 삼형살 팩트를 결합하여 실제 터지는 사건·사고 중심으로 정밀 분석하십시오.)
-
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 대운의 흐름</span>
 [DAEWUN_TABLE_HERE]
 
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 대운 분석</span>
+{past_daewun_html}
+
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 현재 대운 전반기 상세 분석 ({dw_start_age}세~{dw_mid_age}세)</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
-    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
+    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 현재 대운 후반기 상세 분석 ({dw_mid2_age}세~{dw_end_age}세)</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
-    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
+    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 세운의 흐름</span>
 [SEWUN_TABLE_HERE]
 
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 세운 분석</span>
+{past_sewun_html}
+
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 올해 세운 전반기 상세 분석</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
-    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
+    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 올해 세운 후반기 상세 분석</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
-    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
+    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 월운의 흐름</span>
@@ -1552,25 +1541,18 @@ if st.session_state.get('need_calc', False):
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 월운 분석</span>
 {past_months_html}
-(※ 🚨AI 절대 지시: 파이썬 시스템이 제공한 지나온 월운 텍스트를 100% 원문 그대로 복사하여 출력한 후, 각 월별로 아래 템플릿에 따라 1) 일반(전통) 명리 풀이와 2) 시공 명리 풀이를 칼같이 구분하여 작성하십시오.)
-
-[지나온 과거 각 월운 출력 템플릿]
-• <b>(파이썬 제공 월/간지/절기 텍스트):</b> 
-<div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
-    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
-</div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>{prompt_first_half}</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
-    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
+    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>{prompt_second_half}</span>
 <div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반(전통) 명리 풀이:</b> (일간 기준 단순 십성/운성 단식 풀이)</div>
-    <div><b>2) 시공 명리 풀이:</b> (체용 5x5 파동 + 묘고 개고/입고 + 삼형살 실전 사건 풀이)</div>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (내용 상세 작성)</div>
+    <div><b>2) 시공 명리 풀이:</b> (내용 상세 작성)</div>
+</div>
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>12. 삶을 바꾸는 지혜로운 조언</h3>
@@ -1603,7 +1585,6 @@ if st.session_state.get('need_calc', False):
                     res = model.generate_content(prompt)
                     ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                     
-                    # 🚨 [핵심 수술] 버그를 일으키던 split() 절단 로직 완전 삭제 및 직접 치환 방식 적용
                     if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
                         ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
 
@@ -1633,66 +1614,120 @@ if st.session_state.get('need_calc', False):
                 except Exception as e: 
                     st.error(f"AI 연산 오류: {e}")
 
+            # ------------------------------------------------------------------
+            # [2단계] 타 감명서 / 비교 분석 모듈 (ver 71.0 확장 분기 연산)
+            # ------------------------------------------------------------------
             if u_product == "타 감명서":
                 try:
-                    report_2_html = f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#555;'><h2 style='text-align:center; color:#555; font-family:\"Malgun Gothic\", sans-serif; font-weight:900; margin-bottom:20px;'>📜 타 감명서 원문</h2><div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #111; text-align: justify; word-break: keep-all;'>{other_reading_text.replace(chr(10), '<br>')}</div></div></div>"
+                    # 🌟 [분기 1] 전통 명리학과 1:1 자동 대조 분석 선택 시
+                    if compare_mode == "전통 명리학과 1:1 자동 대조":
+                        comp_prompt = f"""
+                        당신은 명리심리상담사 '초연 박사'입니다.
+                        제공된 {disp_name}님의 사주팔자 팩트를 바탕으로 [A. 전통 명리학 단식 풀이]와 [B. 초연 시공명리학 정밀 풀이]의 차이점을 항목별로 칼같이 1:1 대조 분석하십시오.
 
-                    comp_prompt = f"""
-    당신은 명리심리상담사 '초연 박사'를 보조하는 수석 분석관입니다.
-    아래 [1. 초연 사주풀이]와 [2. 타 감명서]를 엄격하게 1:1 대조 분석하십시오.
+                        🚨 [디자인 및 서식 절대 규칙]
+                        0. 🚨 [인사말 원천 차단]: 출력의 첫 글자는 반드시 <h3 style=...> 태그로 시작해야 합니다. "안녕하십니까" 등의 어떠한 서론도 절대 허용하지 않습니다.
+                        1. AI 임의의 목차 서식 생성을 금지합니다.
+                        2. 모든 본문 문단은 HTML 태그인 <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸십시오.
 
-    🚨 [디자인 및 서식 절대 규칙]
-    0. 🚨 [인사말 원천 차단]: 출력의 첫 글자는 반드시 <h3 style=...> 태그로 시작해야 합니다. "안녕하십니까", "보고서를 올립니다" 등의 어떠한 서론이나 인사말도 절대 허용하지 않습니다.
-    1. AI 임의의 목차 서식 생성을 절대 금지합니다.
-    2. 목차 제목 출력 시, 반드시 크기 22px와 하단 색상 선이 조립된 아래 명시된 태그 서식을 그대로 출력하십시오.
-    3. 모든 본문 문단 작성 시, HTML 태그인 <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 를 사용하여 모든 단락을 감싸십시오.
+                        [출력 목차 서식 정의]
+                        <h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>1. 타고난 성격 및 구조 대조</h3>
+                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[A. 전통 명리 단식 풀이]</b> 일간 {ds}와 십성/운성 기준의 단순 표면적 성격 및 기질 해석...</p>
+                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[B. 초연 시공명리 정밀 풀이]</b> 일주 하위 십성 + 년/일지 듀얼 12신살({s12_str}) + 공망({gongmang_actual})의 무의식적 공허감 입체 분석...</p>
 
-    🚨 [내용 집중 대조 규칙]
-    - 타 감명서 원문을 분석하여, 타 감명서에서 '실제로 다루고 있는 내용(주제)'이 무엇인지 파악하십시오.
-    - 타 감명서 원문이 초연 명리의 전체 흐름과 다를 때는, 타 감명서에서 집중적으로 다룬 **'해당 내용'**에 대해서만 초연 명리의 분석과 1:1로 깊이 있게 대조 분석하십시오.
-    - 타 감명서에 언급조차 없는 내용은 억지로 분량을 채우려 하지 말고 과감히 생략하십시오.
-    - 단, 비교 분석이 끝난 후 가장 마지막의 <13. 총평 및 향후 개선점> 목차는 무슨 일이 있어도 반드시 작성해야 합니다.
+                        <h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>2. 대운({dw_g_cur}{dw_j_cur}대운) 환경 분석 대조</h3>
+                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[A. 전통 명리 단식 풀이]</b> 일간 기준 십성 및 운성으로 본 10년 대운의 겉보기 길흉 판단...</p>
+                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[B. 초연 시공명리 정밀 풀이]</b> 체용 5x5 실행 파동 키워드 및 대운 형충에 따른 실전 환경 및 마찰음 조율 분석...</p>
 
-    [출력 목차 서식 정의]
-    <h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>1. 사주팔자 구조 및 성격 대조 분석</h3>
-    (타 감명서의 핵심 논리 기준, 해당 주제에 대한 초연 명리와의 1:1 대조 서술)
-    
-    ... (타 감명서가 다룬 핵심 내용들에 대해서만 이 형식의 h3 목차를 활용하여 순서대로 전개) ...
-    
-    <h3 style='color:#D50000; font-size: 22px; font-weight: 900; border-bottom: 2px solid #D50000; padding-bottom: 5px; margin-top: 35px; margin-bottom: 8px; display:block;'>13. 총평 및 향후 개선점</h3>
-    <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 8px;'>1) 두 감명서의 장점과 단점</span>
-    <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'>[양측의 통변 기술, 논리적 근거, 내담자 공감력 등을 객관적으로 비교 서술]</p>
-    <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 8px;'>2) 초연 시공명리의 누락 및 개선점 (AI 학습 피드백)</span>
-    <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'>[타 감명서를 통해 초연 명리가 벤치마킹하거나 보완해야 할 통변 기법, 누락된 내용, 관점의 차이 등을 날카롭게 분석하여 향후 AI 엔진 업그레이드에 활용할 수 있도록 명확히 제시]</p>
+                        <h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>3. 지정 세운({curr_y}년 {sewun_gan}{sewun_ji}년) 실전 사건 대조</h3>
+                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[A. 전통 명리 단식 풀이]</b> {curr_y}년 십성에 따른 겉보기 재물/직업 운세 판단...</p>
+                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[B. 초연 시공명리 정밀 풀이]</b> 묘고 개고·입고({hang_un_vaults_str}) 및 삼형살({samhyung_warn})에 따른 실전 자산 이동 및 업무 재편 분석...</p>
 
-    [데이터]
-    1. 초연 사주풀이: {full_content_clean}
-    2. 타 감명서: {other_reading_text}
-    """
-                    c_res = call_claude_api(comp_prompt, max_tokens=10000)
-                    
-                    other_cover_html = (
-                            f"<div class='page-break-before'></div>\n"
-                            f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
-                            f"    <div style='border: 4px solid #2E7D32; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
-                            f"        <div style='border-bottom:4px double #2E7D32; padding-bottom:20px; margin-bottom:40px;'>\n"
-                            f"            <h1 class='title-gothic' style='font-size: 40px !important; margin:0 !important;'>초연 시공명리 타 감명서 비교</h1>\n"
-                            f"            <div style='text-align: right; margin-top: 10px;'>\n"
-                            f"                <span class='ver-gothic' style='font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
-                            f"            </div>\n"
-                            f"        </div>\n"
-                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 30px 20px; border-radius: 15px;'>\n"
-                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #2E7D32; margin-bottom: 20px;'>👤 신청인 : {u_name} 님</h2>\n"
-                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
-                            f"                <p style='margin: 0; white-space: nowrap;'>[양력] {sol_str} | [음력] {lun_str}</p>\n"
-                            f"            </div>\n"
-                            f"        </div>\n"
-                            f"        <p style='font-size: 18px; margin-top: 50px; font-weight: 800;'>{today_str}</p>\n"
-                            f"        <p style='font-size: 22px; font-weight: 800; color: #2E7D32; margin-top: 20px;'>초연 시공명리 연구소</p>\n"
-                            f"    </div>\n"
-                            f"</div>"
-                        )
-                    st.session_state['saved_report_2'] = other_cover_html + report_2_html + f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#2E7D32;'><h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 800; border-bottom:2px solid #2E7D32; padding-bottom:15px;'>⚖️ 1:1 상세비교 본문 리포트</h1><div style='margin-top:20px;'>{c_res}</div></div></div>"
+                        <h3 style='color:#D50000; font-size: 22px; font-weight: 900; border-bottom: 2px solid #D50000; padding-bottom: 5px; margin-top: 35px; margin-bottom: 8px; display:block;'>4. 거장 초연 박사의 임상 대조 총평</h3>
+                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'>[전통 풀이의 피상적 한계와 초연시공명리학 체용 매트릭스가 보여주는 실전 정밀함의 임상적 우위 총평 작성을 깊이 있게 기술]</p>
+
+                        [분석 대상 데이터]
+                        - 사주원국: {ys}{yb}년 {ms}{mb}월 {ds}{db}일 {hs}{hb}시 (격국: {gyukgook_detail})
+                        - 공망: {gongmang_actual} / 묘고작용: {hang_un_vaults_str} / 삼형살: {samhyung_warn}
+                        """
+                        c_res = call_claude_api(comp_prompt, max_tokens=10000)
+                        
+                        other_cover_html = (
+                                f"<div class='page-break-before'></div>\n"
+                                f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
+                                f"    <div style='border: 4px solid #2E7D32; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
+                                f"        <div style='border-bottom:4px double #2E7D32; padding-bottom:20px; margin-bottom:40px;'>\n"
+                                f"            <h1 class='title-gothic' style='font-size: 38px !important; margin:0 !important;'>전통 명리 vs 초연시공명리 학술 대조</h1>\n"
+                                f"            <div style='text-align: right; margin-top: 10px;'>\n"
+                                f"                <span class='ver-gothic' style='font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
+                                f"            </div>\n"
+                                f"        </div>\n"
+                                f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 30px 20px; border-radius: 15px;'>\n"
+                                f"            <h2 style='font-size: 24px; font-weight: 800; color: #2E7D32; margin-bottom: 20px;'>👤 신청인 : {u_name} 님</h2>\n"
+                                f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
+                                f"                <p style='margin: 0; white-space: nowrap;'>[양력] {sol_str} | [음력] {lun_str}</p>\n"
+                                f"            </div>\n"
+                                f"        </div>\n"
+                                f"        <p style='font-size: 18px; margin-top: 50px; font-weight: 800;'>{today_str}</p>\n"
+                                f"        <p style='font-size: 22px; font-weight: 800; color: #2E7D32; margin-top: 20px;'>초연 시공명리 연구소</p>\n"
+                                f"    </div>\n"
+                                f"</div>"
+                            )
+                        st.session_state['saved_report_2'] = other_cover_html + f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#2E7D32;'><h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 800; border-bottom:2px solid #2E7D32; padding-bottom:15px;'>⚖️ 전통 명리 vs 초연시공명리 1:1 대조 리포트</h1><div style='margin-top:20px;'>{c_res}</div></div></div>"
+
+                    # 🌟 [분기 2] 외부 타 감명서 원문 대조 선택 시 (기존 기능 유지)
+                    else:
+                        report_2_html = f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#555;'><h2 style='text-align:center; color:#555; font-family:\"Malgun Gothic\", sans-serif; font-weight:900; margin-bottom:20px;'>📜 타 감명서 원문</h2><div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #111; text-align: justify; word-break: keep-all;'>{other_reading_text.replace(chr(10), '<br>')}</div></div></div>"
+
+                        comp_prompt = f"""
+                        당신은 명리심리상담사 '초연 박사'를 보조하는 수석 분석관입니다.
+                        아래 [1. 초연 사주풀이]와 [2. 타 감명서]를 엄격하게 1:1 대조 분석하십시오.
+
+                        🚨 [디자인 및 서식 절대 규칙]
+                        0. 🚨 [인사말 원천 차단]: 출력의 첫 글자는 반드시 <h3 style=...> 태그로 시작해야 합니다. "안녕하십니까" 등의 어떠한 서론도 절대 허용하지 않습니다.
+                        1. AI 임의의 목차 서식 생성을 금지합니다.
+                        2. 모든 본문 문단은 HTML 태그인 <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸십시오.
+
+                        [출력 목차 서식 정의]
+                        <h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>1. 사주팔자 구조 및 성격 대조 분석</h3>
+                        (타 감명서의 핵심 논리 기준, 해당 주제에 대한 초연 명리와의 1:1 대조 서술)
+                        
+                        ... (타 감명서가 다룬 핵심 내용들에 대해서만 이 형식의 h3 목차를 활용하여 순서대로 전개) ...
+                        
+                        <h3 style='color:#D50000; font-size: 22px; font-weight: 900; border-bottom: 2px solid #D50000; padding-bottom: 5px; margin-top: 35px; margin-bottom: 8px; display:block;'>13. 총평 및 향후 개선점</h3>
+                        <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 8px;'>1) 두 감명서의 장점과 단점</span>
+                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'>[양측의 통변 기술, 논리적 근거, 내담자 공감력 등을 객관적으로 비교 서술]</p>
+                        <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 8px;'>2) 초연 시공명리의 누락 및 개선점</span>
+                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'>[타 감명서를 통해 벤치마킹하거나 보완해야 할 통변 기법 분석 제시]</p>
+
+                        [데이터]
+                        1. 초연 사주풀이: {full_content_clean}
+                        2. 타 감명서: {other_reading_text}
+                        """
+                        c_res = call_claude_api(comp_prompt, max_tokens=10000)
+                        
+                        other_cover_html = (
+                                f"<div class='page-break-before'></div>\n"
+                                f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
+                                f"    <div style='border: 4px solid #2E7D32; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
+                                f"        <div style='border-bottom:4px double #2E7D32; padding-bottom:20px; margin-bottom:40px;'>\n"
+                                f"            <h1 class='title-gothic' style='font-size: 40px !important; margin:0 !important;'>초연 시공명리 타 감명서 비교</h1>\n"
+                                f"            <div style='text-align: right; margin-top: 10px;'>\n"
+                                f"                <span class='ver-gothic' style='font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
+                                f"            </div>\n"
+                                f"        </div>\n"
+                                f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 30px 20px; border-radius: 15px;'>\n"
+                                f"            <h2 style='font-size: 24px; font-weight: 800; color: #2E7D32; margin-bottom: 20px;'>👤 신청인 : {u_name} 님</h2>\n"
+                                f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
+                                f"                <p style='margin: 0; white-space: nowrap;'>[양력] {sol_str} | [음력] {lun_str}</p>\n"
+                                f"            </div>\n"
+                                f"        </div>\n"
+                                f"        <p style='font-size: 18px; margin-top: 50px; font-weight: 800;'>{today_str}</p>\n"
+                                f"        <p style='font-size: 22px; font-weight: 800; color: #2E7D32; margin-top: 20px;'>초연 시공명리 연구소</p>\n"
+                                f"    </div>\n"
+                                f"</div>"
+                            )
+                        st.session_state['saved_report_2'] = other_cover_html + report_2_html + f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#2E7D32;'><h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 800; border-bottom:2px solid #2E7D32; padding-bottom:15px;'>⚖️ 1:1 상세비교 본문 리포트</h1><div style='margin-top:20px;'>{c_res}</div></div></div>"
 
                 except Exception as e:
                     st.error(f"2단계 비교 분석 중 오류 발생: {e}")
