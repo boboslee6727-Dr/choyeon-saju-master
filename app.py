@@ -734,18 +734,10 @@ with st.sidebar:
             target_iljin_date = st.date_input("분석할 일자 선택", value=st.session_state['target_date'])
             st.session_state['target_date'] = target_iljin_date
 
-    elif u_product == "타 감명서":
-        st.markdown("<hr style='border:1px dashed #2E7D32; margin:15px 0;'>", unsafe_allow_html=True)
-        st.markdown("<div style='font-weight:900; color:#2E7D32; margin-bottom:5px;'>⚖️ 대조 분석 모드 선택</div>", unsafe_allow_html=True)
-        compare_mode = st.radio("비교 유형", ["전통 명리학과 1:1 자동 대조", "외부 타 감명서 원문 대조"], index=0, key="comp_mode_radio")
-        
-        if compare_mode == "외부 타 감명서 원문 대조":
-            other_reading_text = st.text_area("타 감명서 원문", height=150, placeholder="여기에 타 감명서 내용을 붙여넣기 하세요...", key="other_reading")
-
     elif u_product == "궁합":
         st.markdown("<hr style='border:1px dashed #C62828; margin:15px 0;'>", unsafe_allow_html=True)
         
-        # 🔍 상대방 사주간지 역산 검색 추가
+        # 🔍 상대방 사주간지 역산 검색 (시간 자동입력 연동 오류 완벽 수정)
         with st.expander("🔍 상대방 사주팔자 역산 검색", expanded=False):
             p_col_g1, p_col_g2 = st.columns(2)
             with p_col_g1: p_ry = st.text_input("상대방 년주", value="", key="p_ry_rev")
@@ -774,11 +766,16 @@ with st.sidebar:
                                     st.session_state.p_y_in = curr_dt_p.year
                                     st.session_state.p_m_in = curr_dt_p.month
                                     st.session_state.p_d_in = curr_dt_p.day
+                                    
                                     time_map_rev_p = {'子':'00:30 ~ 01:29 (朝子)시','丑':'01:30 ~ 03:29 (丑)시','寅':'03:30 ~ 05:29 (寅)시','卯':'05:30 ~ 07:29 (卯)시','辰':'07:30 ~ 09:29 (辰)시','巳':'09:30 ~ 11:29 (巳)시','午':'11:30 ~ 13:29 (午)시','未':'13:30 ~ 15:29 (未)시','申':'15:30 ~ 17:29 (申)시','酉':'17:30 ~ 19:29 (酉)시','戌':'19:30 ~ 21:29 (戌)시','亥':'21:30 ~ 23:29 (亥)시'}
                                     if p_rt:
                                         ji_char_p = p_rt.replace("시","").replace(" ","")[-1]
                                         p_rt_h = K2H_JI.get(ji_char_p, ji_char_p)
-                                        if p_rt_h in time_map_rev_p: st.session_state.p_t_key = time_map_rev_p[p_rt_h]
+                                        if p_rt_h in time_map_rev_p:
+                                            matched_time = time_map_rev_p[p_rt_h]
+                                            st.session_state.p_t_key = matched_time
+                                            st.session_state.p_t_select_key = matched_time
+                                    
                                     found_p = True
                                     is_leap_p = getattr(klc_find_p, 'isIntercalary', False)
                                     leap_str_p = "윤달" if is_leap_p else "평달"
@@ -800,13 +797,16 @@ with st.sidebar:
         if 'p_m_in' not in st.session_state: st.session_state['p_m_in'] = 1
         if 'p_d_in' not in st.session_state: st.session_state['p_d_in'] = 1
         if 'p_t_key' not in st.session_state: st.session_state['p_t_key'] = idx_list[0]
+        if 'p_t_select_key' not in st.session_state: st.session_state['p_t_select_key'] = st.session_state['p_t_key']
 
         p_col1, p_col2, p_col3 = st.columns(3)
         p_y = p_col1.number_input("년", 1900, 2050, key="p_y_in")
         p_m = p_col2.number_input("월", 1, 12, key="p_m_in")
         p_d = p_col3.number_input("일", 1, 31, key="p_d_in")
-        p_t = st.selectbox("태어난 시간", idx_list, index=idx_list.index(st.session_state['p_t_key']) if st.session_state['p_t_key'] in idx_list else 0, key="p_t_select_key")
-        p_t = st.session_state['p_t_select_key']
+        
+        p_t_idx = idx_list.index(st.session_state['p_t_select_key']) if st.session_state['p_t_select_key'] in idx_list else 0
+        p_t = st.selectbox("태어난 시간", idx_list, index=p_t_idx, key="p_t_select_key")
+        st.session_state['p_t_key'] = p_t
         
         current_year = dt_mod.datetime.now().year 
         f_year = u_y if u_gender == "여성" else p_y
