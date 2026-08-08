@@ -67,6 +67,7 @@ st.markdown("""
     div.stButton > button[kind="primary"] p { font-weight: 900 !important; font-size: 15px !important; font-family: "Malgun Gothic", "Apple SD Gothic Neo", sans-serif !important; color: white !important; margin: 0 !important; }
 
     div[data-testid="stSidebar"] .navy-btn button { background-color: #1A237E !important; color: white !important; border: none !important; font-weight: 900 !important; height: 45px !important; }    
+
     @media print { 
         @page { size: A4 portrait; margin: 10mm; }
         .stSidebar, button, iframe, .print-hide, header { display: none !important; }
@@ -826,8 +827,9 @@ with st.sidebar:
     
     btn_single = st.button("🚀 초연 전통명리 사주풀이 가동", use_container_width=True, type="primary")
 
+    # 🖨️ 인쇄/PDF 저장 버튼 (상단 마크다운 margin으로 간격 처리)
     components.html("""
-    <div style='padding: 0; margin: 0;'>
+    <div style='margin-top: 8px; width: 100%;'>
         <button id='sidebar-pdf-print-btn' style='width:100%; background-color:#2E7D32; color:white; border:none; font-weight:900; height:45px; border-radius:8px; cursor:pointer; font-size:15px; font-family:"Malgun Gothic", sans-serif; box-shadow: 0 4px 6px rgba(0,0,0,0.15);'>
             🖨️ 풀이 결과 인쇄 / PDF 저장
         </button>
@@ -837,7 +839,7 @@ with st.sidebar:
             });
         </script>
     </div>
-    """, height=55)
+    """, height=53)
 
     if btn_single:
         if not u_name.strip(): 
