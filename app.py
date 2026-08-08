@@ -1495,6 +1495,7 @@ if st.session_state.get('need_calc', False):
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 대운의 흐름</span>
 [DAEWUN_TABLE_HERE]
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(1) 지나온 과거 각 대운 분석</span>
+🚨 [대운 줄바꿈 절대 규칙]: 각 대운 항목(• ... :)의 쌍점(:) 뒤 해설은 절대로 통글로 뭉쳐 쓰지 마시고, 각 불릿 항목마다 독립된 <p style='text-indent: 1em; margin-bottom: 12px;'> 태그로 감싸 반드시 줄바꿈하여 서술하십시오.
 {past_daewun_html}
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 대운 분석</span>
@@ -1504,6 +1505,7 @@ if st.session_state.get('need_calc', False):
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 세운의 흐름</span>
 [SEWUN_TABLE_HERE]
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(1) 지나온 과거 각 세운 분석</span>
+🚨 [세운 줄바꿈 절대 규칙]: 각 세운 항목(• ... :)의 쌍점(:) 뒤 해설은 반드시 독립된 <p style='text-indent: 1em; margin-bottom: 12px;'> 태그로 감싸 한 줄씩 완전히 줄바꿈하여 작성하십시오.
 {past_sewun_html}
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 세운 분석</span>
@@ -1513,6 +1515,7 @@ if st.session_state.get('need_calc', False):
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>3) 월운의 흐름</span>
 [WOLWUN_TABLE_HERE]
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(1) 지나온 과거 각 월운 분석</span>
+🚨 [월운 줄바꿈 절대 규칙]: 각 월운 항목(• ... :)의 쌍점(:) 뒤 해설은 반드시 독립된 <p style='text-indent: 1em; margin-bottom: 12px;'> 태그로 감싸 한 줄씩 완전히 줄바꿈하여 작성하십시오.
 {past_months_html}
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 월운 분석</span>
