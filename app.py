@@ -762,6 +762,14 @@ with st.sidebar:
             target_iljin_date = st.date_input("분석할 일자 선택", value=st.session_state['target_date'])
             st.session_state['target_date'] = target_iljin_date
 
+    elif u_product == "타 감명서":
+        st.markdown("<hr style='border:1px dashed #2E7D32; margin:15px 0;'>", unsafe_allow_html=True)
+        st.markdown("<div style='font-weight:900; color:#2E7D32; margin-bottom:5px;'>📜 타 감명서 원문 대조 설정</div>", unsafe_allow_html=True)
+        compare_mode = st.radio("대조 분석 모드", ["전통 명리학과 1:1 자동 대조", "외부 타 감명서 원문 대조"], index=0, key="comp_mode_select")
+        
+        if compare_mode == "외부 타 감명서 원문 대조":
+            other_reading_text = st.text_area("타 감명서 원문 텍스트 입력", value="", height=180, placeholder="타 철학관이나 프로그램에서 제공받은 감명서 원문을 이곳에 붙여넣으세요.", key="other_txt_in")
+
     elif u_product == "궁합":
         st.markdown("<hr style='border:1px dashed #C62828; margin:15px 0;'>", unsafe_allow_html=True)
         
