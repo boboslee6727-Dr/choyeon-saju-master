@@ -14,7 +14,7 @@ import streamlit.components.v1 as components
 import re
 
 # 🎯 [버전 컨트롤 타워]
-APP_VERSION = "Ver 48.1 전통명리 Master (팩트폭격 통합형)"
+APP_VERSION = "전통명리 사주풀이 (Ver 48.1)"
 
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS (ver 48.0 + ver 72.1/7.3 스타일 응용 통합 - 연녹색 유지)
@@ -1036,23 +1036,52 @@ if st.session_state.get('need_calc', False):
 """
                 calc_gyukgook, gyukgook_detail = get_gyukgook_detailed(ds, ys, ms, hs, mb)
 
-                # 월령 한글 계절 변환 매핑 적용
-                wol_ji_only = mb
-                ji_to_month_name = {
-                    '寅': '인월(아직은 추운 초봄)', '卯': '묘월(완연한 봄)', '辰': '진월(봄과 여름의 환절기)',
-                    '巳': '사월(이른 여름)', '午': '오월(완연한 여름)', '未': '미월(가장 무더운 여름)',
-                    '申': '신월(서늘한 이른 가을)', '酉': '유월(결실을 거두는 가을)', '戌': '술월(가을과 겨울의 환절기)',
-                    '亥': '해월(이른 겨울)', '子': '자월(완연한 한겨울)', '丑': '축월(가장 추운 겨울)'
+                # ==============================================================
+                # 1. 12월지 계절/절기 표준 매핑 정의 및 DB 데이터 로드 (중복 제거)
+                # ==============================================================
+                SEASON_SOLAR_TERMS = {
+                    '寅': '입춘과 경칩 사이의 이른 봄(寅月)',
+                    '卯': '경칩과 청명 사이의 완연한 봄(卯月)',
+                    '辰': '청명과 입하 사이의 봄과 여름의 환절기(辰月)',
+                    '巳': '입하와 망종 사이의 이른 여름(巳月)',
+                    '午': '망종과 소서 사이의 완연한 여름(午月)',
+                    '未': '소서와 입추 사이의 가장 무더운 여름(未月)',
+                    '申': '입추와 백로 사이의 이른 가을(申月)',
+                    '酉': '백로와 한로 사이의 완연한 가을(酉月)',
+                    '戌': '한로와 입동 사이의 가을과 겨울의 환절기(戌月)',
+                    '亥': '입동과 대설 사이의 이른 겨울(亥月)',
+                    '子': '대설과 소한 사이의 완연한 한겨울(子月)',
+                    '丑': '소한과 입춘 사이의 가장 추운 겨울(丑月)'
                 }
-                wol_korean_str = ji_to_month_name.get(wol_ji_only, f"{wol_ji_only}월")
 
-                golden_text_html = f"""
-    <div style="margin: 0; padding: 0;">
-        <p class="ai-body-p" style="margin: 0; color: #000000 !important; text-align: justify; text-indent: 0;">
-            정통 명리학적으로 풀이하면 <b>{disp_name}님</b>은 <b>{wol_korean_str}</b>의 기운을 안고 태어나 <b>{calc_gyukgook}</b>의 그릇을 갖추셨으며, <b>{user_ilju_key}일주</b>가 지닌 <b>'{ilju_summary_text}'</b>의 고유한 성향과 사주원국의 조화에 따라 자신만의 독자적인 성향과 삶의 무대를 멋지게 펼쳐나가게 됩니다.
-        </p>
-    </div>
-    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
+                # 1) 월지 기반 계절/절기 문구 로드 및 격국명 추출
+                wol_korean_str = SEASON_SOLAR_TERMS.get(mb, f"{mb}월")
+                gyuk_name = calc_gyukgook
+
+                # 2) 60일주 구조 DB 및 마스터 DB 로드 (단일화)
+                user_ilju_key = f"{ds}{db}"
+                ilju_struct_db = choyeon_db.get("ilju_structure", {})
+                struct_data = ilju_struct_db.get(user_ilju_key, [])
+
+                if len(struct_data) >= 3:
+                    action_type = struct_data[1]    # (2) 유형 (예: "자기몰입형")
+                    main_tendency = struct_data[2]  # (3) 성격 (예: "자의식 발달하여 발상의 전환이 빠르고 임사즉결")
+                else:
+                    action_type = "자율활동형"
+                    main_tendency = "독자적인 삶의 무대를 개척하는"
+
+                ilju_full_db = choyeon_db.get("ilju_full_master", {})
+                ilju_master_data = ilju_full_db.get(user_ilju_key, {})
+                ilju_summary_text = ilju_master_data.get('summary', '고유의 역량을 품은')
+
+                # 3) 프롬프트 삽입용 choyeon_golden_text 단일 확정
+                choyeon_golden_text = f"""
+<div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
+    <p style='text-indent: 15px; margin-bottom: 5px;'>
+        정통 명리학적으로 풀이하면 <b>{disp_name}님</b>은 <b>{wol_korean_str}</b>에 <b>'{gyuk_name}'</b>의 그릇을 갖추고 태어나셨으며, 성격은 <b>'{action_type}'</b>으로 <b>'{main_tendency}'</b> 성향이 있습니다.
+    </p>
+</div>
+<hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
 """
 
                 gen_shinsal_list = []
@@ -1277,42 +1306,7 @@ if st.session_state.get('need_calc', False):
                     gender_prompt = "여성 내담자입니다. 배우자운(관성)과 자식운(식상)을 여명 이론에 입각하여 해석하십시오."
 
                 # ==============================================================
-                # 1. 내담자 전용 60일주 정밀 원본 비기(ilju_full_master) 핀셋 로더 (선행 로드)
-                # ==============================================================
-                user_ilju_key = f"{ds}{db}"
-                ilju_full_db = choyeon_db.get("ilju_full_master", {})
-                ilju_master_data = ilju_full_db.get(user_ilju_key, {})
-
-                # 일주 요약 성향 데이터 추출 (없을 경우 기본값 처리)
-                ilju_summary_text = ilju_master_data.get('summary', '고유의 역량을 품은')
-
-                # ==============================================================
-                # 2. 전통명리식 모던 텍스트로 정밀 수정된 choyeon_golden_text 조립
-                # ==============================================================
-                # 1. 일주 마스터 데이터 선행 로드
-                user_ilju_key = f"{ds}{db}"
-                ilju_full_db = choyeon_db.get("ilju_full_master", {})
-                ilju_master_data = ilju_full_db.get(user_ilju_key, {})
-                ilju_summary_text = ilju_master_data.get('summary', '고유의 역량을 품은')
-
-                # 2. 상단 엔진 함수를 통한 격국명 실시간 추출
-                gyuk_name, gyuk_desc = get_gyukgook_detailed(ds, ys, ms, hs, mb)
-
-                # 3. 전통명리 모던 골든 텍스트 완성
-                choyeon_golden_text = f"""
-<div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
-    <p style='text-indent: 15px; margin-bottom: 5px;'>
-        <b>{disp_name}님</b>은 <b>{mb}</b>의 월에서 태어난 '격국 {gyuk_name}'으로 해당({ds}{db})일주의 <b>'{ilju_summary_text}'</b> 성향을 지니고 태어나셨습니다.
-    </p>
-</div>
-"""
-                dw_start_age = current_daewun_age
-                dw_mid_age   = current_daewun_age + 4
-                dw_mid2_age  = current_daewun_age + 5
-                dw_end_age   = current_daewun_age + 9
-
-                # ==============================================================
-                # 3. LLM 프롬프트 컨텍스트 주입용 마스터 비기 조립
+                # 2. LLM 프롬프트 컨텍스트 주입용 마스터 비기 조립
                 # ==============================================================
                 if ilju_master_data:
                     ilju_master_prompt_context = f"""
@@ -1390,6 +1384,9 @@ if st.session_state.get('need_calc', False):
    - 🚨돌싱(이혼/사별): '과거의 인연(전 남편)'에 대한 성찰이나 '새로운 인연(재혼운)'으로 변환하여 카운슬링할 것.
 """
 
+                # ==============================================================
+                # [레드/블루 비서 최종 검수] LLM 프롬프트 마스터 최종본 (명리용어 제목 배제)
+                # ==============================================================
                 prompt = f"""
 {db_header}
 {ilju_master_prompt_context}
@@ -1398,12 +1395,14 @@ if st.session_state.get('need_calc', False):
 1. 🚨명리 용어의 전략적 노출 및 해제: 딱딱한 한자어 전문 용어의 단순 남발을 금지하고, 쉬운 비유와 현대적 구어체로 설명하십시오.
 2. 따뜻한 상담가 마인드: 내담자의 삶을 깊이 이해하고 어루만져 주는 친절한 카운슬러 어조를 유지하십시오.
 3. 정통 사주 명리의 십성, 격국, 12운성, 신살의 이치를 유기적으로 융합하여 심도 있게 풀이하십시오.
+4. 🚨[요약 금지 절대 규칙]: 축약, 요약, 압축 서술을 엄금합니다. 원국의 구조와 운의 흐름이 가진 명리적 팩트를 서술형으로 풍부하고 상세하게 풀이하십시오.
 
 [문단 통제 명령]
 1. 모든 통변 에세이 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
 2. 🚨 [계층별 글자 크기 및 상하 간격 강제 규격화]
+   [대목차] <h3 style='color:#1A237E; font-size: 24px; font-weight: 900; margin-top: 30px; margin-bottom: 15px;'>1. 성격 분석</h3>
    [부목차] <span class='sub-title' style='display: block; font-size: 20px; font-weight: 900; color: #111; line-height: 1.4; margin-top: 35px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
-   [세부 소목차] <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; line-height: 1.4; margin-top: 25px; margin-bottom: 5px;'>▶ 현재 대운 상세 분석 ({dw_mid2_age}세~{dw_end_age}세)</span>
+   [세부 소목차] <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; line-height: 1.4; margin-top: 25px; margin-bottom: 5px;'>▶ 현재 대운 전반기 상세 분석</span>
 3. 표(Table) 생성 절대 금지. 운의 흐름 연도별 분석은 반드시 도트 기호(•)를 사용한 텍스트로 작성하십시오.
 
 [내담자 맞춤형 정밀 타겟팅]
@@ -1411,7 +1410,7 @@ if st.session_state.get('need_calc', False):
 - {gender_prompt}
 - {yukchin_rule}
 
-[통변 지시]
+[통변 지시 및 팩트 통제]
 - 간지 표기 시 반드시 한자로 표기하십시오.
 - 격국 팩트: {gyukgook_detail}
 - 공망 팩트: {gongmang_actual}
@@ -1421,164 +1420,122 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 성격 분석</h3>
 <div class='content-box-loose'>
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 겉으로 드러난 성격</span>
-- 일주({ds}{db}), 십성, 십이운성, 그리고 위 박사님 마스터 비기 데이터를 바탕으로 표면적 성격을 상세히 서술하십시오.
-- 12신살 통변 시 년지 기준 신살(사회적 환경)과 일지 기준 신살(내면 파동)을 구별하여 설명하십시오.
+{choyeon_golden_text}
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 감추어진 내 속마음</span>
-- 지장간 인종법과 공망의 양가적 의미, 그리고 마스터 비기의 내면 분석을 바탕으로 원국에 숨겨진 육친의 심리와 내면의 공허함을 서술하십시오.
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 겉으로 드러난 성격</span>
+- 일주({ds}{db}), 일간 십성, 일지 십이운성 봉법/좌법 에너지를 분석하십시오.
+- 위 박사님 마스터 비기의 성향 및 물상 팩트를 직접 인용하여 표면적 행동 방식과 사회적 대인관계 스타일을 상세히 서술하십시오.
+- 12신살 통변 시 년지 기준 신살(사회적 환경)과 일지 기준 신살(내면 파동)을 명확히 구분하여 설명하십시오.
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 감추어진 내 속마음</span>
+- 일지 지장간 인종법(引從法)과 좌법, 일지 공망의 양가적 심리 작용을 정밀 분석하십시오.
+- 마스터 비기의 내면 심리 분석(psychology)을 바탕으로 남들에게 말하지 못하는 속마음, 정신적 고독감, 내면의 공허함을 서술하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조분석</h3>
 <div class='content-box-loose'>
-{choyeon_golden_text}
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
-- 격국({gyukgook_detail})을 핵심 뼈대로 삼아 발현되는 무대의 규모와 특성을 작성하십시오.
+🚨 [원국 분석 엄밀성 지시]: 본 파트는 '사주원국 자체의 고정 구조'만을 분석하는 파트입니다. 동적 운(대/세/월/일운)의 팩트는 절대 개입시키지 마십시오.
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 내 삶의 리듬과 에너지 균형</span>
-- 오행의 분포와 계절적 조후 밸런스를 분석하여 추구해야 할 에너지를 서술하십시오.
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
+- 원국의 오행 분포(木:{counts['목']}, 火:{counts['화']}, 土:{counts['토']}, 金:{counts['금']}, 水:{counts['수']})의 편중 및 발달 상태를 분석하십시오.
+- 십성의 생극제화 및 격국({gyukgook_detail})의 그릇과 품격, 원국의 조후(調候) 상태를 정밀 서술하십시오.
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 내 삶의 역동성과 상호작용</span>
-- 천간·지지의 합충형파해({hap_chung_hyoung_pa_hae}), 묘고 작용({won_guk_vaults_str}), 그리고 삼형살 팩트({samhyung_warn})의 역동성을 드라마틱한 심리상담 에세이로 풀어내십시오.
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 내 삶의 역동성과 상호작용</span>
+- 🚨 [해석 절대 원칙]: 원국 내의 합충형해파는 사건 발생이 아니라, 일간과 7궁성(년·월·일·시) 간의 '육친적 거리감, 심리적 갈등, 사회적 관계성'으로 정밀 통변하십시오.
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>4) 내 삶의 숨겨진 강점과 잠재적 에너지</span>
-- 신살({shinsal_str})과 삼재 정보({cur_samjae}), 그리고 마스터 데이터의 도망역/변곡점 정보를 종합하여 부드러운 에세이로 풀어내십시오.
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>3) 내 삶의 숨겨진 능력과 특별한 행운의 요소</span>
+- 4주 궁위별 12운성의 에너지 세기와 주요 신살(천을귀인: {guiin_str}, 일반신살: {shinsal_str}, 12신살: {s12_str})의 배치가 삶에 미치는 영향을 풀이하십시오.
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>4) 내 삶의 변곡점과 주의해야 할 시련</span>
+- 진술축미 묘고의 원국 내 상태(원국 입고/개고 팩트: {won_guk_vaults_str})와 삼형살(팩트: {samhyung_warn}), 복음, 격각 등의 원국 내 정적 구조를 분석하십시오.
 </div>
 
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 부모·형제운</h3><div class='content-box-loose'>
-- 부모·형제와의 정서적 유대감과 사회적 환경 작용을 풀어내십시오.
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>4. 학업·진학운</h3><div class='content-box-loose'>
-- 인성과 식상, 관성의 통제력을 바탕으로 학업 성패와 방향성을 서술하십시오.
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>5. 적성·직업운</h3><div class='content-box-loose'>
-- 박사님 마스터 데이터의 추천 업상(業象) 및 조직형 vs 독립형 판별을 기반으로 직업 물상 예시를 짚어 제시하십시오.
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>6. 결혼·자녀운</h3><div class='content-box-loose'>
-- 마스터 데이터의 육친적 관점과 배우자/자녀 인연의 깊이를 따뜻한 어조로 서술하십시오.
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>7. 재성운</h3><div class='content-box-loose'>
-- 돈과 물질을 대하는 가치관과 재물 관리 스타일을 정립해 주십시오.
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>8. 사업운</h3><div class='content-box-loose'>
-- 식상생재의 흐름과 창업 적합성 및 리더십의 강약점을 조언하십시오.
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>9. 관직·명예운</h3><div class='content-box-loose'>
-- 조직 내 승진, 명예, 감투운 및 책임감의 크기를 서술하십시오.
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>10. 건강운</h3><div class='content-box-loose'>
-- 마스터 데이터에 명시된 취약 장기 경고 및 오행 에너지 관리법을 제시하십시오.
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>11. 운의 흐름</h3>
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 특정 운의 분석</h3>
 <div class='content-box-loose'>
-(※ 🚨AI 특수 지시: 아래의 모든 대운, 세운, 월운 분석 시 단순 십성 나열이나 학술적 명리 용어 사용을 엄격히 금지합니다. 반드시 전통 명리학적으로만 풀이하십시오. AI 임의의 탭(Tab)이나 들여쓰기 공백을 절대 넣지 마십시오.)
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 대운의 흐름</span>
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 부모·형제운</span>
+- 🚨 [JSON family 연동]: 마스터 데이터의 육친 관점("family")과 년주(조상/부모)·월주(부모/형제)의 십성, 인성·비겁의 동태를 바탕으로 정서적 유대감과 현실적 환경 작용을 서술하십시오.
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 학업·진학운</span>
+- 인성(학문/이해력)과 식상(표현력), 관성(조직/자제력)의 세력을 분석하십시오.
+- 문창, 문곡, 학당, 화개 등 학문 관련 핵심 신살을 자연스럽게 융합하여 공부 스타일, 시험운, 전공 선택 방향성을 서술하십시오.
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>3) 적성·직업운</span>
+- 🚨 [JSON society 및 지장간 구조 연동]: 마스터 데이터의 사회적 관점("society")과 지장간 구조를 연동하십시오.
+  ① 진로 유형 판별: '직장 조직형' vs '자율 사업형' vs '전문 자유직형' 중 어디에 적합한지 명확히 분기하여 제안하십시오.
+  ② 추천 업상: JSON "society"에 정의된 적성 분야 및 추천 업상(業象) 물상 예시를 정확히 짚어주십시오.
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>4) 연애운</span>
+- 일간/일지 십성 및 지장간 구조를 바탕으로 본인의 이상형 스타일과 연애 성향을 풀이하십시오.
+- 원국 내 배우자성(남:재성, 여:관성)의 위치, 충, 원진, 공망 파동을 분석하여 조혼/만혼 권장 가이드 및 연애 시 유의점을 조언하십시오.
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>5) 결혼·자녀운</span>
+- 🚨 [JSON family 연동]: 배우자궁(일지)의 안점 여부 및 배우자성, 자식성(남:관성, 여:식상)의 동태와 인연의 깊이를 따뜻한 어조로 서술하십시오.
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>6) 재물운</span>
+- 재성(정재/편재)의 유무, 지장간 재고(財庫) 여부, 식상생재/재생관 흐름을 정밀 분석하여 돈과 물질을 대하는 가치관과 재물 축적 스타일을 서술하십시오.
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>7) 관직·명예운</span>
+- 관성과 인성의 상생 구조, 조직 내 승진, 감투운, 책임감의 크기 및 사회적 명예 발전 가능성을 정밀 풀이하십시오.
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>8) 건강운</span>
+- 🚨 [JSON shinsal_warnings 연동]: 마스터 데이터의 건강 경고("shinsal_warnings") 취약 장기 팩트 및 원국 오행의 편중/편고를 분석하여 실질적인 건강 관리법을 제시하십시오.
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>4. 운의 흐름 분석</h3>
+<div class='content-box-loose'>
+🚨 [동적 운 통변 절대 원칙]: 외부 운(대운, 세운, 월운)이 원국을 타격할 때 일어나는 '현실적 팩트(언제, 어떤 사건/사고/발복이 일어나는가)'를 정밀 구분하여 통변하십시오.
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 대운의 흐름</span>
 [DAEWUN_TABLE_HERE]
-(※ 🚨AI 절대 지시: 위 마커 자리에 마크다운 표를 직접 그리거나, 대운 간지를 일렬로 나열하는 행위를 엄격히 금지합니다. 마커 원문만 100% 그대로 남겨두고 즉시 아래 과거 대운 분석으로 넘어가십시오.)
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 대운 분석</span>
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(1) 지나온 과거 각 대운 분석</span>
 {past_daewun_html}
-(※ 🚨AI 절대 지시: 지나온 과거 각 대운 분석은 생략하거나 변형하지 말고 낱낱이 순서대로 나열하여 에세이로 분석하십시오. 탭(Tab)키 사용 절대 금지.)
-[지나온 과거 각 대운 출력 템플릿]
-• <b>OO세~OO세 (OO대운):</b> 
-<div style='padding-left: 20px; margin-top: 5px;'>
-(내용 간략히 작성)
-</div>
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 현재 대운 전반기 상세 분석 ({dw_start_age}세~{dw_mid_age}세)</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-(내용 상세히 작성)
-</div>
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 대운 분석</span>
+▶ 현재 대운 전반기 상세 분석 ({dw_start_age}세~{dw_mid_age}세):
+▶ 현재 대운 후반기 상세 분석 ({dw_mid2_age}세~{dw_end_age}세):
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 현재 대운 후반기 상세 분석 ({dw_mid2_age}세~{dw_end_age}세)</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-(내용 상세히 작성)
-</div>
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 세운의 흐름</span>
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 세운의 흐름</span>
 [SEWUN_TABLE_HERE]
-(※ 🚨AI 절대 지시: 마크다운 표 및 간지 나열 텍스트를 직접 생성하는 것을 절대 금지합니다.)
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 세운 분석</span>
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(1) 지나온 과거 각 세운 분석</span>
 {past_sewun_html}
-[지나온 과거 각 세운 출력 템플릿]
-• <b>OOOO년(OO년):</b> 
-<div style='padding-left: 20px; margin-top: 5px;'>
-(내용 간략히 작성)
-</div>
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 올해 세운 전반기 상세 분석</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-(내용 상세히 작성)
-</div>
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 세운 분석</span>
+▶ 현재 세운 전반기 상세 분석:
+▶ 현재 세운 후반기 상세 분석:
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 올해 세운 후반기 상세 분석</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-(내용 상세히 작성)
-</div>
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 월운의 흐름</span>
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>3) 월운의 흐름</span>
 [WOLWUN_TABLE_HERE]
-(※ 🚨AI 절대 지시: 마크다운 표 및 간지 나열 텍스트 직접 생성 절대 금지. 마커 원문만 남기십시오.)
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 월운 분석</span>
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(1) 지나온 과거 각 월운 분석</span>
 {past_months_html}
-(※ 🚨AI 절대 지시: 파이썬 시스템이 계산하여 위에 제공한 '지나온 과거 각 월운 분석'의 월, 간지, 날짜, 절기 텍스트를 AI가 임의로 판단하여 수정하는 것을 엄격히 금지합니다! 제공된 텍스트 그대로 100% 복사하여 출력하십시오. 들여쓰기(Tab) 절대 금지.)
-[지나온 과거 각 월운 출력 템플릿]
-• <b>(파이썬이 제공한 월과 간지): (파이썬이 제공한 연도/날짜/절기 그대로 복사)</b> 
-<div style='padding-left: 20px; margin-top: 5px;'>
-(내용 간략히 작성)
+
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 월운 분석</span>
+{prompt_first_half}
+{prompt_second_half}
 </div>
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>{prompt_first_half}</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-(내용 상세히 작성)
-</div>
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>{prompt_second_half}</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-(내용 상세히 작성)
-</div>
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>12. 삶을 바꾸는 지혜로운 조언</h3>
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>5. 삶을 바꾸는 지혜로운 조언</h3>
 <div class='content-box-loose'>
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 나를 돕는 에너지와 색상:</span>
-(작성)
-</div>
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>12. 삶을 바꾸는 지혜로운 조언</h3>
-<div class='content-box-loose'>
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 나를 돕는 에너지와 색상:</span>
-(작성)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 신체 밸런스와 에너지 관리:</span>
-(작성)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 공간의 흐름과 방위의 지혜:</span>
-(작성)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 재능 효율을 높이는 직업적 지혜:</span>
-(작성)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 더 나은 내일을 위한 절제의 미학:</span>
-(작성)
-</div>
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 나를 돕는 에너지와 색상:</span>
+(용신/희신 오행에 부합하는 개운 색상, 숫자를 제시하십시오)
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 재물을 부르는 이재(理財)와 절제의 지혜:</span> 
+(사주 구조상 손재수를 막고 실질적인 부를 축적할 재태크/지출 절제/투자 가이드를 명쾌하게 제시하십시오)
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 재능 효율을 높이는 직업적 지혜:</span> 
+(강점 오행과 십성을 극대화할 직업적 처세술을 조언하십시오)
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>4) 신체 밸런스와 에너지 관리:</span> 
+(취약 오행 수련법 및 건강 습관을 제시하십시오)
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>5) 공간의 흐름과 방위의 지혜:</span> 
+(길한 방향, 공간 정돈 및 개운 인테리어를 제시하십시오)
 
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'> 🎯 전통명리 특별 개운 비법</h3>
-<div class='content-box-loose'>
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 수호 천사의 기운 조언:</span>
-(※ AI 지시: 사주원국 및 운의 흐름에 따른 천을귀인과 길신 등의 작용에 대한 상세한 에세이를 작성하시오.)
+<div style='margin-top: 25px; padding-top: 15px; border-top: 1.5px dashed #1A237E;'>
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #1A237E; display: block; margin-bottom: 10px;'>🎯 전통명리 특별 개운 비법</span>
 
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 백년해로의 기운 조언:</span>
-(※ AI 지시: 이성 관계에 영향을 미치는 오행의 치우침, 원진, 신살 등을 실질적인 개운 비법과 함께 작성하십시오.)
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 행운에 따른 기운 조언:</span>
-(※ AI 지시: 마스터 데이터의 도망역 및 과숙/고신 팩트를 토대로 주의점에 대한 깊이 있는 에세이를 작성하시오.)
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 수호 천사의 기운 조언:</span>
+(원국의 천을귀인·암록·학당귀인 등 나를 돕는 귀인 성분과 귀인 조력자를 활용하는 개운법을 제시하십시오)
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 백년해로의 기운 조언:</span>
+(배우자궁 일지 및 지장간 합/육친의 동태를 바탕으로 부부·연인 간 갈등을 피하고 인연을 지키는 백년해로 지혜를 조언하십시오)
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 행운에 따른 기운 조언:</span>
+(현재 대운 및 세운의 길한 파동을 타고 흉한 변곡점(충/형/묘고)을 우회하는 실질적인 행운 처세술을 조언하십시오)
 </div>
 """
                 try:
