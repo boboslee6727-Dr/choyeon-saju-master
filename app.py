@@ -676,13 +676,14 @@ class UniversalPrintableGunghap:
         ]
 
 # ==============================================================================
-# 4. 사이드바 UI (통합 완성 버전)
+# 4. 사이드바 UI (사주팔자 역산 원본 100% 보존 및 상품 세분화 반영)
 # ==============================================================================
 with st.sidebar:
     st.title("🏮초연 전통명리 연구소")
     st.caption(f"{APP_VERSION}")
     st.markdown("---")
 
+    # [절대 원본 보존] 🔍 신청인 사주팔자 역산 검색
     with st.expander("🔍 사주팔자 역산 검색", expanded=False):
         col_g1, col_g2 = st.columns(2)
         with col_g1: ry = st.text_input("년주", value="", key="u_ry_rev")
@@ -726,7 +727,67 @@ with st.sidebar:
             else: st.warning("간지를 2글자씩 정확히 입력하세요.")
 
     st.markdown("---")
-    u_product = st.selectbox("📋 분석 상품 선택", ["개인사주", "궁합", "타 감명서"])
+
+    # ==============================================================
+    # 📋 분석 상품 선택 (VER 72.2 세분화 체계 적용)
+    # ==============================================================
+    main_category = st.selectbox(
+        "📋 상담 분야 선택", 
+        [
+            "1. 개인 사주팔자 풀이 (종합)", 
+            "2. 테마별 특성화 상담", 
+            "3. 커플 연애/결혼운 (궁합) 풀이", 
+            "4. 타 감명서 비교"
+        ], 
+        key="main_category"
+    )
+
+    u_product = "1-1. 사주팔자 및 대운 분석"
+
+    if main_category == "1. 개인 사주팔자 풀이 (종합)":
+        u_product = st.radio(
+            "상세 분석 항목:", 
+            [
+                "1-1. 사주팔자 및 대운 분석", 
+                "1-2. 올해 및 특정연도 운세 상세분석", 
+                "1-3. 이번달 및 특정월 운세 상세분석", 
+                "1-4. 특정 주간 및 특정일운 상세분석"
+            ], 
+            key="sub_category_1"
+        )
+    elif main_category == "2. 테마별 특성화 상담":
+        u_product = st.radio(
+            "특성화 상품 선택:", 
+            [
+                "2-1. 재물운 특화 분석", 
+                "2-2. 직업/진학운 특화 분석", 
+                "2-3. 연애/결혼운 특화 분석", 
+                "2-4. 건강운 특화 분석", 
+                "2-5. 이사 및 방위 특화 분석"
+            ], 
+            key="sub_category_2"
+        )
+    elif main_category == "3. 커플 연애/결혼운 (궁합) 풀이":
+        u_product = st.radio(
+            "상세 분석 항목:", 
+            [
+                "3-1. 연애/결혼운 (궁합) 풀이", 
+                "3-2. 결혼 택일", 
+                "3-3. 출산 택일"
+            ], 
+            key="sub_category_3"
+        )
+    else:
+        u_product = st.radio(
+            "비교 분석 대상:", 
+            [
+                "4-1. 타 감명서 비교 (사주)", 
+                "4-2. 타 감명서 비교 (궁합)"
+            ], 
+            key="sub_category_4"
+        )
+
+    st.markdown("---")
     
     st.markdown("<div style='font-weight:900; color:#1A237E; margin-bottom:5px;'>👤 신청인 기본 정보</div>", unsafe_allow_html=True)
     u_name = st.text_input("이름", value="", placeholder="홍길동", key="u_n")
@@ -748,21 +809,24 @@ with st.sidebar:
     start_date, end_date = None, None
     baby_gender = "미정"
     compare_mode = "자동대조"
-
     run_iljin_calc = False
     
-    if u_product == "개인사주":
-        st.markdown("<hr style='border:1px dashed #1A237E; margin:15px 0;'>", unsafe_allow_html=True)
-        run_iljin_calc = st.checkbox("🔮 일운 운세 분석 가동 (선택)", value=False)
-        
-        if run_iljin_calc:
-            if 'target_date' not in st.session_state:
-                kst = pytz.timezone('Asia/Seoul')
-                st.session_state['target_date'] = dt_mod.datetime.now(kst).date()
-            target_iljin_date = st.date_input("분석할 일자 선택", value=st.session_state['target_date'])
-            st.session_state['target_date'] = target_iljin_date
+    # --------------------------------------------------------------
+    # 조건 분기 세부 설정 (일운, 타 감명서, 궁합/택일)
+    # --------------------------------------------------------------
+    if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"]:
+        if u_product in ["1-1. 사주팔자 및 대운 분석", "1-4. 특정 주간 및 특정일운 상세분석"]:
+            st.markdown("<hr style='border:1px dashed #1A237E; margin:15px 0;'>", unsafe_allow_html=True)
+            run_iljin_calc = st.checkbox("🔮 일운 운세 분석 가동 (선택)", value=False)
+            
+            if run_iljin_calc:
+                if 'target_date' not in st.session_state:
+                    kst = pytz.timezone('Asia/Seoul')
+                    st.session_state['target_date'] = dt_mod.datetime.now(kst).date()
+                target_iljin_date = st.date_input("분석할 일자 선택", value=st.session_state['target_date'])
+                st.session_state['target_date'] = target_iljin_date
 
-    elif u_product == "타 감명서":
+    elif main_category == "4. 타 감명서 비교":
         st.markdown("<hr style='border:1px dashed #2E7D32; margin:15px 0;'>", unsafe_allow_html=True)
         st.markdown("<div style='font-weight:900; color:#2E7D32; margin-bottom:5px;'>📜 타 감명서 원문 대조 설정</div>", unsafe_allow_html=True)
         compare_mode = st.radio("대조 분석 모드", ["전통 명리학과 1:1 자동 대조", "외부 타 감명서 원문 대조"], index=0, key="comp_mode_select")
@@ -770,10 +834,10 @@ with st.sidebar:
         if compare_mode == "외부 타 감명서 원문 대조":
             other_reading_text = st.text_area("타 감명서 원문 텍스트 입력", value="", height=180, placeholder="타 철학관이나 프로그램에서 제공받은 감명서 원문을 이곳에 붙여넣으세요.", key="other_txt_in")
 
-    elif u_product == "궁합":
+    if main_category == "3. 커플 연애/결혼운 (궁합) 풀이" or u_product == "4-2. 타 감명서 비교 (궁합)":
         st.markdown("<hr style='border:1px dashed #C62828; margin:15px 0;'>", unsafe_allow_html=True)
         
-        # 🔍 상대방 사주간지 역산 검색
+        # [절대 원본 보존] 🔍 상대방 사주간지 역산 검색
         with st.expander("🔍 상대방 사주팔자 역산 검색", expanded=False):
             p_col_g1, p_col_g2 = st.columns(2)
             with p_col_g1: p_ry = st.text_input("상대방 년주", value="", key="p_ry_rev")
@@ -847,58 +911,58 @@ with st.sidebar:
         current_year = dt_mod.datetime.now().year 
         f_year = u_y if u_gender == "여성" else p_y
 
-        if (current_year - f_year + 1) <= 49:
+        if u_product == "3-3. 출산 택일" or ((current_year - f_year + 1) <= 49 and main_category == "3. 커플 연애/결혼운 (궁합) 풀이"):
             st.markdown("<hr style='border:1px solid #ddd; margin:15px 0;'>", unsafe_allow_html=True)
             
-            with st.expander("👶 출산택일 달력 선택", expanded=False):
+            with st.expander("👶 출산택일 달력 선택", expanded=(u_product == "3-3. 출산 택일")):
                 baby_gender = st.radio("태아 성별", ["미정", "남아", "여아"], index=0)
                 start_date = st.date_input("탐색 시작일")
                 end_date = st.date_input("탐색 종료일")
                 
                 st.markdown("<div style='margin-top:15px;'></div>", unsafe_allow_html=True)
-                run_delivery_calc = st.checkbox("✅ 출산택일 확정 (체크 후 하단 메인 가동버튼 클릭)", value=False)
+                run_delivery_calc = st.checkbox("✅ 출산택일 확정 (체크 후 하단 메인 가동버튼 클릭)", value=(u_product == "3-3. 출산 택일"))
 
-    # ✅ [공통 영역] 버튼들은 if-elif-else 바깥쪽(사이드바 최하단)에 위치해야 항상 보입니다!
+    # ✅ [공통 영역]
     st.markdown("---")
     
     # 🚀 사주풀이 가동 버튼 (Primary - 빨간색)
     btn_single = st.button("🚀 초연 전통명리 사주풀이 가동", key="btn_run", use_container_width=True, type="primary")
 
-    # 🖨️ 인쇄 / PDF 저장 버튼 (Secondary - ver 7.3 CSS가 적용되는 순정 버튼)
+    # 🖨️ 인쇄 / PDF 저장 버튼
     if st.button("🖨️ 풀이 결과 인쇄 / PDF 저장", key="btn_print", use_container_width=True, type="secondary"):
         components.html("<script>window.parent.print();</script>", height=0)
 
     if btn_single:
         if not u_name.strip(): 
             st.warning("⚠️ 신청인의 이름을 입력해 주세요.")
-        elif u_product == "타 감명서" and compare_mode == "외부 타 감명서 원문 대조" and not other_reading_text.strip():
+        elif main_category == "4. 타 감명서 비교" and compare_mode == "외부 타 감명서 원문 대조" and not other_reading_text.strip():
             st.warning("⚠️ 타 감명서 원문을 입력해 주세요.")
-        elif u_product == "궁합" and not p_name.strip(): 
+        elif (main_category == "3. 커플 연애/결혼운 (궁합) 풀이" or u_product == "4-2. 타 감명서 비교 (궁합)") and not p_name.strip(): 
             st.warning("⚠️ 상대방의 이름을 입력해 주세요.")
         else:
             st.session_state['app_running'] = True
             
-            if u_product == "개인사주" and run_iljin_calc and st.session_state.get('saved_report_html'):
+            if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"] and run_iljin_calc and st.session_state.get('saved_report_html'):
                 st.session_state['need_calc'] = False
                 st.session_state['run_waterfall'] = True
                 if 'saved_report_iljin' in st.session_state: del st.session_state['saved_report_iljin']
                 
-            elif u_product == "타 감명서":
+            elif main_category == "4. 타 감명서 비교":
                 st.session_state['need_calc'] = True
                 st.session_state['run_waterfall'] = False
                 st.session_state['run_delivery_only'] = False
                 for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
                     if key in st.session_state: del st.session_state[key]
                     
-            elif u_product == "궁합" and run_delivery_calc and st.session_state.get('saved_report_gh_g'):
+            elif main_category == "3. 커플 연애/결혼운 (궁합) 풀이" and run_delivery_calc and st.session_state.get('saved_report_gh_g'):
                 st.session_state['need_calc'] = False
                 st.session_state['run_delivery_only'] = True
                 if 'saved_report_del' in st.session_state: del st.session_state['saved_report_del']
                 
             else:
                 st.session_state['need_calc'] = True
-                st.session_state['run_waterfall'] = run_iljin_calc if u_product == "개인사주" else False 
-                st.session_state['run_delivery_only'] = run_delivery_calc if u_product == "궁합" else False
+                st.session_state['run_waterfall'] = run_iljin_calc if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"] else False 
+                st.session_state['run_delivery_only'] = run_delivery_calc if main_category == "3. 커플 연애/결혼운 (궁합) 풀이" else False
                 for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
                     if key in st.session_state: del st.session_state[key]
 
