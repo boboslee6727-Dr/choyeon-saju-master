@@ -14,7 +14,7 @@ import streamlit.components.v1 as components
 import re
 
 # 🎯 [버전 컨트롤 타워]
-APP_VERSION = "Ver 47.0 Master"
+APP_VERSION = "Ver 47.1 Master"
 
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS
@@ -85,196 +85,21 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 # ==============================================================================
-# 0.5 [완전 무결점 하드코딩 DB]
+# 0.5 [외부 choyeon_db.json 완벽 동적 연계]
 # ==============================================================================
-choyeon_db = {
-    "wolryeong": {
-        "甲子": "천둥번개 우뢰(甲)가 꽁꽁 얼어붙은 검은 연못(子)의 정적을 거세게 깨우는 완연한 한겨울",
-        "乙丑": "찬 바람(乙)이 꽁꽁 얼어붙은 버드나무 언덕(丑)을 매섭게 휘감아 도는 가장 추운 겨울",
-        "丙寅": "태양(丙)이 넓은 들판(寅)의 찬 기운을 녹이며 환히 비추는, 추위가 남아 있는 이른 봄",
-        "丁卯": "영롱한 별빛(丁)이 옥 같이 아름다운 숲(卯)의 어둠을 밝히는 완연한 봄",
-        "戊辰": "노을(戊)이 풀이 우거진 늪지(辰) 위로 내려앉아 수분이 차오르는 봄과 여름의 환절기",
-        "己巳": "구름(己)이 큰 역(巳) 위로 머무르며 열기를 품기 시작하는 이른 여름",
-        "庚午": "달빛(庚)이 횟불 신호대(午)의 정적 속에 고고하게 빛을 쏟아내는 완연한 여름",
-        "辛未": "서리(辛)가 화원(未)의 열기를 식히지만 가장 무더운 여름",
-        "壬申": "이슬(壬)이 대도시(申)의 마른 풀끝을 적시는 서늘한 이른 가을",
-        "癸酉": "봄비(癸)가 사찰의 종(酉)을 적시며 결실을 거두는 완연 가을",
-        "甲戌": "우뢰(甲)가 불태운 들판(戌)에 진동하며 결실을 저장하는 가을과 겨울의 환절기",
-        "乙亥": "바람(乙)이 쏟아지는 강물(亥) 위를 스치며 추위가 스며드는 이른 겨울",
-        "丙子": "태양(丙)이 검은 연못(子)을 비추는 깊어지는 한겨울",
-        "丁丑": "별(丁)이 버드나무 언덕(丑)의 시린 어둠을 밝히는 가장 추운 겨울",
-        "戊寅": "노을(戊)이 들판(寅)을 온화하게 감싸 안는 이른 봄",
-        "己卯": "구름(己)이 아름다운 숲(卯) 위를 감싸는 완연한 봄",
-        "庚辰": "달빛(庚)이 우거진 늪지(辰) 위로 쏟아지는 봄과 여름의 환절기",
-        "辛巳": "서리(辛)가 큰 역(巳) 위로 내려앉는 이른 여름",
-        "壬午": "이슬(壬)이 횃불 신호대(午) 위로 맺히는 완연한 여름",
-        "癸未": "봄비(癸)가 화원(未)을 적시는 가장 무더운 여름",
-        "甲申": "우뢰(甲)가 대도시(申)를 진동시키는 이른 가을",
-        "乙酉": "바람(乙)이 사찰의 종(酉)을 울리는 완연한 가을",
-        "丙戌": "태양(丙)이 불태운 들판(戌)을 비추는 가을과 겨울의 환절기",
-        "丁亥": "별(丁)이 쏟아지는 강물(亥) 위를 밝히는 이른 겨울",
-        "戊子": "노을(戊)이 검은 연못(子)의 정적을 비추는 한겨울",
-        "己丑": "구름(己)이 버드나무 언덕(丑)을 덮어주는 가장 추운 겨울",
-        "庚寅": "달빛(庚)이 넓은 들판(寅)의 정적을 비추는 이른 봄",
-        "辛卯": "서리(辛)가 아름다운 숲(卯)에 내리는 완연한 봄",
-        "壬辰": "이슬(壬)이 늪지(辰)를 적시는 봄과 여름의 환절기",
-        "癸巳": "봄비(癸)가 큰 역(巳) 위로 내리는 이른 여름",
-        "甲午": "우뢰(甲)가 횃불 신호대(午)를 진동시키는 완연한 여름",
-        "乙未": "바람(乙)이 화원(未) 위를 스치는 가장 무더운 여름",
-        "丙申": "태양(丙)이 대도시(申)를 환히 비추는 이른 가을",
-        "丁酉": "별(丁)이 사찰의 종(酉)을 은은히 비추는 완연한 가을",
-        "戊戌": "노을(戊)이 불태운 들판(戌)을 덮는 가을과 겨울의 환절기",
-        "己亥": "구름(己)이 쏟아지는 강물(亥) 위에 머무는 이른 겨울",
-        "庚子": "달빛(庚)이 검은 연못(子)을 비추는 한겨울",
-        "辛丑": "서리(辛)가 버드나무 언덕(丑)에 내리는 가장 추운 겨울",
-        "壬寅": "이슬(壬)이 들판(寅)을 적시는 이른 봄",
-        "癸卯": "봄비(癸)가 아름다운 숲(卯)을 적시는 완연한 봄",
-        "甲辰": "우뢰(甲)가 늪지(辰)를 진동시키는 봄과 여름의 환절기",
-        "乙巳": "바람(乙)이 큰 역(巳) 위를 스치는 이른 여름",
-        "丙午": "태양(丙)이 횟불 신호대(午)를 비추는 완연한 여름",
-        "丁未": "영롱한 별빛(丁)이 화원(未)을 비추는 가장 무더운 여름",
-        "戊申": "붉은 노을(戊)이 유명한 대도시(申)를 감싸는 이른 가을",
-        "己酉": "포근한 구름(己)이 사찰의 종(酉) 위에 머무는 완연한 가을",
-        "庚戌": "서늘한 달빛(庚)이 불태우는 근원(戌)을 비추는 가을과 겨울의 환절기",
-        "辛亥": "하얀 서리(辛)가 쏟아지는 강물(亥) 위에 내리는 이른 겨울",
-        "壬子": "가을이슬(壬)이 검은 연못(子)을 비추는 한겨울",
-        "癸丑": "봄비(癸)가 버드나무 언덕(丑)을 적시는 가장 추운 겨울",
-        "甲寅": "천둥번개 우뢰(甲)가 넓은 들판(寅)을 진동시키는 이른 봄",
-        "乙卯": "바람(乙)이 옥 같이 아름다운 숲(卯)을 스치는 완연한 봄",
-        "丙辰": "태양(丙)이 풀이 우거진 늪지(辰)를 비추는 봄과 여름의 환절기",
-        "丁巳": "영롱한 별빛(丁)이 큰 역(巳)을 밝히는 이른 여름",
-        "戊午": "붉은 노을(戊)이 횟불 신호대(午)를 덮는 완연한 여름",
-        "己未": "포근한 구름(己)이 화원(未) 위에 머무는 가장 무더운 여름",
-        "庚申": "서늘한 달빛(庚)이 유명한 대도시(申)를 비추는 이른 가을",
-        "辛酉": "하얀 서리(辛)가 사찰의 종(酉) 위에 내리는 완연한 가을",
-        "壬戌": "가을이슬(壬)이 불태우는 근원(戌) 위에 맺히는 가을과 겨울의 환절기",
-        "癸亥": "봄비(癸)가 쏟아지는 강물(亥)을 적시는 이른 겨울"
-    },
-    "ilju": {
-        "甲子": "검은 연못(子) 위에 울려 퍼지는 우레(甲)의 형상",
-        "乙丑": "버드나무 언덕(丑)에 불어오는 바람(乙)의 형상",
-        "丙寅": "넓은 들판(寅)을 비추는 태양(丙)의 형상",
-        "丁卯": "옥 같이 아름다운 숲(卯) 위에 떠있는 밤하늘 별(丁)의 형상",
-        "戊辰": "우거진 늪지(辰)에 드리워진 노을(戊)의 형상",
-        "己巳": "커다란 역(巳) 위에 떠도는 구름(己)의 형상",
-        "庚午": "봉화대(午) 위에 떠있는 밤하늘 달(庚)의 형상",
-        "辛未": "아름다운 화원(未) 위에 내려앉은 서리(辛)의 형상",
-        "壬申": "대도시(申)를 적시는 가을이슬(壬)의 형상",
-        "癸酉": "사찰의 종(酉) 위에 내리는 봄비(癸)의 형상",
-        "甲戌": "불 태우는 근원(戌) 위에 울려 퍼지는 우레(甲)의 형상",
-        "乙亥": "거대한 강물(亥)에 불어오는 바람(乙)의 형상",
-        "丙子": "검은 연못(子)을 비추는 태양(丙)의 형상",
-        "丁丑": "버드나무 언덕(丑) 위에 떠있는 밤하늘 별(丁)의 형상",
-        "戊寅": "넓은 들판(寅) 위에 드리워진 노을(戊)의 형상",
-        "己卯": "옥 같이 아름다운 숲(卯)에 떠도는 구름(己)의 형상",
-        "庚辰": "우거진 늪지(辰) 위에 떠있는 밤하늘 달(庚)의 형상",
-        "辛巳": "대도시(巳)에 내려앉은 서리(辛)의 형상",
-        "壬午": "봉화대(午)에 맺혀진 가을이슬(壬)의 형상",
-        "癸未": "아름다운 화원(未)을 적셔주는 봄비(癸)의 형상",
-        "甲申": "대도시(申)에 울려 퍼지는 우레(甲)의 형상",
-        "乙酉": "사찰의 종(酉)을 스치는 바람(乙)의 형상",
-        "丙戌": "불 태우는 근원(戌)를 비추는 태양(丙)의 형상",
-        "丁亥": "거대한 강물(亥)를 비치는 밤하늘 별(丁)의 형상",
-        "戊子": "검은 연못(子) 위에 드리워진 노을(戊)의 형상",
-        "己丑": "버드나무 언덕(丑) 위에 떠도는 구름(己)의 형상",
-        "庚寅": "넓은 들판(寅)을 비추는 밤하늘 달(庚)의 형상",
-        "辛卯": "옥 같이 아름다운 숲(卯) 위에 내려앉은 서리(辛)의 형상",
-        "壬辰": "우거진 늪지(辰) 위에 맺혀진 가을이슬(壬)의 형상",
-        "癸巳": "커다란 역(巳)을 적시는 봄비(癸)의 형상",
-        "甲午": "봉화대(午) 위에 울려 퍼지는 우레(甲)의 형상",
-        "乙未": "아름다운 화원(未)에 불어오는 바람(乙)의 형상",
-        "丙申": "대도시(申)를 비추는 태양(丙)의 형상",
-        "丁酉": "사찰의 종(酉)을 비추는 밤하늘 별(丁)의 형상",
-        "戊戌": "불태우는 근원(戌) 위에 드리워진 노을(戊)의 형상",
-        "己亥": "거대한 강물(亥) 위를 떠도는 구름(己)의 형상",
-        "庚子": "검은 연못(子) 위에 떠있는 밤하늘 달(庚)의 형상",
-        "辛丑": "버드나무 언덕(丑) 위에 내리앉은 서리(辛)의 형상",
-        "壬寅": "넓은 들판(寅) 위에 맺혀진 가을이슬(壬)의 형상",
-        "癸卯": "옥 같이 아름다운 숲(卯)을 적셔주는 봄비(癸)의 형상",
-        "甲辰": "우거진 늪지(辰) 위에 울려 퍼지는 우레(甲)의 형상",
-        "乙巳": "커다란 역(巳)으로 불어오는 바람(乙)의 형상",
-        "丙午": "봉화대(午) 위에 떠있는 태양(丙)의 형상",
-        "丁未": "아름다운 화원(未)를 비추는 밤하늘 별(丁)의 형상",
-        "戊申": "대도시(申) 위에 드리워진 노을(戊)의 형상",
-        "己酉": "사찰의 종(酉) 위를 떠도는 구름(己)의 형상",
-        "庚戌": "불태우는 근원(戌) 위에 떠있는 밤하늘 달(庚)의 형상",
-        "辛亥": "거대한 강물(亥)에 내려앉은 서리(辛)의 형상",
-        "壬子": "검은 연못(子) 위로 맺혀진 가을이슬(壬)의 형상",
-        "癸丑": "버드나무 언덕(丑) 위에 내리는 진눈개비(癸)의 형상",
-        "甲寅": "넓은 들판(寅) 위에 울려 퍼지는 우레(甲)의 형상",
-        "乙卯": "옥 같이 아름다운 숲(卯)에 불어오는 바람(乙)의 형상",
-        "丙辰": "갯벌(辰) 위를 비추는 태양(丙)의 형상",
-        "丁巳": "커다란 역(巳)을 비추는 밤하늘 별(丁)의 형상",
-        "戊午": "봉화대(午)에 드리워진 노을(戊)의 형상",
-        "己未": "아름다운 화원(未) 위를 떠도는 구름(己)의 형상",
-        "庚申": "대도시(申) 위에 떠있는 밤하늘 달(庚)의 형상",
-        "辛酉": "사찰의 종(酉) 위에 내려 앉은 서리(辛)의 형상",
-        "壬戌": "불태우는 근원(戌) 위에 맺혀진 가을이슬(壬)의 형상",
-        "癸亥": "거대한 강물(亥) 위에 새차게 내리는 봄비(癸)의 형상"
-    },
-    "ilju_structure": {
-        "甲子": ["인성구조", "자기몰입형", "자의식 발달하여 발상의 전환이 빠르고 임사즉결"],
-        "乙丑": ["재관인구조", "출세지향형", "편법적 사고와 신속한 결과를 추구하며 앞서가는 경향"],
-        "丙寅": ["인비식구조", "자기중심형", "감정기복이 심하고 매사를 주도하는 구조"],
-        "丁卯": ["인성구조", "자기몰입형", "자의식 발달하여 발상의 전환이 빠르고 임사즉결"],
-        "戊辰": ["비재관구조", "결과집착형", "원칙을 추구하며 결과를 중시하는 노력파"],
-        "己巳": ["인비식구조", "자기중심형", "감정기복이 심하고 매사를 주도하는 구조"],
-        "庚午": ["관인구조", "순리중시형", "주어진 환경에 적응하며 자기만족을 느끼며 최선을 다함"],
-        "辛未": ["재관인구조", "출세지향형", "편법적 사고와 신속한 결과를 추구하며 앞서가는 경향"],
-        "壬申": ["관인비구조", "원칙중시형", "원칙적 삶에 얽매여 노력하며 끊임없는 갈등구조"],
-        "癸酉": ["인성구조", "자기몰입형", "자의식 발달하여 발상의 전환이 빠르고 임사즉결"],
-        "甲戌": ["식재관구조", "현실타파형", "원칙타파 및 현상개선의 자유주의"],
-        "乙亥": ["인비재구조", "자기만족형", "목표 지향적이며 계산적 경제관념이 분명"],
-        "丙子": ["관성구조", "자기억제형", "주변 의식하고 내면의 갈등을 억제하여 정제된 삶 추구"],
-        "丁丑": ["식재관구조", "현실타파형", "원칙타파 및 현상개선의 자유주의"],
-        "戊寅": ["관인비구조", "원칙중시형", "원칙적 삶에 얽매여 노력하며 끊임없는 갈등구조"],
-        "己卯": ["관성구조", "자기억제형", "주변 의식하고 내면의 갈등을 억제하여 정제된 삶 추구"],
-        "庚辰": ["식재인구조", "다재다능형", "다재다능하고 창조적 감성표출의 달인"],
-        "辛巳": ["관인비구조", "원칙중시형", "원칙적 삶에 얽매여 노력하며 끊임없는 갈등구조"],
-        "壬午": ["재관구조", "실리추구형", "현실적 이익과 명예를 추구하는 계산된 실속파"],
-        "癸未": ["식재관구조", "현실타파형", "원칙타파 및 현상개선의 자유주의"],
-        "甲申": ["재관인구조", "출세지향형", "편법적 사고와 신속한 결과를 추구하며 앞서가는 경향"],
-        "乙酉": ["관성구조", "자기억制형", "주변 의식하고 내면의 갈등을 억제하여 정제된 삶 추구"],
-        "丙戌": ["비식재구조", "분주다망형", "목표추구의 자기주도와 적극적 대외활동"],
-        "丁亥": ["식관인구조", "현실동조형", "일처리에 능숙하고 변동과 변화에 초연한 심리"],
-        "戊子": ["재성구조", "이재추구형", "결과의 명확성을 추구하며 기민하고 분주하게 활동"],
-        "己丑": ["비식재구조", "분주다망형", "목표추구의 자기주도와 적극적 대외활동"],
-        "庚寅": ["재관인구조", "출세지향형", "편법적 사고와 신속한 결과를 추구하며 앞서가는 경향"],
-        "辛卯": ["재성구조", "이재추구형", "결과의 명확성을 추구하며 기민하고 분주하게 활동"],
-        "壬辰": ["비식관구조", "조직봉사형", "조직과 봉사활동을 통해 정체성을 추구"],
-        "癸巳": ["재관인구조", "출세지향형", "편법적 사고와 신속한 결과를 추구하며 앞서가는 경향"],
-        "甲午": ["식재구조", "자기과시형", "내실보다 외형을 중시하고 다소 무모한 결과를 추구"],
-        "乙未": ["비식재구조", "분주다망형", "목표추구의 자기주도와 적극적 대외활동"],
-        "丙申": ["식재관구조", "현실타파형", "원칙타파 및 현상개선의 자유주의"],
-        "丁酉": ["재성구조", "이재추구형", "결과의 명확성을 추구하며 기민하고 분주하게 활동"],
-        "戊戌": ["인비식구조", "자기중심형", "감정기복이 심하고 매사를 주도하는 구조"],
-        "己亥": ["비재관구조", "결과집착형", "원칙을 추구하며 결과를 중시하는 노력파"],
-        "庚子": ["식상구조", "현실추구형", "능수능란한 수단으로 매사를 주도하며 활로 모색"],
-        "辛丑": ["인비식구조", "자기중심형", "감정기복이 심하고 매사를 주도하는 구조"],
-        "壬寅": ["식재관구조", "현실타파형", "원칙타파 및 현상개선의 자유주의"],
-        "癸卯": ["식상구조", "현실추구형", "능수능란한 수단으로 매사를 주도하며 활로 모색"],
-        "甲辰": ["인비재구조", "자기만족형", "목표 지향적이며 계산적 경제관념이 분명"],
-        "乙巳": ["식재관구조", "현실타파형", "원칙타파 및 현상개선의 자유주의"],
-        "丙午": ["비식구조", "자기주도형", "비교우위에 서고자 매사를 적극적으로 주도하며 외향적"],
-        "丁未": ["인비식구조", "자기중심형", "감정기복이 심하고 매사를 주도하는 구조"],
-        "戊申": ["비식재구조", "분주다망형", "목표추구의 자기주도와 적극적 대외활동"],
-        "己酉": ["식상구조", "현실추구형", "능수능란한 수단으로 매사를 주도하며 활로 모색"],
-        "庚戌": ["관인비구조", "원칙중시형", "원칙적 삶에 얽매여 노력하며 끊임없는 갈등구조"],
-        "辛亥": ["식재인구조", "다재다능형", "다재다능하고 창조적 감성표출의 달인"],
-        "壬子": ["비겁구조", "의지분출형", "독자적 활로 모색과 배타적 자력갱생"],
-        "癸丑": ["관인비구조", "원칙중시형", "원칙적 삶에 얽매여 노력하며 끊임없는 갈등구조"],
-        "甲寅": ["비식재구조", "분주다망형", "목표추구의 자기주도와 적극적 대외활동"],
-        "乙卯": ["비겁구조", "의지분출형", "독자적 활로 모색과 배타적 자력갱생"],
-        "丙辰": ["식관인구조", "현실동조형", "일처리에 능숙하고 변동과 변화에 초연한 심리"],
-        "丁巳": ["비식재구조", "분주다망형", "목표추구의 자기주도와 적극적 대외활동"],
-        "戊午": ["인비구조", "주도면밀형", "치밀하게 이해득실을 추구하는 자기발전형"],
-        "己未": ["관인비구조", "원칙중시형", "원칙적 삶에 얽매여 노력하며 끊임없는 갈등구조"],
-        "庚申": ["인비식구조", "자기중심형", "감정기복이 심하고 매사를 주도하는 구조"],
-        "辛酉": ["비겁구조", "의지분출형", "독자적 활로 모색과 배타적 자력갱생"],
-        "壬戌": ["재관인구조", "출세지향형", "편법적 사고와 신속한 결과를 추구하며 앞서가는 경향"],
-        "癸亥": ["비식관구조", "조직봉사형", "조직과 봉사활동을 통해 정체성을 추구"]
-    }
-}
+@st.cache_data
+def load_choyeon_db():
+    file_path = 'choyeon_db.json'
+    if not os.path.exists(file_path):
+        return {"wolryeong": {}, "ilju": {}, "ilju_structure": {}, "ilju_secret": {}}
+    try:
+        with open(file_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except Exception as e:
+        st.error(f"🚨 choyeon_db.json 파일 로드 오류: {e}")
+        return {"wolryeong": {}, "ilju": {}, "ilju_structure": {}, "ilju_secret": {}}
+
+choyeon_db = load_choyeon_db()
 
 # ==============================================================================
 # 1. 시스템 변수 세팅 및 써머타임 엔진
@@ -825,7 +650,7 @@ class UniversalPrintableGunghap:
 # ==============================================================================
 with st.sidebar:
     st.title("🏮초연 시공명리 연구소")
-    st.caption(f"{APP_VERSION} Master (Base + Gunghap)")
+    st.caption(f"{APP_VERSION} (Base + Gunghap)")
     st.markdown("---")
 
     with st.expander("🔍 사주팔자 역산 검색", expanded=False):
@@ -1294,8 +1119,10 @@ if st.session_state.get('need_calc', False):
 <h1 style='text-align:center;'>🎯[초연 시공명리 사주풀이]</h1>
 {table_html}
 {master_bar_html}
+{intro_html}
+{golden_text_html}
 <div style='margin-top:20px;'>
-{{full_content_clean_placeholder}}
+{full_content_clean_placeholder}
 </div>
 </div>
 </div>"""
@@ -1342,6 +1169,13 @@ if st.session_state.get('need_calc', False):
                 struct_data = choyeon_db.get("ilju_structure", {}).get(i_key, ["구조 미상", "유형 미상", "성향 미상"])
                 s_name, s_type, s_desc = struct_data[0], struct_data[1], struct_data[2]
 
+                choyeon_golden_text = f"""
+<div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
+    <p style='text-indent: 15px; margin-bottom: 5px;'>
+        <b>{disp_name}님</b>은 '{w_val}'의 시공간에서, '{i_val}'의 성품을 가지고 태어나셨습니다.
+    </p>
+</div>
+"""
                 dw_start_age = current_daewun_age
                 dw_mid_age   = current_daewun_age + 4
                 dw_mid2_age  = current_daewun_age + 5
@@ -1366,18 +1200,6 @@ if st.session_state.get('need_calc', False):
                     f"4. 괄호 병기 금지: 에세이 작성 시 전문 용어나 한자를 괄호 안에 병기하는 행위를 금지합니다.\n"
                     f"5. HTML 훼손 금지: </div> 태그를 임의로 닫거나 마크다운 기호를 남발하지 마십시오.\n"
                 )
-
-                # 🚨 합충형파해 팩트 변수 미리 생성 (NameError 방지)
-                rels_list = []
-                for i in range(4):
-                    rel_g = get_gan_rel_all(i, gans)
-                    if rel_g != "-":
-                        rels_list.append(f"천간({gans[i]}:{rel_g})")
-                    for j in range(i + 1, 4):
-                        rel_j = get_ji_rel_set(jjis[i], jjis[j])
-                        if rel_j != "-":
-                            rels_list.append(f"지지({jjis[i]}-{jjis[j]}:{rel_j})")
-                hap_chung_hyoung_pa_hae = ", ".join(list(dict.fromkeys(rels_list))) if rels_list else "특이 합충형파해 없음"
 
                 if u_gender == '남성':
                     yukchin_rule = f"""
@@ -1421,21 +1243,27 @@ if st.session_state.get('need_calc', False):
                 # ==============================================================================
                 # 1. 신버전 스타일 안내 문구 및 시공간 자의 형상 준비
                 # ==============================================================================
-                intro_html = (
-                    "<div style='margin-top:20px; padding:15px; background-color:#F5F5F5; border-radius:10px; font-size:14px; line-height:1.6; color:#333; font-family: \"Nanum Myeongjo\", serif;'>"
-                    "<b>💡 초연 시공명리 풀이 안내:</b> 본 리포트는 5x5 체용(體用) 임상 매트릭스, 묘고 개고/입고, 삼형살 팩트 연산을 바탕으로 작성되었습니다. "
-                    "전통 명리의 일간 기준 단식 통변과 초연 시공명리의 실전 체용 사건 통변을 함께 대조하여 삶의 정밀한 궤적을 제시합니다."
-                    "</div>"
-                )
+                intro_html = f"""
+    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
+    <div style="margin: 0; padding: 0;">
+        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 6px; font-weight: 600; text-align: justify; text-indent: 0;">
+            <b>"초연 시공 명리학"</b>은 5년에 한 번 돌아오는 '60월령과 60일주'의 조합으로 <b>3,600개 유형</b>으로 분류하지만, <b>"기존의 전통 명리학"</b>은 1년에 한 번 돌아오는 '12월지와 60일주'의 조합으로 <b>720개 유형</b>으로 분류하여 풀이합니다.
+        </p> 
+        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 0; font-weight: 600; text-align: justify; text-indent: 0;">
+            따라서, <b>"본 초연 시공 명리학"</b>은 기존 전통명리학에 비하여 <b>5배</b>, 요즘 유행하는 16개 유형으로 분류하는 MBTI와 비교하면 무려 <b>225배</b> 더 정확한 사주풀이 입니다.
+        </p>
+    </div>
+    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
+"""
 
                 golden_text_html = f"""
-                <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-top: 15px; margin-bottom: 20px;'>
-                    <p style='text-indent: 15px; margin-bottom: 5px;'>
-                        <b>{disp_name}님</b>은 '{w_val}'의 시공간에서, '{i_val}'의 성품을 가지고 태어나셨습니다.
-                    </p>
-                </div>
-                """
-
+    <div style="margin: 0; padding: 0;">
+        <p class="ai-body-p" style="margin: 0; color: #000000; text-align: justify; text-indent: 0;">
+            초연 시공명리학적으로 풀이하면 <b>{disp_name}님</b>은 <b>'{w_val}'</b>의 시공간에서, <b>'{i_val}'</b>의 성품을 가지고 태어나셨으며, 성격은 <b>'{s_name}'</b>인 <b>'{s_type}'</b>으로, <b>'{s_desc}'</b>하는 성향이 있습니다.
+        </p>
+    </div>
+    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
+"""
                 # ==============================================================================
                 # 2. AI 프롬프트 정의 (표 치환 마커 주입)
                 # ==============================================================================
@@ -1448,8 +1276,11 @@ if st.session_state.get('need_calc', False):
 3. 🚨 초연 시공명리 3대 관점의 입체적 풀이: 1) 육친적, 2) 심리적, 3) 사회적 관점이라는 세 가지 차원을 유기적으로 융합하십시오.
 
 [문단 통제 명령]
-1. 모든 통변 에세이 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
-2. 계층별 글자 크기 및 상하 간격을 철저히 준수하십시오.
+1. 모든 통변 에세이 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸십시오.
+2. 🚨 [계층별 글자 크기 및 상하 간격 강제 규격화]
+   [부목차] <span class='sub-title' style='display: block; font-size: 20px; font-weight: 900; color: #111; line-height: 1.4; margin-top: 35px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
+   [세부 소목차] <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; line-height: 1.4; margin-top: 25px; margin-bottom: 5px;'>▶ 현재 대운 상세 분석 ({dw_mid2_age}세~{dw_end_age}세)</span>
+3. 표(Table) 생성 절대 금지. 운의 흐름 연도별 분석은 반드시 도트 기호(•)를 사용한 텍스트로 작성하십시오.
 
 [내담자 맞춤형 정밀 타겟팅]
 - {age_prompt}
@@ -1468,6 +1299,7 @@ if st.session_state.get('need_calc', False):
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 겉으로 드러난 성격</span>
 - 일주({ds}{db}), 십성, 십이운성을 바탕으로 표면적 성격을 서술하십시오.
+- 12신살 통변 시 년지 기준 신살(사회적 환경)과 일지 기준 신살(내면 파동)을 구별하여 설명하십시오.
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 감추어진 내 속마음</span>
 - 지장간 인종법과 공망의 양가적 의미를 바탕으로 원국에 숨겨진 육친의 심리와 내면의 공허함을 서술하십시오.
@@ -1475,6 +1307,7 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조분석</h3>
 <div class='content-box-loose'>
+[CHOYEON_GOLDEN_TEXT_HERE]
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
 - 격국({gyukgook_detail})을 핵심 뼈대로 삼아 발현되는 무대의 규모와 특성을 작성하십시오.
 
@@ -1482,20 +1315,43 @@ if st.session_state.get('need_calc', False):
 - 오행의 분포와 계절적 조후 밸런스를 분석하여 추구해야 할 에너지를 서술하십시오.
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 내 삶의 역동성과 상호작용</span>
-- 천간·지지의 합충형파해({hap_chung_hyoung_pa_hae}), 묘고 작용({won_guk_vaults_str}), 그리고 삼형살 팩트({samhyung_warn})의 역동성을 풀어나가십시오.
+- 천간·지지의 합충형파해({hap_chung_hyoung_pa_hae}), 묘고 작용({won_guk_vaults_str}), 그리고 삼형살 팩트({samhyung_warn})의 역동성을 드라마틱한 심리상담 에세이로 풀어내십시오.
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>4) 내 삶의 숨겨진 강점과 잠재적 에너지</span>
-- 신살({shinsal_str})과 삼재 정보({cur_samjae})를 종합하여 부드러운 에세이로 풀어내십시오.
+- 신살({shinsal_str})과 삼재 정보({cur_samjae})를 종합하여 현대 심리상담 관점의 부드러운 에세이로 풀어내십시오.
 </div>
 
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 부모·형제운</h3><div class='content-box-loose'>부모·형제와의 유대감을 풀어내십시오.</div>
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>4. 학업·진학운</h3><div class='content-box-loose'>학업 성패와 방향성을 서술하십시오.</div>
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>5. 적성·직업운</h3><div class='content-box-loose'>직업적 물상 예시를 짚어 제시하십시오.</div>
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>6. 결혼·자녀운</h3><div class='content-box-loose'>배우자 및 자녀 인연을 서술하십시오.</div>
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>7. 재성운</h3><div class='content-box-loose'>재물 관리 스타일을 정립해 주십시오.</div>
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>8. 사업운</h3><div class='content-box-loose'>식상생재의 흐름과 창업 적합성을 조언하십시오.</div>
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>9. 관직·명예운</h3><div class='content-box-loose'>승진 및 명예운을 서술하십시오.</div>
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>10. 건강운</h3><div class='content-box-loose'>취약 장기 경고 및 오행 관리법을 제시하십시오.</div>
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 부모·형제운</h3><div class='content-box-loose'>
+- 부모·형제와의 정서적 유대감과 사회적 환경 작용을 풀어내십시오.
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>4. 학업·진학운</h3><div class='content-box-loose'>
+- 인성과 식상, 관성의 통제력을 바탕으로 학업 성패와 방향성을 서술하십시오.
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>5. 적성·직업운</h3><div class='content-box-loose'>
+- 조직형 vs 독립형 판별 및 독특한 실질적 직업 물상 예시를 짚어 제시하십시오.
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>6. 결혼·자녀운</h3><div class='content-box-loose'>
+- 배우자 및 자녀 인연의 깊이와 정서적 정착 과정을 카운슬러 어조로 따뜻하게 서술하십시오.
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>7. 재성운</h3><div class='content-box-loose'>
+- 돈과 물질을 대하는 가치관과 재물 관리 스타일을 정립해 주십시오.
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>8. 사업운</h3><div class='content-box-loose'>
+- 식상생재의 흐름과 창업 적합성 및 리더십의 강약점을 조언하십시오.
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>9. 관직·명예운</h3><div class='content-box-loose'>
+- 조직 내 승진, 명예, 감투운 및 책임감의 크기를 서술하십시오.
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>10. 건강운</h3><div class='content-box-loose'>
+- 취약 장기 경고 및 현실적인 오행 에너지 관리법을 제시하십시오.
+</div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>11. 운의 흐름</h3>
 <div class='content-box-loose'>
@@ -1556,48 +1412,69 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>12. 삶을 바꾸는 지혜로운 조언</h3>
 <div class='content-box-loose'>
-◈ 나를 돕는 에너지와 색상 / 신체 밸런스와 에너지 관리 / 공간의 흐름 / 직업적 지혜 / 절제의 미학에 대해 작성하십시오.
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 나를 돕는 에너지와 색상:</span>
+(작성)
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 신체 밸런스와 에너지 관리:</span>
+(작성)
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 공간의 흐름과 방위의 지혜:</span>
+(작성)
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 재능 효율을 높이는 직업적 지혜:</span>
+(작성)
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 더 나은 내일을 위한 절제의 미학:</span>
+(작성)
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'> 🎯 초연 시공명리 특별 개운 비법</h3>
 <div class='content-box-loose'>
-◈ 수호 천사의 기운 조언 / 백년해로의 기운 조언 / 행운에 따른 기운 조언을 상세히 작성하십시오.
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 수호 천사의 기운 조언:</span>
+(※ AI 지시: 사주원국 및 운의 흐름에 따른 천을귀인과 길신 등의 작용에 대한 상세한 에세이를 작성하시오.)
+
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 백년해로의 기운 조언:</span>
+(※ AI 지시: 이성 관계에 영향을 미치는 오행의 치우침, 원진, 신살 등을 실질적인 개운 비법과 함께 작성하십시오.)
+
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 행운에 따른 기운 조언:</span>
+(※ AI 지시: 운의 흐름에 따른 형충파해와 묘고 입/개고, 도화/망신/역마살 작용에 따른 주의점 에세이를 작성하시오.)
 </div>
 """
-                # ==============================================================================
-                # 3. AI 연산 및 대운/세운/월운 HTML 표 정밀 치환 구역 (누적 체인 연산 보완)
-                # ==============================================================================
                 try:
                     res = model.generate_content(prompt)
                     ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
+                    
+                    if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
+                        ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
 
                     un_html_clean = un_html.replace("\n", " ").replace("\r", "")
                     se_html_clean = se_html.replace("\n", " ").replace("\r", "")
                     wol_html_clean = wol_html.replace("\n", " ").replace("\r", "")
 
+                    clean_ai_text = ai_text
+
                     daeoun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{un_html_clean}</div>"
                     sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
                     wolwun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{wol_html_clean}</div>"
 
-                    # 마커 기반 1:1 정밀 치환 체인
-                    clean_ai_text, count_d = re.subn(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', daeoun_target, ai_text, flags=re.IGNORECASE)
+                    clean_ai_text, count_d = re.subn(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', daeoun_target, clean_ai_text, flags=re.IGNORECASE)
                     clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
                     clean_ai_text, count_w = re.subn(r'[\#\*\_\s]*\[\s*WOLWUN_TABLE_HERE\s*\][\#\*\_\s]*', wolwun_target, clean_ai_text, flags=re.IGNORECASE)
 
-                    # 🚨 [최종 본문 조립] 사주팔자표 + 오행바 + intro_html + golden_text_html + AI 에세이본(표 치환 완료)
-                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{intro_html}{golden_text_html}{clean_ai_text}<br><br>{closing_html}</div>"
+                    if count_d == 0 and "table" not in clean_ai_text.lower():
+                        clean_ai_text = clean_ai_text + f"<br><br><span style='color:red; font-weight:bold;'>⚠️ (AI 표 마커 누락으로 비상 출력된 운의 흐름표)</span><br>{un_html_clean}{se_html_clean}{wol_html_clean}"
+
+                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{clean_ai_text}<br><br>{closing_html}</div>"
 
                     report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
+                    
                     st.session_state['saved_report_html'] = report_1_full_html
-
-                except Exception as e:
-                    st.error(f"AI 연산 및 조립 오류: {e}")
+                    
+                except Exception as e: 
+                    st.error(f"AI 연산 오류: {e}")
 
             # ------------------------------------------------------------------
-            # [2단계] 타 감명서 / 비교 분석 모듈
+            # [2단계] 타 감명서 / 비교 분석 모듈 (ver 71.0 확장 분기 연산)
             # ------------------------------------------------------------------
             if u_product == "타 감명서":
                 try:
+                    # 🌟 [분기 1] 전통 명리학과 1:1 자동 대조 분석 선택 시
                     if compare_mode == "전통 명리학과 1:1 자동 대조":
                         comp_prompt = f"""
                         당신은 명리심리상담사 '초연 박사'입니다.
@@ -1653,6 +1530,7 @@ if st.session_state.get('need_calc', False):
                             )
                         st.session_state['saved_report_2'] = other_cover_html + f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#2E7D32;'><h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 800; border-bottom:2px solid #2E7D32; padding-bottom:15px;'>⚖️ 전통 명리 vs 초연시공명리 1:1 대조 리포트</h1><div style='margin-top:20px;'>{c_res}</div></div></div>"
 
+                    # 🌟 [분기 2] 외부 타 감명서 원문 대조 선택 시 (기존 기능 유지)
                     else:
                         report_2_html = f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#555;'><h2 style='text-align:center; color:#555; font-family:\"Malgun Gothic\", sans-serif; font-weight:900; margin-bottom:20px;'>📜 타 감명서 원문</h2><div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #111; text-align: justify; word-break: keep-all;'>{other_reading_text.replace(chr(10), '<br>')}</div></div></div>"
 
@@ -1921,7 +1799,7 @@ if st.session_state.get('need_calc', False):
                     if count == 0:
                         g_ess = re.sub(r'(<h3[^>]*>🌈 커플의 인생 기상도 분석</h3>)', r'\1\n<div style="margin-top:15px;">' + couple_daewun_tables + '</div>', g_ess)
 
-                    def wrap_a4(content, title_color="#1A237E", title=f"[ 초연 시공명리 사주풀이 {APP_VERSION} ]"):
+                    def wrap_a4(content, title_color="#1A237E", title="[ 초연 시공명리 사주풀이 ]"):
                         return (
                             f"<div class='report-page'>\n"
                             f"<div class='vip-inset-frame' style='border-color:{title_color}; padding:20px;'>\n"
@@ -1986,8 +1864,9 @@ if st.session_state.get('need_calc', False):
                     )
                     st.session_state['saved_report_gh_cover'] = cover_html
 
-                    m_page_content = f"{m_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
-                    f_page_content = f"{f_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
+                    # 궁합 남명/여명 사주 리포트 생성 시 마스터바 하단에 intro 및 golden_text 배치
+                    m_page_content = f"{m_tbl}\n{intro_html}\n{m_golden_html}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
+                    f_page_content = f"{f_tbl}\n{intro_html}\n{f_golden_html}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
                     
                     st.session_state['saved_report_gh_m'] = wrap_a4(m_page_content, "#1A237E", "[ 남명 사주팔자표 및 요약 ]")
                     st.session_state['saved_report_gh_f'] = wrap_a4(f_page_content, "#D50000", "[ 여명 사주팔자표 및 요약 ]")
