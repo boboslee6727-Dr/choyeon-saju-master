@@ -14,7 +14,7 @@ import streamlit.components.v1 as components
 import re
 
 # 🎯 [버전 컨트롤 타워]
-APP_VERSION = "Ver 48.0 전통명리 Master"
+APP_VERSION = "Ver 48.0 전통명리 Master (Ilju Full-Master 연동)"
 
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS
@@ -91,13 +91,13 @@ st.markdown("""
 def load_choyeon_db():
     file_path = 'choyeon_db.json'
     if not os.path.exists(file_path):
-        return {"wolryeong": {}, "ilju": {}, "ilju_structure": {}, "ilju_secret": {}}
+        return {"wolryeong": {}, "ilju": {}, "ilju_structure": {}, "ilju_secret": {}, "ilju_full_master": {}}
     try:
         with open(file_path, 'r', encoding='utf-8') as f:
             return json.load(f)
     except Exception as e:
         st.error(f"🚨 choyeon_db.json 파일 로드 오류: {e}")
-        return {"wolryeong": {}, "ilju": {}, "ilju_structure": {}, "ilju_secret": {}}
+        return {"wolryeong": {}, "ilju": {}, "ilju_structure": {}, "ilju_secret": {}, "ilju_full_master": {}}
 
 choyeon_db = load_choyeon_db()
 
@@ -1205,6 +1205,30 @@ if st.session_state.get('need_calc', False):
                 dw_mid_age   = current_daewun_age + 4
                 dw_mid2_age  = current_daewun_age + 5
                 dw_end_age   = current_daewun_age + 9
+
+                # ==============================================================
+                # [핵심 추가] 내담자 전용 60일주 정밀 원본 비기(ilju_full_master) 핀셋 로더
+                # ==============================================================
+                user_ilju_key = f"{ds}{db}"
+                ilju_full_db = choyeon_db.get("ilju_full_master", {})
+                ilju_master_data = ilju_full_db.get(user_ilju_key, {})
+
+                if ilju_master_data:
+                    ilju_master_prompt_context = f"""
+🎯 [박사님 60일주 정밀 마스터 원본 비기 - {user_ilju_key}일주 전용]
+- 물상 및 성향 요약: {ilju_master_data.get('summary', '')}
+- 심리적 관점: {ilju_master_data.get('psychology', '')}
+- 육친적 관점: {ilju_master_data.get('family', '')}
+- 사회적 관점: {ilju_master_data.get('society', '')}
+- 지장간 좌법(座法) 분석: {ilju_master_data.get('jijanggan_zaBeob', '')}
+- 인종법(引從法) 숨겨진 내면: {ilju_master_data.get('injong_beob', '')}
+- 신살, 변곡점, 건강, 과숙/고신, 도망역: {ilju_master_data.get('shinsal_warnings', '')}
+- 초연 전통명리의 뼈때리는 팩트폭격: {ilju_master_data.get('choyeon_secret', '')}
+
+🚨 [통변 절대 규칙]: 위 박사님의 '60일주 정밀 마스터 원본 비기'에 담긴 문장과 임상적 통찰을 사주풀이 에세이(성격 분석, 사주구조분석, 운의 흐름) 전반에 100% 녹여내어 깊이 있게 풀이하십시오.
+"""
+                else:
+                    ilju_master_prompt_context = ""
                                 
                 db_header = (
                     f"[시스템 강제 시간 인식: 현재 시점은 {curr_y}년 {curr_m}월 입니다.]\n"
@@ -1267,6 +1291,7 @@ if st.session_state.get('need_calc', False):
 
                 prompt = f"""
 {db_header}
+{ilju_master_prompt_context}
 
 [ 🚨종합 특별지시 사항 : 대중을 위한 정통 명리 통변 원칙]
 1. 🚨명리 용어의 전략적 노출 및 해제: 딱딱한 한자어 전문 용어의 단순 남발을 금지하고, 쉬운 비유와 현대적 구어체로 설명하십시오.
@@ -1296,11 +1321,11 @@ if st.session_state.get('need_calc', False):
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 성격 분석</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 겉으로 드러난 성격</span>
-- 일주({ds}{db}), 십성, 십이운성을 바탕으로 표면적 성격을 서술하십시오.
+- 일주({ds}{db}), 십성, 십이운성, 그리고 위 박사님 마스터 비기 데이터를 바탕으로 표면적 성격을 상세히 서술하십시오.
 - 12신살 통변 시 년지 기준 신살(사회적 환경)과 일지 기준 신살(내면 파동)을 구별하여 설명하십시오.
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 감추어진 내 속마음</span>
-- 지장간 인종법과 공망의 양가적 의미를 바탕으로 원국에 숨겨진 육친의 심리와 내면의 공허함을 서술하십시오.
+- 지장간 인종법과 공망의 양가적 의미, 그리고 마스터 비기의 내면 분석을 바탕으로 원국에 숨겨진 육친의 심리와 내면의 공허함을 서술하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조분석</h3>
@@ -1316,7 +1341,7 @@ if st.session_state.get('need_calc', False):
 - 천간·지지의 합충형파해({hap_chung_hyoung_pa_hae}), 묘고 작용({won_guk_vaults_str}), 그리고 삼형살 팩트({samhyung_warn})의 역동성을 드라마틱한 심리상담 에세이로 풀어내십시오.
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>4) 내 삶의 숨겨진 강점과 잠재적 에너지</span>
-- 신살({shinsal_str})과 삼재 정보({cur_samjae})를 종합하여 현대 심리상담 관점의 부드러운 에세이로 풀어내십시오.
+- 신살({shinsal_str})과 삼재 정보({cur_samjae}), 그리고 마스터 데이터의 도망역/변곡점 정보를 종합하여 부드러운 에세이로 풀어내십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 부모·형제운</h3><div class='content-box-loose'>
@@ -1328,11 +1353,11 @@ if st.session_state.get('need_calc', False):
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>5. 적성·직업운</h3><div class='content-box-loose'>
-- 조직형 vs 독립형 판별 및 독특한 실질적 직업 물상 예시를 짚어 제시하십시오.
+- 박사님 마스터 데이터의 추천 업상(業象) 및 조직형 vs 독립형 판별을 기반으로 직업 물상 예시를 짚어 제시하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>6. 결혼·자녀운</h3><div class='content-box-loose'>
-- 배우자 및 자녀 인연의 깊이와 정서적 정착 과정을 카운슬러 어조로 따뜻하게 서술하십시오.
+- 마스터 데이터의 육친적 관점과 배우자/자녀 인연의 깊이를 따뜻한 어조로 서술하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>7. 재성운</h3><div class='content-box-loose'>
@@ -1348,7 +1373,7 @@ if st.session_state.get('need_calc', False):
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>10. 건강운</h3><div class='content-box-loose'>
-- 취약 장기 경고 및 현실적인 오행 에너지 관리법을 제시하십시오.
+- 마스터 데이터에 명시된 취약 장기 경고 및 오행 에너지 관리법을 제시하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>11. 운의 흐름</h3>
@@ -1415,7 +1440,7 @@ if st.session_state.get('need_calc', False):
 (※ AI 지시: 이성 관계에 영향을 미치는 오행의 치우침, 원진, 신살 등을 실질적인 개운 비법과 함께 작성하십시오.)
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 행운에 따른 기운 조언:</span>
-(※ AI 지시: 운의 흐름에 따른 형충파해와 묘고 입/개고, 도화/망신/역마살 작용에 따른 주의점 에세이를 작성하십시오.)
+(※ AI 지시: 마스터 데이터의 도망역 및 과숙/고신 팩트를 토대로 주의점에 대한 깊이 있는 에세이를 작성하십시오.)
 </div>
 """
                 try:
@@ -1435,12 +1460,11 @@ if st.session_state.get('need_calc', False):
                     sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
                     wolwun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{wol_html_clean}</div>"
 
-                    # 운의 흐름 표 강제 삽입 처리 (마커 유실 원천 방지 및 정위치 안착)
+                    # 운의 흐름 표 강제 삽입 처리
                     clean_ai_text, count_d = re.subn(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', daeoun_target, clean_ai_text, flags=re.IGNORECASE)
                     clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
                     clean_ai_text, count_w = re.subn(r'[\#\*\_\s]*\[\s*WOLWUN_TABLE_HERE\s*\][\#\*\_\s]*', wolwun_target, clean_ai_text, flags=re.IGNORECASE)
 
-                    # 만약 마커가 유실되었더라도 정해진 목차 헤더 바로 아래에 강제 인젝션
                     if count_d == 0:
                         clean_ai_text = re.sub(r'(<span[^>]*>1\) 대운의 흐름</span>)', r'\1\n' + daeoun_target, clean_ai_text, flags=re.IGNORECASE)
                     if count_s == 0:
@@ -1666,7 +1690,7 @@ if st.session_state.get('need_calc', False):
 🚨 [출력 절대 형식 및 내용 생성 규칙]
 1. 각 소제목 아래에 절대로 안내 문구를 그대로 복사해서 출력하지 마십시오!
 2. 반드시 내담자의 명리적 특징을 분석하여 3~4문장 분량의 실제 통변 내용을 직접 작성해야 합니다.
-3. 모든 통변 문장은 HTML 태그 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸십시오.
+3. 모든 통변 문장은 HTML 태그 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸하십시오.
 
 [MALE_START]
 <h3 style='color:#1A237E; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 사주팔자의 요약</h3>
