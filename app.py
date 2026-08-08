@@ -728,7 +728,7 @@ with st.sidebar:
     st.markdown("---")
     u_product = st.selectbox("📋 분석 상품 선택", ["개인사주", "궁합", "타 감명서"])
     
-    st.markdown("<div style='font-weight:900; color:#1A237E; margin-bottom:5px;'>👤 신청인 정보 (공통)</div>", unsafe_allow_html=True)
+    st.markdown("<div style='font-weight:900; color:#1A237E; margin-bottom:5px;'>👤 신청인 기본 정보</div>", unsafe_allow_html=True)
     u_name = st.text_input("이름", value="", placeholder="홍길동", key="u_n")
     u_gender = st.selectbox("성별", ["남성", "여성"], index=0, key="u_g")
     u_marital = st.selectbox("혼인여부", ["선택", "미혼", "기혼", "돌싱"], index=1, key="u_m_stat")
@@ -753,7 +753,7 @@ with st.sidebar:
     
     if u_product == "개인사주":
         st.markdown("<hr style='border:1px dashed #1A237E; margin:15px 0;'>", unsafe_allow_html=True)
-        run_iljin_calc = st.checkbox("🔮 일진 시공간 분석 추가 가동 (선택)", value=False)
+        run_iljin_calc = st.checkbox("🔮 일운 운세 분석 가동 (선택)", value=False)
         
         if run_iljin_calc:
             if 'target_date' not in st.session_state:
@@ -807,14 +807,14 @@ with st.sidebar:
                                     found_p = True
                                     is_leap_p = getattr(klc_find_p, 'isIntercalary', False)
                                     leap_str_p = "윤달" if is_leap_p else "평달"
-                                    st.success(f"✅ 상대방 양력{curr_dt_p.year}년 {curr_dt_p.month:02d}월 {curr_dt_p.day:02d}일 음력{klc_find_p.lunarYear}년 {klc_find_p.lunarMonth:02d}월 {klc_find_p.lunarDay:02d}일 ({leap_str_p})")
+                                    st.success(f"✅양력{curr_dt_p.year}년 {curr_dt_p.month:02d}월 {curr_dt_p.day:02d}일 음력{klc_find_p.lunarYear}년 {klc_find_p.lunarMonth:02d}월 {klc_find_p.lunarDay:02d}일 ({leap_str_p})")
                                     break
                                 curr_dt_p -= dt_mod.timedelta(days=1)
                             if found_p: break
                     if not found_p: st.error("일치하는 날짜가 없습니다.")
                 else: st.warning("간지를 2글자씩 정확히 입력하세요.")
 
-        st.markdown("<div style='font-weight:900; color:#C62828; margin-bottom:5px;'>💕 상대방 정보</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-weight:900; color:#C62828; margin-bottom:5px;'>💕 상대방 기본 정보</div>", unsafe_allow_html=True)
         p_name = st.text_input("이름", value="", placeholder="이영희", key="p_n")
         p_gender_default = "여성" if u_gender == "남성" else "남성"
         p_gender = st.selectbox("성별", ["남성", "여성"], index=["남성", "여성"].index(p_gender_default), key="p_g")
@@ -1276,26 +1276,35 @@ if st.session_state.get('need_calc', False):
                 else:
                     gender_prompt = "여성 내담자입니다. 배우자운(관성)과 자식운(식상)을 여명 이론에 입각하여 해석하십시오."
 
-                # 전통명리식 모던 텍스트로 정밀 수정된 choyeon_golden_text
+                # ==============================================================
+                # 1. 내담자 전용 60일주 정밀 원본 비기(ilju_full_master) 핀셋 로더 (선행 로드)
+                # ==============================================================
+                user_ilju_key = f"{ds}{db}"
+                ilju_full_db = choyeon_db.get("ilju_full_master", {})
+                ilju_master_data = ilju_full_db.get(user_ilju_key, {})
+
+                # 일주 요약 성향 데이터 추출 (없을 경우 기본값 처리)
+                ilju_summary_text = ilju_master_data.get('summary', '고유의 역량을 품은')
+
+                # ==============================================================
+                # 2. 전통명리식 모던 텍스트로 정밀 수정된 choyeon_golden_text 조립
+                # ==============================================================
                 choyeon_golden_text = f"""
 <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
     <p style='text-indent: 15px; margin-bottom: 5px;'>
-        <b>{disp_name}님</b>은 <b>{wol_korean_str}</b>의 월에서 태어나 해당일주의 <b>'{ilju_summary_text}'</b> 성향을 지니고 태어나셨습니다.
+        <b>{disp_name}님</b>은 <b>{mb}</b>의 월에서 태어난 '격국 {gyukgook_detailed}'으로 해당({ds}{db})일주의 <b>'{ilju_summary_text}'</b> 성향을 지니고 태어나셨습니다.
     </p>
 </div>
 """
+
                 dw_start_age = current_daewun_age
                 dw_mid_age   = current_daewun_age + 4
                 dw_mid2_age  = current_daewun_age + 5
                 dw_end_age   = current_daewun_age + 9
 
                 # ==============================================================
-                # [핵심 추가] 내담자 전용 60일주 정밀 원본 비기(ilju_full_master) 핀셋 로더
+                # 3. LLM 프롬프트 컨텍스트 주입용 마스터 비기 조립
                 # ==============================================================
-                user_ilju_key = f"{ds}{db}"
-                ilju_full_db = choyeon_db.get("ilju_full_master", {})
-                ilju_master_data = ilju_full_db.get(user_ilju_key, {})
-
                 if ilju_master_data:
                     ilju_master_prompt_context = f"""
 🎯 [초연 전통명리의 뼈때리는 팩트폭격 - {user_ilju_key}일주 전용 마스터 비기]
@@ -1776,24 +1785,34 @@ if st.session_state.get('need_calc', False):
                     
                     couple_daewun_tables = f"<div style='margin-bottom: 25px;'>{m_page_un_html}<div style='height:20px;'></div>{f_page_un_html}</div>"
 
-                    m_w_val = choyeon_db.get("wolryeong", {}).get(m_ms+m_mb, "월령 데이터 없음")
-                    m_i_val = choyeon_db.get("ilju", {}).get(m_ds+m_db, "일주 데이터 없음")
-                    f_w_val = choyeon_db.get("wolryeong", {}).get(f_ms+f_mb, "월령 데이터 없음")
-                    f_i_val = choyeon_db.get("ilju", {}).get(f_ds+f_db, "일주 데이터 없음")
+                    # ==============================================================
+                    # 남명/여명 전용 60일주 정밀 원본 비기(ilju_full_master) 핀셋 로더 및 요약 조립
+                    # ==============================================================
+                    ilju_full_db = choyeon_db.get("ilju_full_master", {})
+
+                    # 1. 남명 데이터 로드 및 텍스트 조립
+                    m_ilju_key = f"{m_ds}{m_db}"
+                    m_ilju_master = ilju_full_db.get(m_ilju_key, {})
+                    m_summary_text = m_ilju_master.get('summary', '고유의 역량을 품은')
 
                     m_traditional_text_html = f"""
                     <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
                         <p style='text-indent: 15px; margin-bottom: 5px;'>
-                            정통 명리학적으로 풀이하면 <b>{m_name}님</b>은 <b>'{m_w_val}'</b>의 월령에서 태어나 <b>'{m_i_val}'</b>의 일주 기운을 품고 계시며, 사주원국의 조화에 따라 독자적인 성향과 삶의 무대를 펼쳐나가게 됩니다.
+                            <b>{m_name}님</b>은 <b>{m_mb}</b>의 월에서 태어난 '격국 {m_gyukgook_detailed}'으로 해당({m_ds}{m_db})일주의 <b>'{m_summary_text}'</b> 성향을 지니고 태어나셨습니다.
                         </p>
                     </div>
                     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
                     """
 
+                    # 2. 여명 데이터 로드 및 텍스트 조립
+                    f_ilju_key = f"{f_ds}{f_db}"
+                    f_ilju_master = ilju_full_db.get(f_ilju_key, {})
+                    f_summary_text = f_ilju_master.get('summary', '고유의 역량을 품은')
+
                     f_traditional_text_html = f"""
                     <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
                         <p style='text-indent: 15px; margin-bottom: 5px;'>
-                            정통 명리학적으로 풀이하면 <b>{f_name}님</b>은 <b>'{f_w_val}'</b>의 월령에서 태어나 <b>'{f_i_val}'</b>의 일주 기운을 품고 계시며, 사주원국의 조화에 따라 독자적인 성향과 삶의 무대를 펼쳐나가게 됩니다.
+                            <b>{f_name}님</b>은 <b>{f_mb}</b>의 월에서 태어난 '격국 {f_gyukgook_detailed}'으로 해당({f_ds}{f_db})일주의 <b>'{f_summary_text}'</b> 성향을 지니고 태어나셨습니다.
                         </p>
                     </div>
                     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
