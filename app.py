@@ -1238,8 +1238,8 @@ if st.session_state.get('need_calc', False):
 
 🚨 [통변 절대 규칙]: 위 박사님의 '초연 전통명리의 뼈때리는 팩트폭격'에 담긴 문장과 임상적 통찰을 사주풀이 에세이(성격 분석, 사주구조분석, 운의 흐름) 전반에 100% 녹여내어 깊이 있게 풀이하십시오.
 """
-else:
-    ilju_master_prompt_context = ""
+                else:
+                    ilju_master_prompt_context = ""
                                 
                 db_header = (
                     f"[시스템 강제 시간 인식: 현재 시점은 {curr_y}년 {curr_m}월 입니다.]\n"
@@ -1300,7 +1300,7 @@ else:
    - 🚨돌싱(이혼/사별): '과거의 인연(전 남편)'에 대한 성찰이나 '새로운 인연(재혼운)'으로 변환하여 카운슬링할 것.
 """
 
-prompt = f"""
+                prompt = f"""
 {db_header}
 {ilju_master_prompt_context}
 
@@ -1495,7 +1495,6 @@ prompt = f"""
                     res = model.generate_content(prompt)
                     ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                     
-                    # 기존 replace 로직은 choyeon_golden_text를 직접 프롬프트에 넣었으므로 호환되도록 유지
                     if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
                         ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
 
