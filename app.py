@@ -1289,14 +1289,23 @@ if st.session_state.get('need_calc', False):
                 # ==============================================================
                 # 2. 전통명리식 모던 텍스트로 정밀 수정된 choyeon_golden_text 조립
                 # ==============================================================
+                # 1. 일주 마스터 데이터 선행 로드
+                user_ilju_key = f"{ds}{db}"
+                ilju_full_db = choyeon_db.get("ilju_full_master", {})
+                ilju_master_data = ilju_full_db.get(user_ilju_key, {})
+                ilju_summary_text = ilju_master_data.get('summary', '고유의 역량을 품은')
+
+                # 2. 상단 엔진 함수를 통한 격국명 실시간 추출
+                gyuk_name, gyuk_desc = get_gyukgook_detailed(ds, ys, ms, hs, mb)
+
+                # 3. 전통명리 모던 골든 텍스트 완성
                 choyeon_golden_text = f"""
 <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
     <p style='text-indent: 15px; margin-bottom: 5px;'>
-        <b>{disp_name}님</b>은 <b>{mb}</b>의 월에서 태어난 '격국 {gyukgook_detailed}'으로 해당({ds}{db})일주의 <b>'{ilju_summary_text}'</b> 성향을 지니고 태어나셨습니다.
+        <b>{disp_name}님</b>은 <b>{mb}</b>의 월에서 태어난 '격국 {gyuk_name}'으로 해당({ds}{db})일주의 <b>'{ilju_summary_text}'</b> 성향을 지니고 태어나셨습니다.
     </p>
 </div>
 """
-
                 dw_start_age = current_daewun_age
                 dw_mid_age   = current_daewun_age + 4
                 dw_mid2_age  = current_daewun_age + 5
@@ -1807,45 +1816,15 @@ if st.session_state.get('need_calc', False):
                     m_gyuk_str = locals().get('m_gyukgook_detailed', locals().get('m_gyuk', '정통격국'))
 
                     # ==============================================================
-                    # 남명/여명 전용 60일주 정밀 원본 비기(ilju_full_master) 핀셋 로더 및 안전 격국 매핑
+                    # 남명/여명 전용 60일주 정밀 원본 비기(ilju_full_master) 로더 및 올바른 격국 함수 호출
                     # ==============================================================
                     ilju_full_db = choyeon_db.get("ilju_full_master", {})
 
-                    # 1. 남명 데이터 로드 및 텍스트 조립
+                    # 1. 남명 데이터 로드 및 정확한 함수명(get_gyukgook_detailed) 호출
                     m_ilju_key = f"{m_ds}{m_db}"
                     m_ilju_master = ilju_full_db.get(m_ilju_key, {})
                     m_summary_text = m_ilju_master.get('summary', '고유의 역량을 품은')
                     
-                    # 남명 격국 변수 안전 추출 (NameError 방지)
-                    m_gyuk_str = (
-                        locals().get('m_gyukgook_detailed') or 
-                        locals().get('m_gyukgook') or 
-                        locals().get('m_jg') or 
-                        locals().get('m_gyuk') or 
-                        '정통격국'
-                    )
-
-                    # ==============================================================
-                    # 남명/여명 전용 60일주 정밀 원본 비기(ilju_full_master) 로더 및 격국 분리 정비
-                    # ==============================================================
-                    ilju_full_db = choyeon_db.get("ilju_full_master", {})
-
-                    # 1. 남명 데이터 로드 및 텍스트 조립
-                    m_ilju_key = f"{m_ds}{m_db}"
-                    m_ilju_master = ilju_full_db.get(m_ilju_key, {})
-                    m_summary_text = m_ilju_master.get('summary', '고유의 역량을 품은')
-                    
-                    # ==============================================================
-                    # 남명/여명 전용 60일주 정밀 원본 비기(ilju_full_master) 로더 및 격국 엔진 함수 직결 연동
-                    # ==============================================================
-                    ilju_full_db = choyeon_db.get("ilju_full_master", {})
-
-                    # 1. 남명 데이터 로드 및 get_gyukgook_detailed 함수 직접 호출
-                    m_ilju_key = f"{m_ds}{m_db}"
-                    m_ilju_master = ilju_full_db.get(m_ilju_key, {})
-                    m_summary_text = m_ilju_master.get('summary', '고유의 역량을 품은')
-                    
-                    # 엔진 함수 호출 (반환값: 격국명, 설명 중 첫 번째 격국명만 추출)
                     m_gy_name, m_gy_desc = get_gyukgook_detailed(m_ds, m_ys, m_ms, m_hs, m_mb)
 
                     m_traditional_text_html = f"""
@@ -1857,12 +1836,11 @@ if st.session_state.get('need_calc', False):
                     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
                     """
 
-                    # 2. 여명 데이터 로드 및 get_gyukgook_detailed 함수 직접 호출
+                    # 2. 여명 데이터 로드 및 정확한 함수명(get_gyukgook_detailed) 호출
                     f_ilju_key = f"{f_ds}{f_db}"
                     f_ilju_master = ilju_full_db.get(f_ilju_key, {})
                     f_summary_text = f_ilju_master.get('summary', '고유의 역량을 품은')
                     
-                    # 엔진 함수 호출 (반환값: 격국명, 설명 중 첫 번째 격국명만 추출)
                     f_gy_name, f_gy_desc = get_gyukgook_detailed(f_ds, f_ys, f_ms, f_hs, f_mb)
 
                     f_traditional_text_html = f"""
@@ -1873,7 +1851,7 @@ if st.session_state.get('need_calc', False):
                     </div>
                     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
                     """
-                    
+
                     gh_engine = UniversalPrintableGunghap(u_name, p_name, male_data_pack, female_data_pack, 10)
                     gh_engine.run_universal_logic()
                     
