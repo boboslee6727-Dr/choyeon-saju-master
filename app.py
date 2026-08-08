@@ -1207,7 +1207,7 @@ if st.session_state.get('need_calc', False):
 {golden_text_html}
 </div>
 <div style='margin-top:20px;'>
-{full_content_clean_placeholder}
+{{full_content_clean_placeholder}}
 </div>
 </div>
 </div>"""
