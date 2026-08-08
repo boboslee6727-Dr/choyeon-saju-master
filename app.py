@@ -157,12 +157,21 @@ components.html("""
     const doc = window.parent.document;
     doc.addEventListener('keyup', function(e) {
         if (e.target.tagName !== 'INPUT' || e.target.type !== 'text') return;
+        
         let label = e.target.getAttribute('aria-label') || "";
         if (label.includes('년주') || label.includes('월주') || label.includes('일주')) {
-            if (e.key === ' ' || e.target.value.includes('년') || e.target.value.includes('월') || e.target.value.includes('일') || e.target.value.includes('시')) {
+            // 한글 조합 중(ㅅ+ㅣ -> 시)일 때는 커서를 이동시키지 않음
+            if (e.isComposing) return;
+
+            let val = e.target.value.trim();
+            
+            // 스페이스바, 엔터키를 누르거나, 간지 2글자('신묘' 등) 작성이 완료되었을 때 다음 칸 이동
+            if (e.key === ' ' || e.key === 'Enter' || val.length >= 2) {
                 let inputs = Array.from(doc.querySelectorAll('input[type="text"]'));
                 let idx = inputs.indexOf(e.target);
-                if (idx > -1 && idx < inputs.length - 1) inputs[idx + 1].focus();
+                if (idx > -1 && idx < inputs.length - 1) {
+                    inputs[idx + 1].focus();
+                }
             }
         }
     });
