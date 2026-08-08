@@ -1192,6 +1192,7 @@ if st.session_state.get('need_calc', False):
 </div>
 </div>"""
 
+                # HTML 태그가 소스코드로 노출되지 않도록 st.markdown 친화적 형태로 템플릿 결합
                 report_1_full_html = f"""{cover_html}
 <div class='report-page' style='page-break-before: avoid;'>
 <div class='vip-inset-frame' style='border:2px solid #1A237E; box-sizing: border-box; padding: 20px; border-radius:15px; margin-top: 0;'>
@@ -1199,10 +1200,14 @@ if st.session_state.get('need_calc', False):
 <h1 style='text-align:center;'>🎯[초연 시공명리 사주풀이]</h1>
 {table_html}
 {master_bar_html}
+<div style='margin-top: 15px;'>
 {intro_html}
+</div>
+<div style='margin-top: 15px;'>
 {golden_text_html}
+</div>
 <div style='margin-top:20px;'>
-{{full_content_clean_placeholder}}
+{full_content_clean_placeholder}
 </div>
 </div>
 </div>"""
@@ -1931,8 +1936,8 @@ if st.session_state.get('need_calc', False):
                     st.session_state['saved_report_gh_cover'] = cover_html
 
                     # 궁합 남명/여명 사주 리포트 생성 시 마스터바 하단에 intro 및 golden_text 배치
-                    m_page_content = f"{m_tbl}\n{intro_html}\n{m_golden_html}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
-                    f_page_content = f"{f_tbl}\n{intro_html}\n{f_golden_html}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
+                    m_page_content = f"{m_tbl}\n<div style='margin-top:15px;'>{intro_html}</div>\n<div style='margin-top:15px;'>{m_golden_html}</div>\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
+                    f_page_content = f"{f_tbl}\n<div style='margin-top:15px;'>{intro_html}</div>\n<div style='margin-top:15px;'>{f_golden_html}</div>\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
                     
                     st.session_state['saved_report_gh_m'] = wrap_a4(m_page_content, "#1A237E", "[ 남명 사주팔자표 및 요약 ]")
                     st.session_state['saved_report_gh_f'] = wrap_a4(f_page_content, "#D50000", "[ 여명 사주팔자표 및 요약 ]")
