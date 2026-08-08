@@ -704,7 +704,7 @@ class UniversalPrintableGunghap:
         ]
 
 # ==============================================================================
-# 4. 사이드바 UI (ver 48.0 + 상대방 역산 및 자동입력 통합)
+# 4. 사이드바 UI (통합 완성 버전)
 # ==============================================================================
 with st.sidebar:
     st.title("🏮초연 전통명리 연구소")
@@ -793,7 +793,7 @@ with st.sidebar:
     elif u_product == "궁합":
         st.markdown("<hr style='border:1px dashed #C62828; margin:15px 0;'>", unsafe_allow_html=True)
         
-        # 🔍 상대방 사주간지 역산 검색 (시간 자동입력 연동 오류 완벽 수정)
+        # 🔍 상대방 사주간지 역산 검색
         with st.expander("🔍 상대방 사주팔자 역산 검색", expanded=False):
             p_col_g1, p_col_g2 = st.columns(2)
             with p_col_g1: p_ry = st.text_input("상대방 년주", value="", key="p_ry_rev")
@@ -878,49 +878,49 @@ with st.sidebar:
                 st.markdown("<div style='margin-top:15px;'></div>", unsafe_allow_html=True)
                 run_delivery_calc = st.checkbox("✅ 출산택일 확정 (체크 후 하단 메인 가동버튼 클릭)", value=False)
 
-        st.markdown("---")
-        
-        # 🚀 사주풀이 가동 버튼 (btn_single 변수 할당)
-        btn_single = st.button("🚀 초연 전통명리 사주풀이 가동", key="btn_run", use_container_width=True, type="primary")
+    # ✅ [공통 영역] 버튼들은 if-elif-else 바깥쪽(사이드바 최하단)에 위치해야 항상 보입니다!
+    st.markdown("---")
+    
+    # 🚀 사주풀이 가동 버튼
+    btn_single = st.button("🚀 초연 전통명리 사주풀이 가동", key="btn_run", use_container_width=True, type="primary")
 
-        # 🖨️ 인쇄 / PDF 저장 버튼
-        if st.button("🖨️ 풀이 결과 인쇄 / PDF 저장", key="btn_print", use_container_width=True, type="secondary"):
-            components.html("<script>window.parent.print();</script>", height=0)
+    # 🖨️ 인쇄 / PDF 저장 버튼
+    if st.button("🖨️ 풀이 결과 인쇄 / PDF 저장", key="btn_print", use_container_width=True, type="secondary"):
+        components.html("<script>window.parent.print();</script>", height=0)
 
-        if btn_single:
-            if not u_name.strip(): 
-                st.warning("⚠️ 신청인의 이름을 입력해 주세요.")
-            elif u_product == "타 감명서" and compare_mode == "외부 타 감명서 원문 대조" and not other_reading_text.strip():
-                st.warning("⚠️ 타 감명서 원문을 입력해 주세요.")
-            elif u_product == "궁합" and not p_name.strip(): 
-                st.warning("⚠️ 상대방의 이름을 입력해 주세요.")
-            else:
-                # ✅ 유효성 검사를 모두 통과했을 때만 아래 실행 로직 진입
-                st.session_state['app_running'] = True
+    if btn_single:
+        if not u_name.strip(): 
+            st.warning("⚠️ 신청인의 이름을 입력해 주세요.")
+        elif u_product == "타 감명서" and compare_mode == "외부 타 감명서 원문 대조" and not other_reading_text.strip():
+            st.warning("⚠️ 타 감명서 원문을 입력해 주세요.")
+        elif u_product == "궁합" and not p_name.strip(): 
+            st.warning("⚠️ 상대방의 이름을 입력해 주세요.")
+        else:
+            st.session_state['app_running'] = True
+            
+            if u_product == "개인사주" and run_iljin_calc and st.session_state.get('saved_report_html'):
+                st.session_state['need_calc'] = False
+                st.session_state['run_waterfall'] = True
+                if 'saved_report_iljin' in st.session_state: del st.session_state['saved_report_iljin']
                 
-                if u_product == "개인사주" and run_iljin_calc and st.session_state.get('saved_report_html'):
-                    st.session_state['need_calc'] = False
-                    st.session_state['run_waterfall'] = True
-                    if 'saved_report_iljin' in st.session_state: del st.session_state['saved_report_iljin']
+            elif u_product == "타 감명서":
+                st.session_state['need_calc'] = True
+                st.session_state['run_waterfall'] = False
+                st.session_state['run_delivery_only'] = False
+                for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
+                    if key in st.session_state: del st.session_state[key]
                     
-                elif u_product == "타 감명서":
-                    st.session_state['need_calc'] = True
-                    st.session_state['run_waterfall'] = False
-                    st.session_state['run_delivery_only'] = False
-                    for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
-                        if key in st.session_state: del st.session_state[key]
-                        
-                elif u_product == "궁합" and run_delivery_calc and st.session_state.get('saved_report_gh_g'):
-                    st.session_state['need_calc'] = False
-                    st.session_state['run_delivery_only'] = True
-                    if 'saved_report_del' in st.session_state: del st.session_state['saved_report_del']
-                    
-                else:
-                    st.session_state['need_calc'] = True
-                    st.session_state['run_waterfall'] = run_iljin_calc if u_product == "개인사주" else False 
-                    st.session_state['run_delivery_only'] = run_delivery_calc if u_product == "궁합" else False
-                    for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
-                        if key in st.session_state: del st.session_state[key]
+            elif u_product == "궁합" and run_delivery_calc and st.session_state.get('saved_report_gh_g'):
+                st.session_state['need_calc'] = False
+                st.session_state['run_delivery_only'] = True
+                if 'saved_report_del' in st.session_state: del st.session_state['saved_report_del']
+                
+            else:
+                st.session_state['need_calc'] = True
+                st.session_state['run_waterfall'] = run_iljin_calc if u_product == "개인사주" else False 
+                st.session_state['run_delivery_only'] = run_delivery_calc if u_product == "궁합" else False
+                for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
+                    if key in st.session_state: del st.session_state[key]
 
 # ==============================================================================
 # 5. 분석 가동 로직 (need_calc 상태일 때만 무거운 연산 실행)
