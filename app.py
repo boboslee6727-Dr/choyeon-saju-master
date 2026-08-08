@@ -19,7 +19,7 @@ APP_VERSION = "Ver 47.1 Master"
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS
 # ==============================================================================
-st.set_page_config(page_title=f"초연 시공명리 {APP_VERSION}", layout="wide")
+st.set_page_config(page_title=f"초연 전통명리 {APP_VERSION}", layout="wide")
 
 st.markdown("""
 <style>
@@ -157,21 +157,14 @@ components.html("""
     const doc = window.parent.document;
     doc.addEventListener('keyup', function(e) {
         if (e.target.tagName !== 'INPUT' || e.target.type !== 'text') return;
-        
         let label = e.target.getAttribute('aria-label') || "";
         if (label.includes('년주') || label.includes('월주') || label.includes('일주')) {
-            // 한글 조합 중(ㅅ+ㅣ -> 시)일 때는 커서를 이동시키지 않음
             if (e.isComposing) return;
-
             let val = e.target.value.trim();
-            
-            // 스페이스바, 엔터키를 누르거나, 간지 2글자('신묘' 등) 작성이 완료되었을 때 다음 칸 이동
             if (e.key === ' ' || e.key === 'Enter' || val.length >= 2) {
                 let inputs = Array.from(doc.querySelectorAll('input[type="text"]'));
                 let idx = inputs.indexOf(e.target);
-                if (idx > -1 && idx < inputs.length - 1) {
-                    inputs[idx + 1].focus();
-                }
+                if (idx > -1 && idx < inputs.length - 1) inputs[idx + 1].focus();
             }
         }
     });
@@ -286,7 +279,7 @@ def get_ji_rel_set(me, target):
     if s in [{'午','亥'}, {'子','戌'}, {'丑','寅'}, {'寅','未'}, {'卯','申'}]: r.append("암합")
     if s in [{'子','午'}, {'丑','未'}, {'寅','申'}, {'卯','酉'}, {'辰','戌'}, {'巳','亥'}]: r.append("충")
     if s in [{'寅','巳'}, {'巳','申'}, {'寅','申'}, {'丑','戌'}, {'戌','未'}, {'丑','未'}, {'子','卯'}]: r.append("형")
-    if s in [{'子','未'}, {'丑','午'}, {'寅','巳'}, {'卯','辰'}, {'申','亥'}, {'酉','戌'}]: r.append("해")
+    if s in [{'子','未'}, {'丑','午'}, {'寅','酉'}, {'卯','申'}, {'辰','亥'}, {'巳','戌'}]: r.append("해")
     if s in [{'子','酉'}, {'丑','辰'}, {'寅','亥'}, {'卯','午'}, {'巳','申'}, {'未','戌'}]: r.append("파")
     if s in [{'丑','午'}, {'卯','申'}, {'辰','亥'}, {'巳','戌'}]: r.extend(["원진", "귀문"])
     elif s in [{'子','酉'}, {'寅','未'}]: r.append("귀문")
@@ -882,15 +875,12 @@ if st.session_state.get('need_calc', False):
             curr_y_ganji = GAN[base_y_idx % 10] + JI[base_y_idx % 12]
             time_str = f" {u_t.split('(')[0].strip()} ({hb})시" if u_t != "시간 모름" else ""
             
-            def td(c, size="18px"): return f"<td class='color-{get_color(c)}' style='font-size:{size}; font-weight:900; border:1px solid #444 !important;'>{('?' if c in ['?',' ','-'] else c)}</td>"
+            def td(c, size="18px"): return f"<td class='color-{get_color(c)}' style='font-size:{size}; font-weight:900; border:1px solid #444 !important;'><span style='color:inherit !important;'>{('?' if c in ['?',' ','-'] else c)}</span></td>"
             
             p_icon = "♂️" if u_gender == "남성" else "♀️"
             p_color = "#1A237E" if u_gender == "남성" else "#D50000"
             today_str = (dt_mod.datetime.utcnow() + dt_mod.timedelta(hours=9)).strftime("%Y년 %m월 %d일")
 
-            # ------------------------------------------------------------------
-            # [시공간 및 성품 데이터 연산] (모든 리포트 공통)
-            # ------------------------------------------------------------------
             w_key = f"{ms}{mb}".strip()
             i_key = f"{ds}{db}".strip()
 
@@ -899,13 +889,13 @@ if st.session_state.get('need_calc', False):
             struct_data = choyeon_db.get("ilju_structure", {}).get(i_key, ["구조 미상", "유형 미상", "성향 미상"])
             s_name, s_type, s_desc = struct_data[0], struct_data[1], struct_data[2]
 
-            intro_html = f"""
+            intro_html = """
     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
     <div style="margin: 0; padding: 0;">
-        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 6px; font-weight: 600; text-align: justify; text-indent: 0;">
+        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 6px; font-weight: 600; text-align: justify; text-indent: 0; color: #000000;">
             <b>"초연 시공 명리학"</b>은 5년에 한 번 돌아오는 '60월령과 60일주'의 조합으로 <b>3,600개 유형</b>으로 분류하지만, <b>"기존의 전통 명리학"</b>은 1년에 한 번 돌아오는 '12월지와 60일주'의 조합으로 <b>720개 유형</b>으로 분류하여 풀이합니다.
         </p> 
-        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 0; font-weight: 600; text-align: justify; text-indent: 0;">
+        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 0; font-weight: 600; text-align: justify; text-indent: 0; color: #000000;">
             따라서, <b>"본 초연 시공 명리학"</b>은 기존 전통명리학에 비하여 <b>5배</b>, 요즘 유행하는 16개 유형으로 분류하는 MBTI와 비교하면 무려 <b>225배</b> 더 정확한 사주풀이 입니다.
         </p>
     </div>
@@ -914,26 +904,21 @@ if st.session_state.get('need_calc', False):
 
             golden_text_html = f"""
     <div style="margin: 0; padding: 0;">
-        <p class="ai-body-p" style="margin: 0; color: #000000; text-align: justify; text-indent: 0;">
+        <p class="ai-body-p" style="margin: 0; color: #000000 !important; text-align: justify; text-indent: 0;">
             초연 시공명리학적으로 풀이하면 <b>{disp_name}님</b>은 <b>'{w_val}'</b>의 시공간에서, <b>'{i_val}'</b>의 성품을 가지고 태어나셨으며, 성격은 <b>'{s_name}'</b>인 <b>'{s_type}'</b>으로, <b>'{s_desc}'</b>하는 성향이 있습니다.
         </p>
     </div>
     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
 """
 
+            hap_chung_hyoung_pa_hae = (
+                f"일-월지:{get_ji_rel_set(db, mb)}, 일-년지:{get_ji_rel_set(db, yb)}, "
+                f"일-시지:{get_ji_rel_set(db, hb)}, 월-년지:{get_ji_rel_set(mb, yb)}"
+            )
+
             if u_product in ["개인사주", "궁합", "타 감명서"]:
                 past_months_html = ""
 
-                # 1. 시공간 및 성품 데이터 선행 로드 (choyeon_db.json 연계)
-                w_key = f"{ms}{mb}".strip()
-                i_key = f"{ds}{db}".strip()
-
-                w_val = choyeon_db.get("wolryeong", {}).get(w_key, f"[{w_key}] 시공간 데이터 없음")
-                i_val = choyeon_db.get("ilju", {}).get(i_key, f"[{i_key}] 성품 데이터 없음")
-                struct_data = choyeon_db.get("ilju_structure", {}).get(i_key, ["구조 미상", "유형 미상", "성향 미상"])
-                s_name, s_type, s_desc = struct_data[0], struct_data[1], struct_data[2]
-
-                # 2. 표지 및 화면 안내 HTML 준비
                 cover_html = (
                         f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
                         f"    <div style='border: 4px solid #1A237E; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
@@ -957,40 +942,12 @@ if st.session_state.get('need_calc', False):
                     )
                 st.session_state['saved_report_cover'] = cover_html
 
-                intro_html = f"""
-    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
-    <div style="margin: 0; padding: 0;">
-        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 6px; font-weight: 600; text-align: justify; text-indent: 0;">
-            <b>"초연 시공 명리학"</b>은 5년에 한 번 돌아오는 '60월령과 60일주'의 조합으로 <b>3,600개 유형</b>으로 분류하지만, <b>"기존의 전통 명리학"</b>은 1년에 한 번 돌아오는 '12월지와 60일주'의 조합으로 <b>720개 유형</b>으로 분류하여 풀이합니다.
-        </p> 
-        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 0; font-weight: 600; text-align: justify; text-indent: 0;">
-            따라서, <b>"본 초연 시공 명리학"</b>은 기존 전통명리학에 비하여 <b>5배</b>, 요즘 유행하는 16개 유형으로 분류하는 MBTI와 비교하면 무려 <b>225배</b> 더 정확한 사주풀이 입니다.
-        </p>
-    </div>
-    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
-"""
-
-                golden_text_html = f"""
-    <div style="margin: 0; padding: 0;">
-        <p class="ai-body-p" style="margin: 0; color: #000000; text-align: justify; text-indent: 0;">
-            초연 시공명리학적으로 풀이하면 <b>{disp_name}님</b>은 <b>'{w_val}'</b>의 시공간에서, <b>'{i_val}'</b>의 성품을 가지고 태어나셨으며, 성격은 <b>'{s_name}'</b>인 <b>'{s_type}'</b>으로, <b>'{s_desc}'</b>하는 성향이 있습니다.
-        </p>
-    </div>
-    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
-"""
-
-                # 3. 원국 지지 합충형파해 연산 선행 정의
-                hap_chung_hyoung_pa_hae = (
-                    f"일-월지:{get_ji_rel_set(db, mb)}, 일-년지:{get_ji_rel_set(db, yb)}, "
-                    f"일-시지:{get_ji_rel_set(db, hb)}, 월-년지:{get_ji_rel_set(mb, yb)}"
-                )
-
                 ji_rel_rows = ""
                 for l_idx, r_idx in enumerate([1, 2, 0, 3]):
                     b_bot = "1px solid #444 !important" if l_idx == 3 else "0px solid transparent !important"
                     b_top = "0px solid transparent !important"
-                    cells = "".join([f"<td style='color:{('#D50000' if ci==r_idx else ('#000' if get_ji_rel_set(jjis[r_idx], jjis[ci])!='-' else '#BBB'))}; font-weight:900; border-top:{b_top}; border-bottom:{b_bot}; border-left:1px solid #444 !important; border-right:1px solid #444 !important;'>{('←('+jjis[r_idx]+')→' if ci==r_idx else get_ji_rel_set(jjis[r_idx], jjis[ci]))}</td>" for ci in range(4)])
-                    lbl = f"<td rowspan='4' class='header-cell-main' style='border-right: 1px solid #444 !important; border-left: 1px solid #444 !important; border-bottom: 1px solid #444 !important; border-top: 0px solid transparent !important; font-size:14px !important;'>합충형파해</td>" if l_idx==0 else ""
+                    cells = "".join([f"<td style='color:{('#D50000' if ci==r_idx else ('#000' if get_ji_rel_set(jjis[r_idx], jjis[ci])!='-' else '#BBB'))}; font-weight:900; border-top:{b_top}; border-bottom:{b_bot}; border-left:1px solid #444 !important; border-right:1px solid #444 !important;'><span style='color:inherit !important;'>{('←('+jjis[r_idx]+')→' if ci==r_idx else get_ji_rel_set(jjis[r_idx], jjis[ci]))}</span></td>" for ci in range(4)])
+                    lbl = f"<td rowspan='4' class='header-cell-main' style='border-right: 1px solid #444 !important; border-left: 1px solid #444 !important; border-bottom: 1px solid #444 !important; border-top: 0px solid transparent !important; font-size:14px !important;'><span style='color:inherit !important;'>합충형파해</span></td>" if l_idx==0 else ""
                     ji_rel_rows += f"<tr style='border:none;'>{lbl}{cells}</tr>"
 
                 info_h = f"<div style='text-align:center; font-family:\"Malgun Gothic\", sans-serif; margin-bottom:15px; line-height:1.5;'><span style='font-size:18px; font-weight:900; color:{p_color}; white-space:nowrap;'>{p_icon} {disp_name}님 ({u_gender}, {u_marital}, {u_age}세)</span><br><span style='font-size:14px; font-weight:bold; color:#555; white-space:nowrap;'>[양력: {sol_str} | 음력: {lun_str} {time_str}]</span></div>"
@@ -998,22 +955,22 @@ if st.session_state.get('need_calc', False):
                 table_html = f"""<div style='text-align:center; margin-bottom:10px;'>{info_h}</div>
 <table class='result-table' style='width:100%; border-collapse:collapse; text-align:center;'>
 <tr class='top-header-cell'>
-<td style='border:1px solid #444; color:#FFFFFF !important; font-weight:900;'>구분</td>
-<td style='border:1px solid #444; color:#FFFFFF !important; font-weight:900;'>시주</td>
-<td style='border:1px solid #444; color:#FFFFFF !important; font-weight:900;'>일주</td>
-<td style='border:1px solid #444; color:#FFFFFF !important; font-weight:900;'>월주</td>
-<td style='border:1px solid #444; color:#FFFFFF !important; font-weight:900;'>년주</td>
+<td style='border:1px solid #444; color:#FFFFFF !important; font-weight:900;'><span style='color:#FFFFFF !important;'>구분</span></td>
+<td style='border:1px solid #444; color:#FFFFFF !important; font-weight:900;'><span style='color:#FFFFFF !important;'>시주</span></td>
+<td style='border:1px solid #444; color:#FFFFFF !important; font-weight:900;'><span style='color:#FFFFFF !important;'>일주</span></td>
+<td style='border:1px solid #444; color:#FFFFFF !important; font-weight:900;'><span style='color:#FFFFFF !important;'>월주</span></td>
+<td style='border:1px solid #444; color:#FFFFFF !important; font-weight:900;'><span style='color:#FFFFFF !important;'>년주</span></td>
 </tr>
-<tr><td class='header-cell-main' style='border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'>천간합충</td>{"".join([f"<td style='border:1px solid #444;'>{get_gan_rel_all(i, gans)}</td>" for i in range(4)])}</tr>
-<tr><td class='header-cell-main' style='border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'>천간십성</td><td style='border:1px solid #444;'>{get_ss(ds,hs)}</td><td style='border:1px solid #444;'><span style='color:#D50000; font-weight:900;'>日元</span></td><td style='border:1px solid #444;'>{get_ss(ds,ms)}</td><td style='border:1px solid #444;'>{get_ss(ds,ys)}</td></tr>
-<tr><td class='header-cell-main' style='border:1px solid #444; background:#E8EAF6; color:#1A237E; font-weight:900; font-size:14px !important;'>천간</td>{td(hs)}{td(ds)}{td(ms)}{td(ys)}</tr>
-<tr><td class='header-cell-main' style='border:1px solid #444; background:#E8EAF6; color:#1A237E; font-weight:900; font-size:14px !important;'>지지</td>{td(hb)}{td(db)}{td(mb)}{td(yb)}</tr>
-<tr><td class='header-cell-main' style='border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'>지지십성</td><td style='border:1px solid #444;'>{get_ss(ds,hb)}</td><td style='border:1px solid #444;'>{get_ss(ds,db)}</td><td style='border:1px solid #444;'>{get_ss(ds,mb)}</td><td style='border:1px solid #444;'>{get_ss(ds,yb)}</td></tr>
-<tr><td class='header-cell-main' style='padding:0; border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'>지장간</td>{"".join([f"<td style='padding:0; border:1px solid #444;'>{get_jijanggan_full(ds, jjis[i])}</td>" for i in range(4)])}</tr>
+<tr><td class='header-cell-main' style='border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>천간합충</span></td>{"".join([f"<td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_gan_rel_all(i, gans)}</span></td>" for i in range(4)])}</tr>
+<tr><td class='header-cell-main' style='border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>천간십성</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,hs)}</span></td><td style='border:1px solid #444;'><span style='color:#D50000; font-weight:900;'>日元</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,ms)}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,ys)}</span></td></tr>
+<tr><td class='header-cell-main' style='border:1px solid #444; background:#E8EAF6; color:#1A237E; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>천간</span></td>{td(hs)}{td(ds)}{td(ms)}{td(ys)}</tr>
+<tr><td class='header-cell-main' style='border:1px solid #444; background:#E8EAF6; color:#1A237E; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>지지</span></td>{td(hb)}{td(db)}{td(mb)}{td(yb)}</tr>
+<tr><td class='header-cell-main' style='border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>지지십성</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,hb)}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,db)}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,mb)}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,yb)}</span></td></tr>
+<tr><td class='header-cell-main' style='padding:0; border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>지장간</span></td>{"".join([f"<td style='padding:0; border:1px solid #444;'><span style='color:inherit !important;'>{get_jijanggan_full(ds, jjis[i])}</span></td>" for i in range(4)])}</tr>
 {ji_rel_rows}
-<tr><td class='header-cell-main' style='border:1px solid #444 !important; background:#f5f5f5; font-weight:900; font-size:14px !important;'>십이운성</td>{"".join([f"<td style='color:#0D47A1; border:1px solid #444 !important;'>{get_unsung(ds, jjis[i])}</td>" for i in range(4)])}</tr>
-<tr><td class='header-cell-main' style='border:1px solid #444 !important; background:#f5f5f5; font-weight:900; font-size:14px !important;'>십이신살</td>{"".join([f"<td style='color:#C62828; border:1px solid #444 !important;'>{get_12_shinsal(yb, jjis[i])}</td>" for i in range(4)])}</tr>
-<tr><td class='header-cell-main' style='border:1px solid #444 !important; background:#f5f5f5; font-weight:900; font-size:14px !important;'>일반신살</td>{"".join([f"<td style='vertical-align:top; padding:2px; border:1px solid #444 !important;'>{'<br>'.join(get_general_shinsal_filtered(i, gans, jjis, u_gender)) if get_general_shinsal_filtered(i, gans, jjis, u_gender) else '-'}</td>" for i in range(4)])}</tr>
+<tr><td class='header-cell-main' style='border:1px solid #444 !important; background:#f5f5f5; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>십이운성</span></td>{"".join([f"<td style='color:#0D47A1; border:1px solid #444 !important;'><span style='color:inherit !important;'>{get_unsung(ds, jjis[i])}</span></td>" for i in range(4)])}</tr>
+<tr><td class='header-cell-main' style='border:1px solid #444 !important; background:#f5f5f5; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>십이신살</span></td>{"".join([f"<td style='color:#C62828; border:1px solid #444 !important;'><span style='color:inherit !important;'>{get_12_shinsal(yb, jjis[i])}</span></td>" for i in range(4)])}</tr>
+<tr><td class='header-cell-main' style='border:1px solid #444 !important; background:#f5f5f5; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>일반신살</span></td>{"".join([f"<td style='vertical-align:top; padding:2px; border:1px solid #444 !important;'><span style='color:inherit !important;'>{'<br>'.join(get_general_shinsal_filtered(i, gans, jjis, u_gender)) if get_general_shinsal_filtered(i, gans, jjis, u_gender) else '-'}</span></td>" for i in range(4)])}</tr>
 </table>
 """
                 calc_gyukgook, gyukgook_detail = get_gyukgook_detailed(ds, ys, ms, hs, mb)
@@ -1192,7 +1149,7 @@ if st.session_state.get('need_calc', False):
 </div>
 </div>"""
 
-                # HTML 태그가 소스코드로 노출되지 않도록 st.markdown 친화적 형태로 템플릿 결합
+                # [중요 수정] report_1_full_html 템플릿 안에서 intro_html과 golden_text_html 직접 결합 제거 (문자열 노출 방지)
                 report_1_full_html = f"""{cover_html}
 <div class='report-page' style='page-break-before: avoid;'>
 <div class='vip-inset-frame' style='border:2px solid #1A237E; box-sizing: border-box; padding: 20px; border-radius:15px; margin-top: 0;'>
@@ -1200,12 +1157,6 @@ if st.session_state.get('need_calc', False):
 <h1 style='text-align:center;'>🎯[초연 시공명리 사주풀이]</h1>
 {table_html}
 {master_bar_html}
-<div style='margin-top: 15px;'>
-{intro_html}
-</div>
-<div style='margin-top: 15px;'>
-{golden_text_html}
-</div>
 <div style='margin-top:20px;'>
 {{full_content_clean_placeholder}}
 </div>
@@ -1316,10 +1267,6 @@ if st.session_state.get('need_calc', False):
    - 미혼: '미래의 남편/인연'으로 칭할 것.
    - 🚨돌싱(이혼/사별): '과거의 인연(전 남편)'에 대한 성찰이나 '새로운 인연(재혼운)'으로 변환하여 카운슬링할 것.
 """
-                hap_chung_hyoung_pa_hae = (
-                    f"일-월지:{get_ji_rel_set(db, mb)}, 일-년지:{get_ji_rel_set(db, yb)}, "
-                    f"일-시지:{get_ji_rel_set(db, hb)}, 월-년지:{get_ji_rel_set(mb, yb)}"
-                )
 
                 prompt = f"""
 {db_header}
@@ -1330,7 +1277,7 @@ if st.session_state.get('need_calc', False):
 3. 🚨 초연 시공명리 3대 관점의 입체적 풀이: 1) 육친적, 2) 심리적, 3) 사회적 관점이라는 세 가지 차원을 유기적으로 융합하십시오.
 
 [문단 통제 명령]
-1. 모든 통변 에세이 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
+1. 모든 통변 에세이 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸십시오.
 2. 🚨 [계층별 글자 크기 및 상하 간격 강제 규격화]
    [부목차] <span class='sub-title' style='display: block; font-size: 20px; font-weight: 900; color: #111; line-height: 1.4; margin-top: 35px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
    [세부 소목차] <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; line-height: 1.4; margin-top: 25px; margin-bottom: 5px;'>▶ 현재 대운 상세 분석 ({dw_mid2_age}세~{dw_end_age}세)</span>
@@ -1487,7 +1434,7 @@ if st.session_state.get('need_calc', False):
 (※ AI 지시: 이성 관계에 영향을 미치는 오행의 치우침, 원진, 신살 등을 실질적인 개운 비법과 함께 작성하십시오.)
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 행운에 따른 기운 조언:</span>
-(※ AI 지시: 운의 흐름에 따른 형충파해와 묘고 입/개고, 도화/망신/역마살 작용에 따른 주의점 에세이를 작성하십시오.)
+(※ AI 지시: 운의 흐름에 따른 형충파해와 묘고 입/개고, 도화/망신/역마살 작용에 따른 주의점 에세이를 작성하시오.)
 </div>
 """
                 try:
@@ -1523,12 +1470,8 @@ if st.session_state.get('need_calc', False):
                 except Exception as e: 
                     st.error(f"AI 연산 오류: {e}")
 
-            # ------------------------------------------------------------------
-            # [2단계] 타 감명서 / 비교 분석 모듈 (ver 71.0 확장 분기 연산)
-            # ------------------------------------------------------------------
             if u_product == "타 감명서":
                 try:
-                    # 🌟 [분기 1] 전통 명리학과 1:1 자동 대조 분석 선택 시
                     if compare_mode == "전통 명리학과 1:1 자동 대조":
                         comp_prompt = f"""
                         당신은 명리심리상담사 '초연 박사'입니다.
@@ -1548,7 +1491,7 @@ if st.session_state.get('need_calc', False):
                         <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[A. 전통 명리 단식 풀이]</b> 일간 기준 십성 및 운성으로 본 10년 대운의 겉보기 길흉 판단...</p>
                         <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[B. 초연 시공명리 정밀 풀이]</b> 체용 5x5 실행 파동 키워드 및 대운 형충에 따른 실전 환경 및 마찰음 조율 분석...</p>
 
-                        <h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>3. 지정 세운({curr_y}년 {sewun_gan}{sewun_ji}년) 실전 사건 대조</h3>
+                        <h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>3. 지정 세운({curr_y}년) 실전 사건 대조</h3>
                         <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[A. 전통 명리 단식 풀이]</b> {curr_y}년 십성에 따른 겉보기 재물/직업 운세 판단...</p>
                         <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[B. 초연 시공명리 정밀 풀이]</b> 묘고 개고·입고({hang_un_vaults_str}) 및 삼형살({samhyung_warn})에 따른 실전 자산 이동 및 업무 재편 분석...</p>
 
@@ -1583,8 +1526,6 @@ if st.session_state.get('need_calc', False):
                                 f"</div>"
                             )
                         st.session_state['saved_report_2'] = other_cover_html + f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#2E7D32;'><h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 800; border-bottom:2px solid #2E7D32; padding-bottom:15px;'>⚖️ 전통 명리 vs 초연시공명리 1:1 대조 리포트</h1><div style='margin-top:20px;'>{c_res}</div></div></div>"
-
-                    # 🌟 [분기 2] 외부 타 감명서 원문 대조 선택 시 (기존 기능 유지)
                     else:
                         report_2_html = f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#555;'><h2 style='text-align:center; color:#555; font-family:\"Malgun Gothic\", sans-serif; font-weight:900; margin-bottom:20px;'>📜 타 감명서 원문</h2><div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #111; text-align: justify; word-break: keep-all;'>{other_reading_text.replace(chr(10), '<br>')}</div></div></div>"
 
@@ -1600,8 +1541,6 @@ if st.session_state.get('need_calc', False):
                         [출력 목차 서식 정의]
                         <h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>1. 사주팔자 구조 및 성격 대조 분석</h3>
                         (타 감명서의 핵심 논리 기준, 해당 주제에 대한 초연 명리와의 1:1 대조 서술)
-                        
-                        ... (타 감명서가 다룬 핵심 내용들에 대해서만 이 형식의 h3 목차를 활용하여 순서대로 전개) ...
                         
                         <h3 style='color:#D50000; font-size: 22px; font-weight: 900; border-bottom: 2px solid #D50000; padding-bottom: 5px; margin-top: 35px; margin-bottom: 8px; display:block;'>13. 총평 및 향후 개선점</h3>
                         <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 8px;'>1) 두 감명서의 장점과 단점</span>
@@ -1706,32 +1645,32 @@ if st.session_state.get('need_calc', False):
                         ji_rel_rows = ""
                         for l_idx, r_idx in enumerate([1, 2, 0, 3]):
                             b_bot = "1px solid #444 !important" if l_idx == 3 else "none !important"
-                            cells = "".join([f"<td style='color:{('#D50000' if ci==r_idx else ('#000' if get_ji_rel_set(t_jjis[r_idx], t_jjis[ci])!='-' else '#BBB'))}; font-weight:900; border-top:none !important; border-bottom:{b_bot}; border-left:1px solid #444 !important; border-right:1px solid #444 !important;'>{('←('+t_jjis[r_idx]+')→' if ci==r_idx else get_ji_rel_set(t_jjis[r_idx], t_jjis[ci]))}</td>" for ci in range(4)])
-                            lbl = f"<td rowspan='4' class='header-cell-main' style='border:1px solid #444 !important;'>합충형파해</td>" if l_idx==0 else ""
+                            cells = "".join([f"<td style='color:{('#D50000' if ci==r_idx else ('#000' if get_ji_rel_set(t_jjis[r_idx], t_jjis[ci])!='-' else '#BBB'))}; font-weight:900; border-top:none !important; border-bottom:{b_bot}; border-left:1px solid #444 !important; border-right:1px solid #444 !important;'><span style='color:inherit !important;'>{('←('+t_jjis[r_idx]+')→' if ci==r_idx else get_ji_rel_set(t_jjis[r_idx], t_jjis[ci]))}</span></td>" for ci in range(4)])
+                            lbl = f"<td rowspan='4' class='header-cell-main' style='border:1px solid #444 !important;'><span style='color:inherit !important;'>합충형파해</span></td>" if l_idx==0 else ""
                             ji_rel_rows += f"<tr>{lbl}{cells}</tr>"
 
                         info_str = f"<div style='text-align:center; margin-bottom:15px; font-family:\"Malgun Gothic\", sans-serif;'><span style='font-size:18px; font-weight:900; color:#1A237E;'>{gender_icon} {name}님 ({gender_str}, {marital_str}, {age}세)</span><br><span style='font-size:14px; font-weight:900; color:#222;'>[양력] {sol} | [음력] {lun}{time}</span></div>"
                         
-                        def td(c): return f"<td class='color-{get_color(c)}' style='font-size:20px; font-weight:900; border:1px solid #444 !important;'>{('?' if c in ['?',' ','-'] else c)}</td>"
+                        def td(c): return f"<td class='color-{get_color(c)}' style='font-size:20px; font-weight:900; border:1px solid #444 !important;'><span style='color:inherit !important;'>{('?' if c in ['?',' ','-'] else c)}</span></td>"
                             
                         return (
                             f"{info_str}\n"
                             f"<table class='result-table' style='width:100%; border-collapse:collapse; text-align:center;'>\n"
                             f"<tr class='top-header-cell'>\n"
-                            f"<td style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'>구분</td>\n"
-                            f"<td style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'>시주</td>\n"
-                            f"<td style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'>일주</td>\n"
-                            f"<td style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'>월주</td>\n"
-                            f"<td style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'>년주</td>\n"
+                            f"<td style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:#FFFFFF !important;'>구분</span></td>\n"
+                            f"<td style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:#FFFFFF !important;'>시주</span></td>\n"
+                            f"<td style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:#FFFFFF !important;'>일주</span></td>\n"
+                            f"<td style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:#FFFFFF !important;'>월주</span></td>\n"
+                            f"<td style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:#FFFFFF !important;'>년주</span></td>\n"
                             f"</tr>\n"
-                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'>천간십성</td><td style='border:1px solid #444;'>{get_ss(t_ds,t_gans[0])}</td><td style='border:1px solid #444;'><span style='color:#D50000; font-weight:900;'>日元</span></td><td style='border:1px solid #444;'>{get_ss(t_ds,t_gans[2])}</td><td style='border:1px solid #444;'>{get_ss(t_ds,t_gans[3])}</td></tr>\n"
-                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'>천간</td>{td(t_gans[0])}{td(t_gans[1])}{td(t_gans[2])}{td(t_gans[3])}</tr>\n"
-                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'>지지</td>{td(t_jjis[0])}{td(t_jjis[1])}{td(t_jjis[2])}{td(t_jjis[3])}</tr>\n"
-                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'>지지십성</td><td style='border:1px solid #444;'>{get_ss(t_ds,t_jjis[0])}</td><td style='border:1px solid #444;'>{get_ss(t_ds,t_jjis[1])}</td><td style='border:1px solid #444;'>{get_ss(t_ds,t_jjis[2])}</td><td style='border:1px solid #444;'>{get_ss(t_ds,t_jjis[3])}</td></tr>\n"
-                            f"<tr><td class='header-cell-main' style='border:1px solid #444; padding:0; font-size:15px !important; white-space:nowrap;'>지장간</td>{''.join([f'<td style=\"border:1px solid #444; padding:0;\">{get_jijanggan_full(t_ds, t_jjis[i])}</td>' for i in range(4)])}</tr>\n"
+                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:inherit !important;'>천간십성</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(t_ds,t_gans[0])}</span></td><td style='border:1px solid #444;'><span style='color:#D50000; font-weight:900;'>日元</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(t_ds,t_gans[2])}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(t_ds,t_gans[3])}</span></td></tr>\n"
+                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:inherit !important;'>천간</span></td>{td(t_gans[0])}{td(t_gans[1])}{td(t_gans[2])}{td(t_gans[3])}</tr>\n"
+                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:inherit !important;'>지지</span></td>{td(t_jjis[0])}{td(t_jjis[1])}{td(t_jjis[2])}{td(t_jjis[3])}</tr>\n"
+                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:inherit !important;'>지지십성</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(t_ds,t_jjis[0])}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(t_ds,t_jjis[1])}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(t_ds,t_jjis[2])}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(t_ds,t_jjis[3])}</span></td></tr>\n"
+                            f"<tr><td class='header-cell-main' style='border:1px solid #444; padding:0; font-size:15px !important; white-space:nowrap;'><span style='color:inherit !important;'>지장간</span></td>{''.join([f'<td style=\"border:1px solid #444; padding:0;\"><span style=\"color:inherit !important;\">{get_jijanggan_full(t_ds, t_jjis[i])}</span></td>' for i in range(4)])}</tr>\n"
                             f"{ji_rel_rows}\n"
-                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'>십이운성</td>{''.join([f'<td style=\"border:1px solid #444; color:#0D47A1; font-weight:bold;\">{get_unsung(t_ds, t_jjis[i])}</td>' for i in range(4)])}</tr>\n"
-                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'>십이신살</td>{''.join([f'<td style=\"border:1px solid #444; color:#C62828; font-weight:bold;\">{get_12_shinsal(t_yb, t_jjis[i])}</td>' for i in range(4)])}</tr>\n"
+                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:inherit !important;'>십이운성</span></td>{''.join([f'<td style=\"border:1px solid #444; color:#0D47A1; font-weight:bold;\"><span style=\"color:inherit !important;\">{get_unsung(t_ds, t_jjis[i])}</span></td>' for i in range(4)])}</tr>\n"
+                            f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:inherit !important;'>십이신살</span></td>{''.join([f'<td style=\"border:1px solid #444; color:#C62828; font-weight:bold;\"><span style=\"color:inherit !important;\">{get_12_shinsal(t_yb, t_jjis[i])}</span></td>' for i in range(4)])}</tr>\n"
                             f"</table>\n"
                             f"<div style='border:2px solid {color}; margin-top:10px; margin-bottom:20px; padding:6px 8px; display:flex; justify-content:space-between; align-items:center; font-weight:900; font-size:11px; letter-spacing:-0.5px; border-radius:8px; background-color:#FAFAFA;'><div style='white-space:nowrap;'>🔢 대운수: {daeun_su}</div><div style='white-space:nowrap;'>💥 오행: 木({counts['목']}) 火({counts['화']}) 土({counts['토']}) 金({counts['금']}) 水({counts['수']})</div><div style='white-space:nowrap;'>🌟 천을귀인: <span style='color:{color};'>{guiin}</span></div><div style='white-space:nowrap;'>🎯 공망: [년] <span style='color:#C62828;'>{y_gong}</span> [일] <span style='color:#C62828;'>{d_gong}</span></div><div style='white-space:nowrap;'>🌪️ 삼재: {samjae}</div></div>"
                         )
@@ -1772,7 +1711,7 @@ if st.session_state.get('need_calc', False):
 
                     m_golden_html = f"""
     <div style="margin: 0; padding: 0;">
-        <p class="ai-body-p" style="margin: 0; color: #000000; text-align: justify; text-indent: 0;">
+        <p class="ai-body-p" style="margin: 0; color: #000000 !important; text-align: justify; text-indent: 0;">
             초연 시공명리학적으로 풀이하면 <b>{m_name}님</b>은 <b>'{m_w_val}'</b>의 시공간에서, <b>'{m_i_val}'</b>의 성품을 가지고 태어나셨습니다.
         </p>
     </div>
@@ -1780,7 +1719,7 @@ if st.session_state.get('need_calc', False):
 """
                     f_golden_html = f"""
     <div style="margin: 0; padding: 0;">
-        <p class="ai-body-p" style="margin: 0; color: #000000; text-align: justify; text-indent: 0;">
+        <p class="ai-body-p" style="margin: 0; color: #000000 !important; text-align: justify; text-indent: 0;">
             초연 시공명리학적으로 풀이하면 <b>{f_name}님</b>은 <b>'{f_w_val}'</b>의 시공간에서, <b>'{f_i_val}'</b>의 성품을 가지고 태어나셨습니다.
         </p>
     </div>
@@ -1935,9 +1874,8 @@ if st.session_state.get('need_calc', False):
                     )
                     st.session_state['saved_report_gh_cover'] = cover_html
 
-                    # 궁합 남명/여명 사주 리포트 생성 시 마스터바 하단에 intro 및 golden_text 배치
-                    m_page_content = f"{m_tbl}\n<div style='margin-top:15px;'>{intro_html}</div>\n<div style='margin-top:15px;'>{m_golden_html}</div>\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
-                    f_page_content = f"{f_tbl}\n<div style='margin-top:15px;'>{intro_html}</div>\n<div style='margin-top:15px;'>{f_golden_html}</div>\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
+                    m_page_content = f"{m_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
+                    f_page_content = f"{f_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
                     
                     st.session_state['saved_report_gh_m'] = wrap_a4(m_page_content, "#1A237E", "[ 남명 사주팔자표 및 요약 ]")
                     st.session_state['saved_report_gh_f'] = wrap_a4(f_page_content, "#D50000", "[ 여명 사주팔자표 및 요약 ]")
@@ -2209,17 +2147,30 @@ if st.session_state.get('app_running', False) and st.session_state.get('run_deli
             st.session_state['run_delivery_only'] = False
 
 # ==============================================================================
-# 9. 화면 출력부
+# 9. 화면 출력부 (st.markdown을 통한 명시적 HTML 주입 방식 적용)
 # ==============================================================================
 if st.session_state.get('app_running', False):
     
     if u_product == "개인사주":
-        st.markdown(st.session_state.get('saved_report_html', ''), unsafe_allow_html=True)
+        if st.session_state.get('saved_report_html'):
+            # 저장된 HTML 템플릿(표+마커)을 1차 렌더링
+            raw_report = st.session_state.get('saved_report_html', '')
+            st.markdown(raw_report, unsafe_allow_html=True)
+            
+            # [수정] intro_html과 golden_text_html을 master_bar 하단에 명시적 st.markdown으로 안전 주입하여 소스코드 노출 원천 차단
+            st.markdown(intro_html, unsafe_allow_html=True)
+            st.markdown(golden_text_html, unsafe_allow_html=True)
+            
+            # AI 통변 본문 부착을 위한 잔여 플레이스홀더 정리
+            # (만약 템플릿 내에 대기 중인 본문이 있다면 여기서 마저 출력)
+
         if st.session_state.get('saved_report_iljin'):
             st.markdown(st.session_state.get('saved_report_iljin', ''), unsafe_allow_html=True)
     
     if u_product == "타 감명서":
         st.markdown(st.session_state.get('saved_report_html', ''), unsafe_allow_html=True)
+        st.markdown(intro_html, unsafe_allow_html=True)
+        st.markdown(golden_text_html, unsafe_allow_html=True)
         st.markdown(st.session_state.get('saved_report_2', ''), unsafe_allow_html=True)
         
     if u_product == "궁합":
@@ -2228,8 +2179,10 @@ if st.session_state.get('app_running', False):
             st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
             
         st.markdown(st.session_state.get('saved_report_gh_m', ''), unsafe_allow_html=True)
+        st.markdown(m_golden_html, unsafe_allow_html=True)
         st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
         st.markdown(st.session_state.get('saved_report_gh_f', ''), unsafe_allow_html=True)
+        st.markdown(f_golden_html, unsafe_allow_html=True)
         st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
         st.markdown(st.session_state.get('saved_report_gh_g', ''), unsafe_allow_html=True)
 
@@ -2248,7 +2201,7 @@ if st.session_state.get('app_running', False):
                     else:
                         m_jjis = [b[1] if len(b)>1 else "?" for b in p_bazi_context]
                         f_jjis = jjis
-                        m_gans_str = "".join([b[0] if len(b)>0 else "?" for b in p_bazi_context])
+                        m_gans_str = "".join([b[0] if len(b)>0 else "?" for b in p_bazi_context] if 'b' in locals() else ["?","?","?","?"])
                         f_gans_str = "".join(gans)
 
                     FORBIDDEN_LIST = ['병오', '임자', '계해', '신유', '경신']
