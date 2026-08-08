@@ -1806,6 +1806,25 @@ if st.session_state.get('need_calc', False):
                     m_summary_text = m_ilju_master.get('summary', '고유의 역량을 품은')
                     m_gyuk_str = locals().get('m_gyukgook_detailed', locals().get('m_gyuk', '정통격국'))
 
+                    # ==============================================================
+                    # 남명/여명 전용 60일주 정밀 원본 비기(ilju_full_master) 핀셋 로더 및 안전 격국 매핑
+                    # ==============================================================
+                    ilju_full_db = choyeon_db.get("ilju_full_master", {})
+
+                    # 1. 남명 데이터 로드 및 텍스트 조립
+                    m_ilju_key = f"{m_ds}{m_db}"
+                    m_ilju_master = ilju_full_db.get(m_ilju_key, {})
+                    m_summary_text = m_ilju_master.get('summary', '고유의 역량을 품은')
+                    
+                    # 남명 격국 변수 안전 추출 (NameError 방지)
+                    m_gyuk_str = (
+                        locals().get('m_gyukgook_detailed') or 
+                        locals().get('m_gyukgook') or 
+                        locals().get('m_jg') or 
+                        locals().get('m_gyuk') or 
+                        '정통격국'
+                    )
+
                     m_traditional_text_html = f"""
                     <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
                         <p style='text-indent: 15px; margin-bottom: 5px;'>
@@ -1815,11 +1834,19 @@ if st.session_state.get('need_calc', False):
                     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
                     """
 
-                    # 2. 여명 데이터 로드 및 텍스트 조립 (변수명: f_traditional_text_html)
+                    # 2. 여명 데이터 로드 및 텍스트 조립
                     f_ilju_key = f"{f_ds}{f_db}"
                     f_ilju_master = ilju_full_db.get(f_ilju_key, {})
                     f_summary_text = f_ilju_master.get('summary', '고유의 역량을 품은')
-                    f_gyuk_str = locals().get('f_gyukgook_detailed', locals().get('f_gyuk', '정통격국'))
+                    
+                    # 여명 격국 변수 안전 추출 (NameError 방지)
+                    f_gyuk_str = (
+                        locals().get('f_gyukgook_detailed') or 
+                        locals().get('f_gyukgook') or 
+                        locals().get('f_jg') or 
+                        locals().get('f_gyuk') or 
+                        '정통격국'
+                    )
 
                     f_traditional_text_html = f"""
                     <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
