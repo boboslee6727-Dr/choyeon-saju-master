@@ -1223,7 +1223,7 @@ if st.session_state.get('need_calc', False):
 - 지장간 좌법(座法) 분석: {ilju_master_data.get('jijanggan_zaBeob', '')}
 - 인종법(引從法) 숨겨진 내면: {ilju_master_data.get('injong_beob', '')}
 - 신살, 변곡점, 건강, 과숙/고신, 도망역: {ilju_master_data.get('shinsal_warnings', '')}
-- 초연 전통명리의 뼈때리는 팩트폭격: {ilju_master_data.get('choyeon_secret', '')}
+- 💥 뼈때리는 팩트폭격 핵심 비기: {ilju_master_data.get('choyeon_secret', '')}
 
 🚨 [통변 절대 규칙]: 위 박사님의 '60일주 정밀 마스터 원본 비기'에 담긴 문장과 임상적 통찰을 사주풀이 에세이(성격 분석, 사주구조분석, 운의 흐름) 전반에 100% 녹여내어 깊이 있게 풀이하십시오.
 """
