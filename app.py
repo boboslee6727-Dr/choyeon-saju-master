@@ -1703,13 +1703,12 @@ if st.session_state.get('need_calc', False):
                     f_page_un_html = build_daewun_html(f_name, f_ds, f_ms, f_mb, f_yb, f_calc_d, f_order, f_age, "#1A237E")
                     
                     couple_daewun_tables = f"<div style='margin-bottom: 25px;'>{m_page_un_html}<div style='height:20px;'></div>{f_page_un_html}</div>"
-m_w_val = choyeon_db.get("wolryeong", {}).get(m_ms+m_mb, "월령 데이터 없음")
+
+                    m_w_val = choyeon_db.get("wolryeong", {}).get(m_ms+m_mb, "월령 데이터 없음")
                     m_i_val = choyeon_db.get("ilju", {}).get(m_ds+m_db, "일주 데이터 없음")
-                    
                     f_w_val = choyeon_db.get("wolryeong", {}).get(f_ms+f_mb, "월령 데이터 없음")
                     f_i_val = choyeon_db.get("ilju", {}).get(f_ds+f_db, "일주 데이터 없음")
 
-                    # 개인사주풀이의 traditional_text_html과 동일한 구조로 통합 정비
                     m_traditional_text_html = f"""
                     <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
                         <p style='text-indent: 15px; margin-bottom: 5px;'>
@@ -1741,7 +1740,7 @@ m_w_val = choyeon_db.get("wolryeong", {}).get(m_ms+m_mb, "월령 데이터 없�
 
 [MALE_START]
 <h3 style='color:#1A237E; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 사주팔자의 요약</h3>
-{m_golden}
+{m_traditional_text_html}
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
 (이곳에 남성의 정통 명리적 성향을 분석한 실제 에세이 작성)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 25px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>
@@ -1758,7 +1757,7 @@ m_w_val = choyeon_db.get("wolryeong", {}).get(m_ms+m_mb, "월령 데이터 없�
 
 [FEMALE_START]
 <h3 style='color:#D50000; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 사주팔자의 요약</h3>
-{f_golden}
+{f_traditional_text_html}
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
 (이곳에 여성의 정통 명리적 성향을 분석한 실제 에세이 작성)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 25px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>
@@ -1892,7 +1891,6 @@ m_w_val = choyeon_db.get("wolryeong", {}).get(m_ms+m_mb, "월령 데이터 없�
             st.error(f"시스템 연산 중 치명적 오류 발생: {e}")
             st.session_state['need_calc'] = False
             st.stop()
-
 # ==============================================================================
 # 🌊 7. [독립 모듈] 일진 분석 (결과 출력부)
 # ==============================================================================
