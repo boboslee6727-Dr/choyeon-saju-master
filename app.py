@@ -1703,31 +1703,30 @@ if st.session_state.get('need_calc', False):
                     f_page_un_html = build_daewun_html(f_name, f_ds, f_ms, f_mb, f_yb, f_calc_d, f_order, f_age, "#1A237E")
                     
                     couple_daewun_tables = f"<div style='margin-bottom: 25px;'>{m_page_un_html}<div style='height:20px;'></div>{f_page_un_html}</div>"
-
-                    m_w_val = choyeon_db.get("wolryeong", {}).get(m_ms+m_mb, "월령 데이터 없음")
+m_w_val = choyeon_db.get("wolryeong", {}).get(m_ms+m_mb, "월령 데이터 없음")
                     m_i_val = choyeon_db.get("ilju", {}).get(m_ds+m_db, "일주 데이터 없음")
-                    m_golden = f"<p style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em;'><b>{m_name}님</b>은 '{m_w_val}'의 월령에서 태어나 '{m_i_val}'의 일주 기운을 지니고 계십니다.</p>"
-
+                    
                     f_w_val = choyeon_db.get("wolryeong", {}).get(f_ms+f_mb, "월령 데이터 없음")
                     f_i_val = choyeon_db.get("ilju", {}).get(f_ds+f_db, "일주 데이터 없음")
-                    f_golden = f"<p style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em;'><b>{f_name}님</b>은 '{f_w_val}'의 월령에서 태어나 '{f_i_val}'의 일주 기운을 지니고 계십니다.</p>"
 
-                    m_golden_html = f"""
-    <div style="margin: 0; padding: 0;">
-        <p class="ai-body-p" style="margin: 0; color: #000000 !important; text-align: justify; text-indent: 0;">
-            정통 명리학적으로 풀이하면 <b>{m_name}님</b>은 <b>'{m_w_val}'</b>의 월령에서 태어나 <b>'{m_i_val}'</b>의 일주 기운을 품고 계십니다.
-        </p>
-    </div>
-    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
-"""
-                    f_golden_html = f"""
-    <div style="margin: 0; padding: 0;">
-        <p class="ai-body-p" style="margin: 0; color: #000000 !important; text-align: justify; text-indent: 0;">
-            정통 명리학적으로 풀이하면 <b>{f_name}님</b>은 <b>'{f_w_val}'</b>의 월령에서 태어나 <b>'{f_i_val}'</b>의 일주 기운을 품고 계십니다.
-        </p>
-    </div>
-    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
-"""
+                    # 개인사주풀이의 traditional_text_html과 동일한 구조로 통합 정비
+                    m_traditional_text_html = f"""
+                    <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
+                        <p style='text-indent: 15px; margin-bottom: 5px;'>
+                            정통 명리학적으로 풀이하면 <b>{m_name}님</b>은 <b>'{m_w_val}'</b>의 월령에서 태어나 <b>'{m_i_val}'</b>의 일주 기운을 품고 계시며, 사주원국의 조화에 따라 독자적인 성향과 삶의 무대를 펼쳐나가게 됩니다.
+                        </p>
+                    </div>
+                    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
+                    """
+
+                    f_traditional_text_html = f"""
+                    <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
+                        <p style='text-indent: 15px; margin-bottom: 5px;'>
+                            정통 명리학적으로 풀이하면 <b>{f_name}님</b>은 <b>'{f_w_val}'</b>의 월령에서 태어나 <b>'{f_i_val}'</b>의 일주 기운을 품고 계시며, 사주원국의 조화에 따라 독자적인 성향과 삶의 무대를 펼쳐나가게 됩니다.
+                        </p>
+                    </div>
+                    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
+                    """
                     
                     gh_engine = UniversalPrintableGunghap(u_name, p_name, male_data_pack, female_data_pack, 10)
                     gh_engine.run_universal_logic()
@@ -2058,10 +2057,10 @@ if st.session_state.get('app_running', False):
             st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
             
         st.markdown(st.session_state.get('saved_report_gh_m', ''), unsafe_allow_html=True)
-        st.markdown(m_golden_html, unsafe_allow_html=True)
+        st.markdown(m_traditional_text_html, unsafe_allow_html=True) # m_golden_html 대신 통합 변수 사용
         st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
         st.markdown(st.session_state.get('saved_report_gh_f', ''), unsafe_allow_html=True)
-        st.markdown(f_golden_html, unsafe_allow_html=True)
+        st.markdown(f_traditional_text_html, unsafe_allow_html=True) # f_golden_html 대신 통합 변수 사용
         st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
         st.markdown(st.session_state.get('saved_report_gh_g', ''), unsafe_allow_html=True)
 
