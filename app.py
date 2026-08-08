@@ -82,7 +82,7 @@ st.markdown("""
     .content-box-loose { line-height: 1.8; font-size: 15px; color: #111; text-align: justify; word-break: keep-all; font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif !important; padding: 0 !important; }
     .content-box-loose .sub-title { text-indent: 0px !important; margin-top: 25px !important; margin-bottom: 10px !important; font-weight: 900 !important; display: block; color: #111 !important; }
     
-    /* 8. 사이드바 버튼 디자인 공통 통일 (ver 72.1 스타일 수용) */
+    /* 8. 사이드바 버튼 디자인 공통 통일 (회색 충돌 완벽 해결 강제 버전) */
     div.stButton > button { 
         font-family: 'Nanum Gothic', sans-serif !important; 
         font-weight: 900 !important; 
@@ -90,8 +90,12 @@ st.markdown("""
         border-radius: 8px !important;
     }
 
-    div[data-testid="stSidebar"] div.stButton > button[kind="primary"] { 
+    /* 🚀 사주풀이 가동 버튼 (Primary - 빨간색 강제) */
+    div[data-testid="stSidebar"] div.stButton > button[kind="primary"],
+    div[data-testid="stSidebar"] div.stButton > button[kind="primary"]:focus,
+    div[data-testid="stSidebar"] div.stButton > button[kind="primary"]:active { 
         background-color: #D50000 !important; 
+        background-image: none !important;
         color: #FFFFFF !important; 
         border: none !important; 
         width: 100% !important;
@@ -106,8 +110,12 @@ st.markdown("""
         margin: 0 !important; 
     }
 
-    div[data-testid="stSidebar"] div.stButton > button[kind="secondary"] { 
-        background-color: #00A843 !important; 
+    /* 🖨️ 인쇄 / PDF 저장 버튼 (Secondary - 원본 진한 녹색 #2E7D32 강제 덮어쓰기) */
+    div[data-testid="stSidebar"] div.stButton > button[kind="secondary"],
+    div[data-testid="stSidebar"] div.stButton > button[kind="secondary"]:focus,
+    div[data-testid="stSidebar"] div.stButton > button[kind="secondary"]:active { 
+        background-color: #2E7D32 !important; 
+        background-image: none !important;
         color: #FFFFFF !important; 
         border: none !important; 
         width: 100% !important;
@@ -115,10 +123,11 @@ st.markdown("""
         font-weight: 900 !important;
         box-shadow: 0 4px 6px rgba(0,0,0,0.08) !important;
     }
-    div[data-testid="stSidebar"] div.stButton > button[kind="secondary"] p { 
+    div[data-testid="stSidebar"] div.stButton > button[kind="secondary"] p,
+    div[data-testid="stSidebar"] div.stButton > button[kind="secondary"] div { 
         font-weight: 900 !important; 
         font-size: 15px !important; 
-        color: white !important; 
+        color: #FFFFFF !important; 
         margin: 0 !important; 
     }
 
