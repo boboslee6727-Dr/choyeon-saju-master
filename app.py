@@ -1708,7 +1708,7 @@ if st.session_state.get('need_calc', False):
                             lbl = f"<td rowspan='4' class='header-cell-main' style='border:1px solid #444 !important;'><span style='color:inherit !important;'>합충형파해</span></td>" if l_idx==0 else ""
                             ji_rel_rows += f"<tr>{lbl}{cells}</tr>"
 
-                        info_str = f"<div style='text-align:center; margin-bottom:15px; font-family:\"Malgun Gothic\", sans-serif;'><span style='font-size:18px; font-weight:900; color:#1A237E;'>{gender_icon} {name}님 ({gender_str}, {marital_str}, {age}세)</span><br><span style='font-size:14px; font-weight:900; color:#222;'>[양력] {sol} | [음력] {lun}{time}</span></div>"
+                        info_str = f"<div style='text-align:center; margin-bottom:15px; font-family:\"Malgun Gothic\", sans-serif;'><span style='font-size:18px; font-weight:900; color:{color};'>{gender_icon} {name}님 ({gender_str}, {marital_str}, {age}세)</span><br><span style='font-size:14px; font-weight:900; color:#222;'>[양력] {sol} | [음력] {lun}{time}</span></div>"
                         
                         def td(c): return f"<td class='color-{get_color(c)}' style='font-size:20px; font-weight:900; border:1px solid #444 !important;'><span style='color:inherit !important;'>{('?' if c in ['?',' ','-'] else c)}</span></td>"
                             
@@ -1739,12 +1739,13 @@ if st.session_state.get('need_calc', False):
                     
                     guiin_map = {'甲':'丑, 未','乙':'子, 申','丙':'酉, 亥','丁':'酉, 亥','戊':'丑, 未','己':'子, 申','庚':'丑, 未','辛':'寅, 午','壬':'卯, 巳','癸':'卯, 巳'}
                     
+                    # [수정 2] 여명 사주팔자표 색상을 #2E7D32(녹색)으로 지정
                     m_tbl = build_bazi_table("♂️", m_name, "남명", m_marital, m_age, m_sol, m_lun, m_time, m_gans, m_jjis, m_ds, m_yb, m_cnt, guiin_map.get(m_ds, '-'), calculate_gongmang(m_ys, m_yb), calculate_gongmang(m_ds, m_db), get_samjae(m_yb, curr_j), m_calc_d, "#1A237E")
-                    f_tbl = build_bazi_table("♀️", f_name, "여명", f_marital, f_age, f_sol, f_lun, f_time, f_gans, f_jjis, f_ds, f_yb, f_cnt, guiin_map.get(f_ds, '-'), calculate_gongmang(f_ys, f_yb), calculate_gongmang(f_ds, f_db), get_samjae(f_yb, curr_j), f_calc_d, "#D50000")
+                    f_tbl = build_bazi_table("♀️", f_name, "여명", f_marital, f_age, f_sol, f_lun, f_time, f_gans, f_jjis, f_ds, f_yb, f_cnt, guiin_map.get(f_ds, '-'), calculate_gongmang(f_ys, f_yb), calculate_gongmang(f_ds, f_db), get_samjae(f_yb, curr_j), f_calc_d, "#2E7D32")
                     
                     def build_daewun_html(name, t_ds, t_ms, t_mb, t_yb, t_calc_d, t_order, age, color):
                         d_str = "순행" if t_order == 1 else "역행"
-                        html = f"<div style='margin-bottom:10px;'><div style='font-size:15px; font-weight:900; color:#1A237E; margin-bottom:5px;'>[ {name}님 대운 흐름표 (대운수: {t_calc_d}), {d_str} ]</div>"
+                        html = f"<div style='margin-bottom:10px;'><div style='font-size:15px; font-weight:900; color:{color}; margin-bottom:5px;'>[ {name}님 대운 흐름표 (대운수: {t_calc_d}), {d_str} ]</div>"
                         html += f"<div style='display:flex; flex-direction:row-reverse; width:100%; border:2px solid #3E2723; background:white;'>"
                         for i in range(10):
                             val = i*10 + t_calc_d
@@ -1756,37 +1757,16 @@ if st.session_state.get('need_calc', False):
                         return html + "</div></div>"
 
                     m_page_un_html = build_daewun_html(m_name, m_ds, m_ms, m_mb, m_yb, m_calc_d, m_order, m_age, "#1A237E")
-                    f_page_un_html = build_daewun_html(f_name, f_ds, f_ms, f_mb, f_yb, f_calc_d, f_order, f_age, "#1A237E")
+                    f_page_un_html = build_daewun_html(f_name, f_ds, f_ms, f_mb, f_yb, f_calc_d, f_order, f_age, "#2E7D32")
                     
                     couple_daewun_tables = f"<div style='margin-bottom: 25px;'>{m_page_un_html}<div style='height:20px;'></div>{f_page_un_html}</div>"
-
-                    # ==============================================================
-                    # 남명/여명 전용 60일주 정밀 원본 비기(ilju_full_master) 핀셋 로더 및 요약 조립
-                    # ==============================================================
-                    ilju_full_db = choyeon_db.get("ilju_full_master", {})
-
-                    # 1. 남명 데이터 로드 및 텍스트 조립
-                    m_ilju_key = f"{m_ds}{m_db}"
-                    m_ilju_master = ilju_full_db.get(m_ilju_key, {})
-                    m_summary_text = m_ilju_master.get('summary', '고유의 역량을 품은')
-
-                    # ==============================================================
-                    # 남명/여명 전용 60일주 정밀 원본 비기(ilju_full_master) 핀셋 로더 및 텍스트 조립
-                    # ==============================================================
-                    ilju_full_db = choyeon_db.get("ilju_full_master", {})
-
-                    # 1. 남명 데이터 로드 및 텍스트 조립 (변수명: m_traditional_text_html)
-                    m_ilju_key = f"{m_ds}{m_db}"
-                    m_ilju_master = ilju_full_db.get(m_ilju_key, {})
-                    m_summary_text = m_ilju_master.get('summary', '고유의 역량을 품은')
-                    m_gyuk_str = locals().get('m_gyukgook_detailed', locals().get('m_gyuk', '정통격국'))
 
                     # ==============================================================
                     # 남명/여명 전용 60일주 DB 연동 (중복제거 및 영업비밀 보호)
                     # ==============================================================
                     ilju_struct_db = choyeon_db.get("ilju_structure", {})
 
-                    # 1. 남명 데이터 로드 (ilju_structure [1]유형, [2]성격 매핑)
+                    # 1. 남명 데이터 로드
                     m_ilju_key = f"{m_ds}{m_db}"
                     m_struct_data = ilju_struct_db.get(m_ilju_key, [])
                     m_action_type = m_struct_data[1] if len(m_struct_data) >= 3 else "자율활동형"
@@ -1802,7 +1782,7 @@ if st.session_state.get('need_calc', False):
                     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
                     """
 
-                    # 2. 여명 데이터 로드 (ilju_structure [1]유형, [2]성격 매핑)
+                    # 2. 여명 데이터 로드
                     f_ilju_key = f"{f_ds}{f_db}"
                     f_struct_data = ilju_struct_db.get(f_ilju_key, [])
                     f_action_type = f_struct_data[1] if len(f_struct_data) >= 3 else "자율활동형"
@@ -1821,6 +1801,8 @@ if st.session_state.get('need_calc', False):
                     gh_engine = UniversalPrintableGunghap(u_name, p_name, male_data_pack, female_data_pack, 10)
                     gh_engine.run_universal_logic()
                     
+                    # [수정 4] 문단 간격 및 줄간격을 개인사주와 완전 동일하게 통일 (line-height:1.8, margin-top:4px, margin-bottom:12px)
+                    # [수정 3] 여명 '1. 사주팔자의 요약' 제목 글자색을 #000000(검정색)으로 지정
                     essay_prompt = f"""[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
 당신은 정통 명리심리상담사 '초연 박사'입니다.
 
