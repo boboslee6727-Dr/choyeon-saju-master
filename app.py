@@ -14,7 +14,7 @@ import streamlit.components.v1 as components
 import re
 
 # 🎯 [버전 컨트롤 타워]
-APP_VERSION = "Ver 48.0 전통명리 Master (Ilju Full-Master 연동)"
+APP_VERSION = "Ver 48.1 전통명리 Master (팩트폭격 통합형)"
 
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS
@@ -881,11 +881,11 @@ if st.session_state.get('need_calc', False):
             p_color = "#1A237E" if u_gender == "남성" else "#D50000"
             today_str = (dt_mod.datetime.utcnow() + dt_mod.timedelta(hours=9)).strftime("%Y년 %m월 %d일")
 
-            w_key = f"{ms}{mb}".strip()
-            i_key = f"{ds}{db}".strip()
-
-            w_val = choyeon_db.get("wolryeong", {}).get(w_key, f"[{w_key}] 월령 데이터 없음")
-            i_val = choyeon_db.get("ilju", {}).get(i_key, f"[{i_key}] 일주 데이터 없음")
+            # 60일주 마스터 데이터 선제 로드 (격국 및 텍스트 조합용)
+            user_ilju_key = f"{ds}{db}"
+            ilju_full_db = choyeon_db.get("ilju_full_master", {})
+            ilju_master_data = ilju_full_db.get(user_ilju_key, {})
+            ilju_summary_text = ilju_master_data.get('summary', f"{user_ilju_key}의 고유한 본성")
 
             intro_html = """
     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
@@ -895,15 +895,6 @@ if st.session_state.get('need_calc', False):
         </p> 
         <p class="ai-body-p" style="margin-top: 0; margin-bottom: 0; font-weight: 600; text-align: justify; text-indent: 0; color: #000000;">
             따라서, 본 감명서는 고전 명리의 이치에 철저히 입각하여 인생의 길흉화복과 시기별 흐름을 가장 정교하고 품격 있게 제시합니다.
-        </p>
-    </div>
-    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
-"""
-
-            golden_text_html = f"""
-    <div style="margin: 0; padding: 0;">
-        <p class="ai-body-p" style="margin: 0; color: #000000 !important; text-align: justify; text-indent: 0;">
-            정통 명리학적으로 풀이하면 <b>{disp_name}님</b>은 <b>'{w_val}'</b>의 월령에서 태어나 <b>'{i_val}'</b>의 일주 기운을 품고 계시며, 사주원국의 조화와 격국에 따라 독자적인 성향과 삶의 무대를 펼쳐나가게 됩니다.
         </p>
     </div>
     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
@@ -972,6 +963,25 @@ if st.session_state.get('need_calc', False):
 </table>
 """
                 calc_gyukgook, gyukgook_detail = get_gyukgook_detailed(ds, ys, ms, hs, mb)
+
+                # 월령 한글 계절 변환 매핑 적용
+                wol_ji_only = mb
+                ji_to_month_name = {
+                    '寅': '인월(아직은 추운 초봄)', '卯': '묘월(완연한 봄)', '辰': '진월(봄과 여름의 환절기)',
+                    '巳': '사월(이른 여름)', '午': '오월(완연한 여름)', '未': '미월(가장 무더운 여름)',
+                    '申': '신월(서늘한 이른 가을)', '酉': '유월(결실을 거두는 가을)', '戌': '술월(가을과 겨울의 환절기)',
+                    '亥': '해월(이른 겨울)', '子': '자월(완연한 한겨울)', '丑': '축월(가장 추운 겨울)'
+                }
+                wol_korean_str = ji_to_month_name.get(wol_ji_only, f"{wol_ji_only}월")
+
+                golden_text_html = f"""
+    <div style="margin: 0; padding: 0;">
+        <p class="ai-body-p" style="margin: 0; color: #000000 !important; text-align: justify; text-indent: 0;">
+            정통 명리학적으로 풀이하면 <b>{disp_name}님</b>은 <b>{wol_korean_str}</b>의 기운을 안고 태어나 <b>{calc_gyukgook}</b>의 그릇을 갖추셨으며, <b>{user_ilju_key}일주</b>가 지닌 <b>'{ilju_summary_text}'</b>의 고유한 성향과 사주원국의 조화에 따라 자신만의 독자적인 성향과 삶의 무대를 멋지게 펼쳐나가게 됩니다.
+        </p>
+    </div>
+    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
+"""
 
                 gen_shinsal_list = []
                 for i in range(4):
@@ -1194,10 +1204,11 @@ if st.session_state.get('need_calc', False):
                 else:
                     gender_prompt = "여성 내담자입니다. 배우자운(관성)과 자식운(식상)을 여명 이론에 입각하여 해석하십시오."
 
+                # 전통명리식 모던 텍스트로 정밀 수정된 choyeon_golden_text
                 choyeon_golden_text = f"""
 <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
     <p style='text-indent: 15px; margin-bottom: 5px;'>
-        <b>{disp_name}님</b>은 '{w_val}'의 월령에서 태어나 '{i_val}'의 일주 기운을 지니고 태어나셨습니다.
+        <b>{disp_name}님</b>은 <b>{wol_korean_str}</b>의 월에서 태어나 해당일주의 <b>'{ilju_summary_text}'</b> 성향을 지니고 태어나셨습니다.
     </p>
 </div>
 """
@@ -1215,7 +1226,7 @@ if st.session_state.get('need_calc', False):
 
                 if ilju_master_data:
                     ilju_master_prompt_context = f"""
-🎯 [박사님 60일주 정밀 마스터 원본 비기 - {user_ilju_key}일주 전용]
+🎯 [초연 전통명리의 뼈때리는 팩트폭격 - {user_ilju_key}일주 전용 마스터 비기]
 - 물상 및 성향 요약: {ilju_master_data.get('summary', '')}
 - 심리적 관점: {ilju_master_data.get('psychology', '')}
 - 육친적 관점: {ilju_master_data.get('family', '')}
@@ -1225,10 +1236,10 @@ if st.session_state.get('need_calc', False):
 - 신살, 변곡점, 건강, 과숙/고신, 도망역: {ilju_master_data.get('shinsal_warnings', '')}
 - 💥 뼈때리는 팩트폭격 핵심 비기: {ilju_master_data.get('choyeon_secret', '')}
 
-🚨 [통변 절대 규칙]: 위 박사님의 '60일주 정밀 마스터 원본 비기'에 담긴 문장과 임상적 통찰을 사주풀이 에세이(성격 분석, 사주구조분석, 운의 흐름) 전반에 100% 녹여내어 깊이 있게 풀이하십시오.
+🚨 [통변 절대 규칙]: 위 박사님의 '초연 전통명리의 뼈때리는 팩트폭격'에 담긴 문장과 임상적 통찰을 사주풀이 에세이(성격 분석, 사주구조분석, 운의 흐름) 전반에 100% 녹여내어 깊이 있게 풀이하십시오.
 """
-                else:
-                    ilju_master_prompt_context = ""
+else:
+    ilju_master_prompt_context = ""
                                 
                 db_header = (
                     f"[시스템 강제 시간 인식: 현재 시점은 {curr_y}년 {curr_m}월 입니다.]\n"
@@ -1266,7 +1277,7 @@ if st.session_state.get('need_calc', False):
    - 동성 형제(형/남동생) = 비견 / 이성 형제(누나/여동생) = 겁재
 4. 🚨 [상태별 호칭 맞춤형 타겟팅]: 내담자의 현재 혼인 상태({u_marital})를 반드시 반영하십시오. 
    - 기혼: '현재 아내/배우자'로 칭할 것.
-   - 미혼: '미래의 아내/인연'으로 칭할 것.
+   - 미혼: '미래의 인연'으로 칭할 것.
    - 🚨돌싱(이혼/사별): '과거의 인연(전처)'에 대한 성찰이나 '새로운 인연(재혼운)'으로 변환하여 카운슬링할 것.
 """
                 else:
@@ -1285,11 +1296,11 @@ if st.session_state.get('need_calc', False):
    - 동성 형제(언니/여동생) = 비견 / 이성 형제(오빠/남동생) = 겁재
 4. 🚨 [상태별 호칭 맞춤형 타겟팅]: 내담자의 현재 혼인 상태({u_marital})를 반드시 반영하십시오. 
    - 기혼: '현재 남편/배우자'로 칭할 것.
-   - 미혼: '미래의 남편/인연'으로 칭할 것.
+   - 미혼: '미래의 인연'으로 칭할 것.
    - 🚨돌싱(이혼/사별): '과거의 인연(전 남편)'에 대한 성찰이나 '새로운 인연(재혼운)'으로 변환하여 카운슬링할 것.
 """
 
-                prompt = f"""
+prompt = f"""
 {db_header}
 {ilju_master_prompt_context}
 
@@ -1330,7 +1341,7 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조분석</h3>
 <div class='content-box-loose'>
-[CHOYEON_GOLDEN_TEXT_HERE]
+{choyeon_golden_text}
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
 - 격국({gyukgook_detail})을 핵심 뼈대로 삼아 발현되는 무대의 규모와 특성을 작성하십시오.
 
@@ -1440,13 +1451,14 @@ if st.session_state.get('need_calc', False):
 (※ AI 지시: 이성 관계에 영향을 미치는 오행의 치우침, 원진, 신살 등을 실질적인 개운 비법과 함께 작성하십시오.)
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 행운에 따른 기운 조언:</span>
-(※ AI 지시: 마스터 데이터의 도망역 및 과숙/고신 팩트를 토대로 주의점에 대한 깊이 있는 에세이를 작성하십시오.)
+(※ AI 지시: 마스터 데이터의 도망역 및 과숙/고신 팩트를 토대로 주의점에 대한 깊이 있는 에세이를 작성하시오.)
 </div>
 """
                 try:
                     res = model.generate_content(prompt)
                     ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                     
+                    # 기존 replace 로직은 choyeon_golden_text를 직접 프롬프트에 넣었으므로 호환되도록 유지
                     if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
                         ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
 
