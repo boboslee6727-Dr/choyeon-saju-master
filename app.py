@@ -14,12 +14,12 @@ import streamlit.components.v1 as components
 import re
 
 # 🎯 [버전 컨트롤 타워]
-APP_VERSION = "전통명리 사주풀이 (Ver 48.1)"
+APP_VERSION = "Ver 48.1"
 
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS (ver 48.0 + ver 72.1/7.3 스타일 응용 통합 - 연녹색 유지)
 # ==============================================================================
-st.set_page_config(page_title=f"초연 전통 명리연구소 {APP_VERSION}", layout="wide")
+st.set_page_config(page_title=f"초연 전통 명리 {APP_VERSION}", layout="wide")
 
 st.markdown("""<style>
     @import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;900&display=swap");
@@ -680,7 +680,7 @@ class UniversalPrintableGunghap:
 # ==============================================================================
 with st.sidebar:
     st.title("🏮초연 전통명리 연구소")
-    st.caption(f"{APP_VERSION} (Traditional Base)")
+    st.caption(f"{APP_VERSION}")
     st.markdown("---")
 
     with st.expander("🔍 사주팔자 역산 검색", expanded=False):
@@ -1830,51 +1830,51 @@ if st.session_state.get('need_calc', False):
 3. 모든 통변 문장은 HTML 태그 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸하십시오.
 
 [MALE_START]
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 사주팔자의 요약</h3>
+<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
+(이곳에 남성의 사회적 표면 성격을 분석한 실제 에세이 작성)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 감추어진 내 속마음</span>
+(이곳에 남성의 내면과 무의식을 분석한 실제 에세이 작성)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
+(남성의 연애 및 결혼관을 실제 에세이로 작성)
+
+<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; margin-top: 15px;'>2. 사주팔자의 요약</h3>
 {m_traditional_text_html}
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
 (이곳에 남성의 정통 명리적 성향을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 25px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>
 (이곳에 남성의 오행 및 조후 에너지를 분석한 실제 에세이 작성)
-
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; margin-top: 35px;'>2. 성격 및 가치관</h3>
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
-(이곳에 남성의 사회적 표면 성격을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 25px; margin-bottom: 5px;'>2) 감추어진 내 속마음</span>
-(이곳에 남성의 내면과 무의식을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 25px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
-(남성의 연애 및 결혼관을 실제 에세이로 작성)
 [MALE_END]
 
 [FEMALE_START]
-<h3 style='color:#D50000; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 사주팔자의 요약</h3>
+<h3 style='color:#D50000; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
+(이곳에 여성의 사회적 표면 성격을 분석한 실제 에세이 작성)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 감추어진 내 속마음</span>
+(이곳에 여성의 내면과 무의식을 분석한 실제 에세이 작성)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
+(여성의 연애 및 결혼관을 실제 에세이로 작성)
+
+<h3 style='color:#D50000; font-size: 22px; font-weight: 900; margin-top: 15px;'>2. 사주팔자의 요약</h3>
 {f_traditional_text_html}
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
 (이곳에 여성의 정통 명리적 성향을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 25px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>
 (이곳에 여성의 오행 및 조후 에너지를 분석한 실제 에세이 작성)
-
-<h3 style='color:#D50000; font-size: 22px; font-weight: 900; margin-top: 35px;'>2. 성격 및 가치관</h3>
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
-(이곳에 여성의 사회적 표면 성격을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 25px; margin-bottom: 5px;'>2) 감추어진 내 속마음</span>
-(이곳에 여성의 내면과 무의식을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 25px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
-(여성의 연애 및 결혼관을 실제 에세이로 작성)
 [FEMALE_END]
 
 [GUNGHAP_START]
 <h3 style='color: #1B5E20; font-size: 22px; font-weight: 900; margin-top: 10px;'>🍀 두 사람의 운명적 만남에 대하여</h3>
 (이곳에 두 사람의 인연 총평을 깊이 있게 통변한 실제 에세이 작성)
 
-<h3 style='color: #1A237E; font-size: 22px; font-weight: 900; margin-top: 35px;'>🌈 커플의 인생 기상도 분석</h3>
+<h3 style='color: #1A237E; font-size: 22px; font-weight: 900; margin-top: 25px;'>🌈 커플의 인생 기상도 분석</h3>
 [COUPLE_DAEWUN_TABLES_HERE]
 (이곳에 상하 대운 교차점에 따른 상생/보완을 분석한 실제 에세이 작성)
 
-<h4 style='color: #1A237E; font-size: 18px; font-weight: 900; margin-top: 35px;'>💞 커플의 상생과 조화 궁합 분석</h4>
+<h4 style='color: #1A237E; font-size: 18px; font-weight: 900; margin-top: 25px;'>💞 커플의 상생과 조화 궁합 분석</h4>
 (이곳에 속궁합, 겉궁합, 오행 궁합을 통합 분석한 실제 에세이 작성)
 
-<h4 style='color: #1A237E; font-size: 18px; font-weight: 900; margin-top: 35px;'>⚓ 조율의 지혜</h4>
+<h4 style='color: #1A237E; font-size: 18px; font-weight: 900; margin-top: 25px;'>⚓ 조율의 지혜</h4>
 (이곳에 갈등 극복 및 개운 처방을 담은 실제 에세이 작성)
 [GUNGHAP_END]
 """
