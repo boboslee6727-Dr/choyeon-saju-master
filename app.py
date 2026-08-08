@@ -17,22 +17,37 @@ import re
 APP_VERSION = "Ver 48.1 전통명리 Master (팩트폭격 통합형)"
 
 # ==============================================================================
-# 0. VIP 인셋 프레임 및 초강력 프린트 CSS (통합 정돈 버전)
+# 0. VIP 인셋 프레임 및 초강력 프린트 CSS (연녹색 배경 원본 복원 버전)
 # ==============================================================================
 st.set_page_config(page_title=f"초연 전통 명리연구소 {APP_VERSION}", layout="wide")
 
 st.markdown("""
 <style>
     @import url("https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@400;600;900&display=swap");
+    @import url('https://fonts.googleapis.com/css2?family=Nanum+Gothic:wght@400;700;800;900&display=swap');
+
+    /* 1. 원본 고유의 연녹색 배경 테마 적용 */
+    body, .stApp { background-color: #E8F5E9 !important; }
     
-    /* 1. 기본 레이아웃 및 배경 */
-    body, .stApp { background-color: #FFF8E1; }
+    /* 사이드바 컨트롤 요소 폰트 및 스타일 정밀 제어 */
+    [data-testid="stSidebar"] label,
+    [data-testid="stSidebar"] p,
+    [data-testid="stSidebar"] h1,
+    [data-testid="stSidebar"] h2,
+    [data-testid="stSidebar"] h3,
+    [data-testid="stSidebar"] span[data-testid="stMarkdownContainer"] { 
+        font-family: 'Nanum Gothic', sans-serif !important; 
+    }
     
-    /* 2. 리포트 페이지 스타일 */
+    div[data-testid="stSidebar"] * { font-size: 14px !important; }
+    div[data-testid="stRadio"] label p { font-size: 14px !important; }
+    div[data-testid="stCheckbox"] label p { font-size: 14px !important; }
+
+    /* 2. 리포트 페이지 스타일 (Noto Serif KR) */
     .report-page { width: 210mm; max-width: 100%; margin: 30px auto; background-color: #FFFFFF !important; padding: 15mm 10mm; box-shadow: 0 0 20px rgba(0,0,0,0.15); border-radius: 20px; box-sizing: border-box; }
     .report-page, .report-page * { font-family: 'Noto Serif KR', serif !important; color: #000000; }
     
-    .vip-inset-frame { border: 2px solid #1A237E; border-radius: 15px; padding: 20px; background: transparent; box-sizing: border-box; width: 100%; overflow: hidden; word-break: keep-all; -webkit-box-decoration-break: clone; box-decoration-break: clone; }
+    .vip-inset-frame { border: 2px solid #3E2723 !important; border-radius: 12px !important; padding: 30px 25px !important; background-color: #FFFFFF !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
 
     /* 3. 표지 및 타이틀 전용 폰트 */
     .cover-page .title-gothic { font-family: 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif !important; color: #0054FF !important; font-weight: 900 !important; }
@@ -45,76 +60,73 @@ st.markdown("""
     .report-page h4 { font-size: 18px !important; margin-top: 15px !important; margin-bottom: 8px !important; font-weight: 900 !important; }
     
     /* 5. 사주팔자 결과 테이블 스타일 */
-    .result-table { width: 100%; border-collapse: collapse; border: 3px solid #3E2723; margin-bottom: 15px; table-layout: fixed; }
-    .result-table td { border: 1px solid #444; padding: 1px; text-align: center; vertical-align: middle; font-weight: 900; font-size: 13px; line-height: 1.2; word-wrap: break-word; }
+    .result-table { width: 100%; border-collapse: collapse !important; border: 3px solid #3E2723 !important; margin-bottom: 15px; table-layout: fixed; }
+    .result-table td { border: 1px solid #444 !important; padding: 1px 0 !important; text-align: center; vertical-align: middle; font-weight: 900 !important; font-size: 13px; line-height: 1.2 !important; }
     
     .no-border-row td { border-top: none !important; border-bottom: none !important; }
     .no-border-row:last-of-type td { border-bottom: 1px solid #444 !important; }
     
-    .header-cell-main { background-color: #E8EAF6 !important; color: #1A237E !important; font-weight: 900 !important; font-size: 15px !important; border: 1px solid #444 !important; }
+    .header-cell-main, .header-cell-sub { background-color: #E8EAF6 !important; color: #000000 !important; font-weight: 900 !important; font-size: 14px !important; border: 1px solid #444 !important; }
     
     .top-header-cell { background-color: #1A237E !important; height: 30px !important; }
     .top-header-cell td, .top-header-cell span { color: #FFFFFF !important; font-weight: 900 !important; font-size: 16px !important; }
     
     /* 6. 오행별 컬러 매칭 */
-    .color-목 { background-color: #2E7D32 !important; color: white !important; }
-    .color-화 { background-color: #C62828 !important; color: white !important; }
-    .color-토 { background-color: #F9A825 !important; color: black !important; }
-    .color-금 { background-color: #9E9E9E !important; color: white !important; }
-    .color-수 { background-color: #212121 !important; color: white !important; }
+    .color-목 { background: #2E7D32 !important; color: #FFF !important; }
+    .color-화 { background: #C62828 !important; color: #FFF !important; }
+    .color-토 { background: #F9A825 !important; color: #000 !important; }
+    .color-금 { background: #9E9E9E !important; color: #FFF !important; }
+    .color-수 { background: #212121 !important; color: #FFF !important; }
     
     /* 7. 본문 에세이 및 텍스트 박스 */
     .content-box-loose { line-height: 1.8; font-size: 15px; color: #111; text-align: justify; word-break: keep-all; font-family: 'Noto Serif KR', 'Nanum Myeongjo', serif !important; padding: 0 !important; }
     .content-box-loose .sub-title { text-indent: 0px !important; margin-top: 25px !important; margin-bottom: 10px !important; font-weight: 900 !important; display: block; color: #111 !important; }
     
-    /* 8. 사이드바 버튼 디자인 통일 (가로 폭 및 크기 완벽 일치) */
-    div[data-testid="stSidebar"] div.stButton > button[kind="primary"] {
-        background-color: #D50000 !important;
-        color: white !important;
-        border: none !important;
-        width: 100% !important;
-        height: 45px !important;
+    /* 8. 사이드바 버튼 디자인 공통 통일 (ver 72.1 스타일 수용) */
+    div.stButton > button { 
+        font-family: 'Nanum Gothic', sans-serif !important; 
+        font-weight: 900 !important; 
+        font-size: 16px !important;
         border-radius: 8px !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.15) !important;
-    }
-    div[data-testid="stSidebar"] div.stButton > button[kind="primary"] p {
-        font-weight: 900 !important;
-        font-size: 15px !important;
-        font-family: "Malgun Gothic", sans-serif !important;
-        color: white !important;
-        margin: 0 !important;
     }
 
-    div[data-testid="stSidebar"] div.stButton > button[kind="secondary"] {
-        background-color: #2E7D32 !important;
-        color: white !important;
-        border: none !important;
+    div[data-testid="stSidebar"] div.stButton > button[kind="primary"] { 
+        background-color: #D50000 !important; 
+        color: #FFFFFF !important; 
+        border: none !important; 
         width: 100% !important;
-        height: 45px !important;
-        border-radius: 8px !important;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.15) !important;
-    }
-    div[data-testid="stSidebar"] div.stButton > button[kind="secondary"] p {
+        height: 45px !important; 
         font-weight: 900 !important;
-        font-size: 15px !important;
-        font-family: "Malgun Gothic", sans-serif !important;
-        color: white !important;
-        margin: 0 !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.1) !important;
+    }
+    div[data-testid="stSidebar"] div.stButton > button[kind="primary"] p { 
+        font-weight: 900 !important; 
+        font-size: 15px !important; 
+        color: white !important; 
+        margin: 0 !important; 
     }
 
-    div[data-testid="stSidebar"] .navy-btn button {
-        background-color: #1A237E !important;
-        color: white !important;
-        border: none !important;
-        font-weight: 900 !important;
+    div[data-testid="stSidebar"] div.stButton > button[kind="secondary"] { 
+        background-color: #00A843 !important; 
+        color: #FFFFFF !important; 
+        border: none !important; 
+        width: 100% !important;
         height: 45px !important;
+        font-weight: 900 !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.08) !important;
+    }
+    div[data-testid="stSidebar"] div.stButton > button[kind="secondary"] p { 
+        font-weight: 900 !important; 
+        font-size: 15px !important; 
+        color: white !important; 
+        margin: 0 !important; 
     }
 
     /* 9. 인쇄(Print) 전용 최적화 스타일 */
     @media print { 
         @page { size: A4 portrait; margin: 10mm; }
         .stSidebar, button, iframe, .print-hide, header { display: none !important; }
-        body, .stApp { background-color: white !important; }
+        body, .stApp { background-color: white !important; -webkit-print-color-adjust: exact !important; }
         
         .block-container, div[data-testid="stAppViewBlockContainer"] { padding-top: 0 !important; padding-bottom: 0 !important; margin-top: 0 !important; margin-bottom: 0 !important; }
         div[data-testid="stVerticalBlock"] { gap: 0 !important; }
@@ -866,15 +878,15 @@ with st.sidebar:
                 st.markdown("<div style='margin-top:15px;'></div>", unsafe_allow_html=True)
                 run_delivery_calc = st.checkbox("✅ 출산택일 확정 (체크 후 하단 메인 가동버튼 클릭)", value=False)
 
-    st.markdown("---")
+        st.markdown("---")
     
-    # 🚀 사주풀이 가동 버튼
-    if st.button("🚀 초연 전통명리 사주풀이 가동", key="btn_run", use_container_width=True, type="primary"):
-        st.session_state['app_running'] = True
+        # 🚀 사주풀이 가동 버튼
+        if st.button("🚀 초연 전통명리 사주풀이 가동", key="btn_run", use_container_width=True, type="primary"):
+            st.session_state['app_running'] = True
 
-    # 🖨️ 인쇄 / PDF 저장 버튼 (Streamlit 순정 secondary + 자바스크립트 인쇄 트리거)
-    if st.button("🖨️ 풀이 결과 인쇄 / PDF 저장", key="btn_print", use_container_width=True, type="secondary"):
-        components.html("<script>window.parent.print();</script>", height=0)
+        # 🖨️ 인쇄 / PDF 저장 버튼 (Streamlit 순정 secondary + 자바스크립트 인쇄 트리거)
+        if st.button("🖨️ 풀이 결과 인쇄 / PDF 저장", key="btn_print", use_container_width=True, type="secondary"):
+            components.html("<script>window.parent.print();</script>", height=0)
 
     if btn_single:
         if not u_name.strip(): 
