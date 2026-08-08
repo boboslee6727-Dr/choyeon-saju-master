@@ -1597,51 +1597,78 @@ if st.session_state.get('need_calc', False):
                 try:
                     if compare_mode == "전통 명리학과 1:1 자동 대조":
                         comp_prompt = f"""
-                        당신은 명리심리상담사 '초연 박사'입니다.
-                        제공된 {disp_name}님의 사주팔자 팩트를 바탕으로 [A. 전통 명리학 단식 풀이]와 [B. 초연 전통명리 정밀 풀이]의 차이점을 항목별로 칼같이 1:1 대조 분석하십시오.
+[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
+당신은 명리심리상담사 '초연 박사'입니다.
+제공된 {disp_name}님의 사주팔자 팩트를 바탕으로 [A. 전통 명리학 단식 풀이]와 [B. 초연 전통명리 정밀 풀이]의 차이점을 항목별로 칼같이 1:1 대조 분석하십시오.
 
-                        🚨 [디자인 및 서식 절대 규칙]
-                        0. 🚨 [인사말 원천 차단]: 출력의 첫 글자는 반드시 <h3 style=...> 태그로 시작해야 합니다. "안녕하십니까" 등의 어떠한 서론도 절대 허용하지 않습니다.
-                        1. AI 임의의 목차 서식 생성을 금지합니다.
-                        2. 모든 본문 문단은 HTML 태그인 <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸하십시오.
+🚨 [디자인 및 서식 절대 규칙]
+0. 🚨 [인사말 원천 차단]: 출력의 첫 글자는 반드시 <h3 style=...> 태그로 시작해야 합니다. "안녕하십니까" 등의 어떠한 서론도 절대 허용하지 않습니다.
+1. AI 임의의 목차 서식 생성을 금지합니다.
+2. 모든 본문 문단은 HTML 태그인 <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 로 감싸하십시오.
 
-                        [출력 목차 서식 정의]
-                        <h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>1. 타고난 성격 및 구조 대조</h3>
-                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[A. 전통 명리 단식 풀이]</b> 일간 {ds}와 십성/운성 기준의 단순 표면적 성격 해석...</p>
-                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'><b>[B. 초연 전통명리 정밀 풀이]</b> 격국 및 12신살({s12_str}) + 공망({gongmang_actual})의 입체적 분석...</p>
+[출력 목차 서식 정의]
+<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>1. 타고난 성격 및 구조 대조</h3>
+<p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 일간 {ds}와 십성/운성 기준의 단순 표면적 성격 해석...</p>
+<p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> 격국 및 12신살({s12_str}) + 공망({gongmang_actual})의 입체적 분석...</p>
 
-                        <h3 style='color:#D50000; font-size: 22px; font-weight: 900; border-bottom: 2px solid #D50000; padding-bottom: 5px; margin-top: 35px; margin-bottom: 8px; display:block;'>2. 거장 초연 박사의 전통 임상 총평</h3>
-                        <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'>[전통 명리의 깊이와 현대적 카운슬링 조화에 대한 총평 작성]</p>
+<h3 style='color:#D50000; font-size: 22px; font-weight: 900; border-bottom: 2px solid #D50000; padding-bottom: 5px; margin-top: 35px; margin-bottom: 8px; display:block;'>2. 거장 초연 박사의 전통 임상 총평</h3>
+<p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'>[전통 명리의 깊이와 현대적 카운슬링 조화에 대한 총평 작성]</p>
 
-                        [분석 대상 데이터]
-                        - 사주원국: {ys}{yb}년 {ms}{mb}월 {ds}{db}일 {hs}{hb}시 (격국: {gyukgook_detail})
-                        """
+[분석 대상 데이터]
+- 사주원국: {ys}{yb}년 {ms}{mb}월 {ds}{db}일 {hs}{hb}시 (격국: {gyukgook_detail})
+"""
                         c_res = call_claude_api(comp_prompt, max_tokens=10000)
                         
                         other_cover_html = (
-                                f"<div class='page-break-before'></div>\n"
-                                f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
-                                f"    <div style='border: 4px solid #2E7D32; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
-                                f"        <div style='border-bottom:4px double #2E7D32; padding-bottom:20px; margin-bottom:40px;'>\n"
-                                f"            <h1 class='title-gothic' style='font-size: 38px !important; margin:0 !important;'>전통 명리 학술 대조 리포트</h1>\n"
-                                f"            <div style='text-align: right; margin-top: 10px;'>\n"
-                                f"                <span class='ver-gothic' style='font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
-                                f"            </div>\n"
-                                f"        </div>\n"
-                                f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 30px 20px; border-radius: 15px;'>\n"
-                                f"            <h2 style='font-size: 24px; font-weight: 800; color: #2E7D32; margin-bottom: 20px;'>👤 신청인 : {u_name} 님</h2>\n"
-                                f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
-                                f"                <p style='margin: 0; white-space: nowrap;'>[양력] {sol_str} | [음력] {lun_str}</p>\n"
-                                f"            </div>\n"
-                                f"        </div>\n"
-                                f"        <p style='font-size: 18px; margin-top: 50px; font-weight: 800;'>{today_str}</p>\n"
-                                f"        <p style='font-size: 22px; font-weight: 800; color: #2E7D32; margin-top: 20px;'>초연 전통명리 연구소</p>\n"
-                                f"    </div>\n"
-                                f"</div>"
-                            )
+                            f"<div class='page-break-before'></div>\n"
+                            f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
+                            f"    <div style='border: 4px solid #2E7D32; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
+                            f"        <div style='border-bottom:4px double #2E7D32; padding-bottom:20px; margin-bottom:40px;'>\n"
+                            f"            <h1 class='title-gothic' style='font-size: 38px !important; margin:0 !important;'>전통 명리 학술 대조 리포트</h1>\n"
+                            f"            <div style='text-align: right; margin-top: 10px;'>\n"
+                            f"                <span class='ver-gothic' style='font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
+                            f"            </div>\n"
+                            f"        </div>\n"
+                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 30px 20px; border-radius: 15px;'>\n"
+                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #2E7D32; margin-bottom: 20px;'>👤 신청인 : {u_name} 님</h2>\n"
+                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
+                            f"                <p style='margin: 0; white-space: nowrap;'>[양력] {sol_str} | [음력] {lun_str}</p>\n"
+                            f"            </div>\n"
+                            f"        </div>\n"
+                            f"        <p style='font-size: 18px; margin-top: 50px; font-weight: 800;'>{today_str}</p>\n"
+                            f"        <p style='font-size: 22px; font-weight: 800; color: #2E7D32; margin-top: 20px;'>초연 전통명리 연구소</p>\n"
+                            f"    </div>\n"
+                            f"</div>"
+                        )
                         st.session_state['saved_report_2'] = other_cover_html + f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#2E7D32;'><h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 800; border-bottom:2px solid #2E7D32; padding-bottom:15px;'>⚖️ 전통 명리 학술 대조 리포트</h1><div style='margin-top:20px;'>{c_res}</div></div></div>"
                     else:
-                        report_2_html = f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#555;'><h2 style='text-align:center; color:#555; font-family:\"Malgun Gothic\", sans-serif; font-weight:900; margin-bottom:20px;'>📜 타 감명서 원문</h2><div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #111; text-align: justify; word-break: keep-all;'>{other_reading_text.replace(chr(10), '<br>')}</div></div></div>"
+                        comp_prompt = f"""
+[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
+당신은 정통 명리심리상담사 '초연 박사'입니다.
+제출된 {disp_name}님의 [외부 타 감명서 원문]을 분석하여, 박사님의 [초연 전통명리학] 지혜와 1:1로 정밀 대조 검증하십시오.
+
+[분석 지시]
+1. 제출된 타 감명서 원문의 핵심 주장과 오판/단식 판단 요소를 짚어내십시오.
+2. 초연 전통명리의 정밀 팩트(격국: {gyukgook_detail}, 공망: {gongmang_actual}, 신살: {shinsal_str})를 바탕으로 무엇이 잘못되었고 어떻게 재해석되어야 하는지 입체적으로 1:1 대조 분석하십시오.
+3. 모든 본문 문단은 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 태그로 감싸하십시오.
+
+[제출된 타 감명서 원문]
+{other_reading_text}
+"""
+                        c_res = call_claude_api(comp_prompt, max_tokens=10000)
+                        
+                        report_2_html = (
+                            f"<div class='page-break-before'></div>\n"
+                            f"<div class='report-page'>\n"
+                            f"<div class='vip-inset-frame' style='border-color:#2E7D32; padding:20px;'>\n"
+                            f"<h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 900; border-bottom:2px solid #2E7D32; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 감명서 원문 정밀 대조 분석 리포트</h1>\n"
+                            f"<div style='margin-top:20px;'>{c_res}</div>\n"
+                            f"<hr style='border:1px dashed #2E7D32; margin:30px 0;'>\n"
+                            f"<h3 style='color:#555; font-size:18px; font-weight:900; margin-bottom:10px;'>📜 [제출된 타 감명서 원문]</h3>\n"
+                            f"<div style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; line-height: 1.8; color: #444; background:#F9F9F9; padding:15px; border-radius:8px;'>{other_reading_text.replace(chr(10), '<br>')}</div>\n"
+                            f"</div>\n"
+                            f"</div>"
+                        )
                         st.session_state['saved_report_2'] = report_2_html
 
                 except Exception as e:
