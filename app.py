@@ -924,6 +924,16 @@ if st.session_state.get('need_calc', False):
             if u_product in ["개인사주", "궁합", "타 감명서"]:
                 past_months_html = ""
 
+                # 1. 시공간 및 성품 데이터 선행 로드 (choyeon_db.json 연계)
+                w_key = f"{ms}{mb}".strip()
+                i_key = f"{ds}{db}".strip()
+
+                w_val = choyeon_db.get("wolryeong", {}).get(w_key, f"[{w_key}] 시공간 데이터 없음")
+                i_val = choyeon_db.get("ilju", {}).get(i_key, f"[{i_key}] 성품 데이터 없음")
+                struct_data = choyeon_db.get("ilju_structure", {}).get(i_key, ["구조 미상", "유형 미상", "성향 미상"])
+                s_name, s_type, s_desc = struct_data[0], struct_data[1], struct_data[2]
+
+                # 2. 표지 및 화면 안내 HTML 준비
                 cover_html = (
                         f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
                         f"    <div style='border: 4px solid #1A237E; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
@@ -946,6 +956,34 @@ if st.session_state.get('need_calc', False):
                         f"</div>"
                     )
                 st.session_state['saved_report_cover'] = cover_html
+
+                intro_html = f"""
+    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
+    <div style="margin: 0; padding: 0;">
+        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 6px; font-weight: 600; text-align: justify; text-indent: 0;">
+            <b>"초연 시공 명리학"</b>은 5년에 한 번 돌아오는 '60월령과 60일주'의 조합으로 <b>3,600개 유형</b>으로 분류하지만, <b>"기존의 전통 명리학"</b>은 1년에 한 번 돌아오는 '12월지와 60일주'의 조합으로 <b>720개 유형</b>으로 분류하여 풀이합니다.
+        </p> 
+        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 0; font-weight: 600; text-align: justify; text-indent: 0;">
+            따라서, <b>"본 초연 시공 명리학"</b>은 기존 전통명리학에 비하여 <b>5배</b>, 요즘 유행하는 16개 유형으로 분류하는 MBTI와 비교하면 무려 <b>225배</b> 더 정확한 사주풀이 입니다.
+        </p>
+    </div>
+    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
+"""
+
+                golden_text_html = f"""
+    <div style="margin: 0; padding: 0;">
+        <p class="ai-body-p" style="margin: 0; color: #000000; text-align: justify; text-indent: 0;">
+            초연 시공명리학적으로 풀이하면 <b>{disp_name}님</b>은 <b>'{w_val}'</b>의 시공간에서, <b>'{i_val}'</b>의 성품을 가지고 태어나셨으며, 성격은 <b>'{s_name}'</b>인 <b>'{s_type}'</b>으로, <b>'{s_desc}'</b>하는 성향이 있습니다.
+        </p>
+    </div>
+    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
+"""
+
+                # 3. 원국 지지 합충형파해 연산 선행 정의
+                hap_chung_hyoung_pa_hae = (
+                    f"일-월지:{get_ji_rel_set(db, mb)}, 일-년지:{get_ji_rel_set(db, yb)}, "
+                    f"일-시지:{get_ji_rel_set(db, hb)}, 월-년지:{get_ji_rel_set(mb, yb)}"
+                )
 
                 ji_rel_rows = ""
                 for l_idx, r_idx in enumerate([1, 2, 0, 3]):
