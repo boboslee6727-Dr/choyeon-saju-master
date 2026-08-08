@@ -1773,37 +1773,37 @@ if st.session_state.get('need_calc', False):
                     m_gyuk_str = locals().get('m_gyukgook_detailed', locals().get('m_gyuk', '정통격국'))
 
                     # ==============================================================
-                    # 남명/여명 전용 60일주 정밀 원본 비기(ilju_full_master) 로더 및 올바른 격국 함수 호출
+                    # 남명/여명 전용 60일주 DB 연동 (중복제거 및 영업비밀 보호)
                     # ==============================================================
-                    ilju_full_db = choyeon_db.get("ilju_full_master", {})
+                    ilju_struct_db = choyeon_db.get("ilju_structure", {})
 
-                    # 1. 남명 데이터 로드 및 정확한 함수명(get_gyukgook_detailed) 호출
+                    # 1. 남명 데이터 로드 (ilju_structure [1]유형, [2]성격 매핑)
                     m_ilju_key = f"{m_ds}{m_db}"
-                    m_ilju_master = ilju_full_db.get(m_ilju_key, {})
-                    m_summary_text = m_ilju_master.get('summary', '고유의 역량을 품은')
-                    
+                    m_struct_data = ilju_struct_db.get(m_ilju_key, [])
+                    m_action_type = m_struct_data[1] if len(m_struct_data) >= 3 else "자율활동형"
+                    m_main_tendency = m_struct_data[2] if len(m_struct_data) >= 3 else "독자적인 삶의 무대를 개척하는"
                     m_gy_name, m_gy_desc = get_gyukgook_detailed(m_ds, m_ys, m_ms, m_hs, m_mb)
 
                     m_traditional_text_html = f"""
                     <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
                         <p style='text-indent: 15px; margin-bottom: 5px;'>
-                            <b>{m_name}님</b>은 <b>{m_mb}</b>의 월에서 태어난 '격국 {m_gy_name}'으로 해당({m_ds}{m_db})일주의 <b>'{m_summary_text}'</b> 성향을 지니고 태어나셨습니다.
+                            정통 명리학적으로 풀이하면 <b>{m_name}님</b>은 <b>{m_mb}월</b>에 <b>'{m_gy_name}'</b>의 그릇을 갖추고 태어나셨으며, 성격은 <b>'{m_action_type}'</b>으로 <b>'{m_main_tendency}'</b> 성향이 있습니다.
                         </p>
                     </div>
                     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
                     """
 
-                    # 2. 여명 데이터 로드 및 정확한 함수명(get_gyukgook_detailed) 호출
+                    # 2. 여명 데이터 로드 (ilju_structure [1]유형, [2]성격 매핑)
                     f_ilju_key = f"{f_ds}{f_db}"
-                    f_ilju_master = ilju_full_db.get(f_ilju_key, {})
-                    f_summary_text = f_ilju_master.get('summary', '고유의 역량을 품은')
-                    
+                    f_struct_data = ilju_struct_db.get(f_ilju_key, [])
+                    f_action_type = f_struct_data[1] if len(f_struct_data) >= 3 else "자율활동형"
+                    f_main_tendency = f_struct_data[2] if len(f_struct_data) >= 3 else "독자적인 삶의 무대를 개척하는"
                     f_gy_name, f_gy_desc = get_gyukgook_detailed(f_ds, f_ys, f_ms, f_hs, f_mb)
 
                     f_traditional_text_html = f"""
                     <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
                         <p style='text-indent: 15px; margin-bottom: 5px;'>
-                            <b>{f_name}님</b>은 <b>{f_mb}</b>의 월에서 태어난 '격국 {f_gy_name}'으로 해당({f_ds}{f_db})일주의 <b>'{f_summary_text}'</b> 성향을 지니고 태어나셨습니다.
+                            정통 명리학적으로 풀이하면 <b>{f_name}님</b>은 <b>{f_mb}월</b>에 <b>'{f_gy_name}'</b>의 그릇을 갖추고 태어나셨으며, 성격은 <b>'{f_action_type}'</b>으로 <b>'{f_main_tendency}'</b> 성향이 있습니다.
                         </p>
                     </div>
                     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
@@ -2113,36 +2113,37 @@ if st.session_state.get('app_running', False) and st.session_state.get('run_deli
             st.session_state['run_delivery_only'] = False
 
 # ==============================================================================
-# 9. 화면 출력부
+# 9. 화면 출력부 (수정 반영)
 # ==============================================================================
 if st.session_state.get('app_running', False):
     
     if u_product == "개인사주":
         if st.session_state.get('saved_report_html'):
             st.markdown(st.session_state.get('saved_report_html', ''), unsafe_allow_html=True)
-            st.markdown(intro_html, unsafe_allow_html=True)
-            st.markdown(golden_text_html, unsafe_allow_html=True)
         if st.session_state.get('saved_report_iljin'):
             st.markdown(st.session_state.get('saved_report_iljin', ''), unsafe_allow_html=True)
     
     if u_product == "타 감명서":
-        st.markdown(st.session_state.get('saved_report_html', ''), unsafe_allow_html=True)
-        st.markdown(intro_html, unsafe_allow_html=True)
-        st.markdown(golden_text_html, unsafe_allow_html=True)
-        st.markdown(st.session_state.get('saved_report_2', ''), unsafe_allow_html=True)
+        if st.session_state.get('saved_report_html'):
+            st.markdown(st.session_state.get('saved_report_html', ''), unsafe_allow_html=True)
+        if st.session_state.get('saved_report_2'):
+            st.markdown(st.session_state.get('saved_report_2', ''), unsafe_allow_html=True)
         
     if u_product == "궁합":
         if st.session_state.get('saved_report_gh_cover'):
             st.markdown(st.session_state.get('saved_report_gh_cover', ''), unsafe_allow_html=True)
             st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
             
-        st.markdown(st.session_state.get('saved_report_gh_m', ''), unsafe_allow_html=True)
-        st.markdown(m_traditional_text_html, unsafe_allow_html=True) # m_golden_html 대신 통합 변수 사용
-        st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
-        st.markdown(st.session_state.get('saved_report_gh_f', ''), unsafe_allow_html=True)
-        st.markdown(f_traditional_text_html, unsafe_allow_html=True) # f_golden_html 대신 통합 변수 사용
-        st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
-        st.markdown(st.session_state.get('saved_report_gh_g', ''), unsafe_allow_html=True)
+        if st.session_state.get('saved_report_gh_m'):
+            st.markdown(st.session_state.get('saved_report_gh_m', ''), unsafe_allow_html=True)
+            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+
+        if st.session_state.get('saved_report_gh_f'):
+            st.markdown(st.session_state.get('saved_report_gh_f', ''), unsafe_allow_html=True)
+            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+
+        if st.session_state.get('saved_report_gh_g'):
+            st.markdown(st.session_state.get('saved_report_gh_g', ''), unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_del'):
             st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
