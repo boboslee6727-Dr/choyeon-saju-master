@@ -1622,8 +1622,13 @@ if st.session_state.get('need_calc', False):
 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 대운({dw_g_cur}{dw_j_cur})과 세운({curr_y_ganji}) 글자의 단순 길흉 및 십성 단식 예측...</p>
 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> (위 실제 감명서의 묘고 반응({hang_un_vaults_str})과 삼형살 변곡점({samhyung_warn}) 발복 팩트를 인용하여 정밀 대조)...</p>
 
-<h3 style='color:#D50000; font-size: 22px; font-weight: 900; border-bottom: 2px solid #D50000; padding-bottom: 5px; margin-top: 35px; margin-bottom: 8px; display:block;'>4. 거장 초연 박사의 전통 임상 총평</h3>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'>[단식 풀이의 한계 극복과 초연 전통명리의 임상적 통찰을 담은 총평 서술]</p>
+<h3 style='color:#2E7D32; font-size: 20px; font-weight: 900; border-bottom: 2px solid #2E7D32; padding-bottom: 4px; margin-top: 25px; margin-bottom: 10px; display:block;'>4. 수석보좌관 종합 검증 및 앱 업데이트 제안 총평</h3>
+<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'>
+🚨 [수석보좌관 총평 절대 작성 규칙]
+1. 정통 명리 논리 위배 검증: 제출된 타 감명서가 정통 명리학 이치(격국, 십성, 궁위, 신살)에 위배되거나 오류를 범한 핵심 요소를 객관적으로 지적하십시오.
+2. 수용 및 타산지석 분석: 그럼에도 타 감명서에서 돋보이는 세련된 어휘, 현대적 카운슬링 어조, 내담자 공감 기법 등 우리가 수용하고 배워야 할 장점을 짚어내십시오.
+3. 초연시공명리 앱 진화 제안: 타 감명서의 장점을 적극 흡수하여 박사님의 '초연시공명리' 시스템과 통변 엔진을 한 단계 더 진화시키기 위한 개발/업데이트 시사점을 결론으로 제시하십시오.
+</p>
 
 [초연 전통명리 감명서 실제 본문 팩트]
 {base_essay_text[:3500]}
@@ -1656,18 +1661,20 @@ if st.session_state.get('need_calc', False):
                         base_essay_text = clean_ai_text if 'clean_ai_text' in locals() else ""
                         
                         comp_prompt = f"""
-[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
-당신은 정통 명리심리상담사 '초연 박사'입니다.
-제출된 {disp_name}님의 [외부 타 감명서 원문]의 **목차 및 분석 항목 순서(제목 구조)**를 그대로 본따서, 각 항목별로 타 감명서의 주장과 박사님의 [초연시공명리] 정밀 검증을 1:1로 비교 대조하십시오.
+[SYSTEM ROLE: CHOYEON SYSTEM CHIEF CHANCELLOR (초연시공명리 수석보좌관)]
+당신은 '초연 박사님'을 보좌하는 수석보좌관 AI입니다.
+제출된 {disp_name}님의 [외부 타 감명서 원문]을 박사님의 [초연시공명리 정밀 통변 팩트]와 1:1로 엄밀히 비교 대조하여 학술 검증 리포트를 작성하십시오.
 
-🚨 [1:1 원문 대조 핵심 지시]
-1. **타 감명서 목차 순서 완벽 재현**: 제출된 타 감명서 원문에 포함된 제목, 소목차, 분석 순서(예: 1. 성격, 2. 직업, 3. 운의 흐름 등 타 감명서 본문의 항목명)를 그대로 가져와 동일한 순서로 목차를 구성하십시오.
-2. **항목별 1:1 대조 서술**:
-   - 각 항목마다 **[타 감명서 원문 주장 및 풀이]**를 요약 정리하십시오.
-   - 이어 **[초연시공명리 정밀 검증 및 재해석]**을 작성하여, 원문의 단식 오판/오류를 짚어내고 박사님의 정통 팩트(격국: {gyukgook_detail}, 공망: {gongmang_actual}, 신살: {shinsal_str}, 묘고: {won_guk_vaults_str})와 실제 감명서 본문을 근거로 바로잡으십시오.
-3. **서식 제어**: 각 목차 제목은 <h3 style='color:#2E7D32; font-size: 20px; font-weight: 900; border-bottom: 2px solid #2E7D32; padding-bottom: 4px; margin-top: 25px; margin-bottom: 10px; display:block;'> 태그로 출력하고, 본문 문단은 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 태그로 감싸하십시오.
+🚨 [1:1 원문 대조 및 학술 검증 지시]
+1. **타 감명서 목차/항목 구조 완벽 재현**: 제출된 타 감명서의 제목, 소목차, 분석 순서(예: 성격, 직업, 대운 등)를 그대로 가져와 동일한 순서로 목차를 구성하십시오.
+2. **항목별 1:1 교차 검증**:
+   - **[타 감명서 원문 분석]**: 원문의 주장과 통변 논리를 요약하십시오.
+   - **[정통 명리 이치 검증 및 초연시공명리 재해석]**: 원문의 서술이 정통 명리 이치(격국: {gyukgook_detail}, 공망: {gongmang_actual}, 신살: {shinsal_str}, 묘고: {won_guk_vaults_str})에 위배되는지 검증하고, 오류를 정교하게 교정하십시오.
+3. **학술적 수용 및 앱 진화 총평 작성**:
+   - 마지막 목차인 **[4. 수석보좌관 종합 검증 및 앱 업데이트 제안 총평]**에서는 타 감명서의 논리적 오류를 검증함과 동시에, 타 감명서가 가진 우수한 카운슬링 어조나 배울 점을 수용하여 **'초연시공명리 앱 고도화 및 업데이트 방향'**을 종합적으로 제안하십시오.
+4. **서식 통제**: 목차 제목은 <h3 style='color:#2E7D32; font-size: 20px; font-weight: 900; border-bottom: 2px solid #2E7D32; padding-bottom: 4px; margin-top: 25px; margin-bottom: 10px; display:block;'> 태그로, 문단은 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 태그로 출력하십시오.
 
-[제출된 타 감명서 원문 (이 목차 구조와 순서를 그대로 따라가십시오)]
+[제출된 타 감명서 원문 (목차 구조 및 분석 순서 기준점)]
 {other_reading_text}
 
 [초연시공명리 정밀 검증 근거 및 실제 감명서 팩트]
@@ -1679,7 +1686,7 @@ if st.session_state.get('need_calc', False):
                             f"<div class='page-break-before'></div>\n"
                             f"<div class='report-page'>\n"
                             f"<div class='vip-inset-frame' style='border-color:#2E7D32; padding:20px;'>\n"
-                            f"<h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 900; border-bottom:2px solid #2E7D32; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 감명서 원문 정밀 대조 분석 리포트</h1>\n"
+                            f"<h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 900; border-bottom:2px solid #2E7D32; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 감명서 학술 검증 및 1:1 대조 리포트</h1>\n"
                             f"<div style='margin-top:20px;'>{c_res}</div>\n"
                             f"<hr style='border:1px dashed #2E7D32; margin:30px 0;'>\n"
                             f"<h3 style='color:#555; font-size:18px; font-weight:900; margin-bottom:10px;'>📜 [제출된 타 감명서 원문]</h3>\n"
