@@ -1596,26 +1596,37 @@ if st.session_state.get('need_calc', False):
             if u_product == "타 감명서":
                 try:
                     if compare_mode == "전통 명리학과 1:1 자동 대조":
+                        base_essay_text = clean_ai_text if 'clean_ai_text' in locals() else ""
+                        
                         comp_prompt = f"""
 [SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
-당신은 명리심리상담사 '초연 박사'입니다.
-제공된 {disp_name}님의 사주팔자 팩트를 바탕으로 [A. 전통 명리학 단식 풀이]와 [B. 초연 전통명리 정밀 풀이]의 차이점을 항목별로 칼같이 1:1 대조 분석하십시오.
+당신은 정통 명리심리상담사 '초연 박사'입니다.
+아래 제공된 [{disp_name}님의 초연 전통명리 감명서 실제 본문]을 바탕으로, 일반 시중의 [A. 전통 명리 단식 풀이]와 [B. 초연 전통명리 정밀 풀이]의 깊이 차이를 항목별로 칼같이 1:1 대조 분석하십시오.
 
-🚨 [디자인 및 서식 절대 규칙]
-0. 🚨 [인사말 원천 차단]: 출력의 첫 글자는 반드시 <h3 style=...> 태그로 시작해야 합니다. "안녕하십니까" 등의 어떠한 서론도 절대 허용하지 않습니다.
-1. AI 임의의 목차 서식 생성을 금지합니다.
-2. 모든 본문 문단은 HTML 태그인 <p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 로 감싸하십시오.
+🚨 [대조 통변 절대 규칙]
+0. 🚨 [인사말 원천 차단]: 출력의 첫 글자는 반드시 <h3 style=...> 태그로 시작해야 합니다. "안녕하십니까" 등의 서론을 엄금합니다.
+1. [B. 초연 전통명리 정밀 풀이] 부분은 반드시 아래 제공된 [초연 전통명리 감명서 실제 본문]의 실제 분석 팩트와 논리를 직접 인용하여 정교하게 대조하십시오.
+2. [A. 전통 명리 단식 풀이] 부분은 시중 철학관의 단순 오행/십성 표면적 해석의 한계를 명쾌히 짚어주십시오.
+3. 모든 본문 문단은 HTML 태그인 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 로 감싸하십시오.
 
 [출력 목차 서식 정의]
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>1. 타고난 성격 및 구조 대조</h3>
-<p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 일간 {ds}와 십성/운성 기준의 단순 표면적 성격 해석...</p>
-<p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> 격국 및 12신살({s12_str}) + 공망({gongmang_actual})의 입체적 분석...</p>
+<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>1. 타고난 성격 및 오행·조후 구조 대조</h3>
+<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 일간 {ds} 중심의 단순 표면 성격 및 오행 개수(木:{counts['목']}, 火:{counts['화']}, 土:{counts['토']}, 金:{counts['금']}, 水:{counts['수']}) 단식 해석...</p>
+<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> (위 실제 감명서의 월령 계절감({wol_korean_str}), 조후, 격국({gyukgook_detail}) 분석 팩트를 인용하여 정밀 대조)...</p>
 
-<h3 style='color:#D50000; font-size: 22px; font-weight: 900; border-bottom: 2px solid #D50000; padding-bottom: 5px; margin-top: 35px; margin-bottom: 8px; display:block;'>2. 거장 초연 박사의 전통 임상 총평</h3>
-<p style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'>[전통 명리의 깊이와 현대적 카운슬링 조화에 대한 총평 작성]</p>
+<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>2. 원국 합충형해파·신살 및 공망 작용 대조</h3>
+<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 합과 충의 단순 길흉 판단 및 일반적 신살 표면 해석...</p>
+<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> (위 실제 감명서의 합충형해파({hap_chung_hyoung_pa_hae}) 육친 거리감, 공망 타격 궁위({gongmang_actual}), 신살({shinsal_str}) 팩트를 인용하여 정밀 대조)...</p>
 
-[분석 대상 데이터]
-- 사주원국: {ys}{yb}년 {ms}{mb}월 {ds}{db}일 {hs}{hb}시 (격국: {gyukgook_detail})
+<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>3. 동적 운(대운 및 세운)의 흐름과 변곡점 대조</h3>
+<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 대운({dw_g_cur}{dw_j_cur})과 세운({curr_y_ganji}) 글자의 단순 길흉 및 십성 단식 예측...</p>
+<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> (위 실제 감명서의 묘고 반응({hang_un_vaults_str})과 삼형살 변곡점({samhyung_warn}) 발복 팩트를 인용하여 정밀 대조)...</p>
+
+<h3 style='color:#D50000; font-size: 22px; font-weight: 900; border-bottom: 2px solid #D50000; padding-bottom: 5px; margin-top: 35px; margin-bottom: 8px; display:block;'>4. 거장 초연 박사의 전통 임상 총평</h3>
+<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'>[단식 풀이의 한계 극복과 초연 전통명리의 임상적 통찰을 담은 총평 서술]</p>
+
+[초연 전통명리 감명서 실제 본문 팩트]
+{base_essay_text[:3500]}
 """
                         c_res = call_claude_api(comp_prompt, max_tokens=10000)
                         
@@ -1642,18 +1653,25 @@ if st.session_state.get('need_calc', False):
                         )
                         st.session_state['saved_report_2'] = other_cover_html + f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#2E7D32;'><h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 800; border-bottom:2px solid #2E7D32; padding-bottom:15px;'>⚖️ 전통 명리 학술 대조 리포트</h1><div style='margin-top:20px;'>{c_res}</div></div></div>"
                     else:
+                        base_essay_text = clean_ai_text if 'clean_ai_text' in locals() else ""
+                        
                         comp_prompt = f"""
 [SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
 당신은 정통 명리심리상담사 '초연 박사'입니다.
-제출된 {disp_name}님의 [외부 타 감명서 원문]을 분석하여, 박사님의 [초연 전통명리학] 지혜와 1:1로 정밀 대조 검증하십시오.
+제출된 {disp_name}님의 [외부 타 감명서 원문]의 **목차 및 분석 항목 순서(제목 구조)**를 그대로 본따서, 각 항목별로 타 감명서의 주장과 박사님의 [초연시공명리] 정밀 검증을 1:1로 비교 대조하십시오.
 
-[분석 지시]
-1. 제출된 타 감명서 원문의 핵심 주장과 오판/단식 판단 요소를 짚어내십시오.
-2. 초연 전통명리의 정밀 팩트(격국: {gyukgook_detail}, 공망: {gongmang_actual}, 신살: {shinsal_str})를 바탕으로 무엇이 잘못되었고 어떻게 재해석되어야 하는지 입체적으로 1:1 대조 분석하십시오.
-3. 모든 본문 문단은 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 태그로 감싸하십시오.
+🚨 [1:1 원문 대조 핵심 지시]
+1. **타 감명서 목차 순서 완벽 재현**: 제출된 타 감명서 원문에 포함된 제목, 소목차, 분석 순서(예: 1. 성격, 2. 직업, 3. 운의 흐름 등 타 감명서 본문의 항목명)를 그대로 가져와 동일한 순서로 목차를 구성하십시오.
+2. **항목별 1:1 대조 서술**:
+   - 각 항목마다 **[타 감명서 원문 주장 및 풀이]**를 요약 정리하십시오.
+   - 이어 **[초연시공명리 정밀 검증 및 재해석]**을 작성하여, 원문의 단식 오판/오류를 짚어내고 박사님의 정통 팩트(격국: {gyukgook_detail}, 공망: {gongmang_actual}, 신살: {shinsal_str}, 묘고: {won_guk_vaults_str})와 실제 감명서 본문을 근거로 바로잡으십시오.
+3. **서식 제어**: 각 목차 제목은 <h3 style='color:#2E7D32; font-size: 20px; font-weight: 900; border-bottom: 2px solid #2E7D32; padding-bottom: 4px; margin-top: 25px; margin-bottom: 10px; display:block;'> 태그로 출력하고, 본문 문단은 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 태그로 감싸하십시오.
 
-[제출된 타 감명서 원문]
+[제출된 타 감명서 원문 (이 목차 구조와 순서를 그대로 따라가십시오)]
 {other_reading_text}
+
+[초연시공명리 정밀 검증 근거 및 실제 감명서 팩트]
+{base_essay_text[:3500]}
 """
                         c_res = call_claude_api(comp_prompt, max_tokens=10000)
                         
