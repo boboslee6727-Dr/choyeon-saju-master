@@ -1825,10 +1825,23 @@ if st.session_state.get('need_calc', False):
                         '정통격국'
                     )
 
+                    # ==============================================================
+                    # 남명/여명 전용 60일주 정밀 원본 비기(ilju_full_master) 로더 및 격국 분리 정비
+                    # ==============================================================
+                    ilju_full_db = choyeon_db.get("ilju_full_master", {})
+
+                    # 1. 남명 데이터 로드 및 텍스트 조립
+                    m_ilju_key = f"{m_ds}{m_db}"
+                    m_ilju_master = ilju_full_db.get(m_ilju_key, {})
+                    m_summary_text = m_ilju_master.get('summary', '고유의 역량을 품은')
+                    
+                    # 남명 격국 변수 안전 매핑 (단일 변수가 아닌 남명 전용 변수 활용)
+                    m_gyuk_val = m_gyukgook_detailed if 'm_gyukgook_detailed' in locals() else '정통격국'
+
                     m_traditional_text_html = f"""
                     <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
                         <p style='text-indent: 15px; margin-bottom: 5px;'>
-                            <b>{m_name}님</b>은 <b>{m_mb}</b>의 월에서 태어난 '격국 {m_gyuk_str}'으로 해당({m_ds}{m_db})일주의 <b>'{m_summary_text}'</b> 성향을 지니고 태어나셨습니다.
+                            <b>{m_name}님</b>은 <b>{m_mb}</b>의 월에서 태어난 '격국 {m_gyuk_val}'으로 해당({m_ds}{m_db})일주의 <b>'{m_summary_text}'</b> 성향을 지니고 태어나셨습니다.
                         </p>
                     </div>
                     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
@@ -1839,19 +1852,13 @@ if st.session_state.get('need_calc', False):
                     f_ilju_master = ilju_full_db.get(f_ilju_key, {})
                     f_summary_text = f_ilju_master.get('summary', '고유의 역량을 품은')
                     
-                    # 여명 격국 변수 안전 추출 (NameError 방지)
-                    f_gyuk_str = (
-                        locals().get('f_gyukgook_detailed') or 
-                        locals().get('f_gyukgook') or 
-                        locals().get('f_jg') or 
-                        locals().get('f_gyuk') or 
-                        '정통격국'
-                    )
+                    # 여명 격국 변수 안전 매핑 (단일 변수가 아닌 여명 전용 변수 활용)
+                    f_gyuk_val = f_gyukgook_detailed if 'f_gyukgook_detailed' in locals() else '정통격국'
 
                     f_traditional_text_html = f"""
                     <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
                         <p style='text-indent: 15px; margin-bottom: 5px;'>
-                            <b>{f_name}님</b>은 <b>{f_mb}</b>의 월에서 태어난 '격국 {f_gyuk_str}'으로 해당({f_ds}{f_db})일주의 <b>'{f_summary_text}'</b> 성향을 지니고 태어나셨습니다.
+                            <b>{f_name}님</b>은 <b>{f_mb}</b>의 월에서 태어난 '격국 {f_gyuk_val}'으로 해당({f_ds}{f_db})일주의 <b>'{f_summary_text}'</b> 성향을 지니고 태어나셨습니다.
                         </p>
                     </div>
                     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
