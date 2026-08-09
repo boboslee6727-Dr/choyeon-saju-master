@@ -14,7 +14,7 @@ import streamlit.components.v1 as components
 import re
 
 # 🎯 [버전 컨트롤 타워]
-APP_VERSION = "Ver 48.1"
+APP_VERSION = "Ver 48.3"
 
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS (ver 48.0 + ver 72.1/7.3 스타일 응용 통합 - 연녹색 유지)
@@ -938,38 +938,35 @@ with st.sidebar:
         components.html("<script>window.parent.print();</script>", height=0)
 
     if btn_single:
+        is_gunghap_type = (main_category == "3. 커플 연애/결혼운 (궁합) 풀이") or (u_product == "4-2. 타 감명서 비교 (궁합)")
+        is_compare_type = (main_category == "4. 타 감명서 비교")
+
         if not u_name.strip(): 
             st.warning("⚠️ 신청인의 이름을 입력해 주세요.")
-        elif main_category == "4. 타 감명서 비교" and compare_mode == "외부 타 감명서 원문 대조" and not other_reading_text.strip():
+        elif is_compare_type and compare_mode == "외부 타 감명서 원문 대조" and not other_reading_text.strip():
             st.warning("⚠️ 타 감명서 원문을 입력해 주세요.")
-        elif (main_category == "3. 커플 연애/결혼운 (궁합) 풀이" or u_product == "4-2. 타 감명서 비교 (궁합)") and not p_name.strip(): 
+        elif is_gunghap_type and not p_name.strip(): 
             st.warning("⚠️ 상대방의 이름을 입력해 주세요.")
         else:
             st.session_state['app_running'] = True
             
-            if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"] and run_iljin_calc and st.session_state.get('saved_report_html'):
-                st.session_state['need_calc'] = False
+            # 이전 세션 출력물 말끔히 초기화
+            for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
+                if key in st.session_state: del st.session_state[key]
+
+            if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"] and run_iljin_calc:
+                st.session_state['need_calc'] = True
                 st.session_state['run_waterfall'] = True
-                if 'saved_report_iljin' in st.session_state: del st.session_state['saved_report_iljin']
-                
-            elif main_category == "4. 타 감명서 비교":
+            elif is_gunghap_type and run_delivery_calc:
+                st.session_state['need_calc'] = True
+                st.session_state['run_delivery_only'] = True
+            else:
                 st.session_state['need_calc'] = True
                 st.session_state['run_waterfall'] = False
                 st.session_state['run_delivery_only'] = False
-                for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
-                    if key in st.session_state: del st.session_state[key]
-                    
-            elif main_category == "3. 커플 연애/결혼운 (궁합) 풀이" and run_delivery_calc and st.session_state.get('saved_report_gh_g'):
-                st.session_state['need_calc'] = False
-                st.session_state['run_delivery_only'] = True
-                if 'saved_report_del' in st.session_state: del st.session_state['saved_report_del']
-                
-            else:
-                st.session_state['need_calc'] = True
-                st.session_state['run_waterfall'] = run_iljin_calc if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"] else False 
-                st.session_state['run_delivery_only'] = run_delivery_calc if main_category == "3. 커플 연애/결혼운 (궁합) 풀이" else False
-                for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
-                    if key in st.session_state: del st.session_state[key]
+            
+            st.rerun()
+
 # ==============================================================================
 # 5. 분석 가동 로직 (need_calc 상태일 때만 무거운 연산 실행)
 # ==============================================================================
@@ -1029,7 +1026,6 @@ if st.session_state.get('need_calc', False):
             p_color = "#1A237E" if u_gender == "남성" else "#D50000"
             today_str = (dt_mod.datetime.utcnow() + dt_mod.timedelta(hours=9)).strftime("%Y년 %m월 %d일")
 
-            # 60일주 마스터 데이터 선제 로드 (격국 및 텍스트 조합용)
             user_ilju_key = f"{ds}{db}"
             ilju_full_db = choyeon_db.get("ilju_full_master", {})
             ilju_master_data = ilju_full_db.get(user_ilju_key, {})
@@ -1053,7 +1049,10 @@ if st.session_state.get('need_calc', False):
                 f"일-시지:{get_ji_rel_set(db, hb)}, 월-년지:{get_ji_rel_set(mb, yb)}"
             )
 
-            if u_product in ["개인사주", "궁합", "타 감명서"]:
+            # ==============================================================
+            # [A] 개인 사주팔자 및 특성화 상품 분석 분기
+            # ==============================================================
+            if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"]:
                 past_months_html = ""
 
                 cover_html = (
@@ -1112,9 +1111,6 @@ if st.session_state.get('need_calc', False):
 """
                 calc_gyukgook, gyukgook_detail = get_gyukgook_detailed(ds, ys, ms, hs, mb)
 
-                # ==============================================================
-                # 1. 12월지 계절/절기 표준 매핑 정의 및 DB 데이터 로드 (중복 제거)
-                # ==============================================================
                 SEASON_SOLAR_TERMS = {
                     '寅': '입춘과 경칩 사이의 이른 봄(寅月)',
                     '卯': '경칩과 청명 사이의 완연한 봄(卯月)',
@@ -1130,11 +1126,9 @@ if st.session_state.get('need_calc', False):
                     '丑': '소한과 입춘 사이의 가장 추운 겨울(丑月)'
                 }
 
-                # 1) 월지 기반 계절/절기 문구 로드 및 격국명 추출
                 wol_korean_str = SEASON_SOLAR_TERMS.get(mb, f"{mb}월")
                 gyuk_name = calc_gyukgook
 
-                # 2) 60일주 구조 DB 및 마스터 DB 로드 (단일화)
                 user_ilju_key = f"{ds}{db}"
                 ilju_struct_db = choyeon_db.get("ilju_structure", {})
                 struct_data = ilju_struct_db.get(user_ilju_key, [])
@@ -1150,7 +1144,6 @@ if st.session_state.get('need_calc', False):
                 ilju_master_data = ilju_full_db.get(user_ilju_key, {})
                 ilju_summary_text = ilju_master_data.get('summary', '고유의 역량을 품은')
 
-                # 3) 프롬프트 삽입용 choyeon_golden_text 단일 확정
                 choyeon_golden_text = f"""
 <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
     <p style='text-indent: 15px; margin-bottom: 5px;'>
@@ -1227,7 +1220,6 @@ if st.session_state.get('need_calc', False):
                 dw_j_cur = JI[(JI.index(mb) + (cur_dw_idx+1)*order)%12] if mb in JI else "-"
                 current_daewun_age = cur_dw_idx * 10 + calc_d
                 
-                # [NameError 및 IndentationError 방지] 프롬프트 바인딩용 대운 나이 변수 선언 (공백 16칸)
                 dw_start_age = current_daewun_age
                 dw_mid_age   = current_daewun_age + 4
                 dw_mid2_age  = current_daewun_age + 5
@@ -1344,7 +1336,7 @@ if st.session_state.get('need_calc', False):
 <div class='report-page' style='page-break-before: avoid;'>
 <div class='vip-inset-frame' style='border:2px solid #1A237E; box-sizing: border-box; padding: 20px; border-radius:15px; margin-top: 0;'>
 
-<h1 style='text-align:center;'>🎯[초연 전통 명리사주 풀이]</h1>
+<h1 style='text-align:center;'>🎯[초연 전통 명리사주 풀이 ({u_product})]</h1>
 {table_html}
 {master_bar_html}
 <div style='margin-top:20px;'>
@@ -1387,9 +1379,6 @@ if st.session_state.get('need_calc', False):
                 else:
                     gender_prompt = "여성 내담자입니다. 배우자운(관성)과 자식운(식상)을 여명 이론에 입각하여 해석하십시오."
 
-                # ==============================================================
-                # 2. LLM 프롬프트 컨텍스트 주입용 마스터 비기 조립
-                # ==============================================================
                 if ilju_master_data:
                     ilju_master_prompt_context = f"""
 🎯 [초연 전통명리의 뼈때리는 팩트폭격 - {user_ilju_key}일주 전용 마스터 비기]
@@ -1413,9 +1402,10 @@ if st.session_state.get('need_calc', False):
                     f"- 내담자 성함: {disp_name}\n"
                     f"- 나이 / 성별: {u_age}세 / {u_gender}\n"
                     f"- marital_status: {u_marital}\n"
+                    f"- 선택 상품: {u_product}\n"
                     f"- 격국 팩트: {gyukgook_detail}\n"
                     f"- 실제 타격받는 공망 궁위 팩트: {gongmang_actual}\n"
-                    f"- 올해({curr_y}년) 삼재 여부: {cur_samjae}\n"  
+                    f"- 올해({curr_y}년) 삼재 여부: {cur_samjae}\n" 
                     f"- 원국 삼형살(인사신/축술미) 팩트: {samhyung_warn}\n"
                     f"- 원국 내부 묘고(입고/개고) 작용: {won_guk_vaults_str}\n"
                     f"- 현재 행운(대/세/월운) 외부 충격에 의한 묘고 작용: {hang_un_vaults_str}\n"
@@ -1466,9 +1456,6 @@ if st.session_state.get('need_calc', False):
    - 🚨돌싱(이혼/사별): '과거의 인연(전 남편)'에 대한 성찰이나 '새로운 인연(재혼운)'으로 변환하여 카운슬링할 것.
 """
 
-                # ==============================================================
-                # [레드/블루 비서 최종 검수] LLM 프롬프트 마스터 최종본 (명리용어 제목 배제)
-                # ==============================================================
                 prompt = f"""
 {db_header}
 {ilju_master_prompt_context}
@@ -1477,7 +1464,7 @@ if st.session_state.get('need_calc', False):
 1. 🚨명리 용어의 전략적 노출 및 해제: 딱딱한 한자어 전문 용어의 단순 남발을 금지하고, 쉬운 비유와 현대적 구어체로 설명하십시오.
 2. 따뜻한 상담가 마인드: 내담자의 삶을 깊이 이해하고 어루만져 주는 친절한 카운슬러 어조를 유지하십시오.
 3. 정통 사주 명리의 십성, 격국, 12운성, 신살의 이치를 유기적으로 융합하여 심도 있게 풀이하십시오.
-4. 🚨[요약 금지 절대 규칙]: 축약, 요약, 압축 서술을 엄금합니다. 원국의 구조와 운의 흐름이 가진 명리적 팩트를 서술형으로 풍부하고 상세하게 풀이하십시오.
+4. 🚨[요약 금지 절대 규칙]: 축약, 요약, 압축 서술을 엄금합니다. 선택된 상품 [{u_product}]의 주 분석 대상 팩트를 풍부하고 상세하게 풀이하십시오.
 
 [문단 통제 명령]
 1. 모든 통변 에세이 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
@@ -1661,12 +1648,16 @@ if st.session_state.get('need_calc', False):
                 except Exception as e: 
                     st.error(f"AI 연산 오류: {e}")
 
-            if u_product == "타 감명서":
+            # ==============================================================
+            # [B] 타 감명서 비교 (사주 / 궁합) 연산 분기
+            # ==============================================================
+            elif main_category == "4. 타 감명서 비교":
                 try:
-                    if compare_mode == "전통 명리학과 1:1 자동 대조":
+                    if u_product == "4-1. 타 감명서 비교 (사주)":
                         base_essay_text = clean_ai_text if 'clean_ai_text' in locals() else ""
                         
-                        comp_prompt = f"""
+                        if compare_mode == "전통 명리학과 1:1 자동 대조":
+                            comp_prompt = f"""
 [SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
 당신은 정통 명리심리상담사 '초연 박사'입니다.
 아래 제공된 [{disp_name}님의 초연 전통명리 감명서 실제 본문]을 바탕으로, 일반 시중의 [A. 전통 명리 단식 풀이]와 [B. 초연 전통명리 정밀 풀이]의 깊이 차이를 항목별로 칼같이 1:1 대조 분석하십시오.
@@ -1701,34 +1692,34 @@ if st.session_state.get('need_calc', False):
 [초연 전통명리 감명서 실제 본문 팩트]
 {base_essay_text[:3500]}
 """
-                        c_res = call_claude_api(comp_prompt, max_tokens=10000)
-                        
-                        other_cover_html = (
-                            f"<div class='page-break-before'></div>\n"
-                            f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
-                            f"    <div style='border: 4px solid #2E7D32; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
-                            f"        <div style='border-bottom:4px double #2E7D32; padding-bottom:20px; margin-bottom:40px;'>\n"
-                            f"            <h1 class='title-gothic' style='font-size: 38px !important; margin:0 !important;'>전통 명리 학술 대조 리포트</h1>\n"
-                            f"            <div style='text-align: right; margin-top: 10px;'>\n"
-                            f"                <span class='ver-gothic' style='font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
-                            f"            </div>\n"
-                            f"        </div>\n"
-                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 30px 20px; border-radius: 15px;'>\n"
-                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #2E7D32; margin-bottom: 20px;'>👤 신청인 : {u_name} 님</h2>\n"
-                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
-                            f"                <p style='margin: 0; white-space: nowrap;'>[양력] {sol_str} | [음력] {lun_str}</p>\n"
-                            f"            </div>\n"
-                            f"        </div>\n"
-                            f"        <p style='font-size: 18px; margin-top: 50px; font-weight: 800;'>{today_str}</p>\n"
-                            f"        <p style='font-size: 22px; font-weight: 800; color: #2E7D32; margin-top: 20px;'>초연 전통명리 연구소</p>\n"
-                            f"    </div>\n"
-                            f"</div>"
-                        )
-                        st.session_state['saved_report_2'] = other_cover_html + f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#2E7D32;'><h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 800; border-bottom:2px solid #2E7D32; padding-bottom:15px;'>⚖️ 전통 명리 학술 대조 리포트</h1><div style='margin-top:20px;'>{c_res}</div></div></div>"
-                    else:
-                        base_essay_text = clean_ai_text if 'clean_ai_text' in locals() else ""
-                        
-                        comp_prompt = f"""
+                            c_res = call_claude_api(comp_prompt, max_tokens=10000)
+                            
+                            other_cover_html = (
+                                f"<div class='page-break-before'></div>\n"
+                                f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
+                                f"    <div style='border: 4px solid #2E7D32; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
+                                f"        <div style='border-bottom:4px double #2E7D32; padding-bottom:20px; margin-bottom:40px;'>\n"
+                                f"            <h1 class='title-gothic' style='font-size: 38px !important; margin:0 !important;'>전통 명리 학술 대조 리포트</h1>\n"
+                                f"            <div style='text-align: right; margin-top: 10px;'>\n"
+                                f"                <span class='ver-gothic' style='font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
+                                f"            </div>\n"
+                                f"        </div>\n"
+                                f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 30px 20px; border-radius: 15px;'>\n"
+                                f"            <h2 style='font-size: 24px; font-weight: 800; color: #2E7D32; margin-bottom: 20px;'>👤 신청인 : {u_name} 님</h2>\n"
+                                f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
+                                f"                <p style='margin: 0; white-space: nowrap;'>[양력] {sol_str} | [음력] {lun_str}</p>\n"
+                                f"            </div>\n"
+                                f"        </div>\n"
+                                f"        <p style='font-size: 18px; margin-top: 50px; font-weight: 800;'>{today_str}</p>\n"
+                                f"        <p style='font-size: 22px; font-weight: 800; color: #2E7D32; margin-top: 20px;'>초연 전통명리 연구소</p>\n"
+                                f"    </div>\n"
+                                f"</div>"
+                            )
+                            st.session_state['saved_report_2'] = other_cover_html + f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#2E7D32;'><h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 800; border-bottom:2px solid #2E7D32; padding-bottom:15px;'>⚖️ 전통 명리 학술 대조 리포트</h1><div style='margin-top:20px;'>{c_res}</div></div></div>"
+                        else:
+                            base_essay_text = clean_ai_text if 'clean_ai_text' in locals() else ""
+                            
+                            comp_prompt = f"""
 [SYSTEM ROLE: CHOYEON SYSTEM CHIEF CHANCELLOR (초연시공명리 수석보좌관)]
 당신은 '초연 박사님'을 보좌하는 수석보좌관 AI입니다.
 제출된 {disp_name}님의 [외부 타 감명서 원문]을 박사님의 [초연시공명리 정밀 통변 팩트]와 1:1로 엄밀히 비교 대조하여 학술 검증 리포트를 작성하십시오.
@@ -1748,26 +1739,64 @@ if st.session_state.get('need_calc', False):
 [초연시공명리 정밀 검증 근거 및 실제 감명서 팩트]
 {base_essay_text[:3500]}
 """
-                        c_res = call_claude_api(comp_prompt, max_tokens=10000)
+                            c_res = call_claude_api(comp_prompt, max_tokens=10000)
+                            
+                            report_2_html = (
+                                f"<div class='page-break-before'></div>\n"
+                                f"<div class='report-page'>\n"
+                                f"<div class='vip-inset-frame' style='border-color:#2E7D32; padding:20px;'>\n"
+                                f"<h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 900; border-bottom:2px solid #2E7D32; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 감명서 학술 검증 및 1:1 대조 리포트</h1>\n"
+                                f"<div style='margin-top:20px;'>{c_res}</div>\n"
+                                f"<hr style='border:1px dashed #2E7D32; margin:30px 0;'>\n"
+                                f"<h3 style='color:#555; font-size:18px; font-weight:900; margin-bottom:10px;'>📜 [제출된 타 감명서 원문]</h3>\n"
+                                f"<div style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; line-height: 1.8; color: #444; background:#F9F9F9; padding:15px; border-radius:8px;'>{other_reading_text.replace(chr(10), '<br>')}</div>\n"
+                                f"</div>\n"
+                                f"</div>"
+                            )
+                            st.session_state['saved_report_2'] = report_2_html
+
+                    elif u_product == "4-2. 타 감명서 비교 (궁합)":
+                        m_name_val = u_name if u_gender == "남성" else p_name
+                        f_name_val = p_name if u_gender == "남성" else u_name
                         
-                        report_2_html = (
-                            f"<div class='page-break-before'></div>\n"
-                            f"<div class='report-page'>\n"
-                            f"<div class='vip-inset-frame' style='border-color:#2E7D32; padding:20px;'>\n"
-                            f"<h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 900; border-bottom:2px solid #2E7D32; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 감명서 학술 검증 및 1:1 대조 리포트</h1>\n"
-                            f"<div style='margin-top:20px;'>{c_res}</div>\n"
-                            f"<hr style='border:1px dashed #2E7D32; margin:30px 0;'>\n"
-                            f"<h3 style='color:#555; font-size:18px; font-weight:900; margin-bottom:10px;'>📜 [제출된 타 감명서 원문]</h3>\n"
-                            f"<div style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; line-height: 1.8; color: #444; background:#F9F9F9; padding:15px; border-radius:8px;'>{other_reading_text.replace(chr(10), '<br>')}</div>\n"
-                            f"</div>\n"
-                            f"</div>"
-                        )
+                        male_data_pack = applicant_bazi if u_gender == "남성" else partner_bazi
+                        female_data_pack = partner_bazi if u_gender == "남성" else applicant_bazi
+
+                        gh_engine = UniversalPrintableGunghap(m_name_val, f_name_val, male_data_pack, female_data_pack, 10)
+                        gh_engine.run_universal_logic()
+
+                        comp_prompt = f"""
+[SYSTEM ROLE: CHOYEON SYSTEM CHANCELLOR (초연시공명리 수석보좌관)]
+당신은 '초연 박사님'을 보좌하는 수석보좌관 AI입니다.
+제출된 [{m_name_val}님과 {f_name_val}님의 외부 궁합 감명서 원문]을 박사님의 [초연시공명리 궁합 정밀 통변 팩트]와 1:1로 엄밀히 비교 대조하여 학술 검증 리포트를 작성하십시오.
+
+🚨 [궁합 1:1 원문 대조 및 학술 검증 지시]
+1. **타 궁합 감명서 목차/항목 구조 완벽 재현**: 제출된 타 감명서의 제목, 소목차, 분석 순서(예: 겉궁합, 속궁합, 오행보완, 운세교차 등)를 그대로 가져와 동일한 순서로 목차를 구성하십시오.
+2. **항목별 1:1 교차 검증**:
+   - **[타 궁합 감명서 원문 분석]**: 원문의 주장과 궁합 통변 논리를 요약하십시오.
+   - **[정통 명리 이치 검증 및 초연시공명리 재해석]**: 원문의 궁합 판단이 정통 명리 이치 및 초연 정밀 궁합 점수({gh_engine.final_score}점)에 위배되는지 검증하고 오류를 교정하십시오.
+3. **학술적 수용 및 앱 진화 총평 작성**:
+   - 마지막 목차인 **[4. 수석보좌관 종합 검증 및 궁합 엔진 업데이트 제안 총평]**에서는 타 궁합 감명서의 논리적 오류를 검증함과 동시에, 타 감명서에서 배울 점을 수용하여 **'초연시공명리 궁합 엔진 고도화 방향'**을 종합적으로 제안하십시오.
+4. 모든 본문 문단은 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 태그로 출력하십시오.
+
+[제출된 타 궁합 감명서 원문 (목차 구조 및 분석 순서 기준점)]
+{other_reading_text}
+
+[초연시공명리 정밀 궁합 팩트]
+- 남성({m_name_val}) / 여성({f_name_val})
+- 초연 궁합 정밀 점수: {gh_engine.final_score}점 ({gh_engine.grade})
+"""
+                        c_res = call_claude_api(comp_prompt, max_tokens=10000)
+                        report_2_html = f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#C62828; padding:20px;'><h1 style='text-align:center; color:#C62828; font-size: 26px; font-weight: 900; border-bottom:2px solid #C62828; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 궁합 감명서 학술 검증 및 1:1 대조 리포트</h1><div style='margin-top:20px;'>{c_res}</div></div></div>"
                         st.session_state['saved_report_2'] = report_2_html
 
                 except Exception as e:
                     st.error(f"2단계 비교 분석 중 오류 발생: {e}")
 
-            if u_product == "궁합":
+            # ==============================================================
+            # [C] 커플 연애/결혼운 (궁합) 풀이 연산 분기
+            # ==============================================================
+            elif main_category == "3. 커플 연애/결혼운 (궁합) 풀이":
                 try:
                     p_klc = KoreanLunarCalendar()
                     if p_cal == "양력": p_klc.setSolarDate(p_y, p_m, p_d)
@@ -1867,7 +1896,6 @@ if st.session_state.get('need_calc', False):
                     
                     guiin_map = {'甲':'丑, 未','乙':'子, 申','丙':'酉, 亥','丁':'酉, 亥','戊':'丑, 未','己':'子, 申','庚':'丑, 未','辛':'寅, 午','壬':'卯, 巳','癸':'卯, 巳'}
                     
-                    # [수정 2] 여명 사주팔자표 색상을 #2E7D32(녹색)으로 지정
                     m_tbl = build_bazi_table("♂️", m_name, "남명", m_marital, m_age, m_sol, m_lun, m_time, m_gans, m_jjis, m_ds, m_yb, m_cnt, guiin_map.get(m_ds, '-'), calculate_gongmang(m_ys, m_yb), calculate_gongmang(m_ds, m_db), get_samjae(m_yb, curr_j), m_calc_d, "#1A237E")
                     f_tbl = build_bazi_table("♀️", f_name, "여명", f_marital, f_age, f_sol, f_lun, f_time, f_gans, f_jjis, f_ds, f_yb, f_cnt, guiin_map.get(f_ds, '-'), calculate_gongmang(f_ys, f_yb), calculate_gongmang(f_ds, f_db), get_samjae(f_yb, curr_j), f_calc_d, "#2E7D32")
                     
@@ -1889,12 +1917,8 @@ if st.session_state.get('need_calc', False):
                     
                     couple_daewun_tables = f"<div style='margin-bottom: 25px;'>{m_page_un_html}<div style='height:20px;'></div>{f_page_un_html}</div>"
 
-                    # ==============================================================
-                    # 남명/여명 전용 60일주 DB 연동 (중복제거 및 영업비밀 보호)
-                    # ==============================================================
                     ilju_struct_db = choyeon_db.get("ilju_structure", {})
 
-                    # 1. 남명 데이터 로드
                     m_ilju_key = f"{m_ds}{m_db}"
                     m_struct_data = ilju_struct_db.get(m_ilju_key, [])
                     m_action_type = m_struct_data[1] if len(m_struct_data) >= 3 else "자율활동형"
@@ -1910,7 +1934,6 @@ if st.session_state.get('need_calc', False):
                     <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
                     """
 
-                    # 2. 여명 데이터 로드
                     f_ilju_key = f"{f_ds}{f_db}"
                     f_struct_data = ilju_struct_db.get(f_ilju_key, [])
                     f_action_type = f_struct_data[1] if len(f_struct_data) >= 3 else "자율활동형"
@@ -1929,8 +1952,6 @@ if st.session_state.get('need_calc', False):
                     gh_engine = UniversalPrintableGunghap(u_name, p_name, male_data_pack, female_data_pack, 10)
                     gh_engine.run_universal_logic()
                     
-                    # [수정 4] 문단 간격 및 줄간격을 개인사주와 완전 동일하게 통일 (line-height:1.8, margin-top:4px, margin-bottom:12px)
-                    # [수정 3] 여명 '1. 사주팔자의 요약' 제목 글자색을 #000000(검정색)으로 지정
                     essay_prompt = f"""[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
 당신은 정통 명리심리상담사 '초연 박사'입니다.
 
@@ -2092,6 +2113,7 @@ if st.session_state.get('need_calc', False):
             st.error(f"시스템 연산 중 치명적 오류 발생: {e}")
             st.session_state['need_calc'] = False
             st.stop()
+
 # ==============================================================================
 # 🌊 7. [독립 모듈] 일진 분석 (결과 출력부)
 # ==============================================================================
@@ -2232,23 +2254,26 @@ if st.session_state.get('app_running', False) and st.session_state.get('run_deli
             st.session_state['run_delivery_only'] = False
 
 # ==============================================================================
-# 9. 화면 출력부 (수정 반영)
+# 9. 화면 출력부 (세분화 카테고리 대응 수정 완결)
 # ==============================================================================
 if st.session_state.get('app_running', False):
     
-    if u_product == "개인사주":
+    # 1. 개인 사주 및 특성화 상품 출력
+    if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"]:
         if st.session_state.get('saved_report_html'):
             st.markdown(st.session_state.get('saved_report_html', ''), unsafe_allow_html=True)
         if st.session_state.get('saved_report_iljin'):
             st.markdown(st.session_state.get('saved_report_iljin', ''), unsafe_allow_html=True)
     
-    if u_product == "타 감명서":
+    # 2. 타 감명서 대조 출력
+    if main_category == "4. 타 감명서 비교":
         if st.session_state.get('saved_report_html'):
             st.markdown(st.session_state.get('saved_report_html', ''), unsafe_allow_html=True)
         if st.session_state.get('saved_report_2'):
             st.markdown(st.session_state.get('saved_report_2', ''), unsafe_allow_html=True)
         
-    if u_product == "궁합":
+    # 3. 궁합 및 택일 출력
+    if main_category == "3. 커플 연애/결혼운 (궁합) 풀이":
         if st.session_state.get('saved_report_gh_cover'):
             st.markdown(st.session_state.get('saved_report_gh_cover', ''), unsafe_allow_html=True)
             st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
