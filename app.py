@@ -14,10 +14,10 @@ import streamlit.components.v1 as components
 import re
 
 # 🎯 [버전 컨트롤 타워]
-APP_VERSION = "Ver 48.5 (구조 혁신 완결본)"
+APP_VERSION = "Ver 48.7 (사이드바 역산 입력창 완벽 표출)"
 
 # ==============================================================================
-# 0. VIP 인셋 프레임 및 초강력 프린트 CSS (시스템 기본 설정)
+# 0. VIP 인셋 프레임 및 초강력 프린트 CSS
 # ==============================================================================
 st.set_page_config(page_title=f"초연 전통 명리 {APP_VERSION}", layout="wide")
 
@@ -55,7 +55,6 @@ st.markdown("""<style>
         width: 100% !important;
     }
 
-    /* Primary 버튼 (빨간색) */
     div.stButton > button[kind="primary"] { 
         background-color: #D50000 !important; 
         color: #FFFFFF !important; 
@@ -69,7 +68,6 @@ st.markdown("""<style>
         color: #FFFFFF !important;
     }
 
-    /* Secondary 버튼 (인쇄/저장 - 초록색 #00A843) */
     div.stButton > button[kind="secondary"] { 
         background-color: #00A843 !important; 
         color: #FFFFFF !important; 
@@ -398,7 +396,7 @@ class UniversalPrintableGunghap:
         self.grade = "천생연분 (최고의 인연)"
 
 # ==============================================================================
-# 📋 [1단계] 손님 주문 접수 (사이드바 UI / 입력부)
+# 📋 [1단계] 손님 주문 접수 (사이드바 UI & 사주팔자 역산 검색 창 복원)
 # ==============================================================================
 with st.sidebar:
     st.title("🏮초연 전통명리 연구소")
@@ -428,6 +426,51 @@ with st.sidebar:
         u_product = st.radio("비교 분석 대상:", ["4-1. 타 감명서 비교 (사주)", "4-2. 타 감명서 비교 (궁합)"], key="sub_cat_4")
 
     st.markdown("---")
+
+    # 🔍 [사이드바 역산 검색창 1:1 표출 복원]
+    with st.expander("🔍 신청인 사주팔자 역산 검색", expanded=False):
+        col_g1, col_g2 = st.columns(2)
+        with col_g1: ry = st.text_input("년주", value="", key="u_ry_rev")
+        with col_g2: rm = st.text_input("월주", value="", key="u_rm_rev")
+        col_g3, col_g4 = st.columns(2)
+        with col_g3: rd = st.text_input("일주", value="", key="u_rd_rev")
+        with col_g4: rt = st.text_input("시주", value="", key="u_rt_rev")
+        
+        K2H_GAN = {'갑':'甲','을':'乙','병':'丙','정':'丁','무':'戊','기':'己','경':'庚','신':'辛','임':'壬','계':'癸'}
+        K2H_JI = {'자':'子','축':'丑','인':'寅','묘':'卯','진':'辰','사':'巳','오':'午','미':'未','신':'申','유':'酉','술':'戌','해':'亥'}
+        
+        if st.button("🔍 생년월일 자동입력", use_container_width=True, key="btn_user_rev"):
+            _ry, _rm, _rd = ry.replace("년","").replace(" ","")[:2], rm.replace("월","").replace(" ","")[:2], rd.replace("일","").replace(" ","")[:2]
+            if len(_ry)==2 and len(_rm)==2 and len(_rd)==2:
+                ry_h = K2H_GAN.get(_ry[0], _ry[0]) + K2H_JI.get(_ry[1], _ry[1])
+                rm_h = K2H_GAN.get(_rm[0], _rm[0]) + K2H_JI.get(_rm[1], _rm[1])
+                rd_h = K2H_GAN.get(_rd[0], _rd[0]) + K2H_JI.get(_rd[1], _rd[1])
+                klc_find = KoreanLunarCalendar(); found = False
+                for y in range(2026, 1899, -1):
+                    klc_find.setSolarDate(y, 7, 1); gj_y = klc_find.getChineseGapJaString().split()
+                    if gj_y and gj_y[0][:2] == ry_h:
+                        curr_dt = dt_mod.date(y+1, 2, 28)
+                        while curr_dt >= dt_mod.date(y, 1, 1):
+                            klc_find.setSolarDate(curr_dt.year, curr_dt.month, curr_dt.day)
+                            gj = klc_find.getChineseGapJaString().split()
+                            if len(gj) >= 3 and gj[0][:2] == ry_h and gj[1][:2] == rm_h and gj[2][:2] == rd_h:
+                                st.session_state.s_y, st.session_state.s_m, st.session_state.s_d = curr_dt.year, curr_dt.month, curr_dt.day
+                                time_map_rev = {'子':'00:30 ~ 01:29 (朝子)시','丑':'01:30 ~ 03:29 (丑)시','寅':'03:30 ~ 05:29 (寅)시','卯':'05:30 ~ 07:29 (卯)시','辰':'07:30 ~ 09:29 (辰)시','巳':'09:30 ~ 11:29 (巳)시','午':'11:30 ~ 13:29 (午)시','未':'13:30 ~ 15:29 (未)시','申':'15:30 ~ 17:29 (申)시','酉':'17:30 ~ 19:29 (酉)시','戌':'19:30 ~ 21:29 (戌)시','亥':'21:30 ~ 23:29 (亥)시'}
+                                if rt:
+                                    ji_char = rt.replace("시","").replace(" ","")[-1]
+                                    rt_h = K2H_JI.get(ji_char, ji_char)
+                                    if rt_h in time_map_rev: st.session_state.s_t = time_map_rev[rt_h]
+                                found = True
+                                is_leap = getattr(klc_find, 'isIntercalary', False)
+                                leap_str = "윤달" if is_leap else "평달"
+                                st.success(f"✅ 양력{curr_dt.year}년 {curr_dt.month:02d}월 {curr_dt.day:02d}일 음력{klc_find.lunarYear}년 {klc_find.lunarMonth:02d}월 {klc_find.lunarDay:02d}일 ({leap_str})")
+                                break
+                            curr_dt -= dt_mod.timedelta(days=1)
+                        if found: break
+                if not found: st.error("일치하는 날짜가 없습니다.")
+            else: st.warning("간지를 2글자씩 정확히 입력하세요.")
+
+    st.markdown("---")
     st.markdown("<div style='font-weight:900; color:#1A237E; margin-bottom:5px;'>👤 신청인 기본 정보</div>", unsafe_allow_html=True)
     u_name = st.text_input("이름", value="", placeholder="홍길동", key="u_n")
     u_gender = st.selectbox("성별", ["남성", "여성"], index=0, key="u_g")
@@ -435,9 +478,9 @@ with st.sidebar:
     u_cal = st.selectbox("달력", ["양력", "음력(평달)", "음력(윤달)"], index=0, key="u_c")
     
     col1, col2, col3 = st.columns(3)
-    u_y = col1.number_input("년", 1900, 2050, value=2010, key="s_y")
-    u_m = col2.number_input("월", 1, 12, value=1, key="s_m")
-    u_d = col3.number_input("일", 1, 31, value=1, key="s_d")
+    u_y = col1.number_input("년", 1900, 2050, value=st.session_state.get('s_y', 2010), key="s_y")
+    u_m = col2.number_input("월", 1, 12, value=st.session_state.get('s_m', 1), key="s_m")
+    u_d = col3.number_input("일", 1, 31, value=st.session_state.get('s_d', 1), key="s_d")
     
     idx_list = ["시간 모름", "00:30 ~ 01:29 (朝子)시", "01:30 ~ 03:29 (丑)시", "03:30 ~ 05:29 (寅)시", "05:30 ~ 07:29 (卯)시", "07:30 ~ 09:29 (辰)시", "09:30 ~ 11:29 (巳)시", "11:30 ~ 13:29 (午)시", "13:30 ~ 15:29 (未)시", "15:30 ~ 17:29 (申)시", "17:30 ~ 19:29 (酉)시", "19:30 ~ 21:29 (戌)시", "21:30 ~ 23:29 (亥)시", "23:30 ~ 00:29 (夜子)시"]
     u_t = st.selectbox("태어난 시간", idx_list, index=0, key="s_t")
@@ -466,6 +509,51 @@ with st.sidebar:
 
     if main_category == "3. 커플 연애/결혼운 (궁합) 풀이" or u_product == "4-2. 타 감명서 비교 (궁합)":
         st.markdown("<hr style='border:1px dashed #C62828; margin:15px 0;'>", unsafe_allow_html=True)
+        
+        # 🔍 [상대방 역산 검색창 1:1 표출 복원]
+        with st.expander("🔍 상대방 사주팔자 역산 검색", expanded=False):
+            p_col_g1, p_col_g2 = st.columns(2)
+            with p_col_g1: p_ry = st.text_input("상대방 년주", value="", key="p_ry_rev")
+            with p_col_g2: p_rm = st.text_input("상대방 월주", value="", key="p_rm_rev")
+            p_col_g3, p_col_g4 = st.columns(2)
+            with p_col_g3: p_rd = st.text_input("상대방 일주", value="", key="p_rd_rev")
+            with p_col_g4: p_rt = st.text_input("상대방 시주", value="", key="p_rt_rev")
+            
+            if st.button("🔍 상대방 생년월일 자동입력", use_container_width=True, key="btn_partner_rev"):
+                _p_ry = p_ry.replace("년","").replace(" ","")[:2]
+                _p_rm = p_rm.replace("월","").replace(" ","")[:2]
+                _p_rd = p_rd.replace("일","").replace(" ","")[:2]
+                if len(_p_ry)==2 and len(_p_rm)==2 and len(_p_rd)==2:
+                    p_ry_h = K2H_GAN.get(_p_ry[0], _p_ry[0]) + K2H_JI.get(_p_ry[1], _p_ry[1])
+                    p_rm_h = K2H_GAN.get(_p_rm[0], _p_rm[0]) + K2H_JI.get(_p_rm[1], _p_rm[1])
+                    p_rd_h = K2H_GAN.get(_p_rd[0], _p_rd[0]) + K2H_JI.get(_p_rd[1], _p_rd[1])
+                    klc_find_p = KoreanLunarCalendar(); found_p = False
+                    for y in range(2026, 1899, -1):
+                        klc_find_p.setSolarDate(y, 7, 1); gj_y = klc_find_p.getChineseGapJaString().split()
+                        if gj_y and gj_y[0][:2] == p_ry_h:
+                            curr_dt_p = dt_mod.date(y+1, 2, 28)
+                            while curr_dt_p >= dt_mod.date(y, 1, 1):
+                                klc_find_p.setSolarDate(curr_dt_p.year, curr_dt_p.month, curr_dt_p.day)
+                                gj = klc_find_p.getChineseGapJaString().split()
+                                if len(gj) >= 3 and gj[0][:2] == p_ry_h and gj[1][:2] == p_rm_h and gj[2][:2] == p_rd_h:
+                                    st.session_state.p_y_in = curr_dt_p.year
+                                    st.session_state.p_m_in = curr_dt_p.month
+                                    st.session_state.p_d_in = curr_dt_p.day
+                                    time_map_rev_p = {'子':'00:30 ~ 01:29 (朝子)시','丑':'01:30 ~ 03:29 (丑)시','寅':'03:30 ~ 05:29 (寅)시','卯':'05:30 ~ 07:29 (卯)시','辰':'07:30 ~ 09:29 (辰)시','巳':'09:30 ~ 11:29 (巳)시','午':'11:30 ~ 13:29 (午)시','未':'13:30 ~ 15:29 (未)시','申':'15:30 ~ 17:29 (申)시','酉':'17:30 ~ 19:29 (酉)시','戌':'19:30 ~ 21:29 (戌)시','亥':'21:30 ~ 23:29 (亥)시'}
+                                    if p_rt:
+                                        ji_char_p = p_rt.replace("시","").replace(" ","")[-1]
+                                        p_rt_h = K2H_JI.get(ji_char_p, ji_char_p)
+                                        if p_rt_h in time_map_rev_p: st.session_state.p_t_in = time_map_rev_p[p_rt_h]
+                                    found_p = True
+                                    is_leap_p = getattr(klc_find_p, 'isIntercalary', False)
+                                    leap_str_p = "윤달" if is_leap_p else "평달"
+                                    st.success(f"✅양력{curr_dt_p.year}년 {curr_dt_p.month:02d}월 {curr_dt_p.day:02d}일 음력{klc_find_p.lunarYear}년 {klc_find_p.lunarMonth:02d}월 {klc_find_p.lunarDay:02d}일 ({leap_str_p})")
+                                    break
+                                curr_dt_p -= dt_mod.timedelta(days=1)
+                            if found_p: break
+                    if not found_p: st.error("일치하는 날짜가 없습니다.")
+                else: st.warning("간지를 2글자씩 정확히 입력하세요.")
+
         st.markdown("<div style='font-weight:900; color:#C62828; margin-bottom:5px;'>💕 상대방 기본 정보</div>", unsafe_allow_html=True)
         p_name = st.text_input("이름", value="", placeholder="이영희", key="p_n")
         p_gender = st.selectbox("성별", ["남성", "여성"], index=1, key="p_g")
@@ -473,9 +561,9 @@ with st.sidebar:
         p_cal = st.selectbox("달력", ["양력", "음력(평달)", "음력(윤달)"], index=0, key="p_c")
         
         p_col1, p_col2, p_col3 = st.columns(3)
-        p_y = p_col1.number_input("년", 1900, 2050, value=2010, key="p_y_in")
-        p_m = p_col2.number_input("월", 1, 12, value=1, key="p_m_in")
-        p_d = p_col3.number_input("일", 1, 31, value=1, key="p_d_in")
+        p_y = p_col1.number_input("년", 1900, 2050, value=st.session_state.get('p_y_in', 2010), key="p_y_in")
+        p_m = p_col2.number_input("월", 1, 12, value=st.session_state.get('p_m_in', 1), key="p_m_in")
+        p_d = p_col3.number_input("일", 1, 31, value=st.session_state.get('p_d_in', 1), key="p_d_in")
         p_t = st.selectbox("태어난 시간", idx_list, index=0, key="p_t_in")
 
         if u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"]:
