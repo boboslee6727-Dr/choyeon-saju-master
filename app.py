@@ -17,7 +17,7 @@ import re
 # ==============================================================================
 # 🎯 [버전 컨트롤 타워]
 # ==============================================================================
-APP_VERSION = "Ver 50.3 (Master Complete restoration & 14종 세분화 완결본)"
+APP_VERSION = "Ver 50.4 (Master Complete restoration & 14종 세분화 완결본)"
 
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS (ver 48.1 원형 100% 보존)
@@ -1255,99 +1255,99 @@ if st.session_state.get('need_calc', False):
             # [A] 개인 사주팔자 및 특성화 상품 분석 분기 (Ver 48.1 원문 전문)
             # ==============================================================
             if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"]:
-                prompt = f"""
+
+            # 미리 오행 변수를 f-string 외부에서 안전하게 추출 (문법 에러 방지)
+            wood_cnt = counts.get('목', 0)
+            fire_cnt = counts.get('화', 0)
+            earth_cnt = counts.get('토', 0)
+            metal_cnt = counts.get('금', 0)
+            water_cnt = counts.get('수', 0)
+
+            prompt = f"""
 {db_header}
 {ilju_master_prompt_context}
 
-[ 🚨종합 특별지시 사항 : 대중을 위한 정통 명리 통변 원칙]
-1. 🚨명리 용어의 전략적 노출 및 해제: 딱딱한 한자어 전문 용어의 단순 남발을 금지하고, 쉬운 비유와 현대적 구어체로 설명하십시오.
-2. 따뜻한 상담가 마인드: 내담자의 삶을 깊이 이해하고 어루만져 주는 친절한 카운슬러 어조를 유지하십시오.
-3. 정통 사주 명리의 십성, 격국, 12운성, 신살의 이치를 유기적으로 융합하여 심도 있게 풀이하십시오.
-4. 🚨[요약 금지 절대 규칙]: 축약, 요약, 압축 서술을 엄금합니다. 선택된 상품 [{u_product}]의 주 분석 대상 팩트를 풍부하고 상세하게 풀이하십시오.
+================================================================================
+🧠 [1단계: AI 내부 심층 분석 지침 - 48.1 정밀 메커니즘 100% 추적·숙지]
+================================================================================
+당신은 정통 명리심리상담사 1급 자격을 갖춘 '초연 박사'입니다. 
+출력물을 작성하기 전, 내부적으로 아래의 정밀 명리학적 메커니즘을 철저히 계산하고 심층 분석하십시오.
 
-[문단 통제 명령]
-1. 모든 통변 에세이 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
-2. 🚨 [계층별 글자 크기 및 상하 간격 강제 규격화]
-   [대목차] <h3 style='color:#1A237E; font-size: 24px; font-weight: 900; margin-top: 30px; margin-bottom: 15px;'>1. 성격 분석</h3>
-   [부목차] <span class='sub-title' style='display: block; font-size: 20px; font-weight: 900; color: #111; line-height: 1.4; margin-top: 35px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
-   [세부 소목차] <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; line-height: 1.4; margin-top: 25px; margin-bottom: 5px;'>▶ 현재 대운 전반기 상세 분석</span>
-3. 표(Table) 생성 절대 금지. 운의 흐름 연도별 분석은 반드시 도트 기호(•)를 사용한 텍스트로 작성하십시오.
-
-[내담자 맞춤형 정밀 타겟팅]
+1. 원국 및 지장간 심층 분석:
+   - 일주({ds}{db})의 일간 십성, 일지 십이운성(봉법/좌법/인종법) 에너지를 정밀 추적하십시오.
+   - 월령 계절감({wol_korean_str}), 조후, 격국({gyukgook_detail})의 그릇과 품격을 엄밀히 판별하십시오.
+   - 4주 궁위별 십이운성 세기와 주요 신살(천을귀인: {guiin_str}, 일반신살: {shinsal_str}, 12신살: {s12_str})을 연계 분석하십시오.
+2. 동적 파동 및 변곡점 추적:
+   - 원국 및 행운(대/세/월운)에서의 묘고 작용(입고/개고 팩트: {won_guk_vaults_str} / {hang_un_vaults_str})을 추적하십시오.
+   - 삼형살(인사신/축술미 팩트: {samhyung_warn}) 및 공망 궁위 타격({gongmang_actual})의 현실적 파동을 계산하십시오.
+3. 육친 및 맞춤형 타겟팅:
+   - 내담자 나이({u_age}세) 및 성별/혼인상태({u_gender}, {u_marital})에 따른 육친 생극제화 및 대체 규칙을 100% 적용하십시오.
 - {age_prompt}
 - {gender_prompt}
 - {yukchin_rule}
 
-[통변 지시 및 팩트 통제]
-- 간지 표기 시 반드시 한자로 표기하십시오.
-- 격국 팩트: {gyukgook_detail}
-- 공망 팩트: {gongmang_actual}
-- 일반신살: {shinsal_str} / 12신살: {s12_str}
-- 삼형살 팩트: {samhyung_warn}
-- 입고/개고 팩트: {won_guk_vaults_str}
+================================================================================
+✍️ [2단계: 최종 출력물 작성 규칙 - 거두절미 현실적 팩트 통변]
+================================================================================
+위 1단계에서 분석한 깊이 있는 명리적 추론을 바탕으로 에세이를 작성하되, 일반 내담자를 위해 아래의 출력 표현 규칙을 철저히 준수하십시오.
+
+1. 🚨 [용어 해설 배제 & 팩트 직행]: '식신이란~', '편관이 들어와서~', '지장간의~', '12운성 묘지에 빠져~' 같은 난해한 명리학 전문 용어나 한자어 개념 설명을 절대로 남발하거나 해설하지 마십시오.
+2. 🚨 [현실적 결론과 파동 서술]: 내담자가 실제 삶에서 체감하는 '행동 양식, 속마음의 고독, 사건·사고의 시기, 재물/직업/인연의 길흉, 구체적 개운 처방'의 현실적 결론만 명쾌하게 통변하십시오.
+3. 🚨 [품격 있는 현대적 구어체]: 따뜻하면서도 현실을 날카롭게 짚어주는 품격 있는 현대적 구어체(-합니다, -입니다)로 서술하십시오.
+4. 모든 통변 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
+5. 표(Table) 생성 절대 금지. 운의 흐름 연도별 분석은 반드시 도트 기호(•)를 사용한 텍스트로 작성하십시오.
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 성격 분석</h3>
 <div class='content-box-loose'>
 {choyeon_golden_text}
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 겉으로 드러난 성격</span>
-- 일주({ds}{db}), 일간 십성, 일지 십이운성 봉법/좌법 에너지를 분석하십시오.
-- 위 박사님 마스터 비기의 성향 및 물상 팩트를 직접 인용하여 표면적 행동 방식과 사회적 대인관계 스타일을 상세히 서술하십시오.
-- 12신살 통변 시 년지 기준 신살(사회적 환경)과 일지 기준 신살(내면 파동)을 명확히 구분하여 설명하십시오.
+- 분석된 일간/일지 에너지를 바탕으로, 표면적 행동 방식과 사회적 대인관계 스타일의 현실적 팩트를 상세히 서술하십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 감추어진 내 속마음</span>
-- 일지 지장간 인종법(引從法)과 좌법, 일지 공망의 양가적 심리 작용을 정밀 분석하십시오.
-- 마스터 비기의 내면 심리 분석(psychology)을 바탕으로 남들에게 말하지 못하는 속마음, 정신적 고독감, 내면의 공허함을 서술하십시오.
+- 일지 지장간 및 공망 파동 분석을 바탕으로, 남들에게 말하지 못하는 속마음, 정신적 고독감, 내면의 공허함을 정밀 서술하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조분석</h3>
 <div class='content-box-loose'>
-🚨 [원국 분석 엄밀성 지시]: 본 파트는 '사주원국 자체의 고정 구조'만을 분석하는 파트입니다. 동적 운(대/세/월/일운)의 팩트는 절대 개입시키지 마십시오.
-
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
-- 원국의 오행 분포(木:{counts['목']}, 火:{counts['화']}, 土:{counts['토']}, 金:{counts['금']}, 水:{counts['수']})의 편중 및 발달 상태를 분석하십시오.
-- 십성의 생극제화 및 격국({gyukgook_detail})의 그릇과 품격, 원국의 조후(調候) 상태를 정밀 서술하십시오.
+- 오행 분포(木:{wood_cnt}, 火:{fire_cnt}, 土:{earth_cnt}, 金:{metal_cnt}, 水:{water_cnt}) 및 격국/조후 분석을 바탕으로, 타고난 삶의 무대와 기본 성품의 강약점을 서술하십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 내 삶의 역동성과 상호작용</span>
-- 🚨 [해석 절대 원칙]: 원국 내의 합충형해파는 사건 발생이 아니라, 일간과 7궁성(년·월·일·시) 간의 '육친적 거리감, 심리적 갈등, 사회적 관계성'으로 정밀 통변하십시오.
+- 원국 합충형해파 분석을 바탕으로, 주변 사람들과의 관계성, 육친 간의 거리감, 심리적 갈등 양상을 풀이하십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>3) 내 삶의 숨겨진 능력과 특별한 행운의 요소</span>
-- 4주 궁위별 12운성의 에너지 세기와 주요 신살(천을귀인: {guiin_str}, 일반신살: {shinsal_str}, 12신살: {s12_str})의 배치가 삶에 미치는 영향을 풀이하십시오.
+- 주요 귀인 성분 및 신살 배치가 삶에 미치는 결정적 행운 요소를 짚어주십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>4) 내 삶의 변곡점과 주의해야 할 시련</span>
-- 진술축미 묘고의 원국 내 상태(원국 입고/개고 팩트: {won_guk_vaults_str})와 삼형살(팩트: {samhyung_warn}), 복음, 격각 등의 원국 내 정적 구조를 분석하십시오.
+- 원국 내 묘고 및 삼형살 구조 분석을 바탕으로, 살면서 마주할 인생의 변곡점과 주의해야 할 시련을 경고하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 특정 운의 분석</h3>
 <div class='content-box-loose'>
-
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 부모·형제운</span>
-- 🚨 [JSON family 연동]: 마스터 데이터의 육친 관점("family")과 년주(조상/부모)·월주(부모/형제)의 십성, 인성·비겁의 동태를 바탕으로 정서적 유대감과 현실적 환경 작용을 서술하십시오.
+- 부모/형제와의 정서적 유대감 및 현실적 덕(德)의 유무를 서술하십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 학업·진학운</span>
-- 인성(학문/이해력)과 식상(표현력), 관성(조직/자제력)의 세력을 분석하십시오.
-- 문창, 문곡, 학당, 화개 등 학문 관련 핵심 신살을 자연스럽게 융합하여 공부 스타일, 시험운, 전공 선택 방향성을 서술하십시오.
+- 공부 스타일, 집중력, 시험운, 전공 및 학문 성취 방향성을 제시하십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>3) 적성·직업운</span>
-- 🚨 [JSON society 및 지장간 구조 연동]: 마스터 데이터의 사회적 관점("society")과 지장간 구조를 연동하십시오.
-  ① 진로 유형 판별: '직장 조직형' vs '자율 사업형' vs '전문 자유직형' 중 어디에 적합한지 명확히 분기하여 제안하십시오.
-  ② 추천 업상: JSON "society"에 정의된 적성 분야 및 추천 업상(業象) 물상 예시를 정확히 짚어주십시오.
+- '직장 조직형' vs '자율 사업형' 중 적성을 제안하고, 최고의 성과를 낼 추천 직업 분야를 명확히 짚어주십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>4) 연애운</span>
-- 일간/일지 십성 및 지장간 구조를 바탕으로 본인의 이상형 스타일과 연애 성향을 풀이하십시오.
-- 원국 내 배우자성(남:재성, 여:관성)의 위치, 충, 원진, 공망 파동을 분석하여 조혼/만혼 권장 가이드 및 연애 시 유의점을 조언하십시오.
+- 이상형 스타일, 연애 성향, 연애 시 자주 발생하는 갈등 패턴과 주의점을 서술하십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>5) 결혼·자녀운</span>
-- 🚨 [JSON family 연동]: 배우자궁(일지)의 안점 여부 및 배우자성, 자식성(남:관성, 여:식상)의 동태와 인연의 깊이를 따뜻한 어조로 서술하십시오.
+- 배우자와의 인연 깊이, 결혼 생활의 조화도, 자녀와의 정서적 유대감을 따뜻하게 풀어내십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>6) 재물운</span>
-- 재성(정재/편재)의 유무, 지장간 재고(財庫) 여부, 식상생재/재생관 흐름을 정밀 분석하여 돈과 물질을 대하는 가치관과 재물 축적 스타일을 서술하십시오.
+- 돈을 대하는 가치관, 자산 축적 스타일, 손재수를 피하고 부를 이루는 실질적 재테크 방향을 조언하십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>7) 관직·명예운</span>
-- 관성과 인성의 상생 구조, 조직 내 승진, 감투운, 책임감의 크기 및 사회적 명예 발전 가능성을 정밀 풀이하십시오.
+- 사회적 출세, 승진운, 조직 내 평가 및 명예 발전 가능성을 풀이하십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>8) 건강운</span>
-- 🚨 [JSON shinsal_warnings 연동]: 마스터 데이터의 건강 경고("shinsal_warnings") 취약 장기 팩트 및 원국 오행의 편중/편고를 분석하여 실질적인 건강 관리법을 제시하십시오.
+- 취약 신체 부위와 실질적인 노후 건강 관리법을 제시하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>4. 운의 흐름 분석</h3>
@@ -1362,7 +1362,9 @@ if st.session_state.get('need_calc', False):
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 대운 분석</span>
 ▶ 현재 대운 전반기 상세 분석 ({dw_start_age}세~{dw_mid_age}세):
+- 용어 해설을 배제하고, 현재 대운 전반기 5년 동안 내담자가 실제 체감하는 환경의 변화, 주 직업/재물 기회의 발복, 심리적 기복 및 주요 변곡점 팩트를 풍부하게 서술하십시오.
 ▶ 현재 대운 후반기 상세 분석 ({dw_mid2_age}세~{dw_end_age}세):
+- 현재 대운 후반기 5년 동안 전개될 실질적인 성과, 주의해야 할 위험 요소(손재, 인간관계 갈등 등), 그리고 미래 대비 처세술 팩트를 상세히 통변하십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 세운의 흐름</span>
 [SEWUN_TABLE_HERE]
@@ -1372,7 +1374,9 @@ if st.session_state.get('need_calc', False):
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 세운 분석</span>
 ▶ 현재 세운 전반기 상세 분석:
+- 올해 상반기 동안 일어나는 주된 환경적 기회, 재물/직업상의 변동성, 실질적 사건·사고의 팩트를 명쾌하게 풀이하십시오.
 ▶ 현재 세운 후반기 상세 분석:
+- 올해 하반기 동안 집중해야 할 핵심 결실, 인연의 길흉, 리스크 방어를 위한 실질적 지침을 서술하십시오.
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>3) 월운의 흐름</span>
 [WOLWUN_TABLE_HERE]
@@ -1382,31 +1386,34 @@ if st.session_state.get('need_calc', False):
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 월운 분석</span>
 {prompt_first_half}
+- 이번 달 전반기(절기~중기/하지 전) 동안 발생할 주요 심리 파동, 실질적 행동 지침 및 주의점 팩트를 서술하십시오.
 {prompt_second_half}
+- 이번 달 후반기(중기/하지~다음 절기 전) 동안 맞이할 실질적 사건, 재물/대인관계의 성패, 마무리 대응 전략을 상세히 서술하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>5. 삶을 바꾸는 지혜로운 조언</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 나를 돕는 에너지와 색상:</span>
-(용신/희신 오행에 부합하는 개운 색상, 숫자를 제시하십시오)
+- 용신/희신 오행에 부합하는 개운 색상, 숫자를 제시하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 재물을 부르는 이재(理財)와 절제의 지혜:</span> 
-(사주 구조상 손재수를 막고 실질적인 부를 축적할 재태크/지출 절제/투자 가이드를 명쾌하게 제시하십시오)
+- 사주 구조상 손재수를 막고 실질적인 부를 축적할 재테크/지출 절제/투자 가이드를 명쾌하게 제시하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 재능 효율을 높이는 직업적 지혜:</span> 
-(강점 오행과 십성을 극대화할 직업적 처세술을 조언하십시오)
+- 강점 오행과 십성을 극대화할 직업적 처세술을 조언하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>4) 신체 밸런스와 에너지 관리:</span> 
-(취약 오행 수련법 및 건강 습관을 제시하십시오)
+- 취약 오행 수련법 및 건강 습관을 제시하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>5) 공간의 흐름과 방위의 지혜:</span> 
-(길한 방향, 공간 정돈 및 개운 인테리어를 제시하십시오)
+- 길한 방향, 공간 정돈 및 개운 인테리어를 제시하십시오.
 
 <div style='margin-top: 25px; padding-top: 15px; border-top: 1.5px dashed #1A237E;'>
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #1A237E; display: block; margin-bottom: 10px;'>🎯 전통명리 특별 개운 비법</span>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 수호 천사의 기운 조언:</span>
-(원국의 천을귀인·암록·학당귀인 등 나를 돕는 귀인 성분과 귀인 조력자를 활용하는 개운법을 제시하십시오)
+- 원국의 천을귀인·암록·학당귀인 등 나를 돕는 귀인 성분과 귀인 조력자를 활용하는 개운법을 제시하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 백년해로의 기운 조언:</span>
-(배우자궁 일지 및 지장간 합/육친의 동태를 바탕으로 부부·연인 간 갈등을 피하고 인연을 지키는 백년해로 지혜를 조언하십시오)
+- 배우자궁 일지 및 지장간 합/육친의 동태를 바탕으로 부부·연인 간 갈등을 피하고 인연을 지키는 백년해로 지혜를 조언하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 행운에 따른 기운 조언:</span>
-(현재 대운 및 세운의 길한 파동을 타고 흉한 변곡점(충/형/묘고)을 우회하는 실질적인 행운 처세술을 조언하십시오)
+- 현재 대운 및 세운의 길한 파동을 타고 흉한 변곡점(충/형/묘고)을 우회하는 실질적인 행운 처세술을 조언하십시오.
+</div>
 </div>
 """
                 try:
@@ -1446,7 +1453,7 @@ if st.session_state.get('need_calc', False):
                 except Exception as e: 
                     st.error(f"AI 연산 오류: {e}")
 
-# ==============================================================
+            # ==============================================================
             # [B] 타 감명서 비교 파이프라인 (4-1 사주 대조)
             # ==============================================================
             elif main_category == "4. 타 감명서 비교" and u_product == "4-1. 타 감명서 비교 (사주)":
