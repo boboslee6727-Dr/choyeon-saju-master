@@ -1256,7 +1256,6 @@ if st.session_state.get('need_calc', False):
             # ==============================================================
             if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"]:
                 
-                # f-string 내부 문법 충돌 방지를 위해 오행 변수를 외부에서 안전하게 추출
                 wood_cnt = counts.get('목', 0)
                 fire_cnt = counts.get('화', 0)
                 earth_cnt = counts.get('토', 0)
