@@ -17,7 +17,7 @@ import re
 # ==============================================================================
 # 🎯 [버전 컨트롤 타워]
 # ==============================================================================
-APP_VERSION = "Ver 50.4 (Master Complete restoration & 14종 세분화 완결본)"
+APP_VERSION = "Ver 50.5 (Master Complete restoration & 14종 세분화 완결본)"
 
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS (ver 48.1 원형 100% 보존)
@@ -578,7 +578,12 @@ with st.sidebar:
     u_product = "1-1. 사주팔자 및 대운 분석"
 
     if main_category == "1. 개인 사주팔자 풀이 (종합)":
-        u_product = st.radio("상세 분석 항목:", ["1-1. 사주팔자 및 대운 분석", "1-2. 올해 및 특정연도 운세 상세분석", "1-3. 이번달 및 특정월 운세 상세분석", "1-4. 특정 주간 및 특정일운 상세분석"], key="sub_cat_1")
+        u_product = st.radio("상세 분석 항목:", ["1-1. 사주팔자와 운세풀이 (기본)", "1-2. 올해 및 특정연도 운세 상세분석", "1-3. 이번달 및 특정월 운세 상세분석", "1-4. 특정 주간 및 특정일운 상세분석"], key="sub_cat_1")
+        
+        # [신설] 1-2 선택 시 특정 연도를 직접 지정하는 사이드바 입력창
+        if u_product == "1-2. 올해 및 특정연도 운세 상세분석":
+            curr_yr_val = dt_mod.datetime.now(pytz.timezone('Asia/Seoul')).year
+            st.number_input("📅 분석할 특정 연도 (기본값: 올해)", min_value=1900, max_value=2050, value=curr_yr_val, key="target_year_input")
     elif main_category == "2. 테마별 특성화 상담":
         u_product = st.radio("특성화 상품 선택:", ["2-1. 재물운 특화 분석", "2-2. 직업/진학운 특화 분석", "2-3. 연애/결혼운 특화 분석", "2-4. 건강운 특화 분석", "2-5. 이사 및 방위 특화 분석"], key="sub_cat_2")
     elif main_category == "3. 커플 연애/결혼운 (궁합) 풀이":
@@ -891,8 +896,8 @@ if st.session_state.get('need_calc', False):
             st.session_state['saved_report_cover'] = cover_html
 
             # [상품별 리포트 메인 타이틀 분기문 배치] (cover_html 선언 직후에 위치)
-            if u_product == "1-1. 사주팔자 및 대운 분석":
-                report_title = "🎯 사주팔자 및 대운 정밀 분석"
+            if u_product == "1-1. 사주팔자와 운세풀이 (기본)":
+                report_title = "🎯 사주팔자와 운세풀이 (기본)"
             elif u_product == "1-2. 올해 및 특정연도 운세 상세분석":
                 report_title = "🎯 올해 및 특정연도 운세 상세분석"
             elif u_product == "1-3. 이번달 및 특정월 운세 상세분석":
@@ -1294,160 +1299,166 @@ if st.session_state.get('need_calc', False):
                 metal_cnt = counts.get('금', 0)
                 water_cnt = counts.get('수', 0)
 
-                prompt = f"""
+                # ----------------------------------------------------------
+                # 1) [1-1. 사주팔자와 운세풀이 (기본)] : 본질+현재운 요약+상세 유도 브릿지
+                # ----------------------------------------------------------
+                if u_product == "1-1. 사주팔자와 운세풀이 (기본)":
+                    prompt = f"""
 {db_header}
 {ilju_master_prompt_context}
 
 ================================================================================
-🧠 [1단계: AI 내부 심층 분석 지침 - 48.1 정밀 메커니즘 100% 추적·숙지]
+🧠 [1단계: 사주팔자와 운세풀이 (기본) 정밀 분석 지침]
 ================================================================================
-당신은 정통 명리심리상담사 1급 자격을 갖춘 '초연 박사'입니다. 
-출력물을 작성하기 전, 내부적으로 아래의 정밀 명리학적 메커니즘을 철저히 계산하고 심층 분석하십시오.
+당신은 정통 명리심리상담사 '초연 박사'입니다. 본 상담은 **[사주팔자와 운세풀이 기본]** 상품으로, 내담자의 타고난 원국 본질(성격, 구조)과 현재 대운 및 올해 세운의 거대한 흐름을 핵심 위주로 명쾌하게 통변합니다.
 
-1. 원국 및 지장간 심층 분석:
-   - 일주({ds}{db})의 일간 십성, 일지 십이운성(봉법/좌법/인종법) 에너지를 정밀 추적하십시오.
-   - 월령 계절감({wol_korean_str}), 조후, 격국({gyukgook_detail})의 그릇과 품격을 엄밀히 판별하십시오.
-   - 4주 궁위별 십이운성 세기와 주요 신살(천을귀인: {guiin_str}, 일반신살: {shinsal_str}, 12신살: {s12_str})을 연계 분석하십시오.
-2. 동적 파동 및 변곡점 추적:
-   - 원국 및 행운(대/세/월운)에서의 묘고 작용(입고/개고 팩트: {won_guk_vaults_str} / {hang_un_vaults_str})을 추적하십시오.
-   - 삼형살(인사신/축술미 팩트: {samhyung_warn}) 및 공망 궁위 타격({gongmang_actual})의 현실적 파동을 계산하십시오.
-3. 육친 및 맞춤형 타겟팅:
-   - 내담자 나이({u_age}세) 및 성별/혼인상태({u_gender}, {u_marital})에 따른 육친 생극제화 및 대체 규칙을 100% 적용하십시오.
-- {age_prompt}
-- {gender_prompt}
-- {yukchin_rule}
+1. 원국 및 지장간 분석: 성격 분석(겉으로 드러난 성격, 감추어진 속마음)과 사주 구조분석(무대, 역동성, 행운, 변곡점)을 깊이 있게 다루십시오.
+2. 현재 운의 핵심 요약: 현재 대운({dw_g_cur}{dw_j_cur})과 올해 세운({curr_y_ganji})이 내담자에게 주는 거시적 영향력을 명쾌히 요약하십시오.
+3. 지혜로운 조언 및 개운 비법: 삶을 바꾸는 조언 및 전통명리 특별 개운 비법을 포함하여 서술하십시오.
+
+🚨 [상세분석 유도 브릿지 규칙]: 에세이 통변의 맨 마지막 문단에는 반드시 아래의 안내 문구를 자연스럽게 서술하여 추가 상담을 유도하십시오.
+"<p style='text-indent: 1em;'><b>💡 [초연 전통명리 안내]:</b> 본 풀이는 사주 원국의 본질과 현재 운의 큰 흐름을 짚어드린 기본 감명입니다. 특정 연도별·월별 정밀한 세부 흐름은 '올해 및 특정연도 운세 상세분석'을, 재물·직업 등 특정 분야의 집중 상담은 '테마별 특성화 상담'을 통해 확인하실 수 있습니다.</p>"
 
 ================================================================================
-✍️ [2단계: 최종 출력물 작성 규칙 - 거두절미 현실적 팩트 통변]
+✍️ [2단계: 최종 출력물 작성 규칙]
 ================================================================================
-위 1단계에서 분석한 깊이 있는 명리적 추론을 바탕으로 에세이를 작성하되, 일반 내담자를 위해 아래의 출력 표현 규칙을 철저히 준수하십시오.
-
-1. 🚨 [용어 해설 배제 & 팩트 직행]: '식신이란~', '편관이 들어와서~', '지장간의~', '12운성 묘지에 빠져~' 같은 난해한 명리학 전문 용어나 한자어 개념 설명을 절대로 남발하거나 해설하지 마십시오.
-2. 🚨 [현실적 결론과 파동 서술]: 내담자가 실제 삶에서 체감하는 '행동 양식, 속마음의 고독, 사건·사고의 시기, 재물/직업/인연의 길흉, 구체적 개운 처방'의 현실적 결론만 명쾌하게 통변하십시오.
-3. 🚨 [품격 있는 현대적 구어체]: 따뜻하면서도 현실을 날카롭게 짚어주는 품격 있는 현대적 구어체(-합니다, -입니다)로 서술하십시오.
-4. 모든 통변 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
-5. 표(Table) 생성 절대 금지. 운의 흐름 연도별 분석은 반드시 도트 기호(•)를 사용한 텍스트로 작성하십시오.
+1. 난해한 명리학 전문 용어 해설을 배제하고 현실적 결론 위주로 서술하십시오.
+2. 모든 통변 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
+3. 표(Table) 생성 절대 금지.
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 성격 분석</h3>
 <div class='content-box-loose'>
 {choyeon_golden_text}
-
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 겉으로 드러난 성격</span>
-- 분석된 일간/일지 에너지를 바탕으로, 표면적 행동 방식과 사회적 대인관계 스타일의 현실적 팩트를 상세히 서술하십시오.
-
+- 분석된 일간/일지 에너지를 바탕으로 표면적 행동 방식과 대인관계 스타일의 팩트를 상세히 서술하십시오.
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 감추어진 내 속마음</span>
-- 일지 지장간 및 공망 파동 분석을 바탕으로, 남들에게 말하지 못하는 속마음, 정신적 고독감, 내면의 공허함을 정밀 서술하십시오.
+- 일지 지장간 및 공망 파동 분석을 바탕으로 내면의 속마음과 정신적 고독감을 정밀 서술하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조분석</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
-- 오행 분포(木:{wood_cnt}, 火:{fire_cnt}, 土:{earth_cnt}, 金:{metal_cnt}, 水:{water_cnt}) 및 격국/조후 분석을 바탕으로, 타고난 삶의 무대와 기본 성품의 강약점을 서술하십시오.
-
+- 오행 분포(木:{wood_cnt}, 火:{fire_cnt}, 土:{earth_cnt}, 金:{metal_cnt}, 水:{water_cnt}) 및 격국/조후 분석을 바탕으로 기본 성품의 강약점을 서술하십시오.
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 내 삶의 역동성과 상호작용</span>
-- 원국 합충형해파 분석을 바탕으로, 주변 사람들과의 관계성, 육친 간의 거리감, 심리적 갈등 양상을 풀이하십시오.
-
+- 원국 합충형해파 분석을 바탕으로 주변 사람들과의 관계성 및 갈등 양상을 풀이하십시오.
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>3) 내 삶의 숨겨진 능력과 특별한 행운의 요소</span>
 - 주요 귀인 성분 및 신살 배치가 삶에 미치는 결정적 행운 요소를 짚어주십시오.
-
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>4) 내 삶의 변곡점과 주의해야 할 시련</span>
-- 원국 내 묘고 및 삼형살 구조 분석을 바탕으로, 살면서 마주할 인생의 변곡점과 주의해야 할 시련을 경고하십시오.
+- 원국 내 묘고 및 삼형살 구조 분석을 바탕으로 인생의 변곡점과 시련을 경고하십시오.
 </div>
 
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 특정 운의 분석</h3>
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 현재 대운 및 세운 흐름 요약</h3>
 <div class='content-box-loose'>
-<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 부모·형제운</span>
-- 부모/형제와의 정서적 유대감 및 현실적 덕(德)의 유무를 서술하십시오.
-
-<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 학업·진학운</span>
-- 공부 스타일, 집중력, 시험운, 전공 및 학문 성취 방향성을 제시하십시오.
-
-<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>3) 적성·직업운</span>
-- '직장 조직형' vs '자율 사업형' 중 적성을 제안하고, 최고의 성과를 낼 추천 직업 분야를 명확히 짚어주십시오.
-
-<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>4) 연애운</span>
-- 이상형 스타일, 연애 성향, 연애 시 자주 발생하는 갈등 패턴과 주의점을 서술하십시오.
-
-<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>5) 결혼·자녀운</span>
-- 배우자와의 인연 깊이, 결혼 생활의 조화도, 자녀와의 정서적 유대감을 따뜻하게 풀어내십시오.
-
-<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>6) 재물운</span>
-- 돈을 대하는 가치관, 자산 축적 스타일, 손재수를 피하고 부를 이루는 실질적 재테크 방향을 조언하십시오.
-
-<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>7) 관직·명예운</span>
-- 사회적 출세, 승진운, 조직 내 평가 및 명예 발전 가능성을 풀이하십시오.
-
-<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>8) 건강운</span>
-- 취약 신체 부위와 실질적인 노후 건강 관리법을 제시하십시오.
+▶ 현재 대운({dw_g_cur}{dw_j_cur}) 및 올해 세운({curr_y_ganji}) 핵심 통변:
+- 현재 대운의 기운과 올해 세운이 맞물려 내담자에게 가져다주는 주된 환경 변동, 성패의 변곡점, 주요 기회를 명쾌히 요약 서술하십시오.
 </div>
 
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>4. 운의 흐름 분석</h3>
-<div class='content-box-loose'>
-🚨 [동적 운 통변 절대 원칙]: 외부 운(대운, 세운, 월운)이 원국을 타격할 때 일어나는 '현실적 팩트(언제, 어떤 사건/사고/발복이 일어나는가)'를 정밀 구분하여 통변하십시오.
-
-<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 대운의 흐름</span>
-[DAEWUN_TABLE_HERE]
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(1) 지나온 과거 각 대운 분석</span>
-🚨 [대운 줄바꿈 절대 규칙]: 각 대운 항목(• ... :)의 쌍점(:) 뒤 해설은 절대로 통글로 뭉쳐 쓰지 마시고, 각 불릿 항목마다 독립된 <p style='text-indent: 1em; margin-bottom: 12px;'> 태그로 감싸 반드시 줄바꿈하여 서술하십시오.
-{past_daewun_html}
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 대운 분석</span>
-▶ 현재 대운 전반기 상세 분석 ({dw_start_age}세~{dw_mid_age}세):
-- 용어 해설을 배제하고, 현재 대운 전반기 5년 동안 내담자가 실제 체감하는 환경의 변화, 주 직업/재물 기회의 발복, 심리적 기복 및 주요 변곡점 팩트를 풍부하게 서술하십시오.
-▶ 현재 대운 후반기 상세 분석 ({dw_mid2_age}세~{dw_end_age}세):
-- 현재 대운 후반기 5년 동안 전개될 실질적인 성과, 주의해야 할 위험 요소(손재, 인간관계 갈등 등), 그리고 미래 대비 처세술 팩트를 상세히 통변하십시오.
-
-<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 세운의 흐름</span>
-[SEWUN_TABLE_HERE]
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(1) 지나온 과거 각 세운 분석</span>
-🚨 [세운 줄바꿈 절대 규칙]: 각 세운 항목(• ... :)의 쌍점(:) 뒤 해설은 반드시 독립된 <p style='text-indent: 1em; margin-bottom: 12px;'> 태그로 감싸 한 줄씩 완전히 줄바꿈하여 작성하십시오.
-{past_sewun_html}
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 세운 분석</span>
-▶ 현재 세운 전반기 상세 분석:
-- 올해 상반기 동안 일어나는 주된 환경적 기회, 재물/직업상의 변동성, 실질적 사건·사고의 팩트를 명쾌하게 풀이하십시오.
-▶ 현재 세운 후반기 상세 분석:
-- 올해 하반기 동안 집중해야 할 핵심 결실, 인연의 길흉, 리스크 방어를 위한 실질적 지침을 서술하십시오.
-
-<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>3) 월운의 흐름</span>
-[WOLWUN_TABLE_HERE]
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(1) 지나온 과거 각 월운 분석</span>
-🚨 [월운 줄바꿈 절대 규칙]: 각 월운 항목(• ... :)의 쌍점(:) 뒤 해설은 반드시 독립된 <p style='text-indent: 1em; margin-bottom: 12px;'> 태그로 감싸 한 줄씩 완전히 줄바꿈하여 작성하십시오.
-{past_months_html}
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>(2) 현재 월운 분석</span>
-{prompt_first_half}
-- 이번 달 전반기(절기~중기/하지 전) 동안 발생할 주요 심리 파동, 실질적 행동 지침 및 주의점 팩트를 서술하십시오.
-{prompt_second_half}
-- 이번 달 후반기(중기/하지~다음 절기 전) 동안 맞이할 실질적 사건, 재물/대인관계의 성패, 마무리 대응 전략을 상세히 서술하십시오.
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>5. 삶을 바꾸는 지혜로운 조언</h3>
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>4. 삶을 바꾸는 지혜로운 조언 및 개운 비법</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 나를 돕는 에너지와 색상:</span>
-- 용신/희신 오행에 부합하는 개운 색상과 더불어 전통 하도 수리(水 1·6, 火 2·7, 木 3·8, 金 4·9, 土 5·10)에 입각한 정확한 행운의 숫자를 제시하십시오.
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 재물을 부르는 이재(理財)와 절제의 지혜:</span> 
-- 사주 구조상 손재수를 막고 실질적인 부를 축적할 재테크/지출 절제/투자 가이드를 명쾌하게 제시하십시오.
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 재능 효율을 높이는 직업적 지혜:</span> 
-- 강점 오행과 십성을 극대화할 직업적 처세술을 조언하십시오.
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>4) 신체 밸런스와 에너지 관리:</span> 
-- 취약 오행 수련법 및 건강 습관을 제시하십시오.
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>5) 공간의 흐름과 방위의 지혜:</span> 
-- 길한 방향, 공간 정돈 및 개운 인테리어를 제시하십시오.
-
+- 용신/희신 오행 색상 및 하도 수리 행운의 숫자를 제시하십시오.
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 재물과 직업의 절제 지혜:</span>
+- 손재수를 막고 재능 효율을 높일 실질적 처세술을 조언하십시오.
 <div style='margin-top: 25px; padding-top: 15px; border-top: 1.5px dashed #1A237E;'>
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #1A237E; display: block; margin-bottom: 10px;'>🎯 전통명리 특별 개운 비법</span>
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 수호 천사의 기운 조언:</span>
-- 원국의 천을귀인·암록·학당귀인 등 나를 돕는 귀인 성분과 귀인 조력자를 활용하는 개운법을 제시하십시오.
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 백년해로의 기운 조언:</span>
-- 배우자궁 일지 및 지장간 합/육친의 동태를 바탕으로 부부·연인 간 갈등을 피하고 인연을 지키는 백년해로 지혜를 조언하십시오.
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 행운에 따른 기운 조언:</span>
-- 현재 대운 및 세운의 길한 파동을 타고 흉한 변곡점(충/형/묘고)을 우회하는 실질적인 행운 처세술을 조언하십시오.
+- 귀인 성분 활용법 및 흉한 변곡점을 우회하는 행운 처세술을 조언하십시오.
 </div>
 </div>
 """
 
+                # ----------------------------------------------------------
+                # 2) [1-2. 올해 및 특정연도 운세 상세분석]
+                # ----------------------------------------------------------
+                elif u_product == "1-2. 올해 및 특정연도 운세 상세분석":
+                    target_year_val = st.session_state.get('target_year_input', curr_y)
+                    prompt = f"""
+{db_header}
+{ilju_master_prompt_context}
+
+================================================================================
+🧠 [1-2. {target_year_val}년 운세 상세분석 정밀 지침]
+================================================================================
+당신은 정통 명리심리상담사 '초연 박사'입니다. 본 상담은 지정된 **{target_year_val}년**의 연도별 운세 흐름을 칼같이 분석하는 상세 리포트입니다.
+
+1. 최근 과거 세운 흐름 회고:
+   {past_sewun_html}
+2. 지정 연도({target_year_val}년) 전반기 및 후반기 정밀 통변:
+   - 전반기(상반기): 환경적 기회, 재물/직업 변동성, 실질적 사건·사고 팩트 서술.
+   - 후반기(하반기): 핵심 결실, 인연의 길흉, 리스크 방어 가이드 서술.
+3. 올해/해당 연도 삶을 바꾸는 지혜로운 조언 및 개운 비법을 상세 서술하십시오.
+
+================================================================================
+✍️ [2단계: 최종 출력물 작성 규칙]
+================================================================================
+1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.
+2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.
+3. 표(Table) 생성 금지.
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 지나온 과거 세운 흐름 회고</h3>
+<div class='content-box-loose'>
+🚨 [세운 줄바꿈 절대 규칙]: 각 세운 항목(• ... :)의 쌍점(:) 뒤 해설은 반드시 독립된 <p style='text-indent: 1em; margin-bottom: 12px;'> 태그로 감싸 한 줄씩 완전히 줄바꿈하여 작성하십시오.
+{past_sewun_html}
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. {target_year_val}년 운세 정밀 상세분석</h3>
+<div class='content-box-loose'>
+▶ {target_year_val}년 전반기(상반기) 상세 분석:
+- 상반기 동안 일어나는 주된 환경적 기회, 재물/직업상의 변동성, 실질적 사건·사고의 팩트를 명쾌하게 풀이하십시오.
+▶ {target_year_val}년 후반기(하반기) 상세 분석:
+- 하반기 동안 집중해야 할 핵심 결실, 인연의 길흉, 리스크 방어를 위한 실질적 지침을 서술하십시오.
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. {target_year_val}년 맞춤형 개운 비법 및 조언</h3>
+<div class='content-box-loose'>
+- 해당 연도의 기운을 극대화하고 리스크를 우회할 실질적 처세술 및 개운 비법을 서술하십시오.
+</div>
+"""
+
+                # ----------------------------------------------------------
+                # 3) [1-3 & 1-4. 월운 및 일진 상세분석]
+                # ----------------------------------------------------------
+                else:
+                    prompt = f"""
+{db_header}
+{ilju_master_prompt_context}
+
+================================================================================
+🧠 [1-3 / 1-4. 월운 및 일진 상세분석 정밀 지침]
+================================================================================
+당신은 정통 명리심리상담사 '초연 박사'입니다. 본 상담은 특정 월과 일진의 미세한 기운 파동을 포착하는 초단기 실전 분석 리포트입니다.
+
+1. 지나온 과거 월운의 흐름 회고:
+   {past_months_html}
+2. 현재/지정 월운 정밀 통변:
+   - {prompt_first_half}: 이번 달 전반기 심리 파동, 행동 지침, 주의점 팩트 서술.
+   - {prompt_second_half}: 이번 달 후반기 사건·사고, 재물/대인관계 성패, 마무리 전략 서술.
+3. 단기 리스크 방어와 성취를 위한 개운 비법 조언.
+
+================================================================================
+✍️ [2단계: 최종 출력물 작성 규칙]
+================================================================================
+1. 난해한 용어 배제, 즉각적 행동 지침 위주.
+2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.
+3. 표(Table) 생성 금지.
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 지나온 월운 회고</h3>
+<div class='content-box-loose'>
+{past_months_html}
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 월운 상세 파동 분석</h3>
+<div class='content-box-loose'>
+{prompt_first_half}
+- 이번 달 전반기 동안 발생할 주요 심리 파동, 실질적 행동 지침 및 주의점 팩트를 서술하십시오.
+{prompt_second_half}
+- 이번 달 후반기 동안 맞이할 실질적 사건, 재물/대인관계의 성패, 마무리 대응 전략을 상세히 서술하십시오.
+</div>
+
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 단기 성공을 위한 개운 비법</h3>
+<div class='content-box-loose'>
+- 이번 달 파동을 극대화할 단기 처세술과 행운의 에너지 활용법을 조언하십시오.
+</div>
+"""
             # ==============================================================
             # [A-2] 2. 테마별 특성화 상담 (재물/직업 등 집중 통변 파이프라인)
             # ==============================================================
