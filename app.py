@@ -1252,18 +1252,18 @@ if st.session_state.get('need_calc', False):
             clean_ai_text = ""
 
             # ==============================================================
-            # [A] 개인 사주팔자 및 특성화 상품 분석 분기 (Ver 48.1 원문 전문)
+            # [A] 개인 사주팔자 및 특성화 상품 분석 분기 (Ver 48.1 원문 전문 및 팩트 지시)
             # ==============================================================
             if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"]:
+                
+                # f-string 내부 문법 충돌 방지를 위해 오행 변수를 외부에서 안전하게 추출
+                wood_cnt = counts.get('목', 0)
+                fire_cnt = counts.get('화', 0)
+                earth_cnt = counts.get('토', 0)
+                metal_cnt = counts.get('금', 0)
+                water_cnt = counts.get('수', 0)
 
-            # 미리 오행 변수를 f-string 외부에서 안전하게 추출 (문법 에러 방지)
-            wood_cnt = counts.get('목', 0)
-            fire_cnt = counts.get('화', 0)
-            earth_cnt = counts.get('토', 0)
-            metal_cnt = counts.get('금', 0)
-            water_cnt = counts.get('수', 0)
-
-            prompt = f"""
+                prompt = f"""
 {db_header}
 {ilju_master_prompt_context}
 
