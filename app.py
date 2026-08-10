@@ -828,6 +828,53 @@ if st.session_state.get('need_calc', False):
             st.session_state['global_ds'] = ds
             st.session_state['global_db'] = db
 
+            # --------------------------------------------------------------
+            # [상품별 리포트 메인 타이틀 정돈]
+            # --------------------------------------------------------------
+            if u_product == "1-1. 사주팔자 및 대운 분석":
+                report_title = "🎯 사주팔자 및 대운 정밀 분석"
+            elif u_product == "1-2. 올해 및 특정연도 운세 상세분석":
+                report_title = "🎯 올해 및 특정연도 운세 상세분석"
+            elif u_product == "1-3. 이번달 및 특정월 운세 상세분석":
+                report_title = "🎯 이번달 및 특정월 운세 상세분석"
+            elif u_product == "1-4. 특정 주간 및 특정일운 상세분석":
+                report_title = "🎯 특정 주간 및 특정일운 상세분석"
+            elif u_product == "2-1. 재물운 특화 분석":
+                report_title = "🎯 재물운 특화 정밀 분석"
+            elif u_product == "2-2. 직업/진학운 특화 분석":
+                report_title = "🎯 직업/진학운 특화 정밀 분석"
+            elif u_product == "2-3. 연애/결혼운 특화 분석":
+                report_title = "🎯 연애/결혼운 특화 정밀 분석"
+            elif u_product == "2-4. 건강운 특화 분석":
+                report_title = "🎯 건강운 특화 정밀 분석"
+            elif u_product == "2-5. 이사 및 방위 특화 분석":
+                report_title = "🎯 이사 및 방위 특화 정밀 분석"
+            elif u_product == "3-1. 연애/결혼운 (궁합) 풀이":
+                report_title = "🎯 커플 연애/결혼운 정밀 궁합 분석"
+            elif u_product == "3-2. 결혼 택일":
+                report_title = "🎯 최고의 결혼 길일 추천 리포트"
+            elif u_product == "3-3. 출산 택일":
+                report_title = "🎯 새 생명 마중 출산 길일 추천 리포트"
+            elif u_product == "4-1. 타 감명서 비교 (사주)":
+                report_title = "🎯 사주 감명서 학술 검증 및 1:1 대조 리포트"
+            elif u_product == "4-2. 타 감명서 비교 (궁합)":
+                report_title = "🎯 궁합 감명서 학술 검증 및 1:1 대조 리포트"
+            else:
+                report_title = "🎯 사주팔자 정밀 분석"
+
+            # 이후 기존 report_1_full_html 템플릿 연결
+            report_1_full_html = f"""{cover_html}
+<div class='report-page' style='page-break-before: avoid;'>
+<div class='vip-inset-frame' style='border:2px solid #1A237E; box-sizing: border-box; padding: 20px; border-radius:15px; margin-top: 0;'>
+<h1 style='text-align:center; font-size: 24px; font-weight: 900; white-space: nowrap;'>{report_title}</h1>
+{table_html}
+{master_bar_html}
+<div style='margin-top:20px;'>
+{{full_content_clean_placeholder}}
+</div>
+</div>
+</div>"""
+
             adj_mins = get_total_time_adjustment(base_dt)
             utc_dt = base_dt - dt_mod.timedelta(hours=9) + dt_mod.timedelta(minutes=adj_mins)
             order = 1 if (GAN.index(ys)%2==0) == (u_gender=='남성') else -1
@@ -1393,7 +1440,7 @@ if st.session_state.get('need_calc', False):
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>5. 삶을 바꾸는 지혜로운 조언</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 나를 돕는 에너지와 색상:</span>
-- 용신/희신 오행에 부합하는 개운 색상, 숫자를 제시하십시오.
+- 용신/희신 오행에 부합하는 개운 색상과 더불어 전통 하도 수리(水 1·6, 火 2·7, 木 3·8, 金 4·9, 土 5·10)에 입각한 정확한 행운의 숫자를 제시하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 재물을 부르는 이재(理財)와 절제의 지혜:</span> 
 - 사주 구조상 손재수를 막고 실질적인 부를 축적할 재테크/지출 절제/투자 가이드를 명쾌하게 제시하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 재능 효율을 높이는 직업적 지혜:</span> 
