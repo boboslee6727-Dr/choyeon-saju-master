@@ -1300,7 +1300,7 @@ if st.session_state.get('need_calc', False):
                 water_cnt = counts.get('수', 0)
 
                 # ----------------------------------------------------------
-                # 1) [1-1. 사주팔자와 운세풀이 (기본)]
+                # 1) [1-1. 사주팔자와 운세풀이 (기본)] : 깊이 있는 본질 + 대/세운 표 & 동적 통변
                 # ----------------------------------------------------------
                 if u_product == "1-1. 사주팔자와 운세풀이 (기본)":
                     prompt = f"""
@@ -1308,23 +1308,17 @@ if st.session_state.get('need_calc', False):
 {ilju_master_prompt_context}
 
 ================================================================================
-🧠 [1단계: 사주팔자와 운세풀이 (기본) 정밀 분석 지침]
+🧠 [1단계: 사주팔자와 운세풀이 (기본) 정밀 심층 분석 지침]
 ================================================================================
-당신은 정통 명리심리상담사 '초연 박사'입니다. 본 상담은 **[사주팔자와 운세풀이 기본]** 상품으로, 내담자의 타고난 원국 본질(성격, 구조)과 현재 대운 및 올해 세운의 거대한 흐름을 핵심 위주로 명쾌하게 통변합니다.
-
-1. 원국 및 지장간 분석: 성격 분석(겉으로 드러난 성격, 감추어진 속마음)과 사주 구조분석(무대, 역동성, 행운, 변곡점)을 깊이 있게 다루십시오.
-2. 현재 운의 핵심 요약: 현재 대운({dw_g_cur}{dw_j_cur})과 올해 세운({curr_y_ganji})이 내담자에게 주는 거시적 영향력을 명쾌히 요약하십시오.
-3. 지혜로운 조언 및 개운 비법: 삶을 바꾸는 조언 및 전통명리 특별 개운 비법을 포함하여 서술하십시오.
-
-🚨 [상세분석 유도 브릿지 규칙]: 에세이 통변의 맨 마지막 문단에는 반드시 아래의 안내 문구를 자연스럽게 서술하여 추가 상담을 유도하십시오.
-"<p style='text-indent: 1em;'><b>💡 [초연 전통명리 안내]:</b> 본 풀이는 사주 원국의 본질과 현재 운의 큰 흐름을 짚어드린 기본 감명입니다. 특정 연도별·월별 정밀한 세부 흐름은 '올해 및 특정연도 운세 상세분석'을, 재물·직업 등 특정 분야의 집중 상담은 '테마별 특성화 상담'을 통해 확인하실 수 있습니다.</p>"
+당신은 정통 명리심리상담사 1급 자격을 갖춘 '초연 박사'입니다. 본 상담은 **[사주팔자와 운세풀이 기본]** 상품입니다.
+단순 요약에 그치지 않고, 내담자의 타고난 원국 본질(성격, 구조)과 대운·세운의 동적 파동을 깊이 있고 격조 높게 통변하십시오.
 
 ================================================================================
-✍️ [2단계: 최종 출력물 작성 규칙]
+✍️ [2단계: 최종 출력물 작성 규칙 - 깊이 있는 에세이 서술]
 ================================================================================
-1. 난해한 명리학 전문 용어 해설을 배제하고 현실적 결론 위주로 서술하십시오.
-2. 모든 통변 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
-3. 표(Table) 생성 절대 금지.
+1. 난해한 명리학 전문 용어 해설을 배제하고, 내담자가 실제 삶에서 체감하는 현실적 결론과 파동을 명쾌히 통변하십시오.
+2. 모든 통변 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸십시오.
+3. 표(Table) 생성 절대 금지. (단, 아래 지정된 [DAEWUN_TABLE_HERE], [SEWUN_TABLE_HERE] 치환 태그는 위치를 정확히 유지하십시오.)
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 성격 분석</h3>
 <div class='content-box-loose'>
@@ -1347,25 +1341,50 @@ if st.session_state.get('need_calc', False):
 - 원국 내 묘고 및 삼형살 구조 분석을 바탕으로 인생의 변곡점과 시련을 경고하십시오.
 </div>
 
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 현재 대운 및 세운 흐름 요약</h3>
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 현재 대운 및 세운 흐름 분석</h3>
 <div class='content-box-loose'>
-▶ 현재 대운({dw_g_cur}{dw_j_cur}) 및 올해 세운({curr_y_ganji}) 핵심 통변:
-- 현재 대운의 기운과 올해 세운이 맞물려 내담자에게 가져다주는 주된 환경 변동, 성패의 변곡점, 주요 기회를 명쾌히 요약 서술하십시오.
+<p style='text-indent: 1em;'><b>대운(大運)의 명리학적 의미:</b> 명리학에서 '대운'이란 흔히 생각하는 대통할 운이 아니라, 10년 단위로 바뀌는 내 삶의 '거대한 계절과 환경의 변화'를 의미합니다. 원국이라는 자동차가 어떤 도로 환경을 달리고 있는지를 보여주는 나침반입니다.</p>
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 대운의 흐름 분석</span>
+[DAEWUN_TABLE_HERE]
+▶ 대운에 따른 과거·현재·미래 운세 분석:
+- 지나온 대운의 환경 변화와 현재 대운({dw_g_cur}{dw_j_cur})이 가져다주는 삶의 기회/시련, 그리고 앞으로 다가올 미래 대운의 발전 가능성을 10년 주기 파동에 입각하여 깊이 있게 정밀 통변하십시오.
+
+<span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 세운의 흐름 분석</span>
+[SEWUN_TABLE_HERE]
+▶ 현재 대운 속 세운의 과거·현재·미래 운세 분석:
+- 현재 대운의 무대 위에서 올해 세운({curr_y_ganji})을 중심으로, 최근 지나온 과거의 기운, 올해 상/하반기 체감하는 환경 변화와 성패의 변곡점, 그리고 다가올 미래 세운의 준비 전략을 상세히 통변하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>4. 삶을 바꾸는 지혜로운 조언 및 개운 비법</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 나를 돕는 에너지와 색상:</span>
-- 용신/희신 오행 색상 및 하도 수리 행운의 숫자를 제시하십시오.
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 재물과 직업의 절제 지혜:</span>
-- 손재수를 막고 재능 효율을 높일 실질적 처세술을 조언하십시오.
+- 용신/희신 오행에 부합하는 개운 색상과 더불어 전통 하도 수리(水 1·6, 火 2·7, 木 3·8, 金 4·9, 土 5·10)에 입각한 정확한 행운의 숫자를 제시하십시오.
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 재물을 부르는 이재(理財)와 절제의 지혜:</span>
+- 사주 구조상 손재수를 막고 실질적인 부를 축적할 재테크/지출 절제/투자 가이드를 명쾌하게 제시하십시오.
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 재능 효율을 높이는 직업적 지혜:</span>
+- 강점 오행과 십성을 극대화할 직업적 처세술을 조언하십시오.
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>4) 신체 밸런스와 에너지 관리:</span>
+- 취약 오행 수련법 및 건강 습관을 제시하십시오.
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>5) 공간의 흐름과 방위의 지혜:</span>
+- 길한 방향, 공간 정돈 및 개운 인테리어를 제시하십시오.
+
 <div style='margin-top: 25px; padding-top: 15px; border-top: 1.5px dashed #1A237E;'>
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #1A237E; display: block; margin-bottom: 10px;'>🎯 전통명리 특별 개운 비법</span>
-- 귀인 성분 활용법 및 흉한 변곡점을 우회하는 행운 처세술을 조언하십시오.
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 수호 천사의 기운 조언:</span>
+- 원국의 천을귀인·암록·학당귀인 등 나를 돕는 귀인 성분과 귀인 조력자를 활용하는 개운법을 제시하십시오.
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 백년해로의 기운 조언:</span>
+- 배우자궁 일지 및 지장간 합/육친의 동태를 바탕으로 부부·연인 간 갈등을 피하고 인연을 지키는 백년해로 지혜를 조언하십시오.
+<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 행운에 따른 기운 조언:</span>
+- 현재 대운 및 세운의 길한 파동을 타고 흉한 변곡점(충/형/묘고)을 우회하는 실질적인 행운 처세술을 조언하십시오.
 </div>
+</div>
+
+<div style='margin-top: 30px; padding: 15px; background-color: #F8F9FA; border-left: 4px solid #1A237E; border-radius: 4px;'>
+<p style='font-size: 16px; font-weight: 900; color: #1A237E; margin: 0; line-height: 1.6;'>💡 [초연 전통명리 안내]</p>
+<p style='font-size: 15px; font-weight: 600; color: #333; margin-top: 5px; margin-bottom: 0; line-height: 1.7;'>본 풀이는 사주 원국의 본질과 현재 운의 큰 흐름을 짚어드린 기본 감명입니다. 특정 연도별·월별 정밀한 세부 흐름은 <b>'올해 및 특정연도 운세 상세분석'</b>을, 재물·직업 등 특정 분야의 집중 상담은 <b>'테마별 특성화 상담'</b>을 통해 확인하실 수 있습니다.</p>
 </div>
 """
-
                 # ----------------------------------------------------------
                 # 2) [1-2. 올해 및 특정연도 운세 상세분석]
                 # ----------------------------------------------------------
@@ -1461,13 +1480,25 @@ if st.session_state.get('need_calc', False):
 """
 
                 # ----------------------------------------------------------
-                # [복원] AI 연산 호출 및 세션 저장 실행부
+                # [복원] AI 연산 호출 및 대운/세운 표 치환 실행부
                 # ----------------------------------------------------------
                 try:
                     res = model.generate_content(prompt)
                     ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                     
-                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{ai_text}<br><br>{closing_html}</div>"
+                    un_html_clean = un_html.replace("\n", " ").replace("\r", "")
+                    se_html_clean = se_html.replace("\n", " ").replace("\r", "")
+
+                    daeoun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{un_html_clean}</div>"
+                    sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
+
+                    clean_ai_text, _ = re.subn(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', daeoun_target, ai_text, flags=re.IGNORECASE)
+                    clean_ai_text, _ = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
+
+                    # 맺음말 상단에 굵은 점선(dashed) 분리선 적용
+                    bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #1A237E; margin: 35px 0 20px 0;'>{closing_html}"
+
+                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{clean_ai_text}<br><br>{bordered_closing_html}</div>"
 
                     report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
                     
