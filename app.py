@@ -1284,10 +1284,10 @@ if st.session_state.get('need_calc', False):
             clean_ai_text = ""
 
             # ==============================================================
-            # [A] 개인 사주팔자 및 특성화 상품 분석 분기 (Ver 48.1 원문 전문 및 팩트 지시)
+            # [A-1] 1. 개인 사주팔자 풀이 (종합 파이프라인)
             # ==============================================================
-            if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"]:
-                
+            if main_category == "1. 개인 사주팔자 풀이 (종합)":
+
                 wood_cnt = counts.get('목', 0)
                 fire_cnt = counts.get('화', 0)
                 earth_cnt = counts.get('토', 0)
@@ -1447,92 +1447,45 @@ if st.session_state.get('need_calc', False):
 </div>
 </div>
 """
-                try:
-                    res = model.generate_content(prompt)
-                    ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
-                    
-                    if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
-                        ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
-
-                    un_html_clean = un_html.replace("\n", " ").replace("\r", "")
-                    se_html_clean = se_html.replace("\n", " ").replace("\r", "")
-                    wol_html_clean = wol_html.replace("\n", " ").replace("\r", "")
-
-                    clean_ai_text = ai_text
-
-                    daeoun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{un_html_clean}</div>"
-                    sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
-                    wolwun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{wol_html_clean}</div>"
-
-                    clean_ai_text, count_d = re.subn(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', daeoun_target, clean_ai_text, flags=re.IGNORECASE)
-                    clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
-                    clean_ai_text, count_w = re.subn(r'[\#\*\_\s]*\[\s*WOLWUN_TABLE_HERE\s*\][\#\*\_\s]*', wolwun_target, clean_ai_text, flags=re.IGNORECASE)
-
-                    if count_d == 0:
-                        clean_ai_text = re.sub(r'(<span[^>]*>1\) 대운의 흐름</span>)', r'\1\n' + daeoun_target, clean_ai_text, flags=re.IGNORECASE)
-                    if count_s == 0:
-                        clean_ai_text = re.sub(r'(<span[^>]*>2\) 세운의 흐름</span>)', r'\1\n' + sewun_target, clean_ai_text, flags=re.IGNORECASE)
-                    if count_w == 0:
-                        clean_ai_text = re.sub(r'(<span[^>]*>3\) 월운의 흐름</span>)', r'\1\n' + wolwun_target, clean_ai_text, flags=re.IGNORECASE)
-
-                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{clean_ai_text}<br><br>{closing_html}</div>"
-
-                    report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
-                    
-                    st.session_state['saved_report_html'] = report_1_full_html
-                    
-                except Exception as e: 
-                    st.error(f"AI 연산 오류: {e}")
 
             # ==============================================================
-            # [B] 타 감명서 비교 파이프라인 (4-1 사주 대조)
+            # [A-2] 2. 테마별 특성화 상담 (재물/직업 등 집중 통변 파이프라인)
             # ==============================================================
-            elif main_category == "4. 타 감명서 비교" and u_product == "4-1. 타 감명서 비교 (사주)":
-                try:
-                    if 'saved_report_html' not in st.session_state or not st.session_state['saved_report_html']:
-                        res = model.generate_content(prompt)
-                        ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
-                        clean_ai_text = ai_text
-                    else:
-                        clean_ai_text = st.session_state.get('saved_report_html', '')
+            elif main_category == "2. 테마별 특성화 상담":
+                
+                if u_product == "2-1. 재물운 특화 분석":
+                    theme_focus_instruction = "내담자의 사주 원국 속 재성(재물)의 그릇, 재고(창고) 유무, 투자와 지출의 패턴, 손재수를 방어하고 부를 축적하는 실질적 이재(理財) 전략을 집중적이고 깊이 있게 통변하십시오."
+                elif u_product == "2-2. 직업/진학운 특화 분석":
+                    theme_focus_instruction = "내담자의 격국과 관성/식상의 유기적 결합을 바탕으로 '조직 직장형'인지 '독자 사업/전문직형'인지 명확히 판별하고, 최고의 성과를 낼 직업 분야 및 승진/이직의 변곡점을 집중적으로 통변하십시오."
+                elif u_product == "2-3. 연애/결혼운 특화 분석":
+                    theme_focus_instruction = "배우자궁(일지)과 배우자성의 동태를 바탕으로 이상형, 연애 시 갈등 패턴, 결혼 생활의 조화도를 집중적으로 통변하십시오."
+                elif u_product == "2-4. 건강운 특화 분석":
+                    theme_focus_instruction = "오행의 편중 및 취약한 장기, 시기별 건강 리스크와 실질적인 노후 건강 관리법을 집중적으로 통변하십시오."
+                elif u_product == "2-5. 이사 및 방위 특화 분석":
+                    theme_focus_instruction = "내담자에게 길한 방위, 흉한 방위를 피하는 법, 공간 정돈 및 이사 개운법을 집중적으로 통변하십시오."
+                else:
+                    theme_focus_instruction = "선택된 특성화 테마에 맞춰 현실적이고 명쾌한 실전 통변을 집중적으로 제공하십시오."
 
-                    base_essay_text = clean_ai_text
+                prompt = f"""
+{db_header}
+{ilju_master_prompt_context}
 
-                    if compare_mode == "전통 명리학과 1:1 자동 대조":
-                        comp_prompt = f"""
-[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
-당신은 정통 명리심리상담사 '초연 박사'입니다.
-아래 제공된 [{disp_name}님의 초연 전통명리 감명서 실제 본문]을 바탕으로, 일반 시중의 [A. 전통 명리 단식 풀이]와 [B. 초연 전통명리 정밀 풀이]의 깊이 차이를 항목별로 칼같이 1:1 대조 분석하십시오.
+================================================================================
+🧠 [테마별 특성화 집중 분석 지침: {u_product}]
+================================================================================
+당신은 정통 명리심리상담사 '초연 박사'입니다. 
+본 상담은 종합 풀이가 아닌 **[{u_product}]** 집중 특성화 분석입니다. 
+다른 사주 요소는 서론에서 간략히 언급만 하고, 아래의 핵심 테마에 모든 역량을 집중하여 깊이 있고 날카로운 실전 에세이를 작성하십시오.
 
-🚨 [대조 통변 절대 규칙]
-0. 🚨 [인사말 원천 차단]: 출력의 첫 글자는 반드시 <h3 style=...> 태그로 시작해야 합니다. "안녕하십니까" 등의 서론을 엄금합니다.
-1. [B. 초연 전통명리 정밀 풀이] 부분은 반드시 아래 제공된 [초연 전통명리 감명서 실제 본문]의 실제 분석 팩트와 논리를 직접 인용하여 정교하게 대조하십시오.
-2. [A. 전통 명리 단식 풀이] 부분은 시중 철학관의 단순 오행/십성 표면적 해석의 한계를 명쾌히 짚어주십시오.
-3. 모든 본문 문단은 HTML 태그인 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 로 감싸하십시오.
+- 집중 분석 테마 가이드: {theme_focus_instruction}
+- 내담자 나이({u_age}세) 및 성별({u_gender})에 따른 현실적 맞춤형 조언을 제공하십시오.
 
-[출력 목차 서식 정의]
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>1. 타고난 성격 및 오행·조후 구조 대조</h3>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 일간 {ds} 중심의 단순 표면 성격 및 오행 개수(木:{counts['목']}, 火:{counts['화']}, 土:{counts['토']}, 金:{counts['금']}, 水:{counts['수']}) 단식 해석...</p>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> (위 실제 감명서의 월령 계절감({wol_korean_str}), 조후, 격국({gyukgook_detail}) 분석 팩트를 인용하여 정밀 대조)...</p>
-
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>2. 원국 합충형해파·신살 및 공망 작용 대조</h3>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 합과 충의 단순 길흉 판단 및 일반적 신살 표면 해석...</p>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> (위 실제 감명서의 합충형해파({hap_chung_hyoung_pa_hae}) 육친 거리감, 공망 타격 궁위({gongmang_actual}), 신살({shinsal_str}) 팩트를 인용하여 정밀 대조)...</p>
-
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>3. 동적 운(대운 및 세운)의 흐름과 변곡점 대조</h3>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 대운({dw_g_cur}{dw_j_cur})과 세운({curr_y_ganji}) 글자의 단순 길흉 및 십성 단식 예측...</p>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> (위 실제 감명서의 묘고 반응({hang_un_vaults_str})과 삼형살 변곡점({samhyung_warn}) 발복 팩트를 인용하여 정밀 대조)...</p>
-
-<h3 style='color:#2E7D32; font-size: 20px; font-weight: 900; border-bottom: 2px solid #2E7D32; padding-bottom: 4px; margin-top: 25px; margin-bottom: 10px; display:block;'>4. 수석보좌관 종합 검증 및 앱 업데이트 제안 총평</h3>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'>
-🚨 [수석보좌관 총평 절대 작성 규칙]
-1. 정통 명리 논리 위배 검증: 제출된 타 감명서가 정통 명리학 이치(격국, 십성, 궁위, 신살)에 위배되거나 오류를 범한 핵심 요소를 객관적으로 지적하십시오.
-2. 수용 및 타산지석 분석: 그럼에도 타 감명서에서 돋보이는 세련된 어휘, 현대적 카운슬링 어조, 내담자 공감 기법 등 우리가 수용하고 배워야 할 장점을 짚어내십시오.
-3. 초연시공명리 앱 진화 제안: 타 감명서의 장점을 적극 흡수하여 박사님의 '초연시공명리' 시스템과 통변 엔진을 한 단계 더 진화시키기 위한 개발/업데이트 시사점을 결론으로 제시하십시오.
-</p>
-
-[초연 전통명리 감명서 실제 본문 팩트]
-{base_essay_text[:3500]}
+================================================================================
+✍️ [출력 규칙]
+================================================================================
+1. 난해한 명리학 용어 해설을 배제하고, 내담자가 실제 삶에서 체감하는 현실적 결론과 행동 지침만 명쾌하게 서술하십시오.
+2. 모든 본문 문단은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
+3. 표(Table) 생성 절대 금지.
 """
                         c_res = call_claude_api(comp_prompt, max_tokens=10000)
                         
