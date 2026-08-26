@@ -578,18 +578,32 @@ with st.sidebar:
     u_product = "1-1. 사주팔자 및 대운 분석"
 
     if main_category == "1. 개인 사주팔자 풀이 (종합)":
-        u_product = st.radio("상세 분석 항목:", ["1-1. 사주팔자와 운세풀이 (기본)", "1-2. 올해 및 특정연도 운세 상세분석", "1-3. 이번달 및 특정월 운세 상세분석", "1-4. 특정 주간 및 특정일운 상세분석"], key="sub_cat_1")
+        u_product = st.radio("상세 분석 항목:", ["1-1. 사주팔자와 운세풀이", "1-2. 올해 및 특정연도 운세 상세분석", "1-3. 이번달 및 특정월 운세 상세분석", "1-4. 특정 주간 및 특정일운 상세분석"], key="sub_cat_1")
         
-        # [신설] 1-2 선택 시 특정 연도를 직접 지정하는 사이드바 입력창
         if u_product == "1-2. 올해 및 특정연도 운세 상세분석":
             curr_yr_val = dt_mod.datetime.now(pytz.timezone('Asia/Seoul')).year
             st.number_input("📅 분석할 특정 연도 (기본값: 올해)", min_value=1900, max_value=2050, value=curr_yr_val, key="target_year_input")
     elif main_category == "2. 테마별 특성화 상담":
-        u_product = st.radio("특성화 상품 선택:", ["2-1. 재물운 특화 분석", "2-2. 직업/진학운 특화 분석", "2-3. 연애/결혼운 특화 분석", "2-4. 건강운 특화 분석", "2-5. 이사 및 방위 특화 분석"], key="sub_cat_2")
+        u_product = st.radio("특성화 상품 선택:", [
+            "2-1. 재물운 특화 분석", 
+            "2-2. 연애/결혼운 특화 분석",
+            "2-3. 진학/입시운 특화 분석",
+            "2-4. 직업/커리어운 특화 분석",
+            "2-5. 건강운 특화 분석", 
+            "2-6. 이사 택일",
+            "2-7. 개업 택일"
+        ], key="sub_cat_2")
     elif main_category == "3. 커플 연애/결혼운 (궁합) 풀이":
-        u_product = st.radio("상세 분석 항목:", ["3-1. 연애/결혼운 (궁합) 풀이", "3-2. 결혼 택일", "3-3. 출산 택일"], key="sub_cat_3")
+        u_product = st.radio("상세 분석 항목:", [
+            "3-1. 연애/결혼운 (궁합) 풀이", 
+            "3-2. 결혼 택일", 
+            "3-3. 출산 택일"
+        ], key="sub_cat_3")
     else:
-        u_product = st.radio("비교 분석 대상:", ["4-1. 타 감명서 비교 (사주)", "4-2. 타 감명서 비교 (궁합)"], key="sub_cat_4")
+        u_product = st.radio("비교 분석 대상:", [
+            "4-1. 타 감명서 비교 (사주)",  
+            "4-2. 타 감명서 비교 (궁합)"
+        ], key="sub_cat_4")
 
     st.markdown("---")
 
@@ -895,9 +909,8 @@ if st.session_state.get('need_calc', False):
             )
             st.session_state['saved_report_cover'] = cover_html
 
-            # [상품별 리포트 메인 타이틀 분기문 배치]
-            if u_product == "1-1. 사주팔자와 운세풀이 (기본)":
-                report_title = "🎯 사주팔자와 운세풀이 (기본)"
+            if u_product == "1-1. 사주팔자와 운세풀이":
+                report_title = "🎯 사주팔자와 운세풀이"
             elif u_product == "1-2. 올해 및 특정연도 운세 상세분석":
                 report_title = "🎯 올해 및 특정연도 운세 상세분석"
             elif u_product == "1-3. 이번달 및 특정월 운세 상세분석":
@@ -906,14 +919,18 @@ if st.session_state.get('need_calc', False):
                 report_title = "🎯 특정 주간 및 특정일운 상세분석"
             elif u_product == "2-1. 재물운 특화 분석":
                 report_title = "🎯 재물운 특화 정밀 분석"
-            elif u_product == "2-2. 직업/진학운 특화 분석":
-                report_title = "🎯 직업/진학운 특화 정밀 분석"
-            elif u_product == "2-3. 연애/결혼운 특화 분석":
+            elif u_product == "2-2. 연애/결혼운 특화 분석":
                 report_title = "🎯 연애/결혼운 특화 정밀 분석"
-            elif u_product == "2-4. 건강운 특화 분석":
+            elif u_product == "2-3. 진학/입시운 특화 분석":
+                report_title = "🎯 진학/입시운 특화 정밀 분석"
+            elif u_product == "2-4. 직업/커리어운 특화 분석":
+                report_title = "🎯 직업/커리어운 특화 정밀 분석"
+            elif u_product == "2-5. 건강운 특화 분석":
                 report_title = "🎯 건강운 특화 정밀 분석"
-            elif u_product == "2-5. 이사 및 방위 특화 분석":
-                report_title = "🎯 이사 및 방위 특화 정밀 분석"
+            elif u_product == "2-6. 이사 택일":
+                report_title = "🎯 이사 택일 추천 리포트"
+            elif u_product == "2-7. 개업 택일":
+                report_title = "🎯 개업 택일 추천 리포트"
             elif u_product == "3-1. 연애/결혼운 (궁합) 풀이":
                 report_title = "🎯 커플 연애/결혼운 정밀 궁합 분석"
             elif u_product == "3-2. 결혼 택일":
@@ -1023,7 +1040,7 @@ if st.session_state.get('need_calc', False):
             for char in gans + jjis:
                 if char != "?": counts[get_color(char)] += 1
             
-            guiin_map = {'甲':'丑, 未','乙':'子, 申','丙':'酉, 亥','丁':'酉, 亥','戊':'丑, 未','己':'子, 申','庚':'丑, 未','辛':'寅, 午','壬':'卯, 巳','癸':'卯, 巳'}
+            guiin_map = {'甲':'丑, 未','乙':'子, 申','丙':'酉, 亥','丁':'酉, 亥','戊':'丑, 未','己':'子, 申','庚':'丑, 未','辛':'午寅','壬':'卯巳','癸':'卯, 巳'}
             guiin_str = guiin_map.get(ds, '없음')
             direction_str = "순행" if order == 1 else "역행"
             n_gong = calculate_gongmang(ys, yb)
@@ -1299,51 +1316,63 @@ if st.session_state.get('need_calc', False):
                 metal_cnt = counts.get('금', 0)
                 water_cnt = counts.get('수', 0)
 
-                # ----------------------------------------------------------
-                # 1) [1-1. 사주팔자와 운세풀이 (기본)] : 깊이 있는 본질 + 대/세운 표 & 동적 통변
-                # ----------------------------------------------------------
                 if u_product == "1-1. 사주팔자와 운세풀이 (기본)":
                     prompt = f"""
 {db_header}
 {ilju_master_prompt_context}
 
 ================================================================================
-🧠 [1단계: 사주팔자와 운세풀이 (기본) 정밀 심층 분석 지침]
+🧠 [1단계: AI 내부 심층 분석 및 표(Table)·마스터바 데이터 연동 지침]
 ================================================================================
-당신은 정통 명리심리상담사 1급 자격을 갖춘 '초연 박사'입니다. 본 상담은 **[사주팔자와 운세풀이 기본]** 상품입니다.
-단순 요약에 그치지 않고, 내담자의 타고난 원국 본질(성격, 구조)과 대운·세운의 동적 파동을 깊이 있고 격조 높게 통변하십시오.
+당신은 정통 명리심리상담사 1급 자격을 갖춘 '초연 박사'입니다.
+상단 표와 마스터 바에 출력된 핵심 팩트(오행 분포, 격국:{gyukgook_detail}, 천간합충, 지지합충형해파:{hap_chung_hyoung_pa_hae}, 공망:{gongmang_actual}, 삼재:{cur_samjae}, 원국 삼형살:{samhyung_warn}, 묘고 작용:{won_guk_vaults_str}, 신살:{shinsal_str})를 본문 에세이와 100% 매칭하여 통변하십시오.
+
+🚨 [명리 용어 표기 & 알기 쉬운 개념 풀이 절대 규칙]:
+1. 🚨 **[용어 표기 서식 규칙 - 필출]**: 본문에 나타나는 모든 명리학 용어(예: 격국명, 십성, 천간합충, 지지합충형해파, 귀인, 신살, 공망, 삼재, 묘고, 대운, 세운 등) 및 특별히 강조하고자 하는 핵심 개념은 반드시 **'작은따옴표와 진한 글씨체'**를 결합하여 **'명리용어'** 서식(예: **'편관격'**, **'천을귀인'**, **'공망'**, **'방합'**, **'눌삼재'**)으로 작성하십시오.
+2. **천간 vs 지지 역할 구분**:
+   - **천간의 합/충/극**: 내담자의 정신적 지향점, 마음의 기운, 의지의 결속 및 심리적 갈등의 상호작용임을 먼저 설명하고 현실적 심리 팩트를 서술하십시오.
+   - **지지의 합충형해파**: 내담자의 실제 삶의 무대(직업, 주거, 대인관계, 자산, 신체)에서 일어나는 현실적 환경 변화와 인생의 변곡점임을 설명하고 팩트를 서술하십시오.
+3. **삼형살 및 묘고 작용 필수 통변**:
+   - 삼형살({samhyung_warn})이나 묘고 작용({won_guk_vaults_str})이 성립하는 경우, 해당 명리학적 개념(기운의 조정·수술·개고·입고)의 뜻을 쉽게 풀어준 후 그것이 가져오는 삶의 거대한 변곡점을 명쾌히 서술하십시오.
+4. **용어 해설 + 현실 결론 구조**:
+   - 상단 표에 나타난 용어가 본문에 등장할 때, **'해당 용어의 원리적 의미 1문장 해설 -> 그것이 내담자의 삶에서 가져오는 현실적 행동/심리/사건·사고 결론'** 형태로 알기 쉽게 풀어서 통변하십시오.
+5. 원국 8글자 한자 외 불필요한 한자 병기를 금지하며, 품격 있는 현대적 구어체 존댓말(-합니다, -입니다)로 서술하십시오.
 
 ================================================================================
-✍️ [2단계: 최종 출력물 작성 규칙 - 깊이 있는 에세이 서술]
+✍️ [2단계: 최종 출력물 작성 규칙]
 ================================================================================
-1. 난해한 명리학 전문 용어 해설을 배제하고, 내담자가 실제 삶에서 체감하는 현실적 결론과 파동을 명쾌히 통변하십시오.
-2. 모든 통변 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸십시오.
-3. 표(Table) 생성 절대 금지. (단, 아래 지정된 [DAEWUN_TABLE_HERE], [SEWUN_TABLE_HERE] 치환 태그는 위치를 정확히 유지하십시오.)
+1. 모든 통변 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
+2. 표(Table) 생성 절대 금지. ([DAEWUN_TABLE_HERE], [SEWUN_TABLE_HERE] 태그 위치 엄수)
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 성격 분석</h3>
 <div class='content-box-loose'>
 {choyeon_golden_text}
+
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 겉으로 드러난 성격</span>
-- 분석된 일간/일지 에너지를 바탕으로 표면적 행동 방식과 대인관계 스타일의 팩트를 상세히 서술하십시오.
+- 내담자의 일간·일지 기운과 원국 구성을 종합하여 **'육친적'**, **'심리적'**, **'사회적'** 관점에서 대외적 행동 방식, 조직 소속감, 대인관계 스타일을 서술하십시오. (자의형상 물상 수식어 배제)
+
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 감추어진 내 속마음</span>
-- 일지 지장간 및 공망 파동 분석을 바탕으로 내면의 속마음과 정신적 고독감을 정밀 서술하십시오.
+- 일지 지장간, 십이운성, 공망 궁위가 형성하는 무의식적 파동을 심층 분석하여, 외부로 드러내지 않는 내면의 본능적 욕구, 가치관, 남모를 정신적 고독감이나 결핍감을 알기 쉽게 풀어 정밀 서술하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조분석</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
-- 오행 분포(木:{wood_cnt}, 火:{fire_cnt}, 土:{earth_cnt}, 金:{metal_cnt}, 水:{water_cnt}) 및 격국/조후 분석을 바탕으로 기본 성품의 강약점을 서술하십시오.
+- 상단 표의 **'오행 분포'**(木:{wood_cnt}, 火:{fire_cnt}, 土:{earth_cnt}, 金:{metal_cnt}, 水:{water_cnt}) 및 **'격국'**({gyukgook_detail})의 원리적 의미를 먼저 설명한 후, 타고난 삶의 무대와 성품의 강약점을 서술하십시오.
+
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 내 삶의 역동성과 상호작용</span>
-- 원국 합충형해파 분석을 바탕으로 주변 사람들과의 관계성 및 갈등 양상을 풀이하십시오.
+- 상단 표의 **'천간 합충'**(극)과 **'지지 합충형해파'**({hap_chung_hyoung_pa_hae})를 구분하여, 천간은 정신적 기운의 변화로, 지지는 현실적 환경 변화와 대인/배우자 관계의 역동성으로 풀어서 서술하십시오.
+
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>3) 내 삶의 숨겨진 능력과 특별한 행운의 요소</span>
-- 주요 귀인 성분 및 신살 배치가 삶에 미치는 결정적 행운 요소를 짚어주십시오.
+- 마스터 바의 **'천을귀인'**({guiin_str}) 및 표의 **'신살'**({shinsal_str}) 개념을 알기 쉽게 해설하고, 이것이 실제 삶에서 위기를 극복하게 만드는 행운의 조력으로 어떻게 작용하는지 서술하십시오.
+
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>4) 내 삶의 변곡점과 주의해야 할 시련</span>
-- 원국 내 묘고 및 삼형살 구조 분석을 바탕으로 인생의 변곡점과 시련을 경고하십시오.
+- 원국 내 **'삼형살'**({samhyung_warn}), **'묘고 작용'**({won_guk_vaults_str}), **'공망'**({gongmang_actual})의 원리(조정, 입고/개고, 결핍)를 알기 쉽게 풀어서 설명하고, 인생에서 마주할 변곡점과 시련에 대한 현실적 대처법을 조언하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 현재 대운 및 세운 흐름 분석</h3>
 <div class='content-box-loose'>
-<p style='text-indent: 1em;'><b>대운(大運)의 명리학적 의미:</b> 명리학에서 '대운'이란 흔히 생각하는 대통할 운이 아니라, 10년 단위로 바뀌는 내 삶의 '거대한 계절과 환경의 변화'를 의미합니다. 원국이라는 자동차가 어떤 도로 환경을 달리고 있는지를 보여주는 나침반입니다.</p>
+<p style='text-indent: 1em;'><b>'대운'(大運)의 명리학적 의미:</b> 명리학에서 **'대운'**이란 흔히 생각하는 대통할 운이 아니라, 10년 단위로 바뀌는 내 삶의 <b>'거대한 계절과 환경의 변화'</b>를 의미합니다. 원국이라는 자동차가 어떤 도로 환경을 달리고 있는지를 보여주는 나침반입니다.</p>
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>1) 대운의 흐름 분석</span>
 [DAEWUN_TABLE_HERE]
@@ -1352,31 +1381,31 @@ if st.session_state.get('need_calc', False):
 
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #111;'>2) 세운의 흐름 분석</span>
 [SEWUN_TABLE_HERE]
-▶ 현재 대운 속 세운의 과거·현재·미래 운세 분석:
-- 현재 대운의 무대 위에서 올해 세운({curr_y_ganji})을 중심으로, 최근 지나온 과거의 기운, 올해 상/하반기 체감하는 환경 변화와 성패의 변곡점, 그리고 다가올 미래 세운의 준비 전략을 상세히 통변하십시오.
+▶ 현재 대운 속 세운의 과거·현재·미래 운세 분석 (삼재 여부: {cur_samjae}):
+- 마스터 바의 **'삼재'**({cur_samjae}) 개념(**'들삼재'**/**'눌삼재'**/**'날삼재'**의 의미)을 알기 쉽게 풀어 설명하고, 올해 세운({curr_y_ganji})을 중심으로 과거 3개년, 올해 상/하반기 환경 변동, 다가올 미래 세운의 준비 전략을 상세히 서술하십시오.
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>4. 삶을 바꾸는 지혜로운 조언 및 개운 비법</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 나를 돕는 에너지와 색상:</span>
-- 용신/희신 오행에 부합하는 개운 색상과 더불어 전통 하도 수리(水 1·6, 火 2·7, 木 3·8, 金 4·9, 土 5·10)에 입각한 정확한 행운의 숫자를 제시하십시오.
+- 용신/희신 오행에 부합하는 개운 색상과 전통 하도 수리(水 1·6, 火 2·7, 木 3·8, 金 4·9, 土 5·10) 행운의 숫자를 명쾌히 제시하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 재물을 부르는 이재(理財)와 절제의 지혜:</span>
-- 사주 구조상 손재수를 막고 실질적인 부를 축적할 재테크/지출 절제/투자 가이드를 명쾌하게 제시하십시오.
+- 손재수를 막고 실질적인 부를 축적할 지출 절제 및 투자 가이드를 조언하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 재능 효율을 높이는 직업적 지혜:</span>
-- 강점 오행과 십성을 극대화할 직업적 처세술을 조언하십시오.
+- 강점을 극대화할 직업적 처세술을 조언하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>4) 신체 밸런스와 에너지 관리:</span>
-- 취약 오행 수련법 및 건강 습관을 제시하십시오.
+- 취약 신체 부위 및 건강 습관을 제시하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>5) 공간의 흐름과 방위의 지혜:</span>
-- 길한 방향, 공간 정돈 및 개운 인테리어를 제시하십시오.
+- 길한 방향과 공간 정돈 개운 인테리어를 제시하십시오.
 
 <div style='margin-top: 25px; padding-top: 15px; border-top: 1.5px dashed #1A237E;'>
 <span class='sub-title' style='font-size: 20px; font-weight: 900; color: #1A237E; display: block; margin-bottom: 10px;'>🎯 전통명리 특별 개운 비법</span>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 수호 천사의 기운 조언:</span>
-- 원국의 천을귀인·암록·학당귀인 등 나를 돕는 귀인 성분과 귀인 조력자를 활용하는 개운법을 제시하십시오.
+- **'천을귀인'** 등 나를 돕는 귀인 성분과 조력자 활용 개운법을 제시하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 백년해로의 기운 조언:</span>
-- 배우자궁 일지 및 지장간 합/육친의 동태를 바탕으로 부부·연인 간 갈등을 피하고 인연을 지키는 백년해로 지혜를 조언하십시오.
+- 부부·연인 간 갈등을 피하고 인연을 지키는 백년해로 지혜를 조언하십시오.
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 행운에 따른 기운 조언:</span>
-- 현재 대운 및 세운의 길한 파동을 타고 흉한 변곡점(충/형/묘고)을 우회하는 실질적인 행운 처세술을 조언하십시오.
+- 현재 운의 파동을 타고 흉한 변곡점을 우회하는 행운 처세술을 조언하십시오.
 </div>
 </div>
 
@@ -1385,9 +1414,6 @@ if st.session_state.get('need_calc', False):
 <p style='font-size: 15px; font-weight: 600; color: #333; margin-top: 5px; margin-bottom: 0; line-height: 1.7;'>본 풀이는 사주 원국의 본질과 현재 운의 큰 흐름을 짚어드린 기본 감명입니다. 특정 연도별·월별 정밀한 세부 흐름은 <b>'올해 및 특정연도 운세 상세분석'</b>을, 재물·직업 등 특정 분야의 집중 상담은 <b>'테마별 특성화 상담'</b>을 통해 확인하실 수 있습니다.</p>
 </div>
 """
-                # ----------------------------------------------------------
-                # 2) [1-2. 올해 및 특정연도 운세 상세분석]
-                # ----------------------------------------------------------
                 elif u_product == "1-2. 올해 및 특정연도 운세 상세분석":
                     target_year_val = st.session_state.get('target_year_input', curr_y)
                     prompt = f"""
@@ -1432,10 +1458,6 @@ if st.session_state.get('need_calc', False):
 - 해당 연도의 기운을 극대화하고 리스크를 우회할 실질적 처세술 및 개운 비법을 서술하십시오.
 </div>
 """
-
-                # ----------------------------------------------------------
-                # 3) [1-3 & 1-4. 월운 및 일진 상세분석]
-                # ----------------------------------------------------------
                 else:
                     prompt = f"""
 {db_header}
@@ -1479,9 +1501,6 @@ if st.session_state.get('need_calc', False):
 </div>
 """
 
-                # ----------------------------------------------------------
-                # [복원] AI 연산 호출 및 대운/세운 표 치환 실행부
-                # ----------------------------------------------------------
                 try:
                     res = model.generate_content(prompt)
                     ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
@@ -1495,7 +1514,6 @@ if st.session_state.get('need_calc', False):
                     clean_ai_text, _ = re.subn(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', daeoun_target, ai_text, flags=re.IGNORECASE)
                     clean_ai_text, _ = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
 
-                    # 맺음말 상단에 굵은 점선(dashed) 분리선 적용
                     bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #1A237E; margin: 35px 0 20px 0;'>{closing_html}"
 
                     full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{clean_ai_text}<br><br>{bordered_closing_html}</div>"
@@ -1508,49 +1526,254 @@ if st.session_state.get('need_calc', False):
                     st.error(f"1번 개인 사주풀이 AI 연산 오류: {e}")
 
             # ==============================================================
-            # [A-2] 2. 테마별 특성화 상담 (재물/직업 등 집중 통변 파이프라인)
+            # [A-2] 2. 테마별 특성화 상담 (1:1 솔루션 제외 / 군더더기 없는 명쾌한 정통명리 통변)
             # ==============================================================
             elif main_category == "2. 테마별 특성화 상담":
                 
+                # 에러 방어용 기본 변수 세팅
+                wealth_goal = st.session_state.get('wealth_goal', '안정적인 자산 증식')
+                love_goal = st.session_state.get('love_goal', '좋은 인연과 화목한 관계')
+                career_goal = st.session_state.get('career_goal', '성공적인 진로와 커리어 성취')
+                health_goal = st.session_state.get('health_goal', '일상의 활력과 신체 밸런스 유지')
+                
+                공통_시스템_헤더 = f"{db_header}\n{ilju_master_prompt_context}\n"
+
                 if u_product == "2-1. 재물운 특화 분석":
-                    theme_focus_instruction = "내담자의 사주 원국 속 재성(재물)의 그릇, 재고(창고) 유무, 투자와 지출의 패턴, 손재수를 방어하고 부를 축적하는 실질적 이재(理財) 전략을 집중적이고 깊이 있게 통변하십시오."
-                elif u_product == "2-2. 직업/진학운 특화 분석":
-                    theme_focus_instruction = "내담자의 격국과 관성/식상의 유기적 결합을 바탕으로 '조직 직장형'인지 '독자 사업/전문직형'인지 명확히 판별하고, 최고의 성과를 낼 직업 분야 및 승진/이직의 변곡점을 집중적으로 통변하십시오."
-                elif u_product == "2-3. 연애/결혼운 특화 분석":
-                    theme_focus_instruction = "배우자궁(일지)과 배우자성의 동태를 바탕으로 이상형, 연애 시 갈등 패턴, 결혼 생활의 조화도를 집중적으로 통변하십시오."
-                elif u_product == "2-4. 건강운 특화 분석":
-                    theme_focus_instruction = "오행의 편중 및 취약한 장기, 시기별 건강 리스크와 실질적인 노후 건강 관리법을 집중적으로 통변하십시오."
-                elif u_product == "2-5. 이사 및 방위 특화 분석":
-                    theme_focus_instruction = "내담자에게 길한 방위, 흉한 방위를 피하는 법, 공간 정돈 및 이사 개운법을 집중적으로 통변하십시오."
-                else:
-                    theme_focus_instruction = "선택된 특성화 테마에 맞춰 현실적이고 명쾌한 실전 통변을 집중적으로 제공하십시오."
+                    prompt = 공통_시스템_헤더 + f"""
+[SYSTEM ROLE: 초연 전통명리 최고위 재물/자산 분석가]
+귀하는 정통 명리학의 오행 생극제화, 십성(정재/편재, 식신/상관), 신강약 및 용희신을 완벽히 통달한 명리학자입니다. 사주 원국에 나타난 재물의 그릇과 대운/세운의 흐름을 정밀하게 분석하되, 내담자가 쉽게 이해할 수 있는 세련된 에세이 형식으로 서술하십시오.
 
-                prompt = f"""
-{db_header}
-{ilju_master_prompt_context}
+🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
 
-================================================================================
-🧠 [테마별 특성화 집중 분석 지침: {u_product}]
-================================================================================
-당신은 정통 명리심리상담사 '초연 박사'입니다. 
-본 상담은 종합 풀이가 아닌 **[{u_product}]** 집중 특성화 분석입니다. 
-다른 사주 요소는 서론에서 간략히 언급만 하고, 아래의 핵심 테마에 모든 역량을 집중하여 깊이 있고 날카로운 실전 에세이를 작성하십시오.
+[출력 서식 및 통변 지침]
 
-- 집중 분석 테마 가이드: {theme_focus_instruction}
-- 내담자 나이({u_age}세) 및 성별({u_gender})에 따른 현실적 맞춤형 조언을 제공하십시오.
+1. 나의 재물운과 진단
+[DAEWUN_TABLE_HERE]
+[SEWUN_TABLE_HERE]
+1) 내가 가진 부의 성향과 자산 그릇
+(※ 분석: 원국의 재성(편재/정재)과 식상생재 여부를 바탕으로 안정적 수입형인지 투자/사업형인지 통변하십시오.)
+2) 현재의 금전운 흐름 진단
+(※ 분석: 내담자의 재물 목표({wealth_goal})와 관련하여 현재 운기를 바탕으로 명쾌하게 진단하십시오.)
 
-================================================================================
-✍️ [출력 규칙]
-================================================================================
-1. 난해한 명리학 용어 해설을 배제하고, 내담자가 실제 삶에서 체감하는 현실적 결론과 행동 지침만 명쾌하게 서술하십시오.
-2. 모든 본문 문단은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
-3. 표(Table) 생성 절대 금지.
+2. 자산이 늘어나는 시기와 현금 흐름
+1) 대운과 세운이 가져다주는 재물운의 파동
+(※ 분석: 재성운이나 용희신 운이 도래하여 금전운이 강하게 발현되는 시기를 서술하십시오.)
+2) 나에게 가장 잘 맞는 맞춤형 자산 증식법
+(※ 분석: 원국의 구조(재생관, 식상생재, 인성용신 등)에 부합하는 재테크 수단(부동산, 저축, 사업 등)을 추천하십시오.)
+
+3. 내 재산을 안전하게 지키는 리스크 관리
+1) 금전적 손실이 우려되는 시기와 방어 가이드
+(※ 분석: 군비쟁재(비겁운)나 재성 충극 시기를 경고하고 실질적인 지출 통제 조언을 작성하십시오.)
+
+4. 부를 끌어당기는 일상 속 개운법
+1) 나에게 부족한 기운을 채우는 행운의 습관
+(※ 분석: 용신 오행을 돕는 행운의 컬러, 방향, 생활 풍수 비법을 제시하십시오.)
 """
+
+                elif u_product == "2-2. 연애/결혼운 특화 분석":
+                    prompt = 공통_시스템_헤더 + f"""
+[SYSTEM ROLE: 초연 전통명리 최고위 연애/궁합 카운슬러]
+정통 명리학의 배우자성(남:재성, 여:관성), 배우자궁(일지)의 동태, 도화/홍염 등의 신살 작용을 바탕으로 내담자의 연애관과 인연의 흐름을 분석하되, 2030 세대가 공감할 수 있는 따뜻한 연애 에세이로 서술하십시오.
+
+🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
+
+[출력 서식 및 통변 지침]
+
+1. 내 마음에 깃든 사랑의 형태와 인연
+[DAEWUN_TABLE_HERE]
+1) 내가 그리는 이상형과 애정을 표현하는 방식
+(※ 분석: 일지 십성과 배우자성의 동태를 분석하여 이상형과 연애 스타일을 서술하십시오.)
+2) 나의 애정운 흐름 진단
+(※ 분석: 내담자의 이성 고민({love_goal})에 대해 현재 기운을 바탕으로 진단해 주십시오.)
+
+2. 새로운 인연이 다가오는 시기와 만남
+1) 운명적인 만남이 이루어지는 타이밍
+(※ 분석: 대운과 세운에서 합(육합/삼합)이 들어오거나 배우자성 운이 도래하는 시기를 서술하십시오.)
+
+3. [관계의 밸런스] 사랑을 지키기 위한 조언
+1) 갈등을 피하고 주도권을 조율하는 지혜
+(※ 분석: 일지 충/형/원진 또는 관살혼잡/군비쟁재 등으로 인한 마찰 요인을 짚어주고 현명한 관계 유지법을 조언하십시오.)
+
+4. 변함없는 사랑을 위한 마음가짐과 개운법
+1) 건강한 관계를 위한 나만의 처세술
+(※ 분석: 서로의 기운을 보완하고 건강한 거리를 유지하기 위한 현실적 명리 팁을 제시하십시오.)
+"""
+
+                elif u_product == "2-3. 진학/입시운 특화 분석":
+                    prompt = 공통_시스템_헤더 + f"""
+[SYSTEM ROLE: 초연 전통명리 최고위 진로/학업 멘토]
+정통 명리학의 인성(수용력/학문)과 식상(표현력/응용력)의 구조, 관인상생 여부, 학당/문창귀인 등의 팩트를 바탕으로 타고난 학습 기질과 적성을 분석하되, 수험생과 학부모에게 용기를 주는 확신에 찬 에세이로 서술하십시오.
+
+🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
+
+[출력 서식 및 통변 지침]
+
+1. 타고난 배움의 에너지와 나의 적성
+[DAEWUN_TABLE_HERE]
+[SEWUN_TABLE_HERE]
+1) 나에게 가장 잘 맞는 학습 스타일
+(※ 분석: 인성 발달(엉덩이 공부/이해형) vs 식상 발달(응용/순발력형)을 분석하여 최적의 공부법을 코칭하십시오.)
+2) 현재의 학업운 흐름 진단
+(※ 분석: 학업 목표({career_goal}) 달성을 위해 현재 운기가 어떻게 작용하는지 진단하십시오.)
+
+2. 나를 가장 빛나게 할 전공과 진로
+1) 나의 재능이 만개할 최적의 학문 분야
+(※ 분석: 용희신 오행과 십성에 가장 잘 부합하는 계열(문/이과, 예체능 등)과 세부 전공을 추천하십시오.)
+
+3. 노력의 결실을 맺는 합격과 성취의 타이밍
+1) 성취운이 강해지는 대/세운의 흐름
+(※ 분석: 관성 및 인성 운이 들어와 시험 합격운과 문서운이 강해지는 시기를 서술하십시오.)
+
+4. 목표 달성을 위한 일상 속 마인드 컨트롤
+1) 집중력을 끌어올리는 공간 풍수와 에너지
+(※ 분석: 용신을 돕는 책상 방위, 행운의 색상 등 실전 팁을 조언하십시오.)
+"""
+
+                elif u_product == "2-4. 직업/커리어운 특화 분석":
+                    prompt = 공통_시스템_헤더 + f"""
+[SYSTEM ROLE: 초연 전통명리 최고위 커리어/직업 멘토]
+정통 명리학의 격국, 관성(조직)과 식재(독립/사업)의 유기적 결합을 분석하여 사회적 성취와 직업적 승부처를 도출하되, 현대 직장인들이 공감할 수 있는 통찰력 있는 에세이로 서술하십시오.
+
+🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
+
+[출력 서식 및 통변 지침]
+
+1. 내 삶의 무대와 타고난 커리어 성향
+[DAEWUN_TABLE_HERE]
+[SEWUN_TABLE_HERE]
+1) 나의 직무 재능과 나만의 경쟁력
+(※ 분석: 격국과 주도적인 십성을 바탕으로 타고난 재능, 장인정신, 리더십 성향을 분석하십시오.)
+2) 조직에 남을 것인가, 나만의 길을 갈 것인가
+(※ 분석: 관인상생(조직 직장형)인지 식상생재(독립 사업/프리랜서형)인지 판별하십시오.)
+3) 현재의 커리어운 흐름 진단
+(※ 분석: 진로/이직 목표({career_goal})에 대해 현재 운기를 바탕으로 진단하십시오.)
+
+2. 나를 성장시킬 최적의 직무와 환경
+1) 내 에너지가 가장 잘 발휘되는 산업과 직종
+(※ 분석: 사주 용희신과 격국에 부합하는 전문 직종을 추천하십시오.)
+2) 가치를 인정받는 슬기로운 직장 처세술
+(※ 분석: 상사(관성), 동료(비겁), 부하(식상)와의 관계성을 분석하여 대인관계 팁을 서술하십시오.)
+
+3. 도약과 성취를 이루는 커리어 변곡점
+1) 승진과 이직을 위한 결정적 골든타임
+(※ 분석: 관운, 인성운 도래 시기나 역마/지살 이동수가 긍정적으로 작용하는 타이밍을 제시하십시오.)
+
+4. 성공적인 커리어를 위한 개운법
+1) 사회적 가치를 극대화하는 행동 지침
+(※ 분석: 현재 대운에 맞는 직업적 처세술과 실전 조언을 서술하십시오.)
+"""
+
+                elif u_product == "2-5. 건강운 특화 분석":
+                    prompt = 공통_시스템_헤더 + f"""
+[SYSTEM ROLE: 초연 전통명리 최고위 헬스케어 코치]
+정통 명리학의 오행 태과/불급, 한난조습(조후), 그리고 충극에 의한 오행 손상을 면밀히 연산하되, 공포감을 주는 대신 '나를 돌보는 다정한 라이프스타일 처방전'처럼 따뜻한 에세이로 서술하십시오.
+
+🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
+
+[출력 서식 및 통변 지침]
+
+1. 내 몸의 리듬과 타고난 체질
+[DAEWUN_TABLE_HERE]
+[SEWUN_TABLE_HERE]
+1) 선천적인 신체 기질과 체력의 바탕
+(※ 분석: 원국 오행의 밸런스를 바탕으로 타고난 신체적 강약점을 부드럽게 분석하십시오.)
+2) 평생 챙겨야 할 건강의 핵심 포인트
+(※ 분석: 원국 내 지나치게 강하거나 충극을 받는 오행과 연관된 취약 장기(예: 목-간/담, 화-심혈관 등)를 주의 깊게 짚어주십시오.)
+
+2. 앞으로의 10년, 그리고 올해의 건강 흐름
+1) 현재 대운에서 살필 신체 밸런스
+(※ 분석: 향후 10년간 기운의 쏠림 현상이 건강에 미칠 영향을 서술하십시오.)
+2) 올해 특히 신경 써야 할 일상 속 건강 흐름
+(※ 분석: 올해 세운 천간/지지의 충극 작용에 따른 건강 주의점을 진단하십시오.)
+
+3. 건강한 일상을 지키기 위한 리스크 관리
+1) 피로와 스트레스가 쌓이는 시기의 대처법
+(※ 분석: 귀문/원진살이나 극신약 운기에 발생할 수 있는 멘탈 스트레스 관리법을 다독여 주십시오.)
+
+4. 내 몸을 살리는 다정한 섭생과 개운법
+1) 에너지를 보충하는 실전 솔루션
+(※ 분석: 부족한 용희신 오행을 채우기 위한 음식, 운동법, 생활 풍수를 다정하게 조언하십시오.)
+"""
+
+                elif u_product == "2-6. 이사 택일":
+                    prompt = 공통_시스템_헤더 + f"""
+[SYSTEM ROLE: 초연 전통명리 최고위 택일/풍수 마스터]
+정통 명리학의 일진 생극제화, 십이건제(十二建除), 천을귀인 및 합(육합/삼합)의 길일을 연산하여, 대흉일(충/형/공망/십악대패일 등)을 철저히 배제한 완벽한 이사 길일을 추천하는 희망찬 에세이를 작성하십시오.
+
+🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
+
+[출력 서식 및 통변 지침]
+
+1. 새로운 공간으로의 이동이 갖는 의미
+[DAEWUN_TABLE_HERE]
+[SEWUN_TABLE_HERE]
+1) 이사가 나의 운명에 가져올 긍정적인 변화
+(※ 분석: 역마살, 지살 등 이동의 기운이 내담자의 사주에 어떤 활력을 주는지 분석하십시오.)
+
+2. 평안과 안정을 부르는 최적의 이사 길일
+[WEEKLY_CALENDAR_HERE]
+1) 나에게 완벽하게 맞는 이사 날짜와 명리적 이유
+(※ 분석: 탐색된 최적의 이사 길일이 사주 원국과 어떻게 조화(합, 상생)를 이루는지 서술하십시오.)
+2) 흉한 기운을 피하고 좋은 기운만 담은 날의 선택
+(※ 분석: 일진의 충극과 공망을 철저히 배제하여 가정이 평안할 것임을 입증하십시오.)
+
+3. 복을 부르는 이사 당일의 지혜와 풍수
+1) 이사 당일 행운을 부르는 시간대(길시)
+(※ 분석: 이사 당일 흉시를 피하고 짐을 들이기 좋은 길시를 지정하십시오.)
+2) 새로운 집을 안락하게 채울 개운 풍수 팁
+(※ 분석: 용희신 방향이나 행운의 색상 등 평안을 부르는 생활 풍수를 조언하십시오.)
+"""
+
+                elif u_product == "2-7. 개업 택일":
+                    prompt = 공통_시스템_헤더 + f"""
+[SYSTEM ROLE: 초연 전통명리 최고위 비즈니스 택일 마스터]
+정통 명리학의 일진 생극제화 및 재성/식상이 살아나는 길일을 연산하여, 사업 번창과 금전 유입을 극대화할 수 있는 완벽한 개업 길일을 추천하는 트렌디하고 에너지 넘치는 응원의 에세이를 작성하십시오.
+
+🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
+
+[출력 서식 및 통변 지침]
+
+1. 새로운 도약과 사업 시작의 타이밍
+[DAEWUN_TABLE_HERE]
+[SEWUN_TABLE_HERE]
+1) 개업이 내 운명에 불어넣을 새로운 성장의 기운
+(※ 분석: 사주의 식상생재 기운을 바탕으로 사업 개창의 운기가 발동하고 있음을 희망차게 서술하십시오.)
+
+2. 재물과 번창을 부르는 최적의 개업 길일
+[WEEKLY_CALENDAR_HERE]
+1) 성공적인 시작을 위한 최고의 날짜와 명리적 이유
+(※ 분석: 탐색된 개업 길일이 내담자의 재성운을 어떻게 돕는지 명리적 근거(상생, 합)로 서술하십시오.)
+2) 리스크를 피하고 현금 흐름을 지키는 날의 선택
+(※ 분석: 비견/겁재 운이나 충극일을 철저히 배제했음을 든든하게 입증하십시오.)
+
+3. 대박을 터뜨릴 오픈 당일의 지혜와 비즈니스 풍수
+1) 손님을 끌어모을 개업 당일의 최적 시간대(길시)
+(※ 분석: 첫 손님을 맞이하거나 고사를 지내기 좋은 최상의 오픈 길시를 지정하십시오.)
+2) 재물을 당기는 사업장 풍수와 인테리어 팁
+(※ 분석: 금전등록기 위치, 간판 방향 등 사업 번창을 돕는 개운 풍수를 조언하십시오.)
+"""
+
                 try:
                     res = model.generate_content(prompt)
                     ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                     
-                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{ai_text}<br><br>{closing_html}</div>"
+                    # 🚨 AI 프롬프트의 테이블 마커 찌꺼기를 안전하게 청소
+                    ai_text = ai_text.replace("[WEEKLY_CALENDAR_HERE]", "").replace("[DAEWUN_TABLE_HERE]", "").replace("[SEWUN_TABLE_HERE]", "")
+                    
+                    # 🚨 2-6, 2-7 전용 택일 결과 블록 생성 로직
+                    extra_html = ""
+                    if u_product in ["2-6. 이사 택일", "2-7. 개업 택일"]:
+                        s_d_val = start_date if start_date else dt_mod.date.today()
+                        e_d_val = end_date if end_date else dt_mod.date.today() + dt_mod.timedelta(days=30)
+                        FORBIDDEN_LIST = ['병오', '임자', '계해', '신유', '경신']
+                        recommended_days = get_optimized_delivery_days(s_d_val, e_d_val, jjis, jjis, FORBIDDEN_LIST)
+                        
+                        extra_html += f"<h3 style='color:#4A148C; text-align:center; margin-top:20px;'>📅 추천 길일 (탐색기간: {s_d_val} ~ {e_d_val})</h3>\n"
+                        for day_info in recommended_days:
+                            extra_html += f"<div style='font-size:16px; font-weight:bold; margin-bottom:8px; padding:8px; background:#F8F9FA; border-radius:6px; text-align:center;'>✅ 추천 길일: <b style='color:#D50000;'>{day_info['date']}</b> (명리 적합도: {day_info['score']}점)</div>\n"
+                        extra_html += "<hr style='border:1px dashed #4A148C; margin:15px 0;'>\n"
+
+                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{extra_html}{ai_text}<br><br>{closing_html}</div>"
 
                     report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
                     
@@ -1560,116 +1783,31 @@ if st.session_state.get('need_calc', False):
                     st.error(f"테마별 특성화 분석 AI 연산 오류: {e}")
 
             # ==============================================================
-            # [B] 타 감명서 비교 파이프라인 (4-1 사주 대조)
+            # [A-3] 4-1. 타 감명서 비교 (사주) 파이프라인
             # ==============================================================
             elif main_category == "4. 타 감명서 비교" and u_product == "4-1. 타 감명서 비교 (사주)":
-                try:
-                    if 'saved_report_html' not in st.session_state or not st.session_state['saved_report_html']:
-                        res = model.generate_content(prompt)
-                        ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
-                        clean_ai_text = ai_text
-                    else:
-                        clean_ai_text = st.session_state.get('saved_report_html', '')
-
-                    base_essay_text = clean_ai_text
-
-                    if compare_mode == "전통 명리학과 1:1 자동 대조":
-                        comp_prompt = f"""
-[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
-당신은 정통 명리심리상담사 '초연 박사'입니다.
-아래 제공된 [{disp_name}님의 초연 전통명리 감명서 실제 본문]을 바탕으로, 일반 시중의 [A. 전통 명리 단식 풀이]와 [B. 초연 전통명리 정밀 풀이]의 깊이 차이를 항목별로 칼같이 1:1 대조 분석하십시오.
-
-🚨 [대조 통변 절대 규칙]
-0. 🚨 [인사말 원천 차단]: 출력의 첫 글자는 반드시 <h3 style=...> 태그로 시작해야 합니다. "안녕하십니까" 등의 서론을 엄금합니다.
-1. [B. 초연 전통명리 정밀 풀이] 부분은 반드시 아래 제공된 [초연 전통명리 감명서 실제 본문]의 실제 분석 팩트와 논리를 직접 인용하여 정교하게 대조하십시오.
-2. [A. 전통 명리 단식 풀이] 부분은 시중 철학관의 단순 오행/십성 표면적 해석의 한계를 명쾌히 짚어주십시오.
-3. 모든 본문 문단은 HTML 태그인 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 로 감싸하십시오.
-
-[출력 목차 서식 정의]
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>1. 타고난 성격 및 오행·조후 구조 대조</h3>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 일간 {ds} 중심의 단순 표면 성격 및 오행 개수(木:{counts['목']}, 火:{counts['화']}, 土:{counts['토']}, 金:{counts['금']}, 水:{counts['수']}) 단식 해석...</p>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> (위 실제 감명서의 월령 계절감({wol_korean_str}), 조후, 격국({gyukgook_detail}) 분석 팩트를 인용하여 정밀 대조)...</p>
-
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>2. 원국 합충형해파·신살 및 공망 작용 대조</h3>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 합과 충의 단순 길흉 판단 및 일반적 신살 표면 해석...</p>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> (위 실제 감명서의 합충형해파({hap_chung_hyoung_pa_hae}) 육친 거리감, 공망 타격 궁위({gongmang_actual}), 신살({shinsal_str}) 팩트를 인용하여 정밀 대조)...</p>
-
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; border-bottom: 2px solid #1A237E; padding-bottom: 5px; margin-top: 25px; margin-bottom: 8px; display:block;'>3. 동적 운(대운 및 세운)의 흐름과 변곡점 대조</h3>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[A. 전통 명리 단식 풀이]</b> 대운({dw_g_cur}{dw_j_cur})과 세운({curr_y_ganji}) 글자의 단순 길흉 및 십성 단식 예측...</p>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'><b>[B. 초연 전통명리 정밀 풀이]</b> (위 실제 감명서의 묘고 반응({hang_un_vaults_str})과 삼형살 변곡점({samhyung_warn}) 발복 팩트를 인용하여 정밀 대조)...</p>
-
-<h3 style='color:#2E7D32; font-size: 20px; font-weight: 900; border-bottom: 2px solid #2E7D32; padding-bottom: 4px; margin-top: 25px; margin-bottom: 10px; display:block;'>4. 수석보좌관 종합 검증 및 앱 업데이트 제안 총평</h3>
-<p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'>
-🚨 [수석보좌관 총평 절대 작성 규칙]
-1. 정통 명리 논리 위배 검증: 제출된 타 감명서가 정통 명리학 이치(격국, 십성, 궁위, 신살)에 위배되거나 오류를 범한 핵심 요소를 객관적으로 지적하십시오.
-2. 수용 및 타산지석 분석: 그럼에도 타 감명서에서 돋보이는 세련된 어휘, 현대적 카운슬링 어조, 내담자 공감 기법 등 우리가 수용하고 배워야 할 장점을 짚어내십시오.
-3. 초연시공명리 앱 진화 제안: 타 감명서의 장점을 적극 흡수하여 박사님의 '초연시공명리' 시스템과 통변 엔진을 한 단계 더 진화시키기 위한 개발/업데이트 시사점을 결론으로 제시하십시오.
-</p>
-
-[초연 전통명리 감명서 실제 본문 팩트]
-{base_essay_text[:3500]}
-"""
-                        c_res = call_claude_api(comp_prompt, max_tokens=10000)
-                        
-                        other_cover_html = (
-                            f"<div class='page-break-before'></div>\n"
-                            f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
-                            f"    <div style='border: 4px solid #2E7D32; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
-                            f"        <div style='border-bottom:4px double #2E7D32; padding-bottom:20px; margin-bottom:40px;'>\n"
-                            f"            <h1 class='title-gothic' style='font-size: 38px !important; margin:0 !important;'>전통 명리 학술 대조 리포트</h1>\n"
-                            f"            <div style='text-align: right; margin-top: 10px;'>\n"
-                            f"                <span class='ver-gothic' style='font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
-                            f"            </div>\n"
-                            f"        </div>\n"
-                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 30px 20px; border-radius: 15px;'>\n"
-                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #2E7D32; margin-bottom: 20px;'>👤 신청인 : {u_name} 님</h2>\n"
-                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
-                            f"                <p style='margin: 0; white-space: nowrap;'>[양력] {sol_str} | [음력] {lun_str}</p>\n"
-                            f"            </div>\n"
-                            f"        </div>\n"
-                            f"        <p style='font-size: 18px; margin-top: 50px; font-weight: 800;'>{today_str}</p>\n"
-                            f"        <p style='font-size: 22px; font-weight: 800; color: #2E7D32; margin-top: 20px;'>초연 전통명리 연구소</p>\n"
-                            f"    </div>\n"
-                            f"</div>"
-                        )
-                        st.session_state['saved_report_2'] = other_cover_html + f"<div class='page-break-before'></div><div class='report-page'><div class='vip-inset-frame' style='border-color:#2E7D32;'><h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 800; border-bottom:2px solid #2E7D32; padding-bottom:15px;'>⚖️ 전통 명리 학술 대조 리포트</h1><div style='margin-top:20px;'>{c_res}</div></div></div>"
-                    else:
-                        comp_prompt = f"""
-[SYSTEM ROLE: CHOYEON SYSTEM CHIEF CHANCELLOR (초연시공명리 수석보좌관)]
+                comp_prompt = f"""
+[SYSTEM ROLE: CHOYEON SYSTEM CHIEF CHANCELLOR]
 당신은 '초연 박사님'을 보좌하는 수석보좌관 AI입니다.
-제출된 {disp_name}님의 [외부 타 감명서 원문]을 박사님의 [초연시공명리 정밀 통변 팩트]와 1:1로 엄밀히 비교 대조하여 학술 검증 리포트를 작성하십시오.
-
-🚨 [1:1 원문 대조 및 학술 검증 지시]
-1. **타 감명서 목차/항목 구조 완벽 재현**: 제출된 타 감명서의 제목, 소목차, 분석 순서(예: 성격, 직업, 대운 등)를 그대로 가져와 동일한 순서로 목차를 구성하십시오.
-2. **항목별 1:1 교차 검증**:
-   - **[타 감명서 원문 분석]**: 원문의 주장과 통변 논리를 요약하십시오.
-   - **[정통 명리 이치 검증 및 초연시공명리 재해석]**: 원문의 서술이 정통 명리 이치(격국: {gyukgook_detail}, 공망: {gongmang_actual}, 신살: {shinsal_str}, 묘고: {won_guk_vaults_str})에 위배되는지 검증하고, 오류를 정교하게 교정하십시오.
-3. **학술적 수용 및 앱 진화 총평 작성**:
-   - 마지막 목차인 **[4. 수석보좌관 종합 검증 및 앱 업데이트 제안 총평]**에서는 타 감명서의 논리적 오류를 검증함과 동시에, 타 감명서가 가진 우수한 카운슬링 어조나 배울 점을 수용하여 **'초연시공명리 앱 고도화 및 업데이트 방향'**을 종합적으로 제안하십시오.
-4. 서식 통제: 목차 제목은 <h3 style='color:#2E7D32; font-size: 20px; font-weight: 900; border-bottom: 2px solid #2E7D32; padding-bottom: 4px; margin-top: 25px; margin-bottom: 10px; display:block;'> 태그로, 문단은 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 태그로 출력하십시오.
-
-[제출된 타 감명서 원문 (목차 구조 및 분석 순서 기준점)]
-{other_reading_text}
-
-[초연시공명리 정밀 검증 근거 및 실제 감명서 팩트]
-{base_essay_text[:3500]}
+제출된 타 감명서 원문과 초연시공명리의 정밀 사주풀이 팩트를 1:1로 엄밀히 비교 대조하여 학술 검증 리포트를 작성하십시오.
+타 감명서의 고전적/단식적 해석(단순 신살, 오행 개수 위주)과 초연 시공명리(월령 시공간, 일주 구조, 대운 파동)의 입체적 해석을 1:1로 대조하여 차이점을 서술하십시오.
 """
-                        c_res = call_claude_api(comp_prompt, max_tokens=10000)
-                        
-                        report_2_html = (
-                            f"<div class='page-break-before'></div>\n"
-                            f"<div class='report-page'>\n"
-                            f"<div class='vip-inset-frame' style='border-color:#2E7D32; padding:20px;'>\n"
-                            f"<h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 900; border-bottom:2px solid #2E7D32; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 감명서 학술 검증 및 1:1 대조 리포트</h1>\n"
-                            f"<div style='margin-top:20px;'>{c_res}</div>\n"
-                            f"<hr style='border:1px dashed #2E7D32; margin:30px 0;'>\n"
-                            f"<h3 style='color:#555; font-size:18px; font-weight:900; margin-bottom:10px;'>📜 [제출된 타 감명서 원문]</h3>\n"
-                            f"<div style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; line-height: 1.8; color: #444; background:#F9F9F9; padding:15px; border-radius:8px;'>{other_reading_text.replace(chr(10), '<br>')}</div>\n"
-                            f"</div>\n"
-                            f"</div>"
-                        )
-                        st.session_state['saved_report_2'] = report_2_html
-
+                try:
+                    c_res = call_claude_api(comp_prompt, max_tokens=10000)
+                    
+                    report_2_html = (
+                        f"<div class='page-break-before'></div>\n"
+                        f"<div class='report-page'>\n"
+                        f"<div class='vip-inset-frame' style='border-color:#2E7D32; padding:20px;'>\n"
+                        f"<h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 900; border-bottom:2px solid #2E7D32; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 감명서 학술 검증 및 1:1 대조 리포트</h1>\n"
+                        f"<div style='margin-top:20px;'>{c_res}</div>\n"
+                        f"<hr style='border:1px dashed #2E7D32; margin:30px 0;'>\n"
+                        f"<h3 style='color:#555; font-size:18px; font-weight:900; margin-bottom:10px;'>📜 [제출된 타 감명서 원문]</h3>\n"
+                        f"<div style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; line-height: 1.8; color: #444; background:#F9F9F9; padding:15px; border-radius:8px;'>{other_reading_text.replace(chr(10), '<br>')}</div>\n"
+                        f"</div>\n"
+                        f"</div>"
+                    )
+                    st.session_state['saved_report_2'] = report_2_html
                 except Exception as e:
                     st.error(f"비교 분석 가동 장애: {e}")
 
@@ -1737,22 +1875,6 @@ if st.session_state.get('need_calc', False):
 [SYSTEM ROLE: CHOYEON SYSTEM CHIEF CHANCELLOR (초연시공명리 수석보좌관)]
 당신은 '초연 박사님'을 보좌하는 수석보좌관 AI입니다.
 제출된 [{m_name_val}님과 {f_name_val}님의 외부 궁합 감명서 원문]을 박사님의 [초연시공명리 궁합 정밀 통변 팩트]와 1:1로 엄밀히 비교 대조하여 학술 검증 리포트를 작성하십시오.
-
-🚨 [궁합 1:1 원문 대조 및 학술 검증 지시]
-1. **타 궁합 감명서 목차/항목 구조 완벽 재현**: 제출된 타 감명서의 제목, 소목차, 분석 순서(예: 겉궁합, 속궁합, 오행보완, 운세교차 등)를 그대로 가져와 동일한 순서로 목차를 구성하십시오.
-2. **항목별 1:1 교차 검증**:
-   - **[타 궁합 감명서 원문 분석]**: 원문의 주장과 궁합 통변 논리를 요약하십시오.
-   - **[정통 명리 이치 검증 및 초연시공명리 재해석]**: 원문의 궁합 판단이 정통 명리 이치 및 초연 정밀 궁합 점수({gh_engine.final_score}점, 등급: {gh_engine.grade})에 위배되는지 검증하고 오류를 교정하십시오.
-3. **학술적 수용 및 앱 진화 총평 작성**:
-   - 마지막 목차인 **[4. 수석보좌관 종합 검증 및 궁합 엔진 업데이트 제안 총평]**에서는 타 궁합 감명서의 논리적 오류를 검증함과 동시에, 타 궁합 감명서에서 배울 점을 수용하여 **'초연시공명리 궁합 엔진 고도화 방향'**을 종합적으로 제안하십시오.
-4. 모든 본문 문단은 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000000; text-indent: 1em; text-align: justify; margin-top: 4px; margin-bottom: 12px;'> 태그로 출력하십시오.
-
-[제출된 타 궁합 감명서 원문 (목차 구조 및 분석 순서 기준점)]
-{other_reading_text}
-
-[초연시공명리 정밀 궁합 팩트]
-- 남성({m_name_val}) / 여성({f_name_val})
-- 초연 궁합 정밀 점수: {gh_engine.final_score}점 ({gh_engine.grade})
 """
                         c_res = call_claude_api(comp_prompt, max_tokens=10000)
                         
@@ -1821,7 +1943,7 @@ if st.session_state.get('need_calc', False):
                         m_marital = u_marital if u_gender == "남성" else p_marital
                         f_marital = p_marital if u_gender == "남성" else u_marital
                         
-                        guiin_map = {'甲':'丑, 未','乙':'子, 申','丙':'酉, 亥','丁':'酉, 亥','戊':'丑, 未','己':'子, 申','庚':'丑, 未','辛':'寅, 午','壬':'卯, 巳','癸':'卯, 巳'}
+                        guiin_map = {'甲':'丑, 未','乙':'子, 申','丙':'酉, 亥','丁':'酉, 亥','戊':'丑, 未','己':'子, 申','庚':'丑, 未','辛':'午寅','壬':'卯巳','癸':'卯, 巳'}
                         
                         m_tbl = build_bazi_table("♂️", m_name, "남명", m_marital, m_age, m_sol, m_lun, m_time, m_gans, m_jjis, m_ds, m_yb, m_cnt, guiin_map.get(m_ds, '-'), calculate_gongmang(m_ys, m_yb), calculate_gongmang(m_ds, m_db), get_samjae(m_yb, curr_j), m_calc_d, "#1A237E")
                         f_tbl = build_bazi_table("♀️", f_name, "여명", f_marital, f_age, f_sol, f_lun, f_time, f_gans, f_jjis, f_ds, f_yb, f_cnt, guiin_map.get(f_ds, '-'), calculate_gongmang(f_ys, f_yb), calculate_gongmang(f_ds, f_db), get_samjae(f_yb, curr_j), f_calc_d, "#2E7D32")
@@ -2029,7 +2151,6 @@ if st.session_state.get('need_calc', False):
                         st.session_state['saved_report_gh_f'] = wrap_a4(f_page_content, "#D50000", "[ 여명 사주팔자표 및 요약 ]")
                         st.session_state['saved_report_gh_g'] = wrap_a4(g_full_content, "#1B5E20", "[ 초연 전통명리 종합 궁합풀이 ]")
 
-                        # 3-2 / 3-3 택일 전용 독립 모듈
                         if u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"]:
                             s_d_val = start_date if start_date else dt_mod.date.today()
                             e_d_val = end_date if end_date else dt_mod.date.today() + dt_mod.timedelta(days=30)
@@ -2068,6 +2189,7 @@ if st.session_state.get('need_calc', False):
             st.error(f"시스템 연산 중 치명적 오류 발생: {e}")
             st.session_state['need_calc'] = False
             st.stop()
+
 # ==============================================================================
 # 🌊 7. [독립 모듈] 일진 분석 (오류 검증 완료)
 # ==============================================================================
@@ -2175,7 +2297,6 @@ if st.session_state.get('app_running', False) and st.session_state.get('run_deli
                 m_jjis = [b[1] if len(b)>1 else "?" for b in p_bazi_context]
                 f_jjis = jjis
 
-            # [수정 완료] None 값 방지 예외 방어선 적용
             s_d_val = start_date if start_date else dt_mod.date.today()
             e_d_val = end_date if end_date else dt_mod.date.today() + dt_mod.timedelta(days=30)
 
