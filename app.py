@@ -776,8 +776,22 @@ with st.sidebar:
     st.markdown("---")
     btn_single = st.button("🚀 초연 전통명리 사주풀이 가동", key="btn_run", use_container_width=True, type="primary")
 
-    if st.button("🖨️ 풀이 결과 인쇄 / PDF 저장", key="btn_print", use_container_width=True, type="secondary"):
-        components.html("<script>window.parent.print();</script>", height=0)
+    # 🚨 [수술]: 46.7 버전의 전설적인 No-Refresh VIP 인쇄 버튼 완벽 부활!
+    components.html("""
+    <div style='padding: 0; margin: 0;'>
+        <button id='sidebar-pdf-print-btn' style='width:100%; background-color:#00A843; color:white; border:none; font-weight:900; height:50px; border-radius:8px; cursor:pointer; font-size:15px; font-family:"Malgun Gothic", sans-serif; box-shadow: 0 4px 6px rgba(0,0,0,0.15); transition: background-color 0.3s;'>
+            🖨️ VIP 감명서 차곡차곡 쌓아 인쇄 / 저장
+        </button>
+        <script>
+            const btn = document.getElementById('sidebar-pdf-print-btn');
+            btn.addEventListener('mouseover', () => btn.style.backgroundColor = '#008937');
+            btn.addEventListener('mouseout', () => btn.style.backgroundColor = '#00A843');
+            btn.addEventListener('click', () => {
+                window.parent.print();
+            });
+        </script>
+    </div>
+    """, height=65)
 
     if btn_single:
         is_compare_type = (main_category == "4. 타 감명서 비교")
