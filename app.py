@@ -35,7 +35,7 @@ st.markdown("""
     /* 🚨 [강제 수술] 표지 타이틀: 고딕체 강제 해제! 웅장한 나눔명조체 + 60px 절대 고정! */
     .cover-page h1, .cover-page .title-gothic { 
         font-family: 'Nanum Myeongjo', serif !important; 
-        font-size: 24px !important; /* 여기서 스트림릿 억압 뚫고 24px로 확정! */
+        font-size: 36px !important; /* 여기서 스트림릿 억압 뚫고 36px로 확정! */
         color: #1A237E !important; /* 초연명리 시그니처 짙은 남색 */
         font-weight: 900 !important; 
         line-height: 1.3 !important;
@@ -51,7 +51,7 @@ st.markdown("""
     }
 
     /* 🌟 본문(에세이) 영역의 h1 (표지 간판에는 영향 안 주도록 :not 예외 처리 쐐기!) */
-    .report-page:not(.cover-page) h1 { font-size: 28px !important; margin-bottom: 15px !important; color: #1A237E !important; font-weight: 900 !important; }
+    .report-page:not(.cover-page) h1 { font-size: 36px !important; margin-bottom: 15px !important; color: #1A237E !important; font-weight: 900 !important; }
     .report-page h2 { font-size: 22px !important; margin-bottom: 15px !important; font-weight: 900 !important; }
     .report-page h3 { font-size: 22px !important; margin-top: 25px !important; margin-bottom: 8px !important; border-bottom: 2px solid #1A237E; padding-bottom: 5px; color: #1A237E !important; font-weight: 900 !important; }
     .report-page h4 { font-size: 18px !important; margin-top: 15px !important; margin-bottom: 8px !important; font-weight: 900 !important; }
