@@ -1482,7 +1482,7 @@ if st.session_state.get('need_calc', False):
 </div>
 </div>
 
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>12. 삶을 바꾸는 지혜로운 조언</h3>
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>7. 삶을 바꾸는 지혜로운 조언</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 나를 돕는 에너지와 색상:</span>
 (사주에 맞는 에너지/색상을 하이브리드 톤으로 2~3문장 창작)
