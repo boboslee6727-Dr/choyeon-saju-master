@@ -1331,7 +1331,7 @@ if st.session_state.get('need_calc', False):
                 metal_cnt = counts.get('금', 0)
                 water_cnt = counts.get('수', 0)
 
-                # 🚨 [수술 1]: ' (기본)' 오타 제거 및 Ver 46.7의 12대목차 압도적 프롬프트 완벽 복원
+                # 🚨 [수술]: 1-1 사주팔자와 운세풀이 (하이브리드 톤 + HTML 템플릿 완벽 복원)
                 if u_product == "1-1. 사주팔자와 운세풀이":
                     prompt = f"""
 {db_header}
@@ -1339,38 +1339,25 @@ if st.session_state.get('need_calc', False):
 
 [ 🚨종합 특별지시 사항 : 대중을 위한 현대적 통변 원칙]
 (※ AI 지시: AI는 전체 에세이 작성 시 아래 원칙을 반드시 뼛속 깊이 새기고 준수하십시오.)
-1. 🚨명리 용어의 전략적 노출 및 해제: 격국, 비견, 십이운성, 신살, 형충파해 등 딱딱한 한자어 전문 용어의 단순 남발을 엄격히 금지합니다. 단, 내담자의 직업 적성이나 특이 심리를 분석할 때는 "사회생활에서 조정해야 할 일이 발생하는데, 
-이는 명리학적으로 寅·巳 형(刑)의 에너지가 작용하기 때문입니다"와 같이 핵심 용어를 먼저 제시한 후 그 의미를 부드럽게 풀어 설명하여 통변의 전문성과 신뢰도를 높이십시오.
-2. 직관적인 쉬운 해설: 부득이하게 명리 용어를 언급해야 할 경우, 반드시 일반인이 단번에 이해할 수 있는 일상적인 비유와 현대적 구어체로 부드럽게 풀어서 설명하십시오. 
-3. 따뜻한 상담가 마인드: 명리학 강의를 하듯 가르치려 들지 말고, 내담자의 삶을 깊이 이해하고 어루만져 주는 친절하고 세련된 카운슬러의 어조(현대적 구어체)로 모든 글을 전개하십시오.
-4. 🚨[절대 성역]: 단, 2. 사주팔자 구조 분석에 주입되는 '[CHOYEON_GOLDEN_TEXT_HERE]' 문장은 초연 박사의 고유 선언문입니다. 부연 설명이나 인사말 없이 원문 그대로 출력하십시오.
-5. 🚨 초연 전통명리 3대 관점의 입체적 풀이: 사주를 단편적으로 해석하지 마십시오. 모든 통변을 전개할 때는 반드시 1) 육친적, 2) 심리적, 3) 사회적 관점이라는 세 가지 차원을 유기적으로 융합하십시오.
-6. 🚨 [모순 요소의 변증법적 통합]: 사주 내에 상충되는 기운이 발견될 경우, 이를 분리하여 서술하지 말고 모순을 입체적인 하나의 서사로 융합하여 서술하십시오. 또한, 천간에 드러나지 않았으나 지장간에 중요한 역할을 하는 육친의 작용력을 반드시 찾아내어 내담자의 무의식적 욕구와 현실의 괴리를 깊이 있게 분석하십시오.
-7. 🚨 [공망(空亡)의 양가적 심리 분석 강화]: 공망을 해석할 때, '기존의 틀을 깨는 독특한 방식의 성공'이라는 긍정적 측면뿐만 아니라, 그 이면에 필연적으로 수반되는 '심리적 공허감'과 '인간관계에서의 거리감' 등 내담자가 겪어왔을 부정적 감정까지 깊이 있게 다루어 복합적인 내면을 따뜻하게 어루만지십시오.
-8. 🚨 [조후(調候)의 입체적 해석]: 조후(온도와 습도)의 불균형을 설명할 때, 원초적이고 생리적인 현상을 먼저 명확히 짚어주십시오. 그 후, 이를 개운법으로 부드럽게 전환하여 서술함으로써 통변의 깊이와 권위를 더하십시오.
-9. 🚨 [고전적 숙명론의 현대적 치환]: '남편 복(덕)', '부모 덕', '자식 운' 등 고전적·숙명론적 주제를 무조건 회피하지 마십시오. 반드시 현대 사회에서는 강력한 독립심이나 특수한 사회적 관계로 발현되는 것으로 봅니다라는 '비교 재해석 프레임'을 사용하십시오.
-10. 🚨 [궁성(宮星) 이론 기반의 현실적 고충 직면]: 사주의 구조적 갈등(예: 형충파해)이 일어난 '궁(자리)'을 팩트로 짚어, 내담자가 겪었을 '뼈아픈 현실적 고충과 사건'을 먼저 구체적으로 묘사하여 깊은 현실 공감대를 형성한 후, 이를 성장의 동력으로 승화시키십시오.
-11. 🚨 [결핍 오행(無字)의 대체 생존 전략 명시]: 사주 원국에 특정 오행이나 십성이 결핍 상태인 경우, 결핍을 극복하기 위한 '대체 생존 전략'을 논리적으로 서술하십시오.
-12. 🚨 [전통 신살 및 12운성의 전략적 앵커링]: 내담자의 특수한 성향을 설명할 때, 원국에 존재하는 구체적인 고전 명리 키워드를 먼저 '앵커(닻)'처럼 명시하십시오. 그 후 심리학적 관점에서 재해석하십시오.
-13. 🚨 [단편적 해석과 구조적 해석의 비교 화법]: 삶의 갈등을 분석할 때, "단순히 ~살의 작용으로 보기도 하나, 보다 근본적인 원인을 구조적 역동성에서 찾습니다"라는 화법을 구사하십시오.
-14. 🚨 [앵무새 반복 서술 절대 금지]: 특정 명리적 원인을 매 문단마다 기계적으로 반복해서 언급하지 마십시오.
-15. 🚨 [HTML 오타 엄중 경고]: HTML 태그 작성 시 절대로 오타를 내지 마십시오.
+1. 🚨명리 용어의 전략적 노출 및 해제: 격국, 비견, 십이운성, 신살, 형충파해 등 딱딱한 한자어 전문 용어의 단순 남발을 엄격히 금지합니다. 단, 내담자의 직업 적성이나 특이 심리를 분석할 때는 핵심 용어를 먼저 제시한 후 그 의미를 부드럽게 풀어 설명하십시오.
+2. 🚨 [따뜻한 위로와 뼈때리는 팩트의 완벽한 융합 (Hybrid Tone)]: 명리학 강의를 하듯 가르치려 들지 마십시오. 기본적으로는 자연의 물상을 활용한 [부드럽고 은유적인 문학적 심리 상담 에세이 톤]을 유지하되, 내담자의 기질적 단점, 흉살(삼형살, 공망 등), 리스크 관리 지점을 짚을 때는 [정통 명리 특유의 날카롭고 묵직한 키워드(예: 심산맹호, 자력갱생, 쟁재 손재수 등)를 뼈를 때리듯 명확하게 직언]하십시오. 부드러운 치유와 서늘한 팩트 폭격이 한 문단 안에서 완벽하게 어우러져야 합니다.
+3. 🚨[절대 성역]: 단, 2. 사주팔자 구조 분석에 주입되는 '[CHOYEON_GOLDEN_TEXT_HERE]' 문장은 초연 박사의 고유 선언문입니다. 부연 설명이나 인사말 없이 원문 그대로 출력하십시오.
+4. 🚨 초연 전통명리 3대 관점의 입체적 풀이: 모든 통변을 전개할 때는 반드시 1) 육친적, 2) 심리적, 3) 사회적 관점이라는 세 가지 차원을 유기적으로 융합하십시오.
+5. 🚨 [모순 요소의 변증법적 통합]: 사주 내에 상충되는 기운이 발견될 경우, 이를 입체적인 하나의 서사로 융합하여 서술하고 무의식적 욕구와 현실의 괴리를 깊이 있게 분석하십시오.
+6. 🚨 [공망(空亡)의 양가적 심리 분석 강화]: '기존의 틀을 깨는 독특한 방식의 성공'이라는 긍정적 측면과 '심리적 공허감' 등 부정적 감정을 깊이 있게 다루어 복합적인 내면을 따뜻하게 어루만지십시오.
+7. 🚨 [조후(調候)의 입체적 해석]: 원초적이고 생리적인 현상을 명확히 짚어주고, 이를 개운법으로 부드럽게 전환하여 통변의 깊이를 더하십시오.
+8. 🚨 [고전적 숙명론의 현대적 치환]: '남편 복', '부모 덕', '자식 운' 등은 현대 사회의 '독립심이나 특수한 사회적 관계'로 발현된다는 비교 재해석 프레임을 사용하십시오.
+9. 🚨 [궁성(宮星) 이론 기반의 현실적 고충 직면]: 충돌이 일어난 '궁(자리)'을 팩트로 짚어 내담자가 겪었을 '뼈아픈 현실적 고충'을 구체적으로 묘사하여 성장의 동력으로 승화시키십시오.
 
-[문단 통제 명령 ]
-1. 모든 통변 에세이 문장은 반드시 <p style='text-indent: 1em;'> 태그로 감싸하십시오.
-2. 🚨 [계층별 글자 크기 및 상하 간격 강제 규격화] 토씨 하나 틀리지 말고 적용하십시오!
-   [지시 3-1] '1), 2)' 형태의 부목차는 20px 크기 적용:
+[문단 및 레이아웃 통제 명령]
+1. 모든 통변 에세이 문장은 반드시 <p style='text-indent: 1em; margin-bottom: 8px;'> 태그로 감싸십시오.
+2. 🚨 [계층별 글자 크기 강제 규격화]
+   [지시 2-1] '1), 2)' 형태의 부목차는 20px 크기 적용:
    <span class='sub-title' style='display: block; font-size: 20px; font-weight: 900; color: #111; line-height: 1.4; margin-top: 35px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
-   [지시 3-2] '▶, ▷, ◈, •' 형태의 세부 소목차는 18px 크기 적용:
+   [지시 2-2] '▶, ▷, ◈, •' 형태의 세부 소목차는 18px 크기 적용:
    <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; line-height: 1.4; margin-top: 25px; margin-bottom: 5px;'>▶ 현재 대운 상세 분석 ({dw_mid2_age}세~{dw_end_age}세)</span>
-3. 표(Table) 생성 절대 금지. 운의 흐름 연도별 분석은 반드시 도트 기호(•)를 사용한 텍스트로 작성하십시오.
-4. 🚨 [출력 레이아웃 절대 규칙] 문단과 문단 사이에 '빈 줄(공백 줄)'을 절대 넣지 마십시오. 엔터키(줄바꿈)는 단 한 번만 사용하여 글이 빈틈없이 빽빽하게 이어지도록 출력하십시오. (HTML 태그 사용 시 <br><br> 금지)
-
-🚨 [AI 환각(Hallucination) 방지 및 가독성 극대화 절대 규칙]
-1. 🚨 [근묘화실 위치 조작 절대 금지]: 내담자의 사주 원국(년주, 월주, 일주, 시주)에 배속된 천간과 지지의 위치를 절대로 뒤섞거나 혼동하지 마십시오. 
-2. 🚨 없는 기운 창조 금지: 사주 원국에 없는 기운을 임의로 지어내어 통변하는 것을 엄격히 금지합니다.
-3. 🚨 명리 용어 시각적 강조: 통변 중 핵심 명리 용어를 기재할 때는 반드시 단일 인용부호(' ')나 괄호( )를 사용하여 가독성을 높이십시오.
-4. 🚨 답답한 문단 해소 및 기본 들여쓰기 엄수: 하나의 거대한 문단으로 뭉쳐서 출력하지 마십시오. 새로운 문단이 시작될 때는 첫 줄을 들여쓰기 하십시오.
+3. 표(Table) 생성 절대 금지.
+4. 🚨 [AI 환각(Placeholder) 절대 금지]: "작성"이라는 지시어를 앵무새처럼 그대로 출력하지 마십시오. 반드시 주어진 구조 내에 3~4문장의 창작된 에세이를 채워 넣어야 합니다.
 
 [내담자 맞춤형 정밀 타겟팅]
 - {age_prompt}
@@ -1380,16 +1367,16 @@ if st.session_state.get('need_calc', False):
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 성격</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 겉으로 드러난 성격</span>
-(일간과 일지의 십성, 십이운성, 십이신살을 바탕으로 표면적인 성격을 상세 작성)
+(일간과 일지의 십성, 십이운성, 십이신살을 바탕으로 표면적인 성격을 상세히 창작)
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 감추어진 내 속마음</span>
-(일지 지장간, 인종법, 공망을 바탕으로 내면의 속마음과 무의식을 상세 작성)
+(일지 지장간, 인종법, 공망을 바탕으로 내면의 속마음과 무의식을 상세히 창작)
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조 분석</h3>
 <div class='content-box-loose'>
 [CHOYEON_GOLDEN_TEXT_HERE]
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
-(격국을 핵심 뼈대로 삼아 에세이 작성)
+(격국을 핵심 뼈대로 삼아 하이브리드 톤으로 에세이 창작)
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 내 삶의 리듬과 에너지 균형</span>
 (오행 분포와 조후 균형 상태를 분석)
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 내 삶의 역동성과 상호작용</span>
@@ -1434,78 +1421,102 @@ if st.session_state.get('need_calc', False):
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 대운의 흐름</span>
 [DAEWUN_TABLE_HERE]
+
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 대운 분석</span>
 {past_daewun_html}
+(※ 🚨AI 절대 지시: 위 파이썬이 제공한 과거 대운 목록을 순서대로 나열하되, 반드시 아래 HTML 템플릿 구조(`<div style='padding-left...'>`)를 사용하여 줄바꿈 파괴를 막고 에세이를 직접 창작하십시오.)
+[출력 템플릿]
+• <b>OO세~OO세 (OO대운):</b> 
+<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (해당 시기의 육친적/사회적 환경 변화를 문학적 비유와 팩트를 섞어 3~4문장으로 창작)</div>
+    <div><b>2) 시공 명리 풀이:</b> (해당 시기의 시공간 파동, 조후, 묘고 작용 등을 날카롭게 직언하여 3~4문장으로 창작)</div>
+</div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 현재 대운 전반기 상세 분석 ({dw_start_age}세~{dw_mid_age}세)</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (작성)</div>
+<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (문학적 비유와 팩트폭격을 믹스하여 3~4문장으로 상세 창작)</div>
+    <div><b>2) 시공 명리 풀이:</b> (날카로운 시공간 파동 분석을 3~4문장으로 상세 창작)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 현재 대운 후반기 상세 분석 ({dw_mid2_age}세~{dw_end_age}세)</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (작성)</div>
+<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (문학적 비유와 팩트폭격을 믹스하여 3~4문장으로 상세 창작)</div>
+    <div><b>2) 시공 명리 풀이:</b> (날카로운 시공간 파동 분석을 3~4문장으로 상세 창작)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 세운의 흐름</span>
 [SEWUN_TABLE_HERE]
+
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 세운 분석</span>
 {past_sewun_html}
+(※ 🚨AI 절대 지시: 파이썬이 제공한 과거 세운 목록을 순서대로 나열하고, 반드시 아래 템플릿 구조를 엄수하여 창작하십시오.)
+[출력 템플릿]
+• <b>OOOO년(OO년):</b> 
+<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (해당 세운의 환경 변화를 3~4문장으로 상세 창작)</div>
+    <div><b>2) 시공 명리 풀이:</b> (해당 세운의 시공간 파동을 3~4문장으로 상세 창작)</div>
+</div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 올해 세운 전반기 상세 분석</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (작성)</div>
+<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (올해 전반기의 특징을 상세 창작)</div>
+    <div><b>2) 시공 명리 풀이:</b> (올해 전반기의 시공간적 역동성을 상세 창작)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 올해 세운 후반기 상세 분석</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (작성)</div>
+<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (올해 후반기의 특징을 상세 창작)</div>
+    <div><b>2) 시공 명리 풀이:</b> (올해 후반기의 시공간적 역동성을 상세 창작)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 월운의 흐름</span>
 [WOLWUN_TABLE_HERE]
+
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 월운 분석</span>
 {past_months_html}
+(※ 🚨AI 절대 지시: 파이썬이 제공한 과거 월운 텍스트를 절기(날짜) 훼손 없이 복사하고, 아래 템플릿을 사용하여 에세이를 창작하십시오.)
+[출력 템플릿]
+• <b>(제공된 월운 텍스트 그대로 복사)</b> 
+<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (해당 월운의 변화를 창작)</div>
+    <div><b>2) 시공 명리 풀이:</b> (해당 월운의 역동성을 창작)</div>
+</div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>{prompt_first_half}</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (작성)</div>
+<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (창작)</div>
+    <div><b>2) 시공 명리 풀이:</b> (창작)</div>
 </div>
 
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>{prompt_second_half}</span>
-<div style='padding-left: 20px; margin-top: 5px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (작성)</div>
-    <div><b>2) 시공 명리 풀이:</b> (작성)</div>
+<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
+    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (창작)</div>
+    <div><b>2) 시공 명리 풀이:</b> (창작)</div>
 </div>
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>12. 삶을 바꾸는 지혜로운 조언</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 나를 돕는 에너지와 색상:</span>
-(작성)
+(창작)
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 신체 밸런스와 에너지 관리:</span>
-(작성)
+(창작)
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 공간의 흐름과 방위의 지혜:</span>
-(작성)
+(창작)
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 재능 효율을 높이는 직업적 지혜:</span>
-(작성)
+(창작)
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 더 나은 내일을 위한 절제의 미학:</span>
-(작성)
+(창작)
 </div>
 
 <h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>🎯 초연 전통명리 특별 개운 비법</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 수호 천사의 기운 조언:</span>
-(천을귀인 등 조언 작성)
+(천을귀인 등 조언 창작)
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 백년해로의 기운 조언:</span>
-(부부/연인 관계 개운 처방 작성)
+(부부/연인 관계 개운 처방 창작)
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 행운에 따른 기운 조언:</span>
-(흐름에 따른 개운 처방 작성)
+(흐름에 따른 개운 처방 창작)
 </div>
 """
                 elif u_product == "1-2. 올해 및 특정연도 운세 상세분석":
