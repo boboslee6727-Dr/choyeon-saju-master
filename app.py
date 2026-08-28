@@ -1325,7 +1325,7 @@ if st.session_state.get('need_calc', False):
             prompt = ""
             clean_ai_text = ""
 
-            # ==============================================================
+# ==============================================================
             # [A-1] 1. 개인 사주팔자 풀이 (종합 파이프라인)
             # ==============================================================
             if main_category == "1. 개인 사주팔자 풀이 (종합)":
@@ -1337,8 +1337,8 @@ if st.session_state.get('need_calc', False):
                 water_cnt = counts.get('수', 0)
 
                 # 🚨 [수술 3]: 46.7(원본) + 50.5(팩트폭격) 하이브리드 융합 및 HTML 줄바꿈 파괴 방어 프롬프트
-            if u_product == "1-1. 사주팔자와 운세풀이":
-                prompt = f"""{db_header}{ilju_master_prompt_context}
+                if u_product == "1-1. 사주팔자와 운세풀이":
+                    prompt = f"""{db_header}{ilju_master_prompt_context}
 
 [ 🚨종합 특별지시 사항 : 초연 하이브리드(Hybrid) 통변 원칙 ]
 1. 🚨명리 용어의 전략적 노출: 딱딱한 한자어 남발을 금지하되, 핵심 용어는 먼저 제시한 후 쉽게 풀어 설명하십시오.
@@ -1454,7 +1454,7 @@ if st.session_state.get('need_calc', False):
 </div>
 </div>
 
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>7. 삶을 바꾸는 지혜로운 조언</h3>
+<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>12. 삶을 바꾸는 지혜로운 조언</h3>
 <div class='content-box-loose'>
 <span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 나를 돕는 에너지와 색상:</span>
 (사주에 맞는 에너지/색상을 하이브리드 톤으로 2~3문장 창작)
