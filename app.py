@@ -671,30 +671,29 @@ with st.sidebar:
     
     p_name, p_gender, p_marital, p_cal, p_y, p_m, p_d, p_t = "", "여성", "미혼", "양력", 0, 0, 0, "시간 모름"
     other_reading_text = ""
-        run_delivery_calc = False  
-        start_date, end_date = None, None
-        baby_gender = "미정"
-        compare_mode = "자동대조"
-        run_iljin_calc = False
-        is_vip_package = False
+    run_delivery_calc = False  
+    start_date, end_date = None, None
+    baby_gender = "미정"
+    compare_mode = "자동대조"
+    run_iljin_calc = False
+    is_vip_package = False
 
-        # 🚨 [안전장치]: 85.5의 stop_ai 함수가 50.5에서도 에러 없이 작동하도록 선언
-        def stop_ai():
-            if 'need_calc' in st.session_state: st.session_state['need_calc'] = False
+    # 🚨 [안전장치]: 85.5의 stop_ai 함수가 50.5에서도 에러 없이 작동하도록 선언
+    def stop_ai():
+        if 'need_calc' in st.session_state: st.session_state['need_calc'] = False
 
-        if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"]:
-            
-            # 🚨 [수술 1]: 85.5 버전의 VIP 패키지 모드 완벽 이식!
-            if u_product.startswith("1-"):
-                st.markdown("<hr style='border:1px dashed #1A237E; margin:15px 0;'>", unsafe_allow_html=True)
-                is_vip_package = st.checkbox("👑 VIP 패키지 모드", value=st.session_state.get("is_vip_package_val", False), key="is_vip_package_val", on_change=stop_ai)
+    if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"]:
+        
+        # 🚨 [수술 1]: 85.5 버전의 VIP 패키지 모드 완벽 이식!
+        if u_product.startswith("1-"):
+            st.markdown("<hr style='border:1px dashed #1A237E; margin:15px 0;'>", unsafe_allow_html=True)
+            is_vip_package = st.checkbox("👑 VIP 패키지 모드", value=st.session_state.get("is_vip_package_val", False), key="is_vip_package_val", on_change=stop_ai)
 
-            if u_product in ["1-1. 사주팔자와 운세풀이", "1-4. 특정 주간 및 특정일운 상세분석"]:
-                # 기존 일운 분석 체크박스 유지
-                run_iljin_calc = st.checkbox("🔮 일운 운세 분석 가동", value=False)
-                if run_iljin_calc:
-                    if 'target_date' not in st.session_state: st.session_state['target_date'] = dt_mod.datetime.now(pytz.timezone('Asia/Seoul')).date()
-                    st.session_state['target_date'] = st.date_input("분석할 일자 선택", value=st.session_state['target_date'])
+        if u_product in ["1-1. 사주팔자와 운세풀이", "1-4. 특정 주간 및 특정일운 상세분석"]:
+            run_iljin_calc = st.checkbox("🔮 일운 운세 분석 가동", value=False)
+            if run_iljin_calc:
+                if 'target_date' not in st.session_state: st.session_state['target_date'] = dt_mod.datetime.now(pytz.timezone('Asia/Seoul')).date()
+                st.session_state['target_date'] = st.date_input("분석할 일자 선택", value=st.session_state['target_date'])
 
     elif main_category == "4. 타 감명서 비교":
         st.markdown("<hr style='border:1px dashed #2E7D32; margin:15px 0;'>", unsafe_allow_html=True)
