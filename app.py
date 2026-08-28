@@ -35,7 +35,7 @@ st.markdown("""
     /* 🚨 [강제 수술] 표지 타이틀: 고딕체 강제 해제! 웅장한 나눔명조체 + 60px 절대 고정! */
     .cover-page h1, .cover-page .title-gothic { 
         font-family: 'Nanum Myeongjo', serif !important; 
-        font-size: 60px !important; /* 여기서 스트림릿 억압 뚫고 60px로 확정! */
+        font-size: 24px !important; /* 여기서 스트림릿 억압 뚫고 24px로 확정! */
         color: #1A237E !important; /* 초연명리 시그니처 짙은 남색 */
         font-weight: 900 !important; 
         line-height: 1.3 !important;
@@ -63,7 +63,7 @@ st.markdown("""
     .no-border-row td { border-top: none !important; border-bottom: none !important; }
     .no-border-row:last-of-type td { border-bottom: 1px solid #444 !important; }
     
-    .header-cell-main { background-color: #E8EAF6 !important; color: #1A237E !important; font-weight: 900 !important; font-size: 15px !important; border: 1px solid #444 !important; }
+    .header-cell-main { background-color: #E8EAF6 !important; color: #1A237E !important; font-weight: 900 !important; font-size: 18px !important; border: 1px solid #444 !important; }
     
     .top-header-cell { background-color: #1A237E !important; height: 30px !important; }
     .top-header-cell td, .top-header-cell span { color: #FFFFFF !important; font-weight: 900 !important; font-size: 16px !important; }
@@ -1118,8 +1118,8 @@ if st.session_state.get('need_calc', False):
                         f"    <div style='border: 4px solid #1A237E; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
                         f"        <div style='border-bottom:4px double #1A237E; padding-bottom:20px; margin-bottom:40px;'>\n"
                         
-                        # 🚨 [원상복구 & 확대!!] h1 태그와 title-gothic 클래스 부활!! 크기만 26px로 빵빵하게!!
-                        f"            <h1 class='title-gothic' style='font-size: 26px !important; margin:0 !important; line-height: 1.3 !important; word-break: keep-all !important;'>초연 시공명리 사주팔자 풀이</h1>\n"
+                        # 🚨 [원상복구 & 확대!!] h1 태그와 title-gothic 클래스 부활!! 크기만 24px로 빵빵하게!!
+                        f"            <h1 class='title-gothic' style='font-size: 24px !important; margin:0 !important; line-height: 1.3 !important; word-break: keep-all !important;'>초연 시공명리 사주팔자 풀이</h1>\n"
                         
                         f"            <div style='text-align: right; margin-top: 10px;'>\n"
                         f"                <span class='ver-gothic' style='font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
