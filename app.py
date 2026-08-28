@@ -925,20 +925,27 @@ if st.session_state.get('need_calc', False):
                 f"일-시지:{get_ji_rel_set(db, hb)}, 월-년지:{get_ji_rel_set(mb, yb)}"
             )
 
+            # 🚨 [수술 1] 남명과 똑같은 색상 통일을 위해 p_color를 무력화하고 진한 남색(#1A237E)으로 고정!
+            safe_color = "#1A237E"
+
             cover_html = (
-                f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
+                # 🚨 [수술 2] height: 297mm를 height: auto로 변경하고 여백을 주어 PDF 첫 장 백지 출력 완벽 방어!
+                f"<div class='report-page cover-page' style='padding:40px 0; margin:0 auto; width:100%; height:auto; min-height:250mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
                 f"    <div style='border: 4px solid #1A237E; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
                 f"        <div style='border-bottom:4px double #1A237E; padding-bottom:20px; margin-bottom:40px;'>\n"
-                f"            <h1 class='title-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 28px !important; font-weight: 900; margin:0 !important;'>초연 전통 명리사주 풀이</h1>\n"
+                f"            <!-- 🚨 [수술 3] white-space: nowrap 추가 및 자간(-1px) 세팅으로 타이틀 2줄 깨짐 완벽 방어! -->\n"
+                f"            <h1 class='title-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 28px !important; font-weight: 900; margin:0 !important; white-space: nowrap !important; letter-spacing: -1px !important;'>초연 전통 명리사주 풀이</h1>\n"
                 f"            <div style='text-align: right; margin-top: 10px;'>\n"
                 f"                <span class='ver-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                 f"            </div>\n"
                 f"        </div>\n"
                 f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 30px 20px; border-radius: 15px;'>\n"
-                f"            <h2 style='font-family: \"Nanum Gothic\", sans-serif; font-size: 24px; font-weight: 800; color: {p_color}; margin-bottom: 20px;'>{p_icon} 신청인 : {u_name} 님</h2>\n"
+                f"            <!-- 🚨 남명/여명 묻지도 따지지도 않고 진한 남색(safe_color) 통일! -->\n"
+                f"            <h2 style='font-family: \"Nanum Gothic\", sans-serif; font-size: 24px; font-weight: 800; color: {safe_color}; margin-bottom: 20px;'>{p_icon} 신청인 : {u_name} 님</h2>\n"
                 f"            <div style='font-family: \"Nanum Gothic\", sans-serif; font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
                 f"                <p style='margin: 0; white-space: nowrap;'>[양력] {sol_str} | [음력] {lun_str}</p>\n"
-                f"                <p style='margin: 5px 0 0 0; color: #D50000; white-space: nowrap;'>{time_str}</p>\n"
+                f"                <!-- 🚨 시뻘건 #D50000 멸종!! 남명/여명 똑같이 진한 남색으로 강제 변경! -->\n"
+                f"                <p style='margin: 5px 0 0 0; color: {safe_color}; white-space: nowrap;'>{time_str}</p>\n"
                 f"            </div>\n"
                 f"        </div>\n"
                 f"        <p style='font-family: \"Nanum Gothic\", sans-serif; font-size: 18px; margin-top: 50px; font-weight: 800;'>{today_str}</p>\n"
@@ -991,7 +998,8 @@ if st.session_state.get('need_calc', False):
                 lbl = f"<td rowspan='4' class='header-cell-main' style='border-right: 1px solid #444 !important; border-left: 1px solid #444 !important; border-bottom: 1px solid #444 !important; border-top: 0px solid transparent !important; font-size:14px !important;'><span style='color:inherit !important;'>합충형파해</span></td>" if l_idx==0 else ""
                 ji_rel_rows += f"<tr style='border:none;'>{lbl}{cells}</tr>"
 
-            info_h = f"<div style='text-align:center; font-family:\"Nanum Gothic\", sans-serif; margin-bottom:15px; line-height:1.5;'><span style='font-size:18px; font-weight:900; color:{p_color}; white-space:nowrap;'>{p_icon} {disp_name}님 ({u_gender}, {u_marital}, {u_age}세)</span><br><span style='font-size:14px; font-weight:bold; color:#555; white-space:nowrap;'>[양력: {sol_str} | 음력: {lun_str} {time_str}]</span></div>"
+            # 🚨 [수술 완료] 여명 붉은색 멸종! {p_color}를 날려버리고 남명과 동일한 진한 남색(#1A237E)으로 강제 고정
+            info_h = f"<div style='text-align:center; font-family:\"Nanum Gothic\", sans-serif; margin-bottom:15px; line-height:1.5;'><span style='font-size:18px; font-weight:900; color:#1A237E; white-space:nowrap;'>{p_icon} {disp_name}님 ({u_gender}, {u_marital}, {u_age}세)</span><br><span style='font-size:14px; font-weight:bold; color:#555; white-space:nowrap;'>[양력: {sol_str} | 음력: {lun_str} {time_str}]</span></div>"
 
             table_html = f"""<div style='text-align:center; margin-bottom:10px;'>{info_h}</div>
 <table class='result-table' style='width:100%; border-collapse:collapse; text-align:center;'>
@@ -2185,10 +2193,10 @@ if st.session_state.get('need_calc', False):
                         )
 
                         cover_html = (
-                            f"<div class='report-page cover-page' style='padding:0; margin:0; width:100%; height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
+                            f"<div class='report-page cover-page' style='padding:40px 0; margin:0 auto; width:100%; height:auto; min-height:250mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
                             f"    <div style='border: 4px solid #1A237E; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
                             f"        <div style='border-bottom:4px double #1A237E; padding-bottom:20px; margin-bottom:40px;'>\n"
-                            f"            <h1 class='title-gothic' style='font-size: 28px !important; margin:0 !important;'>초연 전통 명리궁합 풀이</h1>\n"
+                            f"            <h1 class='title-gothic' style='font-size: 28px !important; margin:0 !important; white-space: nowrap !important; letter-spacing: -1px !important;'>초연 전통 명리궁합 풀이</h1>\n"
                             f"            <div style='text-align: right; margin-top: 10px;'>\n"
                             f"                <span class='ver-gothic' style='font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                             f"            </div>\n"
@@ -2200,7 +2208,7 @@ if st.session_state.get('need_calc', False):
                             f"            </div>\n"
                             f"        </div>\n"
                             f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 25px 20px; border-radius: 15px;'>\n"
-                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #D50000; margin-bottom: 15px;'>♀️ 여명 : {f_name} 님 <span style='font-size:16px; color:#555;'>( {f_age}세 )</span></h2>\n"
+                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #1A237E; margin-bottom: 15px;'>♀️ 여명 : {f_name} 님 <span style='font-size:16px; color:#555;'>( {f_age}세 )</span></h2>\n"
                             f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
                             f"                <p style='margin: 0; white-space: nowrap;'>[양력] {f_sol} | [음력] {f_lun}</p>\n"
                             f"            </div>\n"
