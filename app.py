@@ -23,7 +23,7 @@ import re
 APP_VERSION = "Ver 50.5 (Master & 14종 세분화 완결본)"
 
 # ==============================================================================
-# 0. VIP 인셋 프레임 및 초강력 프린트 CSS (ver 48.1 원형 100% 보존)
+# 0. VIP 인셋 프레임 및 초강력 프린트 CSS (ver 50.5 원본 유지 + 백지 차단/대제목 위엄 추가)
 # ==============================================================================
 st.set_page_config(page_title=f"초연 전통 명리 {APP_VERSION}", layout="wide")
 
@@ -48,6 +48,19 @@ st.markdown("""<style>
 
     .report-page, .report-page *, .cover-page, div.cover-page *, .choyeon-premium-report, .result-table td { 
         font-family: 'Noto Serif KR', serif !important; 
+    }
+
+    /* 🌟 [신규 추가] 본문 대제목(h1)의 위엄 살리기 (진한 남색 밑줄) */
+    .report-page h1:not(.cover-page h1) {
+        font-size: 26px !important;
+        font-weight: 900 !important;
+        color: #1A237E !important;
+        text-align: center !important;
+        border-bottom: 3px solid #1A237E !important;
+        padding-bottom: 10px !important;
+        margin-bottom: 25px !important;
+        margin-top: 0 !important;
+        letter-spacing: -0.5px !important;
     }
 
     .b-text { font-weight: 900 !important; color: #000000 !important; display: inline-block; }
@@ -110,11 +123,18 @@ st.markdown("""<style>
 
     .report-page { width: 210mm; max-width: 100%; margin: 20px auto; background-color: #FFF !important; padding: 12mm 10mm; box-sizing: border-box; color: #000; }
 
+    /* 🚨 [PDF 인쇄 오류 완벽 차단용 수정] 🚨 */
     @media print { 
-        @page { size: A4 portrait; margin: 10mm; }
+        @page { size: A4 portrait; margin: 5mm; } /* 인쇄 여백 축소로 백지 발생 원천 차단 */
         .stSidebar, button, iframe, .print-hide, header { display: none !important; }
-        body, .stApp { background-color: white !important; -webkit-print-color-adjust: exact !important; }
-        .report-page { box-shadow: none; margin: 0 auto; page-break-after: always; width: 100%; padding: 0; }
+        body, html, .stApp { background-color: white !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; }
+        
+        /* 백지 버그의 주범이었던 report-page의 고정 여백과 강제 페이지 나눔(always) 속성 제거 및 높이 유연화 */
+        .report-page { box-shadow: none !important; margin: 0 auto !important; width: 100% !important; padding: 0 !important; height: auto !important; min-height: auto !important; page-break-after: auto !important; }
+        .page-break { display: block !important; page-break-after: always !important; break-after: page !important; height: 1px; }
+        
+        /* 표지 타이틀 줄바꿈 강제 방지 (nowrap 및 크기 최적화) */
+        .cover-page h1 { font-size: 30px !important; white-space: nowrap !important; letter-spacing: -1px !important; word-break: keep-all !important; }
     }
 </style>""", unsafe_allow_html=True)
 
