@@ -125,18 +125,20 @@ st.markdown("""<style>
 
     /* 🚨 [PDF 인쇄 오류 완벽 차단용 수정] 🚨 */
     @media print { 
-        @page { size: A4 portrait; margin: 5mm; } /* 인쇄 여백 축소로 백지 발생 원천 차단 */
+        @page { size: A4 portrait; margin: 5mm; } 
         .stSidebar, button, iframe, .print-hide, header { display: none !important; }
         body, html, .stApp { background-color: white !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; }
         
-        /* 백지 버그의 주범이었던 report-page의 고정 여백과 강제 페이지 나눔(always) 속성 제거 및 높이 유연화 */
         .report-page { box-shadow: none !important; margin: 0 auto !important; width: 100% !important; padding: 0 !important; height: auto !important; min-height: auto !important; page-break-after: auto !important; }
+        
+        /* 🚨 [추가] 표지만 무조건 독립된 페이지로 분리되도록 강제 속성 부여 */
+        .report-page.cover-page { page-break-after: always !important; break-after: page !important; }
+        
         .page-break { display: block !important; page-break-after: always !important; break-after: page !important; height: 1px; }
         
         /* 표지 타이틀 줄바꿈 강제 방지 (nowrap 및 크기 최적화) */
         .cover-page h1 { font-size: 30px !important; white-space: nowrap !important; letter-spacing: -1px !important; word-break: keep-all !important; }
     }
-</style>""", unsafe_allow_html=True)
 
 # ==============================================================================
 # 0.5 [외부 choyeon_db.json 완벽 동적 연계]
@@ -1228,7 +1230,8 @@ if st.session_state.get('need_calc', False):
 
             # 🚨 [수술 2]: 첫 장 백지 출력 원천 차단! (쓸데없는 page-break 삭제 및 HTML 구조 정화)
             report_1_full_html = f"""{cover_html}
-<div class='report-page' style='page-break-before: auto;'>
+<div class='page-break'></div>
+<div class='report-page' style='page-break-before: always;'>
 <div class='vip-inset-frame' style='border:2px solid #1A237E; box-sizing: border-box; padding: 20px; border-radius:15px; margin-top: 0;'>
 <h1 style='text-align:center; font-size: 24px; font-weight: 900; white-space: nowrap;'>{report_title}</h1>
 {table_html}
@@ -2426,23 +2429,23 @@ if st.session_state.get('app_running', False):
     elif main_category == "3. 커플 연애/결혼운 (궁합) 풀이" or u_product == "4-2. 타 감명서 비교 (궁합)":
         if st.session_state.get('saved_report_gh_cover'):
             st.markdown(st.session_state.get('saved_report_gh_cover', ''), unsafe_allow_html=True)
-            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
             
         if st.session_state.get('saved_report_gh_m'):
             st.markdown(st.session_state.get('saved_report_gh_m', ''), unsafe_allow_html=True)
-            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_gh_f'):
             st.markdown(st.session_state.get('saved_report_gh_f', ''), unsafe_allow_html=True)
-            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_gh_g'):
             st.markdown(st.session_state.get('saved_report_gh_g', ''), unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_del'):
-            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
             st.markdown(st.session_state.get('saved_report_del', ''), unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_2'):
-            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
             st.markdown(st.session_state.get('saved_report_2', ''), unsafe_allow_html=True)
