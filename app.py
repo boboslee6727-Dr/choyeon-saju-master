@@ -835,171 +835,139 @@ with st.sidebar:
         if compare_mode == "외부 타 감명서 원문 대조":
             other_reading_text = st.text_area("타 감명서 원문 텍스트 입력", value="", height=180)
 
-if is_2person_product:
-        st.markdown("<hr style='border:1px dashed #C62828; margin:15px 0;'>", unsafe_allow_html=True)
-        
-        with st.expander("🔍 상대방 사주팔자 역산 검색", expanded=False):
-            p_col_g1, p_col_g2 = st.columns(2)
-            with p_col_g1: p_ry = st.text_input("상대방 년주", value="", key="p_ry_rev")
-            with p_col_g2: p_rm = st.text_input("상대방 월주", value="", key="p_rm_rev")
-            p_col_g3, p_col_g4 = st.columns(2)
-            with p_col_g3: p_rd = st.text_input("상대방 일주", value="", key="p_rd_rev")
-            with p_col_g4: p_rt = st.text_input("상대방 시주", value="", key="p_rt_rev")
+        if is_2person_product:
+            st.markdown("<hr style='border:1px dashed #C62828; margin:15px 0;'>", unsafe_allow_html=True)
             
-            def do_auto_fill_partner_507():
-                # 🚨 [수술 1] '신묘' 등 중복 글자 파괴 방지 헬퍼
-                def _extract(text):
-                    if not text: return ""
-                    text = text.replace(" ", "").replace("년", "").replace("월", "").replace("일", "").replace("시", "")
-                    g_char, j_char = "?", "?"
-                    for c in text:
-                        if g_char == "?" and c in "甲乙丙丁戊己庚辛壬癸갑을병정무기경신임계":
-                            g_char = c; continue
-                        if j_char == "?" and c in "子丑寅卯辰巳午未申酉戌亥자축인묘진사오미신유술해":
-                            j_char = c
-                    return g_char + j_char
-
-                _p_ry, _p_rm, _p_rd = _extract(p_ry), _extract(p_rm), _extract(p_rd)
+            with st.expander("🔍 상대방 사주팔자 역산 검색", expanded=False):
+                p_col_g1, p_col_g2 = st.columns(2)
+                with p_col_g1: p_ry = st.text_input("상대방 년주", value="", key="p_ry_rev")
+                with p_col_g2: p_rm = st.text_input("상대방 월주", value="", key="p_rm_rev")
+                p_col_g3, p_col_g4 = st.columns(2)
+                with p_col_g3: p_rd = st.text_input("상대방 일주", value="", key="p_rd_rev")
+                with p_col_g4: p_rt = st.text_input("상대방 시주", value="", key="p_rt_rev")
                 
-                if len(_p_ry) >= 2 and len(_p_rm) >= 2 and len(_p_rd) >= 2:
-                    K2H_GAN = {'갑':'甲','을':'乙','병':'丙','정':'丁','무':'戊','기':'己','경':'庚','신':'辛','임':'壬','계':'癸'}
-                    K2H_JI = {'자':'子','축':'丑','인':'寅','묘':'卯','진':'辰','사':'巳','오':'午','미':'未','신':'申','유':'酉','술':'戌','해':'亥'}
-                    p_ry_h = K2H_GAN.get(_p_ry[0], _p_ry[0]) + K2H_JI.get(_p_ry[1], _p_ry[1])
-                    p_rm_h = K2H_GAN.get(_p_rm[0], _p_rm[0]) + K2H_JI.get(_p_rm[1], _p_rm[1])
-                    p_rd_h = K2H_GAN.get(_p_rd[0], _p_rd[0]) + K2H_JI.get(_p_rd[1], _p_rd[1])
-                    
-                    p_rt_ji = None
-                    if p_rt:
-                        clean_rt = p_rt.replace("시", "").strip()
-                        if clean_rt: p_rt_ji = K2H_JI.get(clean_rt[-1], clean_rt[-1])
+                def do_auto_fill_partner_507():
+                    def _extract(text):
+                        if not text: return ""
+                        text = text.replace(" ", "").replace("년", "").replace("월", "").replace("일", "").replace("시", "")
+                        g_char, j_char = "?", "?"
+                        for c in text:
+                            if g_char == "?" and c in "甲乙丙丁戊己庚辛壬癸갑을병정무기경신임계":
+                                g_char = c; continue
+                            if j_char == "?" and c in "子丑寅卯辰巳午未申酉戌亥자축인묘진사오미신유술해":
+                                j_char = c
+                        return g_char + j_char
 
-                    # 🚨 [수술 2] 1800년대부터 스캔하는 최고급 엔진 호출!
-                    base_year = dt_mod.datetime.now().year
-                    matched_list = engine.search_dates_by_ganji(p_ry_h, p_rm_h, p_rd_h, p_rt_ji, base_year)
+                    _p_ry, _p_rm, _p_rd = _extract(p_ry), _extract(p_rm), _extract(p_rd)
                     
-                    if matched_list:
-                        st.session_state['p_matched_list'] = matched_list
-                        # 가장 최근 연도를 기본값으로 세팅
-                        st.session_state.p_y_in = matched_list[0]['y']
-                        st.session_state.p_m_in = matched_list[0]['m']
-                        st.session_state.p_d_in = matched_list[0]['d']
-                        if matched_list[0]['t'] != "시간 모름":
-                            st.session_state.p_t_key = matched_list[0]['t']
-                            st.session_state.p_t_select_key = matched_list[0]['t']
-                        st.session_state.pop('rev_p_error_msg', None)
+                    if len(_p_ry) >= 2 and len(_p_rm) >= 2 and len(_p_rd) >= 2:
+                        K2H_GAN = {'갑':'甲','을':'乙','병':'丙','정':'丁','무':'戊','기':'己','경':'庚','신':'辛','임':'壬','계':'癸'}
+                        K2H_JI = {'자':'子','축':'丑','인':'寅','묘':'卯','진':'辰','사':'巳','오':'午','미':'未','신':'申','유':'酉','술':'戌','해':'亥'}
+                        p_ry_h = K2H_GAN.get(_p_ry[0], _p_ry[0]) + K2H_JI.get(_p_ry[1], _p_ry[1])
+                        p_rm_h = K2H_GAN.get(_p_rm[0], _p_rm[0]) + K2H_JI.get(_p_rm[1], _p_rm[1])
+                        p_rd_h = K2H_GAN.get(_p_rd[0], _p_rd[0]) + K2H_JI.get(_p_rd[1], _p_rd[1])
+                        
+                        p_rt_ji = None
+                        if p_rt:
+                            clean_rt = p_rt.replace("시", "").strip()
+                            if clean_rt: p_rt_ji = K2H_JI.get(clean_rt[-1], clean_rt[-1])
+
+                        base_year = dt_mod.datetime.now().year
+                        matched_list = engine.search_dates_by_ganji(p_ry_h, p_rm_h, p_rd_h, p_rt_ji, base_year)
+                        
+                        if matched_list:
+                            st.session_state['p_matched_list'] = matched_list
+                            st.session_state.p_y_in = matched_list[0]['y']
+                            st.session_state.p_m_in = matched_list[0]['m']
+                            st.session_state.p_d_in = matched_list[0]['d']
+                            if matched_list[0]['t'] != "시간 모름":
+                                st.session_state.p_t_key = matched_list[0]['t']
+                                st.session_state.p_t_select_key = matched_list[0]['t']
+                            st.session_state.pop('rev_p_error_msg', None)
+                        else:
+                            st.session_state['rev_p_error_msg'] = "일치하는 날짜가 없습니다."
+                            st.session_state.pop('p_matched_list', None)
                     else:
-                        st.session_state['rev_p_error_msg'] = "일치하는 날짜가 없습니다."
-                        st.session_state.pop('p_matched_list', None)
-                else:
-                    st.session_state['rev_p_error_msg'] = "간지를 2글자씩 정확히 입력하세요."
+                        st.session_state['rev_p_error_msg'] = "간지를 2글자씩 정확히 입력하세요."
 
-            st.button("🔍 상대방 생년월일 자동입력", use_container_width=True, key="btn_partner_rev", on_click=do_auto_fill_partner_507)
+                st.button("🔍 상대방 생년월일 자동입력", use_container_width=True, key="btn_partner_rev", on_click=do_auto_fill_partner_507)
 
-            # 🚨 [수술 3] 버튼의 실행이 끝난 후, 연한 녹색 바탕에 두 줄짜리 라디오 UI 렌더링!
-            if 'p_matched_list' in st.session_state and st.session_state['p_matched_list']:
-                p_matches = st.session_state['p_matched_list']
-                if len(p_matches) > 1:
-                    st.success(f"💡 상대방 일치 날짜가 **{len(p_matches)}건** 검색되었습니다. 적용할 날짜를 선택하세요.")
-                    cur_p_y_val = st.session_state.get('p_y_in')
-                    p_match_opts = [m['display'] for m in p_matches]
-                    p_default_idx = 0
-                    for idx, m in enumerate(p_matches):
-                        if m['y'] == cur_p_y_val:
-                            p_default_idx = idx; break
+                if 'p_matched_list' in st.session_state and st.session_state['p_matched_list']:
+                    p_matches = st.session_state['p_matched_list']
+                    if len(p_matches) > 1:
+                        st.success(f"💡 상대방 일치 날짜가 **{len(p_matches)}건** 검색되었습니다. 적용할 날짜를 선택하세요.")
+                        cur_p_y_val = st.session_state.get('p_y_in')
+                        p_match_opts = [m['display'] for m in p_matches]
+                        p_default_idx = 0
+                        for idx, m in enumerate(p_matches):
+                            if m['y'] == cur_p_y_val:
+                                p_default_idx = idx; break
 
-                    def on_select_partner_match():
-                        sel_str = st.session_state.get('partner_match_selector')
-                        for m in p_matches:
-                            if m['display'] == sel_str:
-                                st.session_state['p_y_in'] = m['y']
-                                st.session_state['p_m_in'] = m['m']
-                                st.session_state['p_d_in'] = m['d']
-                                if m['t'] != "시간 모름":
-                                    st.session_state['p_t_key'] = m['t']
-                                    st.session_state['p_t_select_key'] = m['t']
-                                break
+                        def on_select_partner_match():
+                            sel_str = st.session_state.get('partner_match_selector')
+                            for m in p_matches:
+                                if m['display'] == sel_str:
+                                    st.session_state['p_y_in'] = m['y']
+                                    st.session_state['p_m_in'] = m['m']
+                                    st.session_state['p_d_in'] = m['d']
+                                    if m['t'] != "시간 모름":
+                                        st.session_state['p_t_key'] = m['t']
+                                        st.session_state['p_t_select_key'] = m['t']
+                                    break
+                            if 'need_calc' in st.session_state: st.session_state['need_calc'] = False
 
-                    st.radio("📅 적용할 상대방 생년월일 선택:", options=p_match_opts, index=p_default_idx, key="partner_match_selector", on_change=on_select_partner_match)
-                else:
-                    # 1개만 나왔을 때는 \n을 제거하고 1줄로 예쁘게 출력
-                    one_line_str = p_matches[0]['display'].replace('\n', ' ')
-                    st.success(f"✅ {one_line_str}")
+                        st.radio("📅 적용할 상대방 생년월일 선택:", options=p_match_opts, index=p_default_idx, key="partner_match_selector", on_change=on_select_partner_match)
+                    else:
+                        one_line_str = p_matches[0]['display'].replace('\n', ' ')
+                        st.success(f"✅ {one_line_str}")
 
-            if 'rev_p_error_msg' in st.session_state:
-                st.error(st.session_state['rev_p_error_msg'])
-                del st.session_state['rev_p_error_msg']
+                if 'rev_p_error_msg' in st.session_state:
+                    st.error(st.session_state['rev_p_error_msg'])
+                    del st.session_state['rev_p_error_msg']
 
-        st.markdown("<div style='font-weight:900; color:#C62828; margin-bottom:5px;'>💕 상대방 기본 정보</div>", unsafe_allow_html=True)
-        p_name = st.text_input("이름", value="", placeholder="이영희", key="p_n")
-        p_gender_default = "여성" if u_gender == "남성" else "남성"
-        p_gender = st.selectbox("성별", ["남성", "여성"], index=["남성", "여성"].index(p_gender_default), key="p_g")
-        p_marital = st.selectbox("혼인여부", ["미혼", "기혼", "돌싱"], index=0, key="p_m_stat")
-        p_cal = st.selectbox("달력", ["양력", "음력(평달)", "음력(윤달)"], index=0, key="p_c")
-        
-        if 'p_y_in' not in st.session_state: st.session_state['p_y_in'] = 2010
-        if 'p_m_in' not in st.session_state: st.session_state['p_m_in'] = 1
-        if 'p_d_in' not in st.session_state: st.session_state['p_d_in'] = 1
-        if 'p_t_key' not in st.session_state: st.session_state['p_t_key'] = idx_list[0]
-        if 'p_t_select_key' not in st.session_state: st.session_state['p_t_select_key'] = st.session_state['p_t_key']
-
-        p_col1, p_col2, p_col3 = st.columns(3)
-        p_y = p_col1.number_input("년", 1900, 2050, key="p_y_in")
-        p_m = p_col2.number_input("월", 1, 12, key="p_m_in")
-        p_d = p_col3.number_input("일", 1, 31, key="p_d_in")
-        
-        p_t_idx = idx_list.index(st.session_state['p_t_select_key']) if st.session_state['p_t_select_key'] in idx_list else 0
-        p_t = st.selectbox("태어난 시간", idx_list, index=p_t_idx, key="p_t_select_key")
-        st.session_state['p_t_key'] = p_t
-        
-        current_year = dt_mod.datetime.now().year 
-        f_year = u_y if u_gender == "여성" else p_y
-
-        if u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"] or ((current_year - f_year + 1) <= 49 and main_category == "3. 커플 연애/결혼운 (궁합) 풀이"):
-            st.markdown("<hr style='border:1px solid #ddd; margin:15px 0;'>", unsafe_allow_html=True)
+            st.markdown("<div style='font-weight:900; color:#C62828; margin-bottom:5px;'>💕 상대방 기본 정보</div>", unsafe_allow_html=True)
+            p_name = st.text_input("이름", value="", placeholder="이영희", key="p_n")
+            p_gender_default = "여성" if u_gender == "남성" else "남성"
+            p_gender = st.selectbox("성별", ["남성", "여성"], index=["남성", "여성"].index(p_gender_default), key="p_g")
+            p_marital = st.selectbox("혼인여부", ["미혼", "기혼", "돌싱"], index=0, key="p_m_stat")
+            p_cal = st.selectbox("달력", ["양력", "음력(평달)", "음력(윤달)"], index=0, key="p_c")
             
-            with st.expander("📅 택일 달력 기간 선택", expanded=(u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"])):
-                baby_gender = st.radio("태아 성별 (출산택일 전용)", ["미정", "남아", "여아"], index=0)
-                start_date = st.date_input("탐색 시작일", value=dt_mod.date.today())
-                end_date = st.date_input("탐색 종료일", value=dt_mod.date.today() + dt_mod.timedelta(days=30))
+            if 'p_y_in' not in st.session_state: st.session_state['p_y_in'] = 2010
+            if 'p_m_in' not in st.session_state: st.session_state['p_m_in'] = 1
+            if 'p_d_in' not in st.session_state: st.session_state['p_d_in'] = 1
+            if 'p_t_key' not in st.session_state: st.session_state['p_t_key'] = idx_list[0]
+            if 'p_t_select_key' not in st.session_state: st.session_state['p_t_select_key'] = st.session_state['p_t_key']
+
+            p_col1, p_col2, p_col3 = st.columns(3)
+            p_y = p_col1.number_input("년", 1900, 2050, key="p_y_in")
+            p_m = p_col2.number_input("월", 1, 12, key="p_m_in")
+            p_d = p_col3.number_input("일", 1, 31, key="p_d_in")
+            
+            p_t_idx = idx_list.index(st.session_state['p_t_select_key']) if st.session_state['p_t_select_key'] in idx_list else 0
+            p_t = st.selectbox("태어난 시간", idx_list, index=p_t_idx, key="p_t_select_key")
+            st.session_state['p_t_key'] = p_t
+            
+            current_year = dt_mod.datetime.now().year 
+            f_year = u_y if u_gender == "여성" else p_y
+
+            # 🚨 [누락되었던 택일 달력 로직 복구 완료!]
+            if u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"] or ((current_year - f_year + 1) <= 49 and main_category == "3. 커플 연애/결혼운 (궁합) 풀이"):
+                st.markdown("<hr style='border:1px solid #ddd; margin:15px 0;'>", unsafe_allow_html=True)
                 
-                st.markdown("<div style='margin-top:15px;'></div>", unsafe_allow_html=True)
-                run_delivery_calc = st.checkbox("✅ 택일 가동 확정 (체크 후 하단 메인 가동버튼 클릭)", value=(u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"]))
+                with st.expander("📅 택일 달력 기간 선택", expanded=(u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"])):
+                    baby_gender = st.radio("태아 성별 (출산택일 전용)", ["미정", "남아", "여아"], index=0)
+                    start_date = st.date_input("탐색 시작일", value=dt_mod.date.today())
+                    end_date = st.date_input("탐색 종료일", value=dt_mod.date.today() + dt_mod.timedelta(days=30))
+                    
+                    st.markdown("<div style='margin-top:15px;'></div>", unsafe_allow_html=True)
+                    run_delivery_calc = st.checkbox("✅ 택일 가동 확정 (체크 후 하단 메인 가동버튼 클릭)", value=(u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"]))
 
+    # 🚨 [수술 완료] 버튼이 1인용/2인용 모두에서 보이도록 4칸(스페이스바 4번) 위치로 꺼냈습니다!
     st.markdown("---")
-    btn_single = st.button("🚀 초연 전통명리 사주풀이 가동", key="btn_run", use_container_width=True, type="primary")
+    btn_single = st.button("🚀 초연 시공명리 사주풀이 가동", key="btn_run", use_container_width=True, type="primary")
 
-    # 🚨 [수술 2]: 50.5 오리지널 순정 인쇄 버튼으로 완벽하게 원상복구!
     if st.button("🖨️ 풀이 결과 인쇄 / PDF 저장", key="btn_print", use_container_width=True, type="secondary"):
         components.html("<script>window.parent.print();</script>", height=0)
-
-    if btn_single:
-        is_compare_type = (main_category == "4. 타 감명서 비교")
-
-        if not u_name.strip(): 
-            st.warning("⚠️ 신청인의 이름을 입력해 주세요.")
-        elif is_compare_type and compare_mode == "외부 타 감명서 원문 대조" and not other_reading_text.strip():
-            st.warning("⚠️ 타 감명서 원문을 입력해 주세요.")
-        elif is_2person_product and not p_name.strip(): 
-            st.warning("⚠️ 상대방의 이름을 입력해 주세요.")
-        else:
-            st.session_state['app_running'] = True
-            
-            # 🚨 [수술 3]: 50.5 순정 초기화 로직으로 원상복구!
-            for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
-                if key in st.session_state: del st.session_state[key]
-
-            if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"] and run_iljin_calc:
-                st.session_state['need_calc'] = True
-                st.session_state['run_waterfall'] = True
-            elif is_2person_product and run_delivery_calc:
-                st.session_state['need_calc'] = True
-                st.session_state['run_delivery_only'] = True
-            else:
-                st.session_state['need_calc'] = True
-                st.session_state['run_waterfall'] = False
-                st.session_state['run_delivery_only'] = False
-            
-            st.rerun()
 
 # ==============================================================================
 # 5. 분석 가동 로직 (Ver 50.4 완결본)
