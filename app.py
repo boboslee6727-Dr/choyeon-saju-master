@@ -968,6 +968,36 @@ with st.sidebar:
 
     if st.button("🖨️ 풀이 결과 인쇄 / PDF 저장", key="btn_print", use_container_width=True, type="secondary"):
         components.html("<script>window.parent.print();</script>", height=0)
+    
+    # 🚨 [수술 완료] 들여쓰기를 4칸으로 완벽하게 맞춘 가동 엔진입니다! 🚨
+    if btn_single:
+        is_compare_type = (main_category == "4. 타 감명서 비교")
+
+        if not u_name.strip(): 
+            st.warning("⚠️ 신청인의 이름을 입력해 주세요.")
+        elif is_compare_type and compare_mode == "외부 타 감명서 원문 대조" and not other_reading_text.strip():
+            st.warning("⚠️ 타 감명서 원문을 입력해 주세요.")
+        elif is_2person_product and not p_name.strip(): 
+            st.warning("⚠️ 상대방의 이름을 입력해 주세요.")
+        else:
+            st.session_state['app_running'] = True
+            
+            # 이전 결과 초기화
+            for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
+                if key in st.session_state: del st.session_state[key]
+
+            if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"] and run_iljin_calc:
+                st.session_state['need_calc'] = True
+                st.session_state['run_waterfall'] = True
+            elif is_2person_product and run_delivery_calc:
+                st.session_state['need_calc'] = True
+                st.session_state['run_delivery_only'] = True
+            else:
+                st.session_state['need_calc'] = True
+                st.session_state['run_waterfall'] = False
+                st.session_state['run_delivery_only'] = False
+            
+            st.rerun()
 
 # ==============================================================================
 # 5. 분석 가동 로직 (Ver 50.4 완결본)
