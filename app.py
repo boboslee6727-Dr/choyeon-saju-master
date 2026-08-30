@@ -1605,6 +1605,9 @@ if st.session_state.get('need_calc', False):
                     res = model.generate_content(prompt)
                     ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                     
+                    # 🚨 [옥의 티 수술 1] 마크다운 볼드체(**)를 HTML <b> 태그로 일괄 변환
+                    ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
+                    
                     # 🚨 [수술 2]: AI가 골든텍스트와 소스 코드를 화면에 그대로 토해내는 오지랖 완벽 절단!
                     if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
                         ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
@@ -2022,6 +2025,9 @@ if st.session_state.get('need_calc', False):
                 try:
                     c_res = call_claude_api(comp_prompt, max_tokens=10000)
                     
+                    # 🚨 [옥의 티 수술 2]
+                    c_res = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', c_res)
+                    
                     report_2_html = (
                         f"<div class='page-break-before'></div>\n"
                         f"<div class='report-page'>\n"
@@ -2104,6 +2110,9 @@ if st.session_state.get('need_calc', False):
 제출된 [{m_name_val}님과 {f_name_val}님의 외부 궁합 감명서 원문]을 박사님의 [초연시공명리 궁합 정밀 통변 팩트]와 1:1로 엄밀히 비교 대조하여 학술 검증 리포트를 작성하십시오.
 """
                         c_res = call_claude_api(comp_prompt, max_tokens=10000)
+                        
+                        # 🚨 [옥의 티 수술 3]
+                        c_res = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', c_res)
                         
                         report_2_html = (
                             f"<div class='page-break-before'></div>\n"
@@ -2304,6 +2313,9 @@ if st.session_state.get('need_calc', False):
                         res_text = call_claude_api(essay_prompt, max_tokens=12000)
                         ai_clean = "\n".join([line.lstrip() for line in res_text.split("\n")])
                         
+                        # 🚨 [옥의 티 수술 4]
+                        ai_clean = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_clean)
+                        
                         m_ess, f_ess, g_ess = "", "", ai_clean
                         
                         m_match = re.search(r'\[MALE_START\](.*?)\[MALE_END\]', ai_clean, re.DOTALL)
@@ -2468,6 +2480,10 @@ if st.session_state.get('need_calc', False):
 
                             del_res = model.generate_content(delivery_prompt)
                             ai_delivery_html = del_res.text.strip().replace("\n", "<br>")
+                            
+                            # 🚨 [옥의 티 수술 5]
+                            ai_delivery_html = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_delivery_html)
+
                             del_content += f"<div class='content-box-loose' style='font-size:15px; line-height:1.8; margin-top:20px;'>\n{ai_delivery_html}\n</div>"
 
                             # 🚨 [수술 완료] 중복 선언되던 wrap_takil_a4 삭제 및 단일 마스터 함수(wrap_a4) 호출!
@@ -2557,6 +2573,9 @@ if st.session_state.get('app_running', False) and st.session_state.get('run_wate
                 try:
                     res = model.generate_content(iljin_prompt)
                     ai_iljin_html = res.text.strip().replace("\n", "<br>")
+                    
+                    # 🚨 [옥의 티 수술 6]
+                    ai_iljin_html = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_iljin_html)
                 except Exception as e:
                     ai_iljin_html = f"<div style='color:red;'>🚨 AI 일진 분석 장애: {e}</div>"
 
