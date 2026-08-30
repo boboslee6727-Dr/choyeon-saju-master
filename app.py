@@ -2244,6 +2244,7 @@ if st.session_state.get('need_calc', False):
 ■ 대제목: 1., 2., 3. / 중제목: 1), 2), 3) / 소제목: (1), (2), (3) / 강조 기호: ◆, ▶, ▷ (※ 원숫자 ①, ②, ③ 사용을 절대 금지한다.)
 ■ [콜론(:) 병기 절대 금지]: 소제목 작성 후 콜론(:)을 표기하거나 같은 줄에 부연 설명을 덧붙이는 것을 절대 금지한다.
 ■ [소제목 볼드체 강제]: 소제목(예: **(1) 서로의 개인적인 공간과 시간을 존중하십시오.**)은 반드시 볼드체(굵은 글씨) 기호를 적용하여 작성한 후, 무조건 강제 줄바꿈(<br> 또는 Enter)을 실행하여 다음 줄에서 온전한 서술형 문장으로 전개할 것.
+■ 🚨 [표(Table) 생성 절대 금지]: 대운표는 시스템이 자동 삽입하므로, AI는 절대로 임의로 마크다운 표(대운/나이/길흉 등)를 그리지 마십시오.
 ■ 시스템이 남명 풀이, 여명 풀이, 종합 궁합 풀이를 개별 페이지로 분리하여 렌더링할 수 있도록 반드시 아래 태그 구조를 정확히 사용하여 작성할 것.
 ■ 모든 통변 문장은 반드시 HTML 태그 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸서 작성하십시오.
 
@@ -2287,7 +2288,7 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>🌈 커플의 인생 궤도 교차 분석</h3>
 [COUPLE_DAEWUN_TABLES_HERE]
-(상단에 제공된 대운 흐름을 바탕으로 두 사람의 길흉 주기가 어떻게 맞물리는지, 한 사람의 운이 하락할 때 상대방이 방어해 줄 수 있는지 등 인생 궤도의 상호 작용을 정밀하게 분석)
+[※ AI 통변 지시: AI는 절대로 임의로 대운표(마크다운 표)를 생성하지 마십시오. 상단에 시스템이 대운표를 자동 삽입하므로, 오직 두 사람의 길흉 주기가 어떻게 맞물리는지 텍스트(에세이)로만 정밀하게 분석하십시오.]
 
 <h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>3. 종합 궁합 점수 및 5대 핵심 조화도 분석</h3>
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 두 사람의 운명적 인연 종합점수</span>
@@ -2330,9 +2331,10 @@ if st.session_state.get('need_calc', False):
                         else:
                             g_ess = ai_clean.replace(m_ess, "").replace(f_ess, "").replace("[MALE_START]", "").replace("[MALE_END]", "").replace("[FEMALE_START]", "").replace("[FEMALE_END]", "")
                         
-                        g_ess, count = re.subn(r'\[\s*COUPLE_DAEWUN_TABLES_HERE\s*\]', couple_daewun_tables, g_ess, flags=re.IGNORECASE)
+                        # 🚨 [표 증발 방어막 수정 완료] 정규식 패턴에 여유 공간(공백) 추가 및 제목 텍스트 동기화
+                        g_ess, count = re.subn(r'[\#\*\_\s]*\[\s*COUPLE_DAEWUN_TABLES_HERE\s*\][\#\*\_\s]*', couple_daewun_tables, g_ess, flags=re.IGNORECASE)
                         if count == 0:
-                            g_ess = re.sub(r'(<h3[^>]*>🌈 커플의 인생 기상도 분석</h3>)', r'\1\n<div style="margin-top:15px;">' + couple_daewun_tables + '</div>', g_ess)
+                            g_ess = re.sub(r'(<h3[^>]*>🌈 커플의 인생 궤도 교차 분석</h3>)', r'\1\n<div style="margin-top:15px;">' + couple_daewun_tables + '</div>', g_ess)
 
                         def wrap_a4(content, title_color="#1A237E", title="[ 초연 전통 명리사주 풀이 ]"):
                             return (
