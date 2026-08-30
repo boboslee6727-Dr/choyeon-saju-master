@@ -182,9 +182,22 @@ GAN = ["甲", "乙", "丙", "丁", "戊", "己", "庚", "辛", "壬", "癸"]
 JI = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"]
 
 def extract_ganji(text):
-    g = [c for c in text if c in "甲乙丙丁戊己庚辛壬癸갑을병정무기경신임계"]
-    j = [c for c in text if c in "子丑寅卯辰巳午未申酉戌亥자축인묘진사오미신유술해"]
-    return (g[0] if g else "?") + (j[0] if j else "?")
+    """'신'처럼 천간/지지가 겹칠 때 2개 이상 중 올바른 글자를 선택하는 완벽한 필터링"""
+    if not text: return ""
+    text = text.replace(" ", "").replace("년", "").replace("월", "").replace("일", "").replace("시", "")
+    g_char, j_char = "?", "?"
+    
+    for c in text:
+        # 천간이 비어있고 천간 글자면 넣은 뒤, 다음 글자로 넘어감 (지지에 중복 할당 방지)
+        if g_char == "?" and c in "甲乙丙丁戊己庚辛壬癸갑을병정무기경신임계":
+            g_char = c
+            continue 
+            
+        # 지지가 비어있고 지지 글자면 넣음
+        if j_char == "?" and c in "子丑寅卯辰巳午未申酉戌亥자축인묘진사오미신유술해":
+            j_char = c
+            
+    return g_char + j_char
 
 def get_true_year_month_pillar(year, month, day, hour, minute):
     kst = pytz.timezone('Asia/Seoul')
