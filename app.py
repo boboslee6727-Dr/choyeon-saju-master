@@ -1278,7 +1278,7 @@ if st.session_state.get('need_calc', False):
 
             if ilju_master_data:
                 ilju_master_prompt_context = f"""
-🎯 [초연 전통명리의 뼈때리는 팩트폭격 - {user_ilju_key}일주 전용 마스터 비기]
+[초연 전통명리의 뼈때리는 팩트폭격 - {user_ilju_key}일주 전용 마스터 비기]
 - 물상 및 성향 요약: {ilju_master_data.get('summary', '')}
 - 심리적 관점: {ilju_master_data.get('psychology', '')}
 - 육친적 관점: {ilju_master_data.get('family', '')}
