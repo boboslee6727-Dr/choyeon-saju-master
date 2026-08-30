@@ -137,7 +137,15 @@ st.markdown("""<style>
         .report-page { box-shadow: none; margin: 0 auto; padding: 0; page-break-after: always; border-radius: 0; width: 100%; max-width: 100%; }
         .report-page:last-of-type { page-break-after: auto; }
         .page-break-before { page-break-before: always; }
-        .vip-inset-frame { border: 2px solid #000; border-radius: 20px; padding: 15px; }
+        
+        /* 🚨 [프레임 분할 닫기 적용] 매 페이지마다 테두리가 새로 열리고 닫히도록 복제(clone) */
+        .vip-inset-frame { 
+            border: 2px solid #000 !important; 
+            border-radius: 20px !important; 
+            padding: 15px !important; 
+            box-decoration-break: clone !important; 
+            -webkit-box-decoration-break: clone !important; 
+        }
     }
 </style>
 """, unsafe_allow_html=True)
