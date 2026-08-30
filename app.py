@@ -1277,19 +1277,18 @@ if st.session_state.get('need_calc', False):
                 gender_prompt = "여성 내담자입니다. 배우자운(관성)과 자식운(식상)을 여명 이론에 입각하여 해석하십시오."
 
             if ilju_master_data:
-                ilju_master_prompt_context = f"""
-🎯 [초연 전통명리의 뼈때리는 팩트폭격 - {user_ilju_key}일주 전용 마스터 비기]
-- 물상 및 성향 요약: {ilju_master_data.get('summary', '')}
-- 심리적 관점: {ilju_master_data.get('psychology', '')}
-- 육친적 관점: {ilju_master_data.get('family', '')}
-- 사회적 관점: {ilju_master_data.get('society', '')}
-- 지장간 좌법(座法) 분석: {ilju_master_data.get('jijanggan_zaBeob', '')}
-- 인종법(引從法) 숨겨진 내면: {ilju_master_data.get('injong_beob', '')}
-- 신살, 변곡점, 건강, 과숙/고신, 도망역: {ilju_master_data.get('shinsal_warnings', '')}
-- 💥 뼈때리는 팩트폭격 핵심 비기: {ilju_master_data.get('choyeon_secret', '')}
-
-🚨 [통변 절대 규칙]: 위 박사님의 '초연 전통명리의 뼈때리는 팩트폭격'에 담긴 문장과 임상적 통찰을 사주풀이 에세이(성격 분석, 사주구조분석, 운의 흐름) 전반에 100% 녹여내어 깊이 있게 풀이하십시오.
-"""
+                ilju_master_prompt_context = (
+                    f"\n🎯 [초연 전통명리의 뼈때리는 팩트폭격 - {user_ilju_key}일주 전용 마스터 비기]\n"
+                    f"- 물상 및 성향 요약: {ilju_master_data.get('summary', '')}\n"
+                    f"- 심리적 관점: {ilju_master_data.get('psychology', '')}\n"
+                    f"- 육친적 관점: {ilju_master_data.get('family', '')}\n"
+                    f"- 사회적 관점: {ilju_master_data.get('society', '')}\n"
+                    f"- 지장간 좌법(座法) 분석: {ilju_master_data.get('jijanggan_zaBeob', '')}\n"
+                    f"- 인종법(引從法) 숨겨진 내면: {ilju_master_data.get('injong_beob', '')}\n"
+                    f"- 신살, 변곡점, 건강, 과숙/고신, 도망역: {ilju_master_data.get('shinsal_warnings', '')}\n"
+                    f"- 💥 뼈때리는 팩트폭격 핵심 비기: {ilju_master_data.get('choyeon_secret', '')}\n"
+                    f"\n🚨 [통변 절대 규칙]: 위 박사님의 '초연 전통명리의 뼈때리는 팩트폭격'에 담긴 문장과 임상적 통찰을 사주풀이 에세이(성격 분석, 사주구조분석, 운의 흐름) 전반에 100% 녹여내어 깊이 있게 풀이하십시오.\n"
+                )
             else:
                 ilju_master_prompt_context = ""
                                 
