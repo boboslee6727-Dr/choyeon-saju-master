@@ -127,30 +127,27 @@ st.markdown("""<style>
     @media print { 
         @page { size: A4 portrait; margin: 5mm; } /* 인쇄 여백 축소로 백지 발생 원천 차단 */
         .stSidebar, button, iframe, .print-hide, header { display: none !important; }
-        body, html, .stApp { background-color: white !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; height: 100% !important; }
+        body, html, .stApp { background-color: white !important; margin: 0 !important; padding: 0 !important; -webkit-print-color-adjust: exact !important; }
         
         /* 일반 페이지 여백 및 페이지 나눔 속성 초기화 */
         .report-page { box-shadow: none !important; margin: 0 auto !important; width: 100% !important; padding: 0 !important; height: auto !important; min-height: auto !important; page-break-after: auto !important; }
-        
-        /* 👑 표지 전용 강제 중앙 정렬 및 2페이지 백지 차단 */
-        .cover-page { 
-            height: 100vh !important; 
-            max-height: 280mm !important; /* A4 높이(297mm) 초과 원천 방어 */
-            display: flex !important; 
-            flex-direction: column !important; 
-            justify-content: center !important; 
-            align-items: center !important; 
-            page-break-after: always !important; 
-            page-break-inside: avoid !important;
-            margin: 0 !important;
-            padding: 0 !important;
-            box-sizing: border-box !important;
-        }
-        
         .page-break { display: block !important; page-break-after: always !important; break-after: page !important; height: 1px; }
         
         /* 표지 타이틀 줄바꿈 강제 방지 (nowrap 및 크기 최적화) */
-        .cover-page h1 { font-size: 30px !important; white-space: nowrap !important; letter-spacing: -1px !important; word-break: keep-all !important; margin-top: 0 !important; }
+        .cover-page h1 { font-size: 30px !important; white-space: nowrap !important; letter-spacing: -1px !important; word-break: keep-all !important; }
+
+        /* 👑 박사님 지시사항: 파이썬 코드 수정 없이 CSS만으로 표지 중앙 정렬 & 백지 원천 차단 */
+        .cover-page { 
+            height: 100vh !important;           /* 1) 표지를 A4 한 장 높이에 딱 맞춤 */
+            min-height: 0 !important;           /* 2) 파이썬 코드에 있는 250mm 속성 무력화! (2페이지 백지 원인 제거) */
+            padding: 0 !important;              /* 3) 파이썬 코드에 있는 padding: 40px 무력화! (여백 초과 방지) */
+            margin: 0 !important;
+            display: flex !important; 
+            flex-direction: column !important; 
+            justify-content: center !important; /* 상하 중앙 정렬 */
+            align-items: center !important;     /* 좌우 중앙 정렬 */
+            box-sizing: border-box !important;
+        }
     }
 
 # ==============================================================================
