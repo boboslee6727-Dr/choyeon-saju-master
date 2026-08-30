@@ -2083,61 +2083,76 @@ if st.session_state.get('need_calc', False):
                         gh_engine = UniversalPrintableGunghap(u_name, p_name, male_data_pack, female_data_pack, 10)
                         gh_engine.run_universal_logic()
                         
-                        essay_prompt = f"""[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
-당신은 정통 명리심리상담사 '초연 박사'입니다.
+                        essay_prompt = f"""[SYSTEM ROLE: 초연시공명리 최고위 커플 궁합 & 부부 심리 컨설턴트]
+제공된 남명과 여명의 사주 원국 및 시공간 팩트 데이터를 꼼꼼하게 훑어 바탕으로 삼고, 두 사람의 음양오행적 조화, 심리적 기류, 대운 궤도의 동조성을 엄정하고 입체적으로 통변할 것.
 
-🚨 [출력 절대 형식 및 내용 생성 규칙]
-1. 각 소제목 아래에 절대로 안내 문구를 그대로 복사해서 출력하지 마십시오!
-2. 반드시 내담자의 명리적 특징을 분석하여 3~4문장 분량의 실제 통변 내용을 직접 작성해야 합니다.
-3. 모든 통변 문장은 HTML 태그 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸하십시오.
+🚨 [절대 강제: 3분할 파싱 태그 서식 엄수]
+■ 시스템이 남명 풀이, 여명 풀이, 종합 궁합 풀이를 개별 페이지로 분리하여 렌더링할 수 있도록 반드시 아래 태그 구조를 정확히 사용하여 작성할 것.
+■ 모든 통변 문장은 반드시 HTML 태그 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸서 작성하십시오.
 
 [MALE_START]
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>
+<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
-(이곳에 남성의 사회적 표면 성격을 분석한 실제 에세이 작성)
+(남명의 대외적 행동 스타일 및 사회적 태도 정밀 통변)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 감추어진 내 속마음</span>
-(이곳에 남성의 내면과 무의식을 분석한 실제 에세이 작성)
+(타인에게 내비치지 않는 남명의 내면 가치관, 본능적 욕구 통변)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
-(남성의 연애 및 결혼관을 실제 에세이로 작성)
+(무의식적으로 갈망하는 이상형과 결혼관 통변)
 
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; margin-top: 15px;'>2. 사주팔자의 요약</h3>
+<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 25px;'>2. 타고난 삶의 구조 요약</h3>
 {m_traditional_text_html}
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
-(이곳에 남성의 정통 명리적 성향을 분석한 실제 에세이 작성)
+(명리 용어를 배제하고 순화하여 삶의 주된 환경 그릇 통변)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>
-(이곳에 남성의 오행 및 조후 에너지를 분석한 실제 에세이 작성)
+(원국의 오행 분포, 조후 균형 및 심리적 에너지 밸런스 통변)
 [MALE_END]
 
 [FEMALE_START]
-<h3 style='color:#D50000; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>
+<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
-(이곳에 여성의 사회적 표면 성격을 분석한 실제 에세이 작성)
+(여명의 대외적 행동 스타일 및 사회적 태도 정밀 통변)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 감추어진 내 속마음</span>
-(이곳에 여성의 내면과 무의식을 분석한 실제 에세이 작성)
+(타인에게 내비치지 않는 여명의 내면 가치관, 본능적 욕구 통변)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
-(여성의 연애 및 결혼관을 실제 에세이로 작성)
+(무의식적으로 갈망하는 이상형과 결혼관 통변)
 
-<h3 style='color:#D50000; font-size: 22px; font-weight: 900; margin-top: 15px;'>2. 사주팔자의 요약</h3>
+<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 25px;'>2. 타고난 삶의 구조 요약</h3>
 {f_traditional_text_html}
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
-(이곳에 여성의 정통 명리적 성향을 분석한 실제 에세이 작성)
+(명리 용어를 배제하고 순화하여 삶의 주된 환경 그릇 통변)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>
-(이곳에 여성의 오행 및 조후 에너지를 분석한 실제 에세이 작성)
+(원국의 오행 분포, 조후 균형 및 심리적 에너지 밸런스 통변)
 [FEMALE_END]
 
 [GUNGHAP_START]
-<h3 style='color: #1B5E20; font-size: 22px; font-weight: 900; margin-top: 10px;'>🍀 두 사람의 운명적 만남에 대하여</h3>
-(이곳에 두 사람의 인연 총평을 깊이 있게 통변한 실제 에세이 작성)
+<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 10px;'>1. 두 사람의 운명적 만남에 대하여</h3>
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 인연의 의미와 첫 기류</span>
+(두 사람 인연의 깊이와 첫 끌림을 깊이 있게 통변)
 
-<h3 style='color: #1A237E; font-size: 22px; font-weight: 900; margin-top: 25px;'>🌈 커플의 인생 기상도 분석</h3>
+<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>2. 커플의 인생 궤도 교차 분석</h3>
 [COUPLE_DAEWUN_TABLES_HERE]
-(이곳에 상하 대운 교차점에 따른 상생/보완을 분석한 실제 에세이 작성)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 커플의 궤도 동조성</span>
+(대운 교차점을 바탕으로 함께 걸어가는 인생 궤도의 상생과 보완점 심층 분석)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 삶의 굴곡과 상호 공명</span>
+(한 사람의 건강/성패 변동이 일어날 때 상대방에게 미치는 영향 통변)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 관계의 결정적 전환기</span>
+(일주 복음 세운 및 대운 전환기 작용 등 두 사람 관계의 결정적 분기점 정밀 분석)
 
-<h4 style='color: #1A237E; font-size: 18px; font-weight: 900; margin-top: 25px;'>💞 커플의 상생과 조화 궁합 분석</h4>
-(이곳에 속궁합, 겉궁합, 오행 궁합을 통합 분석한 실제 에세이 작성)
+<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>3. 종합 궁합 점수({gh_engine.final_score}점) 및 5대 핵심 조화도 분석</h3>
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 두 사람의 운명적 인연 종합점수</span>
+(종합 궁합 점수 {gh_engine.final_score}점과 인연 등급 '{gh_engine.grade}'의 의미를 묵직하게 통변하고, 다음 5대 조화도에 대해 심층 서술: (1) 사회적 가치관과 소통 조화, (2) 내면적 정서와 애정 밀착도, (3) 경제 및 자산 운용 시너지, (4) 위기 극복 및 가정 안정성, (5) 오행 유통과 조후 상보성)
 
-<h4 style='color: #1A237E; font-size: 18px; font-weight: 900; margin-top: 25px;'>⚓ 조율의 지혜</h4>
-(이곳에 갈등 극복 및 개운 처방을 담은 실제 에세이 작성)
+<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>4. 다름을 이해하고 맞춰가는 건강한 연애 가이드</h3>
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 흔들림 없는 롱런(Long-run) 솔루션</span>
+(4대 실전 행동 수칙을 (1), (2), (3), (4) 기호를 사용한 단답형 소제목으로 먼저 작성한 후, 다음 줄에 오랜 만남을 이어갈 수 있는 가이드를 명리적 환경 보완 관점에서 조언)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 관계 안정을 위한 실천 마인드셋</span>
+(서로의 신뢰를 깊게 다지기 위해 일상에서 실천해야 할 구체적인 상호 존중의 태도를 세련되게 조언)
+
+<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>5. 💡 [커플의 평행이론] 1:1 심층 솔루션</h3>
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 부부 갈등 공감 및 진짜 원인 규명</span>
+(사주의 합충, 오행 쏠림, 대운 교차 등 명리적 원인을 바탕으로 부부간 발생할 수 있는 갈등에 깊이 공감하고 원인을 규명)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 화목한 결합을 위한 현실적 해법</span>
+(서로의 성향 차이를 보완하며 화목하게 잘 살 수 있는 명쾌하고 현실적인 해법 조언)
 [GUNGHAP_END]
 """
                         res_text = call_claude_api(essay_prompt, max_tokens=12000)
