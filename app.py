@@ -1,5 +1,5 @@
 # ==============================================================================
-# app.py (ver 50.5 Master - 초연 전통명리 완결판)
+# app.py (ver 50.7 Master - 초연 전통명리 완결판)
 # ====================================================================
 import streamlit as st
 import pandas as pd
@@ -20,7 +20,7 @@ import re
 # ==============================================================================
 # 🎯 [버전 컨트롤 타워]
 # ==============================================================================
-APP_VERSION = "Ver 50.5 (Master & 14종 세분화 완결본)"
+APP_VERSION = "Ver 50.7 (Master & 14종 세분화 완결본)"
 
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS (ver 50.5 원본 유지 + 백지 차단/대제목 위엄 추가)
@@ -2088,7 +2088,8 @@ if st.session_state.get('need_calc', False):
 
 🚨 [절대 강제: 목차 및 서식 위계 절대 규칙]
 ■ 대제목: 1., 2., 3. / 중제목: 1), 2), 3) / 소제목: (1), (2), (3) / 강조 기호: ◆, ▶, ▷ (※ 원숫자 ①, ②, ③ 사용을 절대 금지한다.)
-■ [콜론(:) 병기 절대 금지]: 소제목(예: (1) 서로의 성장 환경 조성) 작성 후 콜론(:)을 표기하거나 같은 줄에 부연 설명을 덧붙이는 것을 절대 금지한다. 소제목 작성 후 반드시 강제 줄바꿈(<br> 또는 Enter)을 실행하여 다음 줄에서 온전한 서술형 문장으로 전개할 것.
+■ [콜론(:) 병기 절대 금지]: 소제목 작성 후 콜론(:)을 표기하거나 같은 줄에 부연 설명을 덧붙이는 것을 절대 금지한다.
+■ [소제목 볼드체 강제]: 소제목(예: **(1) 서로의 개인적인 공간과 시간을 존중하십시오.**)은 반드시 볼드체(굵은 글씨) 기호를 적용하여 작성한 후, 무조건 강제 줄바꿈(<br> 또는 Enter)을 실행하여 다음 줄에서 온전한 서술형 문장으로 전개할 것.
 ■ 시스템이 남명 풀이, 여명 풀이, 종합 궁합 풀이를 개별 페이지로 분리하여 렌더링할 수 있도록 반드시 아래 태그 구조를 정확히 사용하여 작성할 것.
 ■ 모든 통변 문장은 반드시 HTML 태그 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸서 작성하십시오.
 
@@ -2101,7 +2102,7 @@ if st.session_state.get('need_calc', False):
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
 (무의식적으로 갈망하는 이상형과 결혼관 통변)
 
-<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 25px;'>2. 남명 사주의 요약</h3>
+<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 25px;'>2. 남명 사주팔자의 요약</h3>
 {m_traditional_text_html}
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
 (명리 용어를 배제하고 순화하여 삶의 주된 환경 그릇 통변)
@@ -2118,7 +2119,7 @@ if st.session_state.get('need_calc', False):
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
 (무의식적으로 갈망하는 이상형과 결혼관 통변)
 
-<h3 style='color:#D50000; font-size: 22px; font-weight: 900; margin-top: 25px;'>2. 여명 사주의 요약</h3>
+<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 25px;'>2. 여명 사주팔자의 요약</h3>
 {f_traditional_text_html}
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
 (명리 용어를 배제하고 순화하여 삶의 주된 환경 그릇 통변)
@@ -2127,18 +2128,12 @@ if st.session_state.get('need_calc', False):
 [FEMALE_END]
 
 [GUNGHAP_START]
-<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 10px;'>1. 두 사람의 운명적 만남에 대하여</h3>
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 인연의 의미와 첫 기류</span>
-(두 사람 인연의 깊이와 첫 끌림을 깊이 있게 통변)
+<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 10px;'>🍀 두 사람의 운명적 만남</h3>
+(남명과 여명의 일간 및 일지 합충 등을 바탕으로 두 사람 인연의 깊이와 첫 끌림을 비교 설명하며 깊이 있게 통변)
 
-<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>2. 커플의 인생 궤도 교차 분석</h3>
+<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>🌈 커플의 인생 궤도 교차 분석</h3>
 [COUPLE_DAEWUN_TABLES_HERE]
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 커플의 궤도 동조성</span>
-(대운 교차점을 바탕으로 함께 걸어가는 인생 궤도의 상생과 보완점 심층 분석)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 삶의 굴곡과 상호 공명</span>
-(한 사람의 건강/성패 변동이 일어날 때 상대방에게 미치는 영향 통변)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 관계의 결정적 전환기</span>
-(일주 복음 세운 및 대운 전환기 작용 등 두 사람 관계의 결정적 분기점 정밀 분석)
+(상단에 제공된 대운 흐름을 바탕으로 두 사람의 길흉 주기가 어떻게 맞물리는지, 한 사람의 운이 하락할 때 상대방이 방어해 줄 수 있는지 등 인생 궤도의 상호 작용을 정밀하게 분석)
 
 <h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>3. 종합 궁합 점수 및 5대 핵심 조화도 분석</h3>
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 두 사람의 운명적 인연 종합점수</span>
@@ -2156,7 +2151,7 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>4. 다름을 이해하고 맞춰가는 건강한 연애 가이드</h3>
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 행복한 가정을 유지하기 위한 행동수칙</span>
-[※ AI 통변 지시: 4대 실전 행동 수칙을 반드시 (1), (2), (3), (4) 단답형 소제목으로 작성하되, 콜론(:) 사용을 절대 금지하고 소제목 작성 후 무조건 줄바꿈(<br> 또는 Enter)을 하여 다음 줄에 상세 가이드를 서술하십시오.]
+[※ AI 통변 지시: 4대 실전 행동 수칙을 반드시 **(1) 소제목**, **(2) 소제목**, **(3) 소제목**, **(4) 소제목** 형태로 볼드체(굵은글씨)를 적용하여 작성하되, 콜론(:) 사용을 절대 금지하고 소제목 작성 후 무조건 줄바꿈(<br> 또는 Enter)을 하여 다음 줄에 상세 가이드를 서술하십시오.]
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 관계 안정을 위한 실천 마인드셋</span>
 (서로의 신뢰를 깊게 다지기 위해 일상에서 실천해야 할 구체적인 상호 존중의 태도를 세련되게 조언)
 [GUNGHAP_END]
@@ -2248,8 +2243,8 @@ if st.session_state.get('need_calc', False):
                         m_page_content = f"{m_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
                         f_page_content = f"{f_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
                         
-                        st.session_state['saved_report_gh_m'] = wrap_a4(m_page_content, "#1A237E", "[ 남명 사주팔자표 및 요약 ]")
-                        st.session_state['saved_report_gh_f'] = wrap_a4(f_page_content, "#D50000", "[ 여명 사주팔자표 및 요약 ]")
+                        st.session_state['saved_report_gh_m'] = wrap_a4(m_page_content, "#1A237E", "[ 남명 사주의 요약 ]")
+                        st.session_state['saved_report_gh_f'] = wrap_a4(f_page_content, "#E91E63", "[ 여명 사주의 요약 ]")
                         st.session_state['saved_report_gh_g'] = wrap_a4(g_full_content, "#1B5E20", "[ 초연 전통명리 종합 궁합풀이 ]")
 
                         if u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"]:
