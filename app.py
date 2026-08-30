@@ -1,5 +1,5 @@
 # ==============================================================================
-# app.py (ver 50.5 Master - 초연 전통명리 완결판)
+# app.py (ver 50.5 Master - 초연 전통명리 완결판 - 오류 완벽 박멸/올블랙/표지독립 버전)
 # ====================================================================
 import streamlit as st
 import pandas as pd
@@ -23,7 +23,7 @@ import re
 APP_VERSION = "Ver 50.5 (Master & 14종 세분화 완결본)"
 
 # ==============================================================================
-# 0. VIP 인셋 프레임 및 초강력 프린트 CSS (ver 50.5 원본 유지 + 백지 차단/대제목 위엄 추가)
+# 0. VIP 인셋 프레임 및 초강력 프린트 CSS
 # ==============================================================================
 st.set_page_config(page_title=f"초연 전통 명리 {APP_VERSION}", layout="wide")
 
@@ -50,13 +50,12 @@ st.markdown("""<style>
         font-family: 'Noto Serif KR', serif !important; 
     }
 
-    /* 🌟 [신규 추가] 본문 대제목(h1)의 위엄 살리기 (진한 남색 밑줄) */
     .report-page h1:not(.cover-page h1) {
         font-size: 26px !important;
         font-weight: 900 !important;
-        color: #1A237E !important;
+        color: #000000 !important;
         text-align: center !important;
-        border-bottom: 3px solid #1A237E !important;
+        border-bottom: 3px solid #000000 !important;
         padding-bottom: 10px !important;
         margin-bottom: 25px !important;
         margin-top: 0 !important;
@@ -74,7 +73,6 @@ st.markdown("""<style>
         width: 100% !important;
     }
 
-    /* Primary 버튼 (빨간색) */
     div.stButton > button[kind="primary"] { 
         background-color: #D50000 !important; 
         color: #FFFFFF !important; 
@@ -88,7 +86,6 @@ st.markdown("""<style>
         color: #FFFFFF !important;
     }
 
-    /* Secondary 버튼 (인쇄/저장 - 초록색 #00A843) */
     div.stButton > button[kind="secondary"] { 
         background-color: #00A843 !important; 
         color: #FFFFFF !important; 
@@ -104,8 +101,8 @@ st.markdown("""<style>
 
     .ai-title-l1 { font-size: 22px !important; font-weight: 900 !important; color: #000000 !important; margin-top: 35px !important; margin-bottom: 15px !important; border-bottom: 2px solid #000000 !important; padding-bottom: 5px !important; line-height: 1.4 !important; font-family: sans-serif !important; display: block !important; }
     .ai-title-l2 { font-size: 18px !important; font-weight: 900 !important; color: #000000 !important; margin-top: 22px !important; margin-bottom: 10px !important; line-height: 1.4 !important; font-family: sans-serif !important; display: block !important; }
-    .vip-inset-frame { border: 2px solid #3E2723 !important; border-radius: 12px !important; padding: 30px 25px !important; background-color: #FFFFFF !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
-    .ai-body-p { font-size: 16px !important; font-weight: 400 !important; line-height: 1.85 !important; color: #222222 !important; text-align: justify !important; text-justify: inter-character !important; text-indent: 1.0em !important; margin-bottom: 12px !important; word-break: break-all !important; }
+    .vip-inset-frame { border: 2px solid #000000 !important; border-radius: 12px !important; padding: 30px 25px !important; background-color: #FFFFFF !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+    .ai-body-p { font-size: 16px !important; font-weight: 400 !important; line-height: 1.85 !important; color: #000000 !important; text-align: justify !important; text-justify: inter-character !important; text-indent: 1.0em !important; margin-bottom: 12px !important; word-break: break-all !important; }
 
     .color-목 { background: #2E7D32 !important; color: #FFF !important; }
     .color-화 { background: #C62828 !important; color: #FFF !important; }
@@ -113,13 +110,13 @@ st.markdown("""<style>
     .color-금 { background: #9E9E9E !important; color: #FFF !important; }
     .color-수 { background: #212121 !important; color: #FFF !important; }
 
-    .result-table { width: 100%; border-collapse: collapse !important; border: 3px solid #3E2723 !important; margin-bottom: 15px; table-layout: fixed; }
+    .result-table { width: 100%; border-collapse: collapse !important; border: 3px solid #000000 !important; margin-bottom: 15px; table-layout: fixed; }
     .result-table td { border: 1px solid #444 !important; padding: 1px 0 !important; text-align: center; vertical-align: middle; font-weight: 900 !important; font-size: 13px; line-height: 1.2 !important; }
     .ganji-cell-24 { font-size: 24px !important; font-weight: 900 !important; }
 
-    .top-header-cell { background-color: #1A237E !important; height: 30px !important; }
-    .top-header-cell td { background-color: #1A237E !important; color: #FFFFFF !important; font-weight: 900 !important; font-size: 16px !important; border: 1px solid #444 !important; }
-    .header-cell-main, .header-cell-sub { background-color: #E8EAF6 !important; color: #000000 !important; font-weight: 900 !important; font-size: 14px !important; }
+    .top-header-cell { background-color: #222222 !important; height: 30px !important; }
+    .top-header-cell td { background-color: #222222 !important; color: #FFFFFF !important; font-weight: 900 !important; font-size: 16px !important; border: 1px solid #444 !important; }
+    .header-cell-main, .header-cell-sub { background-color: #F5F5F5 !important; color: #000000 !important; font-weight: 900 !important; font-size: 14px !important; }
 
     .report-page { width: 210mm; max-width: 100%; margin: 20px auto; background-color: #FFF !important; padding: 12mm 10mm; box-sizing: border-box; color: #000; }
 
@@ -139,6 +136,7 @@ st.markdown("""<style>
         /* 표지 타이틀 줄바꿈 강제 방지 (nowrap 및 크기 최적화) */
         .cover-page h1 { font-size: 30px !important; white-space: nowrap !important; letter-spacing: -1px !important; word-break: keep-all !important; }
     }
+</style>""", unsafe_allow_html=True)
 
 # ==============================================================================
 # 0.5 [외부 choyeon_db.json 완벽 동적 연계]
@@ -376,9 +374,9 @@ def check_vault_status(base_gans, base_jjis, attacker_ji):
                 is_trapped = any(g in targets for g in base_gans)
                 if is_trapped:
                     trapped_chars = [g for g in targets if g in base_gans]
-                    results.append(f"🚨 <b style='color:#C62828;'>[입고(入庫) 주의]</b> {ji} 무덤이 열려 천간의 {','.join(trapped_chars)} 기운이 빨려 들어갑니다.")
+                    results.append(f"🚨 <b style='color:#000000;'>[입고(入庫) 주의]</b> {ji} 무덤이 열려 천간의 {','.join(trapped_chars)} 기운이 빨려 들어갑니다.")
                 else:
-                    results.append(f"💎 <b style='color:#2E7D32;'>[개고(開庫) 발현]</b> {ji} 금고가 열려 지장간의 숨은 보물이 세상에 드러납니다.")
+                    results.append(f"💎 <b style='color:#000000;'>[개고(開庫) 발현]</b> {ji} 금고가 열려 지장간의 숨은 보물이 세상에 드러납니다.")
     return results
 
 def get_gyukgook_detailed(ds, ys, ms, hs, mb):
@@ -457,7 +455,7 @@ def get_optimized_delivery_days(start_date, end_date, m_jjis, f_jjis, forbidden_
     return sorted(results, key=lambda x: x['score'], reverse=True)[:5]
 
 # ==============================================================================
-# 3. 프리미엄 궁합 분석 엔진 클래스 (ver 48.3 원형 100% 보존 및 조후/묘고 메서드 포함)
+# 3. 프리미엄 궁합 분석 엔진 클래스
 # ==============================================================================
 class UniversalPrintableGunghap:
     def __init__(self, applicant, partner_name, male, female, daeun_score=10):
@@ -573,16 +571,16 @@ class UniversalPrintableGunghap:
         elif self.final_score >= 60: self.grade = "성장연분 (이해하며 맞춰가는 인연)"
         else: self.grade = "조율연분 (인내와 배려가 필요한 인연)"
         self.details = [
-            {"label": "내면의 유대감", "pct": p1, "color": "#9b59b6"},
-            {"label": "환경 조화", "pct": p2, "color": "#2ecc71"},
-            {"label": "기운 상호보완", "pct": p3, "color": "#3498db"},
-            {"label": "특수 기운", "pct": p4, "color": "#f1c40f"},
-            {"label": "대운 기상도 조화", "pct": p5, "color": "#8e44ad"},
-            {"label": "리스크 방어력", "pct": p6_safety, "color": "#e74c3c"}
+            {"label": "내면의 유대감", "pct": p1, "color": "#000000"},
+            {"label": "환경 조화", "pct": p2, "color": "#000000"},
+            {"label": "기운 상호보완", "pct": p3, "color": "#000000"},
+            {"label": "특수 기운", "pct": p4, "color": "#000000"},
+            {"label": "대운 기상도 조화", "pct": p5, "color": "#000000"},
+            {"label": "리스크 방어력", "pct": p6_safety, "color": "#000000"}
         ]
 
 # ==============================================================================
-# 4. 사이드바 UI (14종 상세 분석 항목 완벽 분기)
+# 4. 사이드바 UI
 # ==============================================================================
 with st.sidebar:
     st.title("🏮초연 전통명리 연구소")
@@ -604,7 +602,6 @@ with st.sidebar:
 
     if main_category == "1. 개인 사주팔자 풀이 (종합)":
         u_product = st.radio("상세 분석 항목:", ["1-1. 사주팔자와 운세풀이", "1-2. 올해 및 특정연도 운세 상세분석", "1-3. 이번달 및 특정월 운세 상세분석", "1-4. 특정 주간 및 특정일운 상세분석"], key="sub_cat_1")
-        
         if u_product == "1-2. 올해 및 특정연도 운세 상세분석":
             curr_yr_val = dt_mod.datetime.now(pytz.timezone('Asia/Seoul')).year
             st.number_input("📅 분석할 특정 연도 (기본값: 올해)", min_value=1900, max_value=2050, value=curr_yr_val, key="target_year_input")
@@ -675,7 +672,7 @@ with st.sidebar:
             else: st.warning("간지를 2글자씩 정확히 입력하세요.")
 
     st.markdown("---")
-    st.markdown("<div style='font-weight:900; color:#1A237E; margin-bottom:5px;'>👤 신청인 기본 정보</div>", unsafe_allow_html=True)
+    st.markdown("<div style='font-weight:900; color:#000000; margin-bottom:5px;'>👤 신청인 기본 정보</div>", unsafe_allow_html=True)
     u_name = st.text_input("이름", value="", placeholder="홍길동", key="u_n")
     u_gender = st.selectbox("성별", ["남성", "여성"], index=0, key="u_g")
     u_marital = st.selectbox("혼인여부", ["선택", "미혼", "기혼", "돌싱"], index=1, key="u_m_stat")
@@ -700,18 +697,14 @@ with st.sidebar:
     run_iljin_calc = False
     is_vip_package = False
 
-    # 🚨 [안전장치]: 85.5의 stop_ai 함수가 50.5에서도 에러 없이 작동하도록 선언
     def stop_ai():
         if 'need_calc' in st.session_state: st.session_state['need_calc'] = False
 
     if main_category in ["1. 개인 사주팔자 풀이 (종합)", "2. 테마별 특성화 상담"]:
-        
-        # 🚨 [수술 1]: 85.5 버전의 VIP 패키지 모드 완벽 이식!
         if u_product.startswith("1-"):
-            st.markdown("<hr style='border:1px dashed #1A237E; margin:15px 0;'>", unsafe_allow_html=True)
+            st.markdown("<hr style='border:1px dashed #000000; margin:15px 0;'>", unsafe_allow_html=True)
             is_vip_package = st.checkbox("👑 VIP 패키지 모드", value=st.session_state.get("is_vip_package_val", False), key="is_vip_package_val", on_change=stop_ai)
 
-        # 🚨 [수술 1]: 1-1번에서는 일운 스위치 철거! 1-4번에서만 가동되도록 분리!
         if u_product == "1-4. 특정 주간 및 특정일운 상세분석":
             run_iljin_calc = st.checkbox("🔮 일운 운세 분석 가동", value=False)
             if run_iljin_calc:
@@ -719,16 +712,16 @@ with st.sidebar:
                 st.session_state['target_date'] = st.date_input("분석할 일자 선택", value=st.session_state['target_date'])
                 
         elif u_product == "1-1. 사주팔자와 운세풀이":
-            run_iljin_calc = False  # 1-1번은 무조건 메인 사주만 풀이 (일진 스위치 차단)
+            run_iljin_calc = False 
 
     elif main_category == "4. 타 감명서 비교":
-        st.markdown("<hr style='border:1px dashed #2E7D32; margin:15px 0;'>", unsafe_allow_html=True)
+        st.markdown("<hr style='border:1px dashed #000000; margin:15px 0;'>", unsafe_allow_html=True)
         compare_mode = st.radio("대조 분석 모드", ["전통 명리학과 1:1 자동 대조", "외부 타 감명서 원문 대조"], index=0)
         if compare_mode == "외부 타 감명서 원문 대조":
             other_reading_text = st.text_area("타 감명서 원문 텍스트 입력", value="", height=180)
 
     if is_2person_product:
-        st.markdown("<hr style='border:1px dashed #C62828; margin:15px 0;'>", unsafe_allow_html=True)
+        st.markdown("<hr style='border:1px dashed #000000; margin:15px 0;'>", unsafe_allow_html=True)
         
         with st.expander("🔍 상대방 사주팔자 역산 검색", expanded=False):
             p_col_g1, p_col_g2 = st.columns(2)
@@ -773,7 +766,7 @@ with st.sidebar:
                     if not found_p: st.error("일치하는 날짜가 없습니다.")
                 else: st.warning("간지를 2글자씩 정확히 입력하세요.")
 
-        st.markdown("<div style='font-weight:900; color:#C62828; margin-bottom:5px;'>💕 상대방 기본 정보</div>", unsafe_allow_html=True)
+        st.markdown("<div style='font-weight:900; color:#000000; margin-bottom:5px;'>💕 상대방 기본 정보</div>", unsafe_allow_html=True)
         p_name = st.text_input("이름", value="", placeholder="이영희", key="p_n")
         p_gender_default = "여성" if u_gender == "남성" else "남성"
         p_gender = st.selectbox("성별", ["남성", "여성"], index=["남성", "여성"].index(p_gender_default), key="p_g")
@@ -812,7 +805,6 @@ with st.sidebar:
     st.markdown("---")
     btn_single = st.button("🚀 초연 전통명리 사주풀이 가동", key="btn_run", use_container_width=True, type="primary")
 
-    # 🚨 [수술 2]: 50.5 오리지널 순정 인쇄 버튼으로 완벽하게 원상복구!
     if st.button("🖨️ 풀이 결과 인쇄 / PDF 저장", key="btn_print", use_container_width=True, type="secondary"):
         components.html("<script>window.parent.print();</script>", height=0)
 
@@ -828,7 +820,6 @@ with st.sidebar:
         else:
             st.session_state['app_running'] = True
             
-            # 🚨 [수술 3]: 50.5 순정 초기화 로직으로 원상복구!
             for key in ['saved_report_html', 'saved_report_2', 'saved_report_gh_cover', 'saved_report_gh_m', 'saved_report_gh_f', 'saved_report_gh_g', 'saved_report_del', 'saved_report_iljin']:
                 if key in st.session_state: del st.session_state[key]
 
@@ -846,7 +837,7 @@ with st.sidebar:
             st.rerun()
 
 # ==============================================================================
-# 5. 분석 가동 로직 (Ver 50.4 완결본)
+# 5. 분석 가동 로직
 # ==============================================================================
 if st.session_state.get('need_calc', False):
     spinner_msg = f"⏳ [초연 전통명리 정밀 분석({u_product}) 연산 중....]"
@@ -901,7 +892,6 @@ if st.session_state.get('need_calc', False):
             def td(c, size="18px"): return f"<td class='color-{get_color(c)}' style='font-size:{size}; font-weight:900; border:1px solid #444 !important;'><span style='color:inherit !important;'>{('?' if c in ['?',' ','-'] else c)}</span></td>"
             
             p_icon = "♂️" if u_gender == "남성" else "♀️"
-            p_color = "#1A237E" if u_gender == "남성" else "#D50000"
             today_str = (dt_mod.datetime.utcnow() + dt_mod.timedelta(hours=9)).strftime("%Y년 %m월 %d일")
 
             user_ilju_key = f"{ds}{db}"
@@ -909,88 +899,64 @@ if st.session_state.get('need_calc', False):
             ilju_master_data = ilju_full_db.get(user_ilju_key, {})
             ilju_summary_text = ilju_master_data.get('summary', f"{user_ilju_key}의 고유한 본성")
 
-            intro_html = """
-    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
-    <div style="margin: 0; padding: 0;">
-        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 6px; font-weight: 600; text-align: justify; text-indent: 0; color: #000000;">
-            <b>"초연 전통 명리학"</b>은 태어난 연·월·일·시의 정통 <b>사주팔자 원국과 격국, 십성, 12운성 및 신살</b>을 바탕으로 내담자의 타고난 천성과 삶의 궤적을 맑고 깊이 있게 통변합니다.
-        </p> 
-        <p class="ai-body-p" style="margin-top: 0; margin-bottom: 0; font-weight: 600; text-align: justify; text-indent: 0; color: #000000;">
-            따라서, 본 감명서는 고전 명리의 이치에 철저히 입각하여 인생의 길흉화복과 시기별 흐름을 가장 정교하고 품격 있게 제시합니다.
-        </p>
-    </div>
-    <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
-"""
+            intro_html = (
+                f"<hr style='border: 0; border-top: 2px solid #000000; margin: 25px 0;'>\n"
+                f"<div style='margin: 0; padding: 0;'>\n"
+                f"    <p class='ai-body-p' style='margin-top: 0; margin-bottom: 6px; font-weight: 600; text-align: justify; text-indent: 0; color: #000000;'>\n"
+                f"        <b>\"초연 전통 명리학\"</b>은 태어난 연·월·일·시의 정통 <b>사주팔자 원국과 격국, 십성, 12운성 및 신살</b>을 바탕으로 내담자의 타고난 천성과 삶의 궤적을 맑고 깊이 있게 통변합니다.\n"
+                f"    </p> \n"
+                f"    <p class='ai-body-p' style='margin-top: 0; margin-bottom: 0; font-weight: 600; text-align: justify; text-indent: 0; color: #000000;'>\n"
+                f"        따라서, 본 감명서는 고전 명리의 이치에 철저히 입각하여 인생의 길흉화복과 시기별 흐름을 가장 정교하고 품격 있게 제시합니다.\n"
+                f"    </p>\n"
+                f"</div>\n"
+                f"<hr style='border: 0; border-top: 2px solid #000000; margin: 25px 0;'>\n"
+            )
 
             hap_chung_hyoung_pa_hae = (
                 f"일-월지:{get_ji_rel_set(db, mb)}, 일-년지:{get_ji_rel_set(db, yb)}, "
                 f"일-시지:{get_ji_rel_set(db, hb)}, 월-년지:{get_ji_rel_set(mb, yb)}"
             )
 
-            # 🚨 [수술 1] 남명과 똑같은 색상 통일을 위해 p_color를 무력화하고 진한 남색(#1A237E)으로 고정!
-            safe_color = "#1A237E"
-
             cover_html = (
-                # 🚨 [수술 2] height: 297mm를 height: auto로 변경하고 여백을 주어 PDF 첫 장 백지 출력 완벽 방어!
                 f"<div class='report-page cover-page' style='padding:40px 0; margin:0 auto; width:100%; height:auto; min-height:250mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
-                f"    <div style='border: 4px solid #1A237E; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
-                f"        <div style='border-bottom:4px double #1A237E; padding-bottom:20px; margin-bottom:40px;'>\n"
-                f"            <!-- 🚨 [수술 3] white-space: nowrap 추가 및 자간(-1px) 세팅으로 타이틀 2줄 깨짐 완벽 방어! -->\n"
-                f"            <h1 class='title-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 28px !important; font-weight: 900; margin:0 !important; white-space: nowrap !important; letter-spacing: -1px !important;'>초연 전통 명리사주 풀이</h1>\n"
+                f"    <div style='border: 4px solid #000000; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
+                f"        <div style='border-bottom:4px double #000000; padding-bottom:20px; margin-bottom:40px;'>\n"
+                f"            <h1 class='title-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 28px !important; font-weight: 900; margin:0 !important; color:#000000 !important; white-space: nowrap !important; letter-spacing: -1px !important;'>초연 전통 명리사주 풀이</h1>\n"
                 f"            <div style='text-align: right; margin-top: 10px;'>\n"
-                f"                <span class='ver-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
+                f"                <span class='ver-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 14px; font-weight: 700; color:#000000; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                 f"            </div>\n"
                 f"        </div>\n"
-                f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 30px 20px; border-radius: 15px;'>\n"
-                f"            <!-- 🚨 남명/여명 묻지도 따지지도 않고 진한 남색(safe_color) 통일! -->\n"
-                f"            <h2 style='font-family: \"Nanum Gothic\", sans-serif; font-size: 24px; font-weight: 800; color: {safe_color}; margin-bottom: 20px;'>{p_icon} 신청인 : {u_name} 님</h2>\n"
-                f"            <div style='font-family: \"Nanum Gothic\", sans-serif; font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
+                f"        <div style='background:#F8F9FA; border: 1px solid #000000; padding: 30px 20px; border-radius: 15px;'>\n"
+                f"            <h2 style='font-family: \"Nanum Gothic\", sans-serif; font-size: 24px; font-weight: 800; color: #000000; margin-bottom: 20px;'>{p_icon} 신청인 : {u_name} 님</h2>\n"
+                f"            <div style='font-family: \"Nanum Gothic\", sans-serif; font-size: 15px; font-weight: 600; color: #000000; line-height: 1.8;'>\n"
                 f"                <p style='margin: 0; white-space: nowrap;'>[양력] {sol_str} | [음력] {lun_str}</p>\n"
-                f"                <!-- 🚨 시뻘건 #D50000 멸종!! 남명/여명 똑같이 진한 남색으로 강제 변경! -->\n"
-                f"                <p style='margin: 5px 0 0 0; color: {safe_color}; white-space: nowrap;'>{time_str}</p>\n"
+                f"                <p style='margin: 5px 0 0 0; color: #000000; white-space: nowrap;'>{time_str}</p>\n"
                 f"            </div>\n"
                 f"        </div>\n"
-                f"        <p style='font-family: \"Nanum Gothic\", sans-serif; font-size: 18px; margin-top: 50px; font-weight: 800;'>{today_str}</p>\n"
-                f"        <p style='font-family: \"Nanum Gothic\", sans-serif; font-size: 22px; font-weight: 800; color: #1A237E; margin-top: 20px;'>초연 전통명리 연구소</p>\n"
+                f"        <p style='font-family: \"Nanum Gothic\", sans-serif; font-size: 18px; margin-top: 50px; font-weight: 800; color:#000000;'>{today_str}</p>\n"
+                f"        <p style='font-family: \"Nanum Gothic\", sans-serif; font-size: 22px; font-weight: 800; color: #000000; margin-top: 20px;'>초연 전통명리 연구소</p>\n"
                 f"    </div>\n"
                 f"</div>"
             )
             st.session_state['saved_report_cover'] = cover_html
 
-            if u_product == "1-1. 사주팔자와 운세풀이":
-                report_title = "🎯 사주팔자와 운세풀이"
-            elif u_product == "1-2. 올해 및 특정연도 운세 상세분석":
-                report_title = "🎯 올해 및 특정연도 운세 상세분석"
-            elif u_product == "1-3. 이번달 및 특정월 운세 상세분석":
-                report_title = "🎯 이번달 및 특정월 운세 상세분석"
-            elif u_product == "1-4. 특정 주간 및 특정일운 상세분석":
-                report_title = "🎯 특정 주간 및 특정일운 상세분석"
-            elif u_product == "2-1. 재물운 특화 분석":
-                report_title = "🎯 재물운 특화 정밀 분석"
-            elif u_product == "2-2. 연애/결혼운 특화 분석":
-                report_title = "🎯 연애/결혼운 특화 정밀 분석"
-            elif u_product == "2-3. 진학/입시운 특화 분석":
-                report_title = "🎯 진학/입시운 특화 정밀 분석"
-            elif u_product == "2-4. 직업/커리어운 특화 분석":
-                report_title = "🎯 직업/커리어운 특화 정밀 분석"
-            elif u_product == "2-5. 건강운 특화 분석":
-                report_title = "🎯 건강운 특화 정밀 분석"
-            elif u_product == "2-6. 이사 택일":
-                report_title = "🎯 이사 택일 추천 리포트"
-            elif u_product == "2-7. 개업 택일":
-                report_title = "🎯 개업 택일 추천 리포트"
-            elif u_product == "3-1. 연애/결혼운 (궁합) 풀이":
-                report_title = "🎯 커플 연애/결혼운 정밀 궁합 분석"
-            elif u_product == "3-2. 결혼 택일":
-                report_title = "🎯 최고의 결혼 길일 추천 리포트"
-            elif u_product == "3-3. 출산 택일":
-                report_title = "🎯 새 생명 마중 출산 길일 추천 리포트"
-            elif u_product == "4-1. 타 감명서 비교 (사주)":
-                report_title = "🎯 사주 감명서 학술 검증 및 1:1 대조 리포트"
-            elif u_product == "4-2. 타 감명서 비교 (궁합)":
-                report_title = "🎯 궁합 감명서 학술 검증 및 1:1 대조 리포트"
-            else:
-                report_title = "🎯 사주팔자 정밀 분석"
+            if u_product == "1-1. 사주팔자와 운세풀이": report_title = "🎯 사주팔자와 운세풀이"
+            elif u_product == "1-2. 올해 및 특정연도 운세 상세분석": report_title = "🎯 올해 및 특정연도 운세 상세분석"
+            elif u_product == "1-3. 이번달 및 특정월 운세 상세분석": report_title = "🎯 이번달 및 특정월 운세 상세분석"
+            elif u_product == "1-4. 특정 주간 및 특정일운 상세분석": report_title = "🎯 특정 주간 및 특정일운 상세분석"
+            elif u_product == "2-1. 재물운 특화 분석": report_title = "🎯 재물운 특화 정밀 분석"
+            elif u_product == "2-2. 연애/결혼운 특화 분석": report_title = "🎯 연애/결혼운 특화 정밀 분석"
+            elif u_product == "2-3. 진학/입시운 특화 분석": report_title = "🎯 진학/입시운 특화 정밀 분석"
+            elif u_product == "2-4. 직업/커리어운 특화 분석": report_title = "🎯 직업/커리어운 특화 정밀 분석"
+            elif u_product == "2-5. 건강운 특화 분석": report_title = "🎯 건강운 특화 정밀 분석"
+            elif u_product == "2-6. 이사 택일": report_title = "🎯 이사 택일 추천 리포트"
+            elif u_product == "2-7. 개업 택일": report_title = "🎯 개업 택일 추천 리포트"
+            elif u_product == "3-1. 연애/결혼운 (궁합) 풀이": report_title = "🎯 커플 연애/결혼운 정밀 궁합 분석"
+            elif u_product == "3-2. 결혼 택일": report_title = "🎯 최고의 결혼 길일 추천 리포트"
+            elif u_product == "3-3. 출산 택일": report_title = "🎯 새 생명 마중 출산 길일 추천 리포트"
+            elif u_product == "4-1. 타 감명서 비교 (사주)": report_title = "🎯 사주 감명서 학술 검증 및 1:1 대조 리포트"
+            elif u_product == "4-2. 타 감명서 비교 (궁합)": report_title = "🎯 궁합 감명서 학술 검증 및 1:1 대조 리포트"
+            else: report_title = "🎯 사주팔자 정밀 분석"
 
             ji_rel_rows = ""
             for l_idx, r_idx in enumerate([1, 2, 0, 3]):
@@ -1000,8 +966,7 @@ if st.session_state.get('need_calc', False):
                 lbl = f"<td rowspan='4' class='header-cell-main' style='border-right: 1px solid #444 !important; border-left: 1px solid #444 !important; border-bottom: 1px solid #444 !important; border-top: 0px solid transparent !important; font-size:14px !important;'><span style='color:inherit !important;'>합충형파해</span></td>" if l_idx==0 else ""
                 ji_rel_rows += f"<tr style='border:none;'>{lbl}{cells}</tr>"
 
-            # 🚨 [수술 완료] 여명 붉은색 멸종! {p_color}를 날려버리고 남명과 동일한 진한 남색(#1A237E)으로 강제 고정
-            info_h = f"<div style='text-align:center; font-family:\"Nanum Gothic\", sans-serif; margin-bottom:15px; line-height:1.5;'><span style='font-size:18px; font-weight:900; color:#1A237E; white-space:nowrap;'>{p_icon} {disp_name}님 ({u_gender}, {u_marital}, {u_age}세)</span><br><span style='font-size:14px; font-weight:bold; color:#555; white-space:nowrap;'>[양력: {sol_str} | 음력: {lun_str} {time_str}]</span></div>"
+            info_h = f"<div style='text-align:center; font-family:\"Nanum Gothic\", sans-serif; margin-bottom:15px; line-height:1.5;'><span style='font-size:18px; font-weight:900; color:#000000; white-space:nowrap;'>{p_icon} {disp_name}님 ({u_gender}, {u_marital}, {u_age}세)</span><br><span style='font-size:14px; font-weight:bold; color:#000000; white-space:nowrap;'>[양력: {sol_str} | 음력: {lun_str} {time_str}]</span></div>"
 
             table_html = f"""<div style='text-align:center; margin-bottom:10px;'>{info_h}</div>
 <table class='result-table' style='width:100%; border-collapse:collapse; text-align:center;'>
@@ -1014,8 +979,8 @@ if st.session_state.get('need_calc', False):
 </tr>
 <tr><td class='header-cell-main' style='border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>천간합충</span></td>{"".join([f"<td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_gan_rel_all(i, gans)}</span></td>" for i in range(4)])}</tr>
 <tr><td class='header-cell-main' style='border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>천간십성</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,hs)}</span></td><td style='border:1px solid #444;'><span style='color:#D50000; font-weight:900;'>日元</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,ms)}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,ys)}</span></td></tr>
-<tr><td class='header-cell-main' style='border:1px solid #444; background:#E8EAF6; color:#1A237E; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>천간</span></td>{td(hs)}{td(ds)}{td(ms)}{td(ys)}</tr>
-<tr><td class='header-cell-main' style='border:1px solid #444; background:#E8EAF6; color:#1A237E; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>지지</span></td>{td(hb)}{td(db)}{td(mb)}{td(yb)}</tr>
+<tr><td class='header-cell-main' style='border:1px solid #444; background:#FAFAFA; color:#000000; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>천간</span></td>{td(hs)}{td(ds)}{td(ms)}{td(ys)}</tr>
+<tr><td class='header-cell-main' style='border:1px solid #444; background:#FAFAFA; color:#000000; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>지지</span></td>{td(hb)}{td(db)}{td(mb)}{td(yb)}</tr>
 <tr><td class='header-cell-main' style='border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>지지십성</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,hb)}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,db)}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,mb)}</span></td><td style='border:1px solid #444;'><span style='color:inherit !important;'>{get_ss(ds,yb)}</span></td></tr>
 <tr><td class='header-cell-main' style='padding:0; border:1px solid #444; background:#f5f5f5; font-weight:900; font-size:14px !important;'><span style='color:inherit !important;'>지장간</span></td>{"".join([f"<td style='padding:0; border:1px solid #444;'><span style='color:inherit !important;'>{get_jijanggan_full(ds, jjis[i])}</span></td>" for i in range(4)])}</tr>
 {ji_rel_rows}
@@ -1050,14 +1015,14 @@ if st.session_state.get('need_calc', False):
             ilju_master_data = ilju_full_db.get(user_ilju_key, {})
             ilju_summary_text = ilju_master_data.get('summary', '고유의 역량을 품은')
 
-            choyeon_golden_text = f"""
-<div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
-    <p style='text-indent: 1.0em; text-align: justify; margin-bottom: 5px;'>
-        정통 명리학적으로 풀이하면 <b>{disp_name}님</b>은 <b>{wol_korean_str}</b>에 <b>'{gyuk_name}'</b>의 그릇을 갖추고 태어나셨으며, 성격은 <b>'{action_type}'</b>으로 <b>'{main_tendency}'</b> 성향이 있습니다.
-    </p>
-</div>
-<hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
-"""
+            choyeon_golden_text = (
+                f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 16px; line-height: 1.85; color: #000000; margin-bottom: 20px;'>\n"
+                f"    <p style='text-indent: 1.0em; text-align: justify; margin-bottom: 5px;'>\n"
+                f"        정통 명리학적으로 풀이하면 <b style='color:#000000;'>{disp_name}님</b>은 <b style='color:#000000;'>{wol_korean_str}</b>에 <b style='color:#000000;'>'{gyuk_name}'</b>의 그릇을 갖추고 태어나셨으며, 성격은 <b style='color:#000000;'>'{action_type}'</b>으로 <b style='color:#000000;'>'{main_tendency}'</b> 성향이 있습니다.\n"
+                f"    </p>\n"
+                f"</div>\n"
+                f"<hr style='border: 0; border-top: 2px solid #000000; margin: 25px 0;'>\n"
+            )
 
             gen_shinsal_list = []
             for i in range(4):
@@ -1106,17 +1071,17 @@ if st.session_state.get('need_calc', False):
             cur_samjae = get_samjae(yb, curr_y_ganji[1])
             samjae_color = "#C62828" if cur_samjae != "해당 없음" else "#555"
 
-            master_bar_html = f"<div style='border:2px solid #3E2723; margin-top:20px; padding:8px; display:flex; justify-content:space-between; font-weight:900; font-size:12px; border-radius:8px; white-space:nowrap;'><div>🔢 대운수: {calc_d}</div><div>💥 오행: 木({counts['목']}) 火({counts['화']}) 土({counts['토']}) 金({counts['금']}) 水({counts['수']})</div><div>🌟 천을귀인: {guiin_str}</div><div>🎯 공망: [일] {i_gong}</div><div>🌪️ 삼재: <span style='color:{samjae_color};'>{cur_samjae}</span></div></div>"
+            master_bar_html = f"<div style='border:2px solid #000000; margin-top:20px; padding:8px; display:flex; justify-content:space-between; font-weight:900; font-size:12px; color:#000000; border-radius:8px; white-space:nowrap;'><div>🔢 대운수: {calc_d}</div><div>💥 오행: 木({counts['목']}) 火({counts['화']}) 土({counts['토']}) 金({counts['금']}) 水({counts['수']})</div><div>🌟 천을귀인: {guiin_str}</div><div>🎯 공망: [일] {i_gong}</div><div>🌪️ 삼재: <span style='color:{samjae_color};'>{cur_samjae}</span></div></div>"
 
             daewun_info = []
-            un_html = f"<div style='margin-top:5px; margin-bottom:10px; font-size:18px; font-weight:900; color:#1A237E;'>[ 대운의 흐름 (대운수: {calc_d}, {direction_str}) ]</div><div style='display:flex; flex-direction:row-reverse; width:100%; border:2px solid #3E2723; background:white; margin-bottom:5px;'>"
+            un_html = f"<div style='margin-top:5px; margin-bottom:10px; font-size:18px; font-weight:900; color:#000000;'>[ 대운의 흐름 (대운수: {calc_d}, {direction_str}) ]</div><div style='display:flex; flex-direction:row-reverse; width:100%; border:2px solid #000000; background:white; margin-bottom:5px;'>"
             for i in range(10):
                 val, c, j = i*10+calc_d, GAN[(GAN.index(ms)+(i+1)*order)%10] if ms in GAN else "-", JI[(JI.index(mb)+(i+1)*order)%12] if mb in JI else "-"
                 daewun_info.append(f"{val}세:{c}{j}")
                 is_active = val <= u_age < val+10
                 bg_col = "#FFF9C4" if is_active else "transparent"
                 b_left = "1px solid #ccc" if i != 9 else "none"
-                un_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,c)}</div><div class='color-{get_color(c)}' style='font-size:16px; font-weight:900;'>{c}</div><div class='color-{get_color(j)}' style='font-size:16px; font-weight:900;'>{j}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,j)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,j)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc;'>{get_12_shinsal(yb, j)}</div></div>"
+                un_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#222222; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:12px; color:#000000;'>{get_ss(ds,c)}</div><div class='color-{get_color(c)}' style='font-size:16px; font-weight:900;'>{c}</div><div class='color-{get_color(j)}' style='font-size:16px; font-weight:900;'>{j}</div><div style='padding:2px; font-size:12px; color:#000000;'>{get_ss(ds,j)}</div><div style='font-size:11px; border-top:1px solid #ccc; color:#0D47A1;'>{get_unsung(ds,j)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc;'>{get_12_shinsal(yb, j)}</div></div>"
             un_html += "</div>"
 
             cur_dw_idx = max(0, (u_age - calc_d) // 10)
@@ -1131,7 +1096,7 @@ if st.session_state.get('need_calc', False):
 
             start_year = u_y + current_daewun_age - 1
             sewun_info = []
-            se_html = f"<div style='margin-top:5px; margin-bottom:10px; font-size:18px; font-weight:900; color:#1A237E;'>[ 세운의 흐름 ({dw_g_cur}{dw_j_cur}대운 기준) ]</div><div style='display:flex; flex-direction:row-reverse; width:100%; border:2px solid #3E2723; background:white; margin-bottom:5px;'>"
+            se_html = f"<div style='margin-top:5px; margin-bottom:10px; font-size:18px; font-weight:900; color:#000000;'>[ 세운의 흐름 ({dw_g_cur}{dw_j_cur}대운 기준) ]</div><div style='display:flex; flex-direction:row-reverse; width:100%; border:2px solid #000000; background:white; margin-bottom:5px;'>"
             for i in range(10):
                 ty = start_year + i
                 tage = current_daewun_age + i
@@ -1141,7 +1106,7 @@ if st.session_state.get('need_calc', False):
                 is_cur_yr = (ty == curr_y)
                 bg_col = "#E1F5FE" if is_cur_yr else "transparent"
                 b_left = "1px solid #ccc" if i != 9 else "none"
-                se_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; line-height:1.2; border-bottom:1px solid #ccc;'>{ty}년<br>({tage}세)</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc;'>{get_12_shinsal(yb, tj)}</div></div>"
+                se_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#222222; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; line-height:1.2; border-bottom:1px solid #ccc;'>{ty}년<br>({tage}세)</div><div style='padding:2px; font-size:12px; color:#000000;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px; color:#000000;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc; color:#0D47A1;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc;'>{get_12_shinsal(yb, tj)}</div></div>"
             se_html += "</div>"
 
             wol_gans = ["己", "庚", "辛", "壬", "癸", "甲", "乙", "丙", "丁", "戊", "己", "庚"]
@@ -1149,13 +1114,13 @@ if st.session_state.get('need_calc', False):
             cur_wol_g = wol_gans[curr_m - 1]
             cur_wol_j = wol_jis[curr_m - 1]
             
-            wol_html = f"<div style='margin-top:5px; margin-bottom:10px; font-size:18px; font-weight:900; color:#1A237E;'>[ 월운의 흐름 ({curr_y}년도 양력기준) ]</div><div style='display:flex; flex-direction:row-reverse; width:100%; border:2px solid #3E2723; background:white; margin-bottom:5px;'>"
+            wol_html = f"<div style='margin-top:5px; margin-bottom:10px; font-size:18px; font-weight:900; color:#000000;'>[ 월운의 흐름 ({curr_y}년도 양력기준) ]</div><div style='display:flex; flex-direction:row-reverse; width:100%; border:2px solid #000000; background:white; margin-bottom:5px;'>"
             for i in range(12):
                 tm, tc, tj = i + 1, wol_gans[i], wol_jis[i]
                 is_cur_m = (tm == curr_m)
                 bg_col = "#E8F5E9" if is_cur_m else "transparent"
                 b_left = "1px solid #ccc" if i != 11 else "none"
-                wol_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{tm}월</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc;'>{get_12_shinsal(yb, tj)}</div></div>"
+                wol_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#222222; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{tm}월</div><div style='padding:2px; font-size:12px; color:#000000;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px; color:#000000;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc; color:#0D47A1;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc;'>{get_12_shinsal(yb, tj)}</div></div>"
             wol_html += "</div>"
 
             past_daewun_list = []
@@ -1218,29 +1183,32 @@ if st.session_state.get('need_calc', False):
                 prompt_first_half = f"▶ 이번 달 전반기 ({curr_m}월 {curr_term_day}일 {curr_t_name} ~ {curr_m}월 {mid_day-1}일: {curr_wol_pillar})"
                 prompt_second_half = f"▶ 이번 달 후반기 ({curr_m}월 {mid_day}일 ~ {next_m}월 {next_term_day-1}일 {next_t_name} 전: {curr_wol_pillar})"
 
-            closing_html = f"""<div style='margin-top: 30px;'>
-<p style='text-indent: 15px; text-align: justify; line-height: 1.8; margin-bottom: 8px;'>'사주팔자'는 태어날 때 부여받은 정통 명식의 바코드와 같지만, 우리가 살아가며 마주하는 '운'은 늘 변화하며 흐릅니다.</p>
-<p style='text-indent: 15px; text-align: justify; line-height: 1.8; margin-bottom: 8px;'>따라서 오늘의 '초연 전통명리와의 인연'이 <b>{disp_name}님</b>의 삶이라는 긴 여정에서 올바른 방향을 잡는 든든한 '나침반'이 되기를 진심으로 기원합니다.</p>
-<p style='text-indent: 15px; text-align: justify; line-height: 1.8; margin-bottom: 15px;'>앞으로 인생의 길흉화복과 명리에 대한 더 깊은 지혜가 필요하실 때 언제든 <b>'초연 전통명리 연구소'</b>를 찾아 주십시오.</p>
-<p style='text-indent: 15px; font-size: 16px; line-height: 1.8; font-weight: bold; margin-bottom: 0px;'>오늘 닿은 귀한 인연에 다시 한 번 깊이 감사드립니다.</p>
-<div style='text-align: right; margin-top: 30px;'>
-<span style='font-weight: 900; font-size: 18px; color: #1A237E;'>- 초연 전통명리 연구소 드림 -</span>
-</div>
-</div>"""
+            closing_html = (
+                f"<div style='margin-top: 30px;'>\n"
+                f"<p style='text-indent: 14px; text-align: justify; line-height: 1.85; margin-bottom: 8px; font-size:16px; color:#000000;'>'사주팔자'는 태어날 때 부여받은 정통 명식의 바코드와 같지만, 우리가 살아가며 마주하는 '운'은 늘 변화하며 흐릅니다.</p>\n"
+                f"<p style='text-indent: 14px; text-align: justify; line-height: 1.85; margin-bottom: 8px; font-size:16px; color:#000000;'>따라서 오늘의 '초연 전통명리와의 인연'이 <b>{disp_name}님</b>의 삶이라는 긴 여정에서 올바른 방향을 잡는 든든한 '나침반'이 되기를 진심으로 기원합니다.</p>\n"
+                f"<p style='text-indent: 14px; text-align: justify; line-height: 1.85; margin-bottom: 15px; font-size:16px; color:#000000;'>앞으로 인생의 길흉화복과 명리에 대한 더 깊은 지혜가 필요하실 때 언제든 <b>'초연 전통명리 연구소'</b>를 찾아 주십시오.</p>\n"
+                f"<p style='text-indent: 14px; font-size: 16px; line-height: 1.85; font-weight: 900; margin-bottom: 0px; color:#000000;'>오늘 닿은 귀한 인연에 다시 한 번 깊이 감사드립니다.</p>\n"
+                f"<div style='text-align: right; margin-top: 30px;'>\n"
+                f"<span style='font-weight: 900; font-size: 18px; color: #000000;'>- 초연 전통명리 연구소 드림 -</span>\n"
+                f"</div>\n"
+                f"</div>\n"
+            )
 
-            # 🚨 [수술 2]: 첫 장 백지 출력 원천 차단! (쓸데없는 page-break 삭제 및 HTML 구조 정화)
-            report_1_full_html = f"""{cover_html}
-<div class='page-break'></div>
-<div class='report-page' style='page-break-before: always;'>
-<div class='vip-inset-frame' style='border:2px solid #1A237E; box-sizing: border-box; padding: 20px; border-radius:15px; margin-top: 0;'>
-<h1 style='text-align:center; font-size: 24px; font-weight: 900; white-space: nowrap;'>{report_title}</h1>
-{table_html}
-{master_bar_html}
-<div style='margin-top:20px;'>
-{{full_content_clean_placeholder}}
-</div>
-</div>
-</div>"""
+            report_1_full_html = (
+                f"{cover_html}\n"
+                f"<div class='page-break'></div>\n"
+                f"<div class='report-page' style='page-break-before: always;'>\n"
+                f"<div class='vip-inset-frame' style='border:2px solid #000000; box-sizing: border-box; padding: 20px; border-radius:15px; margin-top: 0;'>\n"
+                f"<h1 style='text-align:center; font-size: 26px; font-weight: 900; white-space: nowrap; color:#000000; border-bottom:3px solid #000000; padding-bottom:10px; margin-bottom:25px;'>{report_title}</h1>\n"
+                f"{table_html}\n"
+                f"{master_bar_html}\n"
+                f"<div style='margin-top:20px;'>\n"
+                f"{{full_content_clean_placeholder}}\n"
+                f"</div>\n"
+                f"</div>\n"
+                f"</div>"
+            )
 
             base_gans_list = [hs, ds, ms, ys]
             base_jjis_list = [hb, db, mb, yb]
@@ -1294,7 +1262,7 @@ if st.session_state.get('need_calc', False):
                                 
             db_header = (
                 f"[시스템 강제 시간 인식: 현재 시점은 {curr_y}년 {curr_m}월 입니다.]\n"
-                "당신은 정통 명리심리상담사 1급 자격을 갖춘 초연 박사입니다. \n"
+                f"당신은 정통 명리심리상담사 1급 자격을 갖춘 초연 박사입니다. \n"
                 f"- 내담자 성함: {disp_name}\n"
                 f"- 나이 / 성별: {u_age}세 / {u_gender}\n"
                 f"- marital_status: {u_marital}\n"
@@ -1355,7 +1323,7 @@ if st.session_state.get('need_calc', False):
             prompt = ""
             clean_ai_text = ""
 
-            # ==============================================================
+# ==============================================================
             # [A-1] 1. 개인 사주팔자 풀이 (종합 파이프라인)
             # ==============================================================
             if main_category == "1. 개인 사주팔자 풀이 (종합)":
@@ -1366,242 +1334,209 @@ if st.session_state.get('need_calc', False):
                 metal_cnt = counts.get('금', 0)
                 water_cnt = counts.get('수', 0)
 
-                # 🚨 [수술 3]: 46.7(원본) + 50.5(팩트폭격) 하이브리드 융합 및 HTML 줄바꿈 파괴 방어 프롬프트
                 if u_product == "1-1. 사주팔자와 운세풀이":
-                    prompt = f"""{db_header}{ilju_master_prompt_context}
-
-[ 🚨종합 특별지시 사항 : 초연 하이브리드(Hybrid) 통변 원칙 ]
-1. 🚨명리 용어의 전략적 노출: 딱딱한 한자어 남발을 금지하되, 핵심 용어는 먼저 제시한 후 쉽게 풀어 설명하십시오.
-2. 🚨[문학적 치유와 뼈때리는 팩트의 완벽한 융합]: 자연의 물상을 활용한 '부드럽고 은유적인 문학적 에세이 톤'으로 내담자를 따뜻하게 다독이십시오. 그러나 흉살, 기질적 단점, 리스크를 짚을 때는 '정통 명리 특유의 날카롭고 묵직한 키워드'를 사용하여 뼈를 때리듯 명확하게 직언하십시오. 치유와 팩트 폭격이 한 문단 안에 완벽히 공존해야 합니다.
-3. 🚨[절대 성역]: '[CHOYEON_GOLDEN_TEXT_HERE]' 문장은 원문 그대로 출력하십시오.
-
-[ 🚨문단 레이아웃 및 AI 환각 통제 명령 ]
-1. 모든 에세이 문장은 반드시 <p style='text-indent: 1em; margin-bottom: 10px; line-height: 1.8;'> 태그로 감싸서 줄바꿈이 완벽하게 유지되도록 하십시오.
-2. 표(Table) 생성 절대 금지.
-3. 🚨 [앵무새 출력 절대 금지]: 지시문에 적힌 괄호 안의 텍스트(예: "하이브리드 톤으로...", "전문 용어는 숨기고..." 등)를 절대로 화면에 그대로 복사하여 출력하지 마십시오. 반드시 주어진 HTML 구조 안에 요구된 분량의 창작된 에세이를 채워 넣어야 합니다.
-
-[내담자 맞춤형 정밀 타겟팅]
-- {age_prompt}
-- {gender_prompt}
-- {yukchin_rule}
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 성격 분석</h3>
-<div class='content-box-loose'>
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 겉으로 드러난 성격</span>
-(일간, 일지 십성, 신살을 바탕으로 표면적 성격을 하이브리드 톤으로 3~4문장 에세이 창작)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 감추어진 내 속마음</span>
-(지장간, 공망을 바탕으로 무의식을 하이브리드 톤으로 3~4문장 에세이 창작)
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조 분석</h3>
-<div class='content-box-loose'>
-[CHOYEON_GOLDEN_TEXT_HERE]
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 내 삶의 무대와 타고난 기본 성향</span>
-(격국을 핵심으로 하이브리드 톤 3~4문장 에세이 창작)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 내 삶의 리듬과 에너지 균형</span>
-(오행 조후 균형 분석을 하이브리드 톤으로 3~4문장 에세이 창작)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 내 삶의 역동성과 상호작용</span>
-(합충형파해 및 묘고 작용을 팩트 폭격 위주로 정밀 분석하여 3~4문장 창작)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>4) 내 삶의 숨겨진 강점과 잠재적 에너지</span>
-(12신살, 삼재 등을 유기적으로 분석하여 3~4문장 창작)
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 부모·형제운</h3><div class='content-box-loose'>
-(연주·월주 인성/비겁 분석하여 하이브리드 톤으로 3~4문장 에세이 창작)
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>4. 적성·직업운</h3><div class='content-box-loose'>
-(직업 물상 및 조직/사업형 판별하여 하이브리드 톤으로 3~4문장 에세이 창작)
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>5. 연애·결혼운</h3><div class='content-box-loose'>
-(배우자성, 일지 동태 분석하여 하이브리드 톤으로 3~4문장 에세이 창작)
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>6. 운의 흐름 분석</h3>
-<div class='content-box-loose'>
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>1) 대운의 흐름</span>
-[DAEWUN_TABLE_HERE]
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 대운 분석</span>{past_daewun_html}
-[출력 템플릿]
-• <b>OO세~OO세 (OO대운):</b> 
-<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (과거 대운의 특징을 하이브리드 톤으로 3~4문장 에세이 창작)</div>
-    <div><b>2) 시공 명리 풀이:</b> (과거 대운의 시공간 파동을 3~4문장 에세이 창작)</div>
-</div>
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 현재 대운 전반기 상세 분석 ({dw_start_age}세~{dw_mid_age}세)</span>
-<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (하이브리드 톤으로 3~4문장 에세이 상세 창작)</div>
-    <div><b>2) 시공 명리 풀이:</b> (시공간 파동 분석 3~4문장 상세 창작)</div>
-</div>
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 현재 대운 후반기 상세 분석 ({dw_mid2_age}세~{dw_end_age}세)</span>
-<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (하이브리드 톤으로 3~4문장 에세이 상세 창작)</div>
-    <div><b>2) 시공 명리 풀이:</b> (시공간 파동 분석 3~4문장 상세 창작)</div>
-</div>
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>2) 세운의 흐름</span>
-[SEWUN_TABLE_HERE]
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 세운 분석</span>{past_sewun_html}
-[출력 템플릿]
-• <b>OOOO년(OO년):</b> 
-<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (과거 세운 특징을 하이브리드 톤으로 3~4문장 에세이 창작)</div>
-    <div><b>2) 시공 명리 풀이:</b> (과거 세운 시공간 작용을 3~4문장 에세이 창작)</div>
-</div>
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▶ 올해 세운 상세 분석</span>
-<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (올해 세운을 하이브리드 톤으로 3~4문장 에세이 상세 창작)</div>
-    <div><b>2) 시공 명리 풀이:</b> (올해 세운의 시공간 역동성을 3~4문장 상세 창작)</div>
-</div>
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>3) 월운의 흐름</span>
-[WOLWUN_TABLE_HERE]
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>▷ 지나온 과거 각 월운 분석</span>{past_months_html}
-[출력 템플릿]
-• <b>(월운 텍스트 그대로 복사)</b> 
-<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (과거 월운을 하이브리드 톤으로 3~4문장 에세이 창작)</div>
-    <div><b>2) 시공 명리 풀이:</b> (과거 월운 시공간 작용을 3~4문장 에세이 창작)</div>
-</div>
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>{prompt_first_half}</span>
-<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (해당 기간 월운을 하이브리드 톤으로 3~4문장 에세이 창작)</div>
-    <div><b>2) 시공 명리 풀이:</b> (해당 기간 시공간 작용을 3~4문장 에세이 창작)</div>
-</div>
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>{prompt_second_half}</span>
-<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>
-    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (해당 기간 월운을 하이브리드 톤으로 3~4문장 에세이 창작)</div>
-    <div><b>2) 시공 명리 풀이:</b> (해당 기간 시공간 작용을 3~4문장 에세이 창작)</div>
-</div>
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>7. 삶을 바꾸는 지혜로운 조언</h3>
-<div class='content-box-loose'>
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 나를 돕는 에너지와 색상:</span>
-(사주에 맞는 에너지/색상을 하이브리드 톤으로 2~3문장 창작)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 신체 밸런스와 에너지 관리:</span>
-(건강 및 기운 관리를 하이브리드 톤으로 2~3문장 창작)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 공간의 흐름과 방위의 지혜:</span>
-(사주에 유리한 풍수 및 방위적 이점을 하이브리드 톤으로 2~3문장 창작)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 재능 효율을 높이는 직업적 지혜:</span>
-(직업적 강점 극대화 방안을 하이브리드 톤으로 2~3문장 창작)
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 더 나은 내일을 위한 절제의 미학:</span>
-(피해야 할 리스크 관리를 팩트 폭격 톤으로 2~3문장 창작)
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'> 🎯 초연 시공명리 특별 개운 비법</h3>
-<div class='content-box-loose'>
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 수호 천사의 기운 조언:</span>
-(사주원국 및 운의 흐름에 따른 천을귀인과 길신 등의 작용에 대하여 하이브리드 톤으로 상세하게 3~4문장 에세이 창작)
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 백년해로의 기운 조언:</span>
-(오행의 치우침, 원진, 고란살, 고신, 과숙 등 이성 관계에 영향을 미치는 사주원국 및 운의 흐름을 분석하되, 전문 용어는 철저히 숨길 것. 오직 '부부 및 연인 관계에서 발생할 수 있는 성격적/상황적 갈등 요소'와 이를 극복하기 위한 '실질적이고 따뜻한 개운 비법'에만 100% 초점을 맞추어 카운슬러 어조로 3~4문장 창작)
-
-<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #111;'>◈ 행운에 따른 기운 조언:</span>
-(운의 흐름에 따른 합형충파해와 진술축미의 입고/개고, 도화/망신/역마살 작용에 따른 역동성과 재물/대인관계 등 주의할 점을 하이브리드 톤으로 상세하게 3~4문장 에세이 창작)
-</div>
-"""
+                    prompt = (
+                        f"{db_header}\n{ilju_master_prompt_context}\n\n"
+                        f"[ 🚨종합 특별지시 사항 : 초연 하이브리드(Hybrid) 통변 원칙 ]\n"
+                        f"1. 🚨명리 용어의 전략적 노출: 딱딱한 한자어 남발을 금지하되, 핵심 용어는 먼저 제시한 후 쉽게 풀어 설명하십시오.\n"
+                        f"2. 🚨[문학적 치유와 뼈때리는 팩트의 완벽한 융합]: 자연의 물상을 활용한 '부드럽고 은유적인 문학적 에세이 톤'으로 내담자를 따뜻하게 다독이십시오. 그러나 흉살, 기질적 단점, 리스크를 짚을 때는 '정통 명리 특유의 날카롭고 묵직한 키워드'를 사용하여 뼈를 때리듯 명확하게 직언하십시오. 치유와 팩트 폭격이 한 문단 안에 완벽히 공존해야 합니다.\n"
+                        f"3. 🚨[절대 성역]: '[CHOYEON_GOLDEN_TEXT_HERE]' 문장은 원문 그대로 출력하십시오.\n\n"
+                        f"[ 🚨문단 레이아웃 및 AI 환각 통제 명령 ]\n"
+                        f"1. 모든 에세이 문장은 반드시 <p style='text-indent: 1em; margin-bottom: 10px; line-height: 1.8;'> 태그로 감싸서 줄바꿈이 완벽하게 유지되도록 하십시오.\n"
+                        f"2. 표(Table) 생성 절대 금지.\n"
+                        f"3. 🚨 [앵무새 출력 절대 금지]: 지시문에 적힌 괄호 안의 텍스트(예: \"하이브리드 톤으로...\", \"전문 용어는 숨기고...\" 등)를 절대로 화면에 그대로 복사하여 출력하지 마십시오. 반드시 주어진 HTML 구조 안에 요구된 분량의 창작된 에세이를 채워 넣어야 합니다.\n\n"
+                        f"[내담자 맞춤형 정밀 타겟팅]\n"
+                        f"- {age_prompt}\n"
+                        f"- {gender_prompt}\n"
+                        f"- {yukchin_rule}\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 성격 분석</h3>\n"
+                        f"<div class='content-box-loose'>\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 겉으로 드러난 성격</span>\n"
+                        f"(일간, 일지 십성, 신살을 바탕으로 표면적 성격을 하이브리드 톤으로 3~4문장 에세이 창작)\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 감추어진 내 속마음</span>\n"
+                        f"(지장간, 공망을 바탕으로 무의식을 하이브리드 톤으로 3~4문장 에세이 창작)\n"
+                        f"</div>\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 사주팔자 구조 분석</h3>\n"
+                        f"<div class='content-box-loose'>\n"
+                        f"[CHOYEON_GOLDEN_TEXT_HERE]\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 내 삶의 무대와 타고난 기본 성향</span>\n"
+                        f"(격국을 핵심으로 하이브리드 톤 3~4문장 에세이 창작)\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 내 삶의 리듬과 에너지 균형</span>\n"
+                        f"(오행 조후 균형 분석을 하이브리드 톤으로 3~4문장 에세이 창작)\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>3) 내 삶의 역동성과 상호작용</span>\n"
+                        f"(합충형파해 및 묘고 작용을 팩트 폭격 위주로 정밀 분석하여 3~4문장 창작)\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>4) 내 삶의 숨겨진 강점과 잠재적 에너지</span>\n"
+                        f"(12신살, 삼재 등을 유기적으로 분석하여 3~4문장 창작)\n"
+                        f"</div>\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 부모·형제운</h3><div class='content-box-loose'>\n"
+                        f"(연주·월주 인성/비겁 분석하여 하이브리드 톤으로 3~4문장 에세이 창작)\n"
+                        f"</div>\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 적성·직업운</h3><div class='content-box-loose'>\n"
+                        f"(직업 물상 및 조직/사업형 판별하여 하이브리드 톤으로 3~4문장 에세이 창작)\n"
+                        f"</div>\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>5. 연애·결혼운</h3><div class='content-box-loose'>\n"
+                        f"(배우자성, 일지 동태 분석하여 하이브리드 톤으로 3~4문장 에세이 창작)\n"
+                        f"</div>\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>6. 운의 흐름 분석</h3>\n"
+                        f"<div class='content-box-loose'>\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 대운의 흐름</span>\n"
+                        f"[DAEWUN_TABLE_HERE]\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>▷ 지나온 과거 각 대운 분석</span>\n"
+                        f"{past_daewun_html}\n"
+                        f"[출력 템플릿]\n"
+                        f"• <b>OO세~OO세 (OO대운):</b> \n"
+                        f"<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>\n"
+                        f"    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (과거 대운의 특징을 하이브리드 톤으로 3~4문장 에세이 창작)</div>\n"
+                        f"    <div><b>2) 시공 명리 풀이:</b> (과거 대운의 시공간 파동을 3~4문장 에세이 창작)</div>\n"
+                        f"</div>\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>▶ 현재 대운 전반기 상세 분석 ({dw_start_age}세~{dw_mid_age}세)</span>\n"
+                        f"<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>\n"
+                        f"    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (하이브리드 톤으로 3~4문장 에세이 상세 창작)</div>\n"
+                        f"    <div><b>2) 시공 명리 풀이:</b> (시공간 파동 분석 3~4문장 상세 창작)</div>\n"
+                        f"</div>\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>▶ 현재 대운 후반기 상세 분석 ({dw_mid2_age}세~{dw_end_age}세)</span>\n"
+                        f"<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>\n"
+                        f"    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (하이브리드 톤으로 3~4문장 에세이 상세 창작)</div>\n"
+                        f"    <div><b>2) 시공 명리 풀이:</b> (시공간 파동 분석 3~4문장 상세 창작)</div>\n"
+                        f"</div>\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 세운의 흐름</span>\n"
+                        f"[SEWUN_TABLE_HERE]\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>▷ 지나온 과거 각 세운 분석</span>\n"
+                        f"{past_sewun_html}\n"
+                        f"[출력 템플릿]\n"
+                        f"• <b>OOOO년(OO년):</b> \n"
+                        f"<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>\n"
+                        f"    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (과거 세운 특징을 하이브리드 톤으로 3~4문장 에세이 창작)</div>\n"
+                        f"    <div><b>2) 시공 명리 풀이:</b> (과거 세운 시공간 작용을 3~4문장 에세이 창작)</div>\n"
+                        f"</div>\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>▶ 올해 세운 상세 분석</span>\n"
+                        f"<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>\n"
+                        f"    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (올해 세운을 하이브리드 톤으로 3~4문장 에세이 상세 창작)</div>\n"
+                        f"    <div><b>2) 시공 명리 풀이:</b> (올해 세운의 시공간 역동성을 3~4문장 상세 창작)</div>\n"
+                        f"</div>\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>3) 월운의 흐름</span>\n"
+                        f"[WOLWUN_TABLE_HERE]\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>▷ 지나온 과거 각 월운 분석</span>\n"
+                        f"{past_months_html}\n"
+                        f"[출력 템플릿]\n"
+                        f"• <b>(월운 텍스트 그대로 복사)</b> \n"
+                        f"<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>\n"
+                        f"    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (과거 월운을 하이브리드 톤으로 3~4문장 에세이 창작)</div>\n"
+                        f"    <div><b>2) 시공 명리 풀이:</b> (과거 월운 시공간 작용을 3~4문장 에세이 창작)</div>\n"
+                        f"</div>\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>{prompt_first_half}</span>\n"
+                        f"<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>\n"
+                        f"    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (해당 기간 월운을 하이브리드 톤으로 3~4문장 에세이 창작)</div>\n"
+                        f"    <div><b>2) 시공 명리 풀이:</b> (해당 기간 시공간 작용을 3~4문장 에세이 창작)</div>\n"
+                        f"</div>\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>{prompt_second_half}</span>\n"
+                        f"<div style='padding-left: 20px; margin-top: 5px; margin-bottom: 15px;'>\n"
+                        f"    <div style='margin-bottom: 5px;'><b>1) 일반 명리 풀이:</b> (해당 기간 월운을 하이브리드 톤으로 3~4문장 에세이 창작)</div>\n"
+                        f"    <div><b>2) 시공 명리 풀이:</b> (해당 기간 시공간 작용을 3~4문장 에세이 창작)</div>\n"
+                        f"</div>\n"
+                        f"</div>\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>7. 삶을 바꾸는 지혜로운 조언</h3>\n"
+                        f"<div class='content-box-loose'>\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>◈ 나를 돕는 에너지와 색상:</span>\n"
+                        f"(사주에 맞는 에너지/색상을 하이브리드 톤으로 2~3문장 창작)\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>◈ 신체 밸런스와 에너지 관리:</span>\n"
+                        f"(건강 및 기운 관리를 하이브리드 톤으로 2~3문장 창작)\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>◈ 공간의 흐름과 방위의 지혜:</span>\n"
+                        f"(사주에 유리한 풍수 및 방위적 이점을 하이브리드 톤으로 2~3문장 창작)\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>◈ 재능 효율을 높이는 직업적 지혜:</span>\n"
+                        f"(직업적 강점 극대화 방안을 하이브리드 톤으로 2~3문장 창작)\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>◈ 더 나은 내일을 위한 절제의 미학:</span>\n"
+                        f"(피해야 할 리스크 관리를 팩트 폭격 톤으로 2~3문장 창작)\n"
+                        f"</div>\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'> 🎯 초연 시공명리 특별 개운 비법</h3>\n"
+                        f"<div class='content-box-loose'>\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>◈ 수호 천사의 기운 조언:</span>\n"
+                        f"(사주원국 및 운의 흐름에 따른 천을귀인과 길신 등의 작용에 대하여 하이브리드 톤으로 상세하게 3~4문장 에세이 창작)\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>◈ 백년해로의 기운 조언:</span>\n"
+                        f"(오행의 치우침, 원진, 고란살, 고신, 과숙 등 이성 관계에 영향을 미치는 사주원국 및 운의 흐름을 분석하되, 전문 용어는 철저히 숨길 것. 오직 '부부 및 연인 관계에서 발생할 수 있는 성격적/상황적 갈등 요소'와 이를 극복하기 위한 '실질적이고 따뜻한 개운 비법'에만 100% 초점을 맞추어 카운슬러 어조로 3~4문장 창작)\n\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>◈ 행운에 따른 기운 조언:</span>\n"
+                        f"(운의 흐름에 따른 합형충파해와 진술축미의 입고/개고, 도화/망신/역마살 작용에 따른 역동성과 재물/대인관계 등 주의할 점을 하이브리드 톤으로 상세하게 3~4문장 에세이 창작)\n"
+                        f"</div>\n"
+                    )
                 elif u_product == "1-2. 올해 및 특정연도 운세 상세분석":
                     target_year_val = st.session_state.get('target_year_input', curr_y)
-                    prompt = f"""
-{db_header}
-{ilju_master_prompt_context}
-
-================================================================================
-🧠 [1-2. {target_year_val}년 운세 상세분석 정밀 지침]
-================================================================================
-당신은 정통 명리심리상담사 '초연 박사'입니다. 본 상담은 지정된 **{target_year_val}년**의 연도별 운세 흐름을 칼같이 분석하는 상세 리포트입니다.
-
-1. 최근 과거 세운 흐름 회고:
-   {past_sewun_html}
-2. 지정 연도({target_year_val}년) 전반기 및 후반기 정밀 통변:
-   - 전반기(상반기): 환경적 기회, 재물/직업 변동성, 실질적 사건·사고 팩트 서술.
-   - 후반기(하반기): 핵심 결실, 인연의 길흉, 리스크 방어 가이드 서술.
-3. 올해/해당 연도 삶을 바꾸는 지혜로운 조언 및 개운 비법을 상세 서술하십시오.
-
-================================================================================
-✍️ [2단계: 최종 출력물 작성 규칙]
-================================================================================
-1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.
-2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.
-3. 표(Table) 생성 금지.
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 지나온 과거 세운 흐름 회고</h3>
-<div class='content-box-loose'>
-🚨 [세운 줄바꿈 절대 규칙]: 각 세운 항목(• ... :)의 쌍점(:) 뒤 해설은 반드시 독립된 <p style='text-indent: 1em; margin-bottom: 12px;'> 태그로 감싸 한 줄씩 완전히 줄바꿈하여 작성하십시오.
-{past_sewun_html}
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. {target_year_val}년 운세 정밀 상세분석</h3>
-<div class='content-box-loose'>
-▶ {target_year_val}년 전반기(상반기) 상세 분석:
-- 상반기 동안 일어나는 주된 환경적 기회, 재물/직업상의 변동성, 실질적 사건·사고의 팩트를 명쾌하게 풀이하십시오.
-▶ {target_year_val}년 후반기(하반기) 상세 분석:
-- 하반기 동안 집중해야 할 핵심 결실, 인연의 길흉, 리스크 방어를 위한 실질적 지침을 서술하십시오.
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. {target_year_val}년 맞춤형 개운 비법 및 조언</h3>
-<div class='content-box-loose'>
-- 해당 연도의 기운을 극대화하고 리스크를 우회할 실질적 처세술 및 개운 비법을 서술하십시오.
-</div>
-"""
+                    prompt = (
+                        f"{db_header}\n"
+                        f"{ilju_master_prompt_context}\n\n"
+                        f"================================================================================\n"
+                        f"🧠 [1-2. {target_year_val}년 운세 상세분석 정밀 지침]\n"
+                        f"================================================================================\n"
+                        f"당신은 정통 명리심리상담사 '초연 박사'입니다. 본 상담은 지정된 **{target_year_val}년**의 연도별 운세 흐름을 칼같이 분석하는 상세 리포트입니다.\n\n"
+                        f"1. 최근 과거 세운 흐름 회고:\n"
+                        f"   {past_sewun_html}\n"
+                        f"2. 지정 연도({target_year_val}년) 전반기 및 후반기 정밀 통변:\n"
+                        f"   - 전반기(상반기): 환경적 기회, 재물/직업 변동성, 실질적 사건·사고 팩트 서술.\n"
+                        f"   - 후반기(하반기): 핵심 결실, 인연의 길흉, 리스크 방어 가이드 서술.\n"
+                        f"3. 올해/해당 연도 삶을 바꾸는 지혜로운 조언 및 개운 비법을 상세 서술하십시오.\n\n"
+                        f"================================================================================\n"
+                        f"✍️ [2단계: 최종 출력물 작성 규칙]\n"
+                        f"================================================================================\n"
+                        f"1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.\n"
+                        f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
+                        f"3. 표(Table) 생성 금지.\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 지나온 과거 세운 흐름 회고</h3>\n"
+                        f"<div class='content-box-loose'>\n"
+                        f"🚨 [세운 줄바꿈 절대 규칙]: 각 세운 항목(• ... :)의 쌍점(:) 뒤 해설은 반드시 독립된 <p style='text-indent: 1em; margin-bottom: 12px;'> 태그로 감싸 한 줄씩 완전히 줄바꿈하여 작성하십시오.\n"
+                        f"{past_sewun_html}\n"
+                        f"</div>\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. {target_year_val}년 운세 정밀 상세분석</h3>\n"
+                        f"<div class='content-box-loose'>\n"
+                        f"▶ {target_year_val}년 전반기(상반기) 상세 분석:\n"
+                        f"- 상반기 동안 일어나는 주된 환경적 기회, 재물/직업상의 변동성, 실질적 사건·사고의 팩트를 명쾌하게 풀이하십시오.\n"
+                        f"▶ {target_year_val}년 후반기(하반기) 상세 분석:\n"
+                        f"- 하반기 동안 집중해야 할 핵심 결실, 인연의 길흉, 리스크 방어를 위한 실질적 지침을 서술하십시오.\n"
+                        f"</div>\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. {target_year_val}년 맞춤형 개운 비법 및 조언</h3>\n"
+                        f"<div class='content-box-loose'>\n"
+                        f"- 해당 연도의 기운을 극대화하고 리스크를 우회할 실질적 처세술 및 개운 비법을 서술하십시오.\n"
+                        f"</div>\n"
+                    )
                 else:
-                    prompt = f"""
-{db_header}
-{ilju_master_prompt_context}
-
-================================================================================
-🧠 [1-3 / 1-4. 월운 및 일진 상세분석 정밀 지침]
-================================================================================
-당신은 정통 명리심리상담사 '초연 박사'입니다. 본 상담은 특정 월과 일진의 미세한 기운 파동을 포착하는 초단기 실전 분석 리포트입니다.
-
-1. 지나온 과거 월운의 흐름 회고:
-   {past_months_html}
-2. 현재/지정 월운 정밀 통변:
-   - {prompt_first_half}: 이번 달 전반기 심리 파동, 행동 지침, 주의점 팩트 서술.
-   - {prompt_second_half}: 이번 달 후반기 사건·사고, 재물/대인관계 성패, 마무리 전략 서술.
-3. 단기 리스크 방어와 성취를 위한 개운 비법 조언.
-
-================================================================================
-✍️ [2단계: 최종 출력물 작성 규칙]
-================================================================================
-1. 난해한 용어 배제, 즉각적 행동 지침 위주.
-2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.
-3. 표(Table) 생성 금지.
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>1. 지나온 월운 회고</h3>
-<div class='content-box-loose'>
-{past_months_html}
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>2. 월운 상세 파동 분석</h3>
-<div class='content-box-loose'>
-{prompt_first_half}
-- 이번 달 전반기 동안 발생할 주요 심리 파동, 실질적 행동 지침 및 주의점 팩트를 서술하십시오.
-{prompt_second_half}
-- 이번 달 후반기 동안 맞이할 실질적 사건, 재물/대인관계의 성패, 마무리 대응 전략을 상세히 서술하십시오.
-</div>
-
-<h3 style='color:#1A237E; font-size: 24px; font-weight: 900;'>3. 단기 성공을 위한 개운 비법</h3>
-<div class='content-box-loose'>
-- 이번 달 파동을 극대화할 단기 처세술과 행운의 에너지 활용법을 조언하십시오.
-</div>
-"""
+                    prompt = (
+                        f"{db_header}\n"
+                        f"{ilju_master_prompt_context}\n\n"
+                        f"================================================================================\n"
+                        f"🧠 [1-3 / 1-4. 월운 및 일진 상세분석 정밀 지침]\n"
+                        f"================================================================================\n"
+                        f"당신은 정통 명리심리상담사 '초연 박사'입니다. 본 상담은 특정 월과 일진의 미세한 기운 파동을 포착하는 초단기 실전 분석 리포트입니다.\n\n"
+                        f"1. 지나온 과거 월운의 흐름 회고:\n"
+                        f"   {past_months_html}\n"
+                        f"2. 현재/지정 월운 정밀 통변:\n"
+                        f"   - {prompt_first_half}: 이번 달 전반기 심리 파동, 행동 지침, 주의점 팩트 서술.\n"
+                        f"   - {prompt_second_half}: 이번 달 후반기 사건·사고, 재물/대인관계 성패, 마무리 전략 서술.\n"
+                        f"3. 단기 리스크 방어와 성취를 위한 개운 비법 조언.\n\n"
+                        f"================================================================================\n"
+                        f"✍️ [2단계: 최종 출력물 작성 규칙]\n"
+                        f"================================================================================\n"
+                        f"1. 난해한 용어 배제, 즉각적 행동 지침 위주.\n"
+                        f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
+                        f"3. 표(Table) 생성 금지.\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 지나온 월운 회고</h3>\n"
+                        f"<div class='content-box-loose'>\n"
+                        f"{past_months_html}\n"
+                        f"</div>\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 월운 상세 파동 분석</h3>\n"
+                        f"<div class='content-box-loose'>\n"
+                        f"{prompt_first_half}\n"
+                        f"- 이번 달 전반기 동안 발생할 주요 심리 파동, 실질적 행동 지침 및 주의점 팩트를 서술하십시오.\n"
+                        f"{prompt_second_half}\n"
+                        f"- 이번 달 후반기 동안 맞이할 실질적 사건, 재물/대인관계의 성패, 마무리 대응 전략을 상세히 서술하십시오.\n"
+                        f"</div>\n\n"
+                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 단기 성공을 위한 개운 비법</h3>\n"
+                        f"<div class='content-box-loose'>\n"
+                        f"- 이번 달 파동을 극대화할 단기 처세술과 행운의 에너지 활용법을 조언하십시오.\n"
+                        f"</div>\n"
+                    )
 
                 try:
                     res = model.generate_content(prompt)
                     ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                     
-                    # 🚨 [수술 2]: AI가 골든텍스트와 소스 코드를 화면에 그대로 토해내는 오지랖 완벽 절단!
                     if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
                         ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
 
@@ -1617,14 +1552,13 @@ if st.session_state.get('need_calc', False):
                     clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
                     clean_ai_text, count_w = re.subn(r'[\#\*\_\s]*\[\s*WOLWUN_TABLE_HERE\s*\][\#\*\_\s]*', wolwun_target, clean_ai_text, flags=re.IGNORECASE)
 
-                    # 🚨 [수술 3]: 표가 안 나오고 마크다운 코드가 출력될 경우를 대비한 46.7버전의 강력한 예외 처리 복구!
                     if u_product == "1-1. 사주팔자와 운세풀이":
                         if count_d == 0 and "table" not in clean_ai_text.lower():
                             clean_ai_text = clean_ai_text + f"<br><br><span style='color:red; font-weight:bold;'>⚠️ (AI 표 마커 누락으로 비상 출력된 운의 흐름표)</span><br>{un_html_clean}{se_html_clean}{wol_html_clean}"
 
-                    bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #1A237E; margin: 35px 0 20px 0;'>{closing_html}"
+                    bordered_closing_html = f"<hr style='border: 0; border-top: 2px solid #000000; margin: 35px 0 20px 0;'>{closing_html}"
 
-                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{clean_ai_text}<br><br>{bordered_closing_html}</div>"
+                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 16px; line-height: 1.85; color: #000000;'>{clean_ai_text}<br><br>{bordered_closing_html}</div>"
 
                     report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
                     
@@ -1634,11 +1568,10 @@ if st.session_state.get('need_calc', False):
                     st.error(f"1번 개인 사주풀이 AI 연산 오류: {e}")
 
             # ==============================================================
-            # [A-2] 2. 테마별 특성화 상담 (Ver 50.5 순정형 렌더링 완벽 호환)
+            # [A-2] 2. 테마별 특성화 상담
             # ==============================================================
             elif main_category == "2. 테마별 특성화 상담":
                 
-                # 에러 방어용 기본 변수 세팅 (땜질용 변수 싹 다 폐기)
                 wealth_goal = st.session_state.get('wealth_goal', '안정적인 자산 증식')
                 love_goal = st.session_state.get('love_goal', '좋은 인연과 화목한 관계')
                 career_goal = st.session_state.get('career_goal', '성공적인 진로와 커리어 성취')
@@ -1647,198 +1580,172 @@ if st.session_state.get('need_calc', False):
                 공통_시스템_헤더 = f"{db_header}\n{ilju_master_prompt_context}\n"
 
                 if u_product == "2-1. 재물운 특화 분석":
-                    prompt = 공통_시스템_헤더 + f"""
-[SYSTEM ROLE: 초연 전통명리 최고위 재물/자산 분석가]
-귀하는 정통 명리학의 오행 생극제화, 십성, 신강약 및 용희신을 완벽히 통달한 명리학자입니다. 사주 원국에 나타난 재물의 그릇과 운의 흐름을 정밀하게 분석하되, 세련된 에세이 형식으로 서술하십시오.
-
-🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
-
-1. 나의 재물운과 진단
-[DAEWUN_TABLE_HERE]
-[SEWUN_TABLE_HERE]
-1) 내가 가진 부의 성향과 자산 그릇
-(※ 분석: 원국의 재성(편재/정재)과 식상생재 여부를 바탕으로 안정적 수입형인지 투자/사업형인지 통변하십시오.)
-2) 현재의 금전운 흐름 진단
-(※ 분석: 내담자의 재물 목표({wealth_goal})와 관련하여 현재 운기를 바탕으로 진단하십시오.)
-
-2. 자산이 늘어나는 시기와 현금 흐름
-1) 대운과 세운이 가져다주는 재물운의 파동
-(※ 분석: 재성운이나 용희신 운이 도래하여 금전운이 강하게 발현되는 시기를 서술하십시오.)
-2) 나에게 가장 잘 맞는 맞춤형 자산 증식법
-(※ 분석: 원국의 구조에 부합하는 재테크 수단을 추천하십시오.)
-
-3. 내 재산을 안전하게 지키는 리스크 관리
-1) 금전적 손실이 우려되는 시기와 방어 가이드
-(※ 분석: 비겁운이나 재성 충극 시기를 경고하고 지출 통제 조언을 작성하십시오.)
-
-4. 부를 끌어당기는 일상 속 개운법
-1) 나에게 부족한 기운을 채우는 행운의 습관
-(※ 분석: 용신 오행을 돕는 생활 풍수 비법을 제시하십시오.)
-"""
+                    prompt = (
+                        f"{공통_시스템_헤더}\n"
+                        f"[SYSTEM ROLE: 초연 전통명리 최고위 재물/자산 분석가]\n"
+                        f"귀하는 정통 명리학의 오행 생극제화, 십성, 신강약 및 용희신을 완벽히 통달한 명리학자입니다. 사주 원국에 나타난 재물의 그릇과 운의 흐름을 정밀하게 분석하되, 세련된 에세이 형식으로 서술하십시오.\n\n"
+                        f"🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.\n\n"
+                        f"1. 나의 재물운과 진단\n"
+                        f"[DAEWUN_TABLE_HERE]\n"
+                        f"[SEWUN_TABLE_HERE]\n"
+                        f"1) 내가 가진 부의 성향과 자산 그릇\n"
+                        f"(※ 분석: 원국의 재성(편재/정재)과 식상생재 여부를 바탕으로 안정적 수입형인지 투자/사업형인지 통변하십시오.)\n"
+                        f"2) 현재의 금전운 흐름 진단\n"
+                        f"(※ 분석: 내담자의 재물 목표({wealth_goal})와 관련하여 현재 운기를 바탕으로 진단하십시오.)\n\n"
+                        f"2. 자산이 늘어나는 시기와 현금 흐름\n"
+                        f"1) 대운과 세운이 가져다주는 재물운의 파동\n"
+                        f"(※ 분석: 재성운이나 용희신 운이 도래하여 금전운이 강하게 발현되는 시기를 서술하십시오.)\n"
+                        f"2) 나에게 가장 잘 맞는 맞춤형 자산 증식법\n"
+                        f"(※ 분석: 원국의 구조에 부합하는 재테크 수단을 추천하십시오.)\n\n"
+                        f"3. 내 재산을 안전하게 지키는 리스크 관리\n"
+                        f"1) 금전적 손실이 우려되는 시기와 방어 가이드\n"
+                        f"(※ 분석: 비겁운이나 재성 충극 시기를 경고하고 지출 통제 조언을 작성하십시오.)\n\n"
+                        f"4. 부를 끌어당기는 일상 속 개운법\n"
+                        f"1) 나에게 부족한 기운을 채우는 행운의 습관\n"
+                        f"(※ 분석: 용신 오행을 돕는 생활 풍수 비법을 제시하십시오.)\n"
+                    )
 
                 elif u_product == "2-2. 연애/결혼운 특화 분석":
-                    prompt = 공통_시스템_헤더 + f"""
-[SYSTEM ROLE: 초연 전통명리 최고위 연애/궁합 카운슬러]
-정통 명리학의 배우자성, 배우자궁의 동태, 신살 작용을 바탕으로 내담자의 연애관과 인연의 흐름을 분석하되, 따뜻한 연애 에세이로 서술하십시오.
-
-🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
-
-1. 내 마음에 깃든 사랑의 형태와 인연
-[DAEWUN_TABLE_HERE]
-1) 내가 그리는 이상형과 애정을 표현하는 방식
-(※ 분석: 일지 십성과 배우자성의 동태를 분석하여 이상형과 연애 스타일을 서술하십시오.)
-2) 나의 애정운 흐름 진단
-(※ 분석: 내담자의 고민({love_goal})에 대해 현재 기운을 바탕으로 진단해 주십시오.)
-
-2. 새로운 인연이 다가오는 시기와 만남
-1) 운명적인 만남이 이루어지는 타이밍
-(※ 분석: 대운과 세운에서 합이 들어오거나 배우자성 운이 도래하는 시기를 서술하십시오.)
-
-3. [관계의 밸런스] 사랑을 지키기 위한 조언
-1) 갈등을 피하고 주도권을 조율하는 지혜
-(※ 분석: 일지 충/형/원진 등으로 인한 마찰 요인을 짚어주고 관계 유지법을 조언하십시오.)
-
-4. 변함없는 사랑을 위한 마음가짐과 개운법
-1) 건강한 관계를 위한 나만의 처세술
-(※ 분석: 서로의 기운을 보완하는 현실적 명리 팁을 제시하십시오.)
-"""
+                    prompt = (
+                        f"{공통_시스템_헤더}\n"
+                        f"[SYSTEM ROLE: 초연 전통명리 최고위 연애/궁합 카운슬러]\n"
+                        f"정통 명리학의 배우자성, 배우자궁의 동태, 신살 작용을 바탕으로 내담자의 연애관과 인연의 흐름을 분석하되, 따뜻한 연애 에세이로 서술하십시오.\n\n"
+                        f"🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.\n\n"
+                        f"1. 내 마음에 깃든 사랑의 형태와 인연\n"
+                        f"[DAEWUN_TABLE_HERE]\n"
+                        f"1) 내가 그리는 이상형과 애정을 표현하는 방식\n"
+                        f"(※ 분석: 일지 십성과 배우자성의 동태를 분석하여 이상형과 연애 스타일을 서술하십시오.)\n"
+                        f"2) 나의 애정운 흐름 진단\n"
+                        f"(※ 분석: 내담자의 고민({love_goal})에 대해 현재 기운을 바탕으로 진단해 주십시오.)\n\n"
+                        f"2. 새로운 인연이 다가오는 시기와 만남\n"
+                        f"1) 운명적인 만남이 이루어지는 타이밍\n"
+                        f"(※ 분석: 대운과 세운에서 합이 들어오거나 배우자성 운이 도래하는 시기를 서술하십시오.)\n\n"
+                        f"3. [관계의 밸런스] 사랑을 지키기 위한 조언\n"
+                        f"1) 갈등을 피하고 주도권을 조율하는 지혜\n"
+                        f"(※ 분석: 일지 충/형/원진 등으로 인한 마찰 요인을 짚어주고 관계 유지법을 조언하십시오.)\n\n"
+                        f"4. 변함없는 사랑을 위한 마음가짐과 개운법\n"
+                        f"1) 건강한 관계를 위한 나만의 처세술\n"
+                        f"(※ 분석: 서로의 기운을 보완하는 현실적 명리 팁을 제시하십시오.)\n"
+                    )
 
                 elif u_product == "2-3. 진학/입시운 특화 분석":
-                    prompt = 공통_시스템_헤더 + f"""
-[SYSTEM ROLE: 초연 전통명리 최고위 진로/학업 멘토]
-정통 명리학의 인성(학문)과 식상(응용력)의 구조, 관인상생 여부 등의 팩트를 바탕으로 타고난 학습 기질과 적성을 분석하되, 수험생과 학부모에게 용기를 주는 확신에 찬 에세이로 서술하십시오.
-
-🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
-
-1. 타고난 배움의 에너지와 나의 적성
-[DAEWUN_TABLE_HERE]
-[SEWUN_TABLE_HERE]
-1) 나에게 가장 잘 맞는 학습 스타일
-(※ 분석: 인성 발달 vs 식상 발달을 분석하여 최적의 공부법을 코칭하십시오.)
-2) 현재의 학업운 흐름 진단
-(※ 분석: 학업 목표({career_goal}) 달성을 위해 현재 운기가 어떻게 작용하는지 진단하십시오.)
-
-2. 나를 가장 빛나게 할 전공과 진로
-1) 나의 재능이 만개할 최적의 학문 분야
-(※ 분석: 용희신 오행과 십성에 부합하는 계열 및 세부 전공을 추천하십시오.)
-
-3. 노력의 결실을 맺는 합격과 성취의 타이밍
-1) 성취운이 강해지는 대/세운의 흐름
-(※ 분석: 관성 및 인성 운이 들어와 합격운과 문서운이 강해지는 시기를 서술하십시오.)
-
-4. 목표 달성을 위한 일상 속 마인드 컨트롤
-1) 집중력을 끌어올리는 공간 풍수와 에너지
-(※ 분석: 책상 방위, 행운의 색상 등 실전 팁을 조언하십시오.)
-"""
+                    prompt = (
+                        f"{공통_시스템_헤더}\n"
+                        f"[SYSTEM ROLE: 초연 전통명리 최고위 진로/학업 멘토]\n"
+                        f"정통 명리학의 인성(학문)과 식상(응용력)의 구조, 관인상생 여부 등의 팩트를 바탕으로 타고난 학습 기질과 적성을 분석하되, 수험생과 학부모에게 용기를 주는 확신에 찬 에세이로 서술하십시오.\n\n"
+                        f"🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.\n\n"
+                        f"1. 타고난 배움의 에너지와 나의 적성\n"
+                        f"[DAEWUN_TABLE_HERE]\n"
+                        f"[SEWUN_TABLE_HERE]\n"
+                        f"1) 나에게 가장 잘 맞는 학습 스타일\n"
+                        f"(※ 분석: 인성 발달 vs 식상 발달을 분석하여 최적의 공부법을 코칭하십시오.)\n"
+                        f"2) 현재의 학업운 흐름 진단\n"
+                        f"(※ 분석: 학업 목표({career_goal}) 달성을 위해 현재 운기가 어떻게 작용하는지 진단하십시오.)\n\n"
+                        f"2. 나를 가장 빛나게 할 전공과 진로\n"
+                        f"1) 나의 재능이 만개할 최적의 학문 분야\n"
+                        f"(※ 분석: 용희신 오행과 십성에 부합하는 계열 및 세부 전공을 추천하십시오.)\n\n"
+                        f"3. 노력의 결실을 맺는 합격과 성취의 타이밍\n"
+                        f"1) 성취운이 강해지는 대/세운의 흐름\n"
+                        f"(※ 분석: 관성 및 인성 운이 들어와 합격운과 문서운이 강해지는 시기를 서술하십시오.)\n\n"
+                        f"4. 목표 달성을 위한 일상 속 마인드 컨트롤\n"
+                        f"1) 집중력을 끌어올리는 공간 풍수와 에너지\n"
+                        f"(※ 분석: 책상 방위, 행운의 색상 등 실전 팁을 조언하십시오.)\n"
+                    )
 
                 elif u_product == "2-4. 직업/커리어운 특화 분석":
-                    prompt = 공통_시스템_헤더 + f"""
-[SYSTEM ROLE: 초연 전통명리 최고위 커리어/직업 멘토]
-정통 명리학의 격국, 관성(조직)과 식재(독립/사업)의 유기적 결합을 분석하여 사회적 성취와 직업적 승부처를 도출하되, 현대 직장인들이 공감할 수 있는 통찰력 있는 에세이로 서술하십시오.
-
-🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
-
-1. 내 삶의 무대와 타고난 커리어 성향
-[DAEWUN_TABLE_HERE]
-[SEWUN_TABLE_HERE]
-1) 나의 직무 재능과 나만의 경쟁력
-(※ 분석: 격국과 주도적인 십성을 바탕으로 타고난 재능, 장인정신, 리더십 성향을 분석하십시오.)
-2) 조직에 남을 것인가, 나만의 길을 갈 것인가
-(※ 분석: 관인상생(직장형)인지 식상생재(사업/프리랜서형)인지 판별하십시오.)
-3) 현재의 커리어운 흐름 진단
-(※ 분석: 진로/이직 목표({career_goal})에 대해 현재 운기를 바탕으로 진단하십시오.)
-
-2. 나를 성장시킬 최적의 직무와 환경
-1) 내 에너지가 가장 잘 발휘되는 산업과 직종
-(※ 분석: 사주 용희신과 격국에 부합하는 전문 직종을 추천하십시오.)
-2) 가치를 인정받는 슬기로운 직장 처세술
-(※ 분석: 직장 내 상하/동료와의 관계성을 분석하여 대인관계 팁을 서술하십시오.)
-
-3. 도약과 성취를 이루는 커리어 변곡점
-1) 승진과 이직을 위한 결정적 골든타임
-(※ 분석: 관운, 인성운 도래 시기나 이동수가 긍정적으로 작용하는 타이밍을 제시하십시오.)
-
-4. 성공적인 커리어를 위한 개운법
-1) 사회적 가치를 극대화하는 행동 지침
-(※ 분석: 현재 대운에 맞는 직업적 처세술과 조언을 서술하십시오.)
-"""
+                    prompt = (
+                        f"{공통_시스템_헤더}\n"
+                        f"[SYSTEM ROLE: 초연 전통명리 최고위 커리어/직업 멘토]\n"
+                        f"정통 명리학의 격국, 관성(조직)과 식재(독립/사업)의 유기적 결합을 분석하여 사회적 성취와 직업적 승부처를 도출하되, 현대 직장인들이 공감할 수 있는 통찰력 있는 에세이로 서술하십시오.\n\n"
+                        f"🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.\n\n"
+                        f"1. 내 삶의 무대와 타고난 커리어 성향\n"
+                        f"[DAEWUN_TABLE_HERE]\n"
+                        f"[SEWUN_TABLE_HERE]\n"
+                        f"1) 나의 직무 재능과 나만의 경쟁력\n"
+                        f"(※ 분석: 격국과 주도적인 십성을 바탕으로 타고난 재능, 장인정신, 리더십 성향을 분석하십시오.)\n"
+                        f"2) 조직에 남을 것인가, 나만의 길을 갈 것인가\n"
+                        f"(※ 분석: 관인상생(직장형)인지 식상생재(사업/프리랜서형)인지 판별하십시오.)\n"
+                        f"3) 현재의 커리어운 흐름 진단\n"
+                        f"(※ 분석: 진로/이직 목표({career_goal})에 대해 현재 운기를 바탕으로 진단하십시오.)\n\n"
+                        f"2. 나를 성장시킬 최적의 직무와 환경\n"
+                        f"1) 내 에너지가 가장 잘 발휘되는 산업과 직종\n"
+                        f"(※ 분석: 사주 용희신과 격국에 부합하는 전문 직종을 추천하십시오.)\n"
+                        f"2) 가치를 인정받는 슬기로운 직장 처세술\n"
+                        f"(※ 분석: 직장 내 상하/동료와의 관계성을 분석하여 대인관계 팁을 서술하십시오.)\n\n"
+                        f"3. 도약과 성취를 이루는 커리어 변곡점\n"
+                        f"1) 승진과 이직을 위한 결정적 골든타임\n"
+                        f"(※ 분석: 관운, 인성운 도래 시기나 이동수가 긍정적으로 작용하는 타이밍을 제시하십시오.)\n\n"
+                        f"4. 성공적인 커리어를 위한 개운법\n"
+                        f"1) 사회적 가치를 극대화하는 행동 지침\n"
+                        f"(※ 분석: 현재 대운에 맞는 직업적 처세술과 조언을 서술하십시오.)\n"
+                    )
 
                 elif u_product == "2-5. 건강운 특화 분석":
-                    prompt = 공통_시스템_헤더 + f"""
-[SYSTEM ROLE: 초연 전통명리 최고위 헬스케어 코치]
-정통 명리학의 오행 태과/불급, 조후, 그리고 충극에 의한 오행 손상을 연산하되, 따뜻한 에세이로 서술하십시오.
-
-🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
-
-1. 내 몸의 리듬과 타고난 체질
-[DAEWUN_TABLE_HERE]
-[SEWUN_TABLE_HERE]
-1) 선천적인 신체 기질과 체력의 바탕
-(※ 분석: 타고난 신체적 강약점을 분석하십시오.)
-2) 평생 챙겨야 할 건강의 핵심 포인트
-(※ 분석: 취약 장기를 짚어주십시오.)
-
-2. 앞으로의 10년, 그리고 올해의 건강 흐름
-1) 현재 대운에서 살필 신체 밸런스
-(※ 분석: 향후 10년간 기운의 쏠림 현상이 건강에 미칠 영향을 서술하십시오.)
-
-3. 건강한 일상을 지키기 위한 리스크 관리
-1) 피로와 스트레스가 쌓이는 시기의 대처법
-(※ 분석: 멘탈 스트레스 관리법을 다독여 주십시오.)
-
-4. 내 몸을 살리는 다정한 섭생과 개운법
-1) 에너지를 보충하는 실전 솔루션
-(※ 분석: 부족한 기운을 채우기 위한 음식, 운동법 등을 조언하십시오.)
-"""
+                    prompt = (
+                        f"{공통_시스템_헤더}\n"
+                        f"[SYSTEM ROLE: 초연 전통명리 최고위 헬스케어 코치]\n"
+                        f"정통 명리학의 오행 태과/불급, 조후, 그리고 충극에 의한 오행 손상을 연산하되, 따뜻한 에세이로 서술하십시오.\n\n"
+                        f"🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.\n\n"
+                        f"1. 내 몸의 리듬과 타고난 체질\n"
+                        f"[DAEWUN_TABLE_HERE]\n"
+                        f"[SEWUN_TABLE_HERE]\n"
+                        f"1) 선천적인 신체 기질과 체력의 바탕\n"
+                        f"(※ 분석: 타고난 신체적 강약점을 분석하십시오.)\n"
+                        f"2) 평생 챙겨야 할 건강의 핵심 포인트\n"
+                        f"(※ 분석: 취약 장기를 짚어주십시오.)\n\n"
+                        f"2. 앞으로의 10년, 그리고 올해의 건강 흐름\n"
+                        f"1) 현재 대운에서 살필 신체 밸런스\n"
+                        f"(※ 분석: 향후 10년간 기운의 쏠림 현상이 건강에 미칠 영향을 서술하십시오.)\n\n"
+                        f"3. 건강한 일상을 지키기 위한 리스크 관리\n"
+                        f"1) 피로와 스트레스가 쌓이는 시기의 대처법\n"
+                        f"(※ 분석: 멘탈 스트레스 관리법을 다독여 주십시오.)\n\n"
+                        f"4. 내 몸을 살리는 다정한 섭생과 개운법\n"
+                        f"1) 에너지를 보충하는 실전 솔루션\n"
+                        f"(※ 분석: 부족한 기운을 채우기 위한 음식, 운동법 등을 조언하십시오.)\n"
+                    )
 
                 elif u_product == "2-6. 이사 택일":
-                    prompt = 공통_시스템_헤더 + f"""
-[SYSTEM ROLE: 초연 전통명리 최고위 택일/풍수 마스터]
-정통 명리학의 일진 생극제화 및 합의 길일을 연산하여, 흉일을 철저히 배제한 이사 길일을 추천하는 에세이를 작성하십시오.
-
-🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
-
-1. 새로운 공간으로의 이동이 갖는 의미
-[DAEWUN_TABLE_HERE]
-[SEWUN_TABLE_HERE]
-1) 이사가 나의 운명에 가져올 긍정적인 변화
-(※ 분석: 역마살, 지살 등 이동의 기운이 사주에 어떤 활력을 주는지 분석하십시오.)
-
-2. 복을 부르는 이사 당일의 지혜와 풍수
-1) 이사 당일 행운을 부르는 시간대(길시)
-(※ 분석: 흉시를 피하고 짐을 들이기 좋은 길시를 지정하십시오.)
-2) 새로운 집을 안락하게 채울 개운 풍수 팁
-(※ 분석: 용희신 방향이나 행운의 색상 등 생활 풍수를 조언하십시오.)
-"""
+                    prompt = (
+                        f"{공통_시스템_헤더}\n"
+                        f"[SYSTEM ROLE: 초연 전통명리 최고위 택일/풍수 마스터]\n"
+                        f"정통 명리학의 일진 생극제화 및 합의 길일을 연산하여, 흉일을 철저히 배제한 이사 길일을 추천하는 에세이를 작성하십시오.\n\n"
+                        f"🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.\n\n"
+                        f"1. 새로운 공간으로의 이동이 갖는 의미\n"
+                        f"[DAEWUN_TABLE_HERE]\n"
+                        f"[SEWUN_TABLE_HERE]\n"
+                        f"1) 이사가 나의 운명에 가져올 긍정적인 변화\n"
+                        f"(※ 분석: 역마살, 지살 등 이동의 기운이 사주에 어떤 활력을 주는지 분석하십시오.)\n\n"
+                        f"2. 복을 부르는 이사 당일의 지혜와 풍수\n"
+                        f"1) 이사 당일 행운을 부르는 시간대(길시)\n"
+                        f"(※ 분석: 흉시를 피하고 짐을 들이기 좋은 길시를 지정하십시오.)\n"
+                        f"2) 새로운 집을 안락하게 채울 개운 풍수 팁\n"
+                        f"(※ 분석: 용희신 방향이나 행운의 색상 등 생활 풍수를 조언하십시오.)\n"
+                    )
 
                 elif u_product == "2-7. 개업 택일":
-                    prompt = 공통_시스템_헤더 + f"""
-[SYSTEM ROLE: 초연 전통명리 최고위 비즈니스 택일 마스터]
-정통 명리학의 일진 연산 및 재성/식상이 살아나는 길일을 연산하여, 금전 유입을 극대화할 수 있는 개업 길일을 추천하는 에세이를 작성하십시오.
-
-🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.
-
-1. 새로운 도약과 사업 시작의 타이밍
-[DAEWUN_TABLE_HERE]
-[SEWUN_TABLE_HERE]
-1) 개업이 내 운명에 불어넣을 새로운 성장의 기운
-(※ 분석: 사주의 식상생재 기운을 바탕으로 사업 개창의 운기가 발동함을 서술하십시오.)
-
-2. 대박을 터뜨릴 오픈 당일의 지혜와 비즈니스 풍수
-1) 손님을 끌어모을 개업 당일의 최적 시간대(길시)
-(※ 분석: 오픈 및 고사를 지내기 좋은 길시를 지정하십시오.)
-2) 재물을 당기는 사업장 풍수와 인테리어 팁
-(※ 분석: 금전등록기 위치 등 사업 번창을 돕는 개운 풍수를 조언하십시오.)
-"""
+                    prompt = (
+                        f"{공통_시스템_헤더}\n"
+                        f"[SYSTEM ROLE: 초연 전통명리 최고위 비즈니스 택일 마스터]\n"
+                        f"정통 명리학의 일진 연산 및 재성/식상이 살아나는 길일을 연산하여, 금전 유입을 극대화할 수 있는 개업 길일을 추천하는 에세이를 작성하십시오.\n\n"
+                        f"🚨 [출력 목차 강제 지시]: 아래 제목을 100% 그대로 출력하십시오.\n\n"
+                        f"1. 새로운 도약과 사업 시작의 타이밍\n"
+                        f"[DAEWUN_TABLE_HERE]\n"
+                        f"[SEWUN_TABLE_HERE]\n"
+                        f"1) 개업이 내 운명에 불어넣을 새로운 성장의 기운\n"
+                        f"(※ 분석: 사주의 식상생재 기운을 바탕으로 사업 개창의 운기가 발동함을 서술하십시오.)\n\n"
+                        f"2. 대박을 터뜨릴 오픈 당일의 지혜와 비즈니스 풍수\n"
+                        f"1) 손님을 끌어모을 개업 당일의 최적 시간대(길시)\n"
+                        f"(※ 분석: 오픈 및 고사를 지내기 좋은 길시를 지정하십시오.)\n"
+                        f"2) 재물을 당기는 사업장 풍수와 인테리어 팁\n"
+                        f"(※ 분석: 금전등록기 위치 등 사업 번창을 돕는 개운 풍수를 조언하십시오.)\n"
+                    )
 
                 try:
                     res = model.generate_content(prompt)
                     ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                     
-                    # 🚨 AI 프롬프트의 테이블 마커 찌꺼기를 안전하게 청소
                     ai_text = ai_text.replace("[WEEKLY_CALENDAR_HERE]", "").replace("[DAEWUN_TABLE_HERE]", "").replace("[SEWUN_TABLE_HERE]", "")
                     
-                    # 🚨 2-6, 2-7 전용 택일 결과 블록 생성 로직
                     extra_html = ""
                     if u_product in ["2-6. 이사 택일", "2-7. 개업 택일"]:
                         s_d_val = start_date if start_date else dt_mod.date.today()
@@ -1846,12 +1753,12 @@ if st.session_state.get('need_calc', False):
                         FORBIDDEN_LIST = ['병오', '임자', '계해', '신유', '경신']
                         recommended_days = get_optimized_delivery_days(s_d_val, e_d_val, jjis, jjis, FORBIDDEN_LIST)
                         
-                        extra_html += f"<h3 style='color:#4A148C; text-align:center; margin-top:20px;'>📅 추천 길일 (탐색기간: {s_d_val} ~ {e_d_val})</h3>\n"
+                        extra_html += f"<h3 style='color:#000000; text-align:center; margin-top:20px;'>📅 추천 길일 (탐색기간: {s_d_val} ~ {e_d_val})</h3>\n"
                         for day_info in recommended_days:
-                            extra_html += f"<div style='font-size:16px; font-weight:bold; margin-bottom:8px; padding:8px; background:#F8F9FA; border-radius:6px; text-align:center;'>✅ 추천 길일: <b style='color:#D50000;'>{day_info['date']}</b> (명리 적합도: {day_info['score']}점)</div>\n"
-                        extra_html += "<hr style='border:1px dashed #4A148C; margin:15px 0;'>\n"
+                            extra_html += f"<div style='font-size:16px; font-weight:bold; margin-bottom:8px; padding:8px; background:#F8F9FA; border-radius:6px; text-align:center; color:#000000;'>✅ 추천 길일: <b style='color:#000000;'>{day_info['date']}</b> (명리 적합도: {day_info['score']}점)</div>\n"
+                        extra_html += "<hr style='border:1px solid #000000; margin:15px 0;'>\n"
 
-                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{extra_html}{ai_text}<br><br>{closing_html}</div>"
+                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 16px; line-height: 1.85; color: #000000;'>{extra_html}{ai_text}<br><br>{closing_html}</div>"
 
                     report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
                     
@@ -1864,24 +1771,24 @@ if st.session_state.get('need_calc', False):
             # [A-3] 4-1. 타 감명서 비교 (사주) 파이프라인
             # ==============================================================
             elif main_category == "4. 타 감명서 비교" and u_product == "4-1. 타 감명서 비교 (사주)":
-                comp_prompt = f"""
-[SYSTEM ROLE: CHOYEON SYSTEM CHIEF CHANCELLOR]
-당신은 '초연 박사님'을 보좌하는 수석보좌관 AI입니다.
-제출된 타 감명서 원문과 초연시공명리의 정밀 사주풀이 팩트를 1:1로 엄밀히 비교 대조하여 학술 검증 리포트를 작성하십시오.
-타 감명서의 고전적/단식적 해석(단순 신살, 오행 개수 위주)과 초연 시공명리(월령 시공간, 일주 구조, 대운 파동)의 입체적 해석을 1:1로 대조하여 차이점을 서술하십시오.
-"""
+                comp_prompt = (
+                    f"[SYSTEM ROLE: CHOYEON SYSTEM CHIEF CHANCELLOR]\n"
+                    f"당신은 '초연 박사님'을 보좌하는 수석보좌관 AI입니다.\n"
+                    f"제출된 타 감명서 원문과 초연시공명리의 정밀 사주풀이 팩트를 1:1로 엄밀히 비교 대조하여 학술 검증 리포트를 작성하십시오.\n"
+                    f"타 감명서의 고전적/단식적 해석(단순 신살, 오행 개수 위주)과 초연 시공명리(월령 시공간, 일주 구조, 대운 파동)의 입체적 해석을 1:1로 대조하여 차이점을 서술하십시오.\n"
+                )
                 try:
                     c_res = call_claude_api(comp_prompt, max_tokens=10000)
                     
                     report_2_html = (
                         f"<div class='page-break-before'></div>\n"
                         f"<div class='report-page'>\n"
-                        f"<div class='vip-inset-frame' style='border-color:#2E7D32; padding:20px;'>\n"
-                        f"<h1 style='text-align:center; color:#2E7D32; font-size: 26px; font-weight: 900; border-bottom:2px solid #2E7D32; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 감명서 학술 검증 및 1:1 대조 리포트</h1>\n"
+                        f"<div class='vip-inset-frame' style='border:2px solid #000000; padding:20px;'>\n"
+                        f"<h1 style='text-align:center; color:#000000; font-size: 26px; font-weight: 900; border-bottom:2px solid #000000; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 감명서 학술 검증 및 1:1 대조 리포트</h1>\n"
                         f"<div style='margin-top:20px;'>{c_res}</div>\n"
-                        f"<hr style='border:1px dashed #2E7D32; margin:30px 0;'>\n"
-                        f"<h3 style='color:#555; font-size:18px; font-weight:900; margin-bottom:10px;'>📜 [제출된 타 감명서 원문]</h3>\n"
-                        f"<div style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; line-height: 1.8; color: #444; background:#F9F9F9; padding:15px; border-radius:8px;'>{other_reading_text.replace(chr(10), '<br>')}</div>\n"
+                        f"<hr style='border:1px solid #000000; margin:30px 0;'>\n"
+                        f"<h3 style='color:#000000; font-size:18px; font-weight:900; margin-bottom:10px;'>📜 [제출된 타 감명서 원문]</h3>\n"
+                        f"<div style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; line-height: 1.85; color: #000000; background:#FAFAFA; padding:15px; border-radius:8px;'>{other_reading_text.replace(chr(10), '<br>')}</div>\n"
                         f"</div>\n"
                         f"</div>"
                     )
@@ -1949,22 +1856,22 @@ if st.session_state.get('need_calc', False):
                         gh_engine = UniversalPrintableGunghap(m_name_val, f_name_val, male_data_pack, female_data_pack, 10)
                         gh_engine.run_universal_logic()
 
-                        comp_prompt = f"""
-[SYSTEM ROLE: CHOYEON SYSTEM CHIEF CHANCELLOR (초연시공명리 수석보좌관)]
-당신은 '초연 박사님'을 보좌하는 수석보좌관 AI입니다.
-제출된 [{m_name_val}님과 {f_name_val}님의 외부 궁합 감명서 원문]을 박사님의 [초연시공명리 궁합 정밀 통변 팩트]와 1:1로 엄밀히 비교 대조하여 학술 검증 리포트를 작성하십시오.
-"""
+                        comp_prompt = (
+                            f"[SYSTEM ROLE: CHOYEON SYSTEM CHIEF CHANCELLOR (초연시공명리 수석보좌관)]\n"
+                            f"당신은 '초연 박사님'을 보좌하는 수석보좌관 AI입니다.\n"
+                            f"제출된 [{m_name_val}님과 {f_name_val}님의 외부 궁합 감명서 원문]을 박사님의 [초연시공명리 궁합 정밀 통변 팩트]와 1:1로 엄밀히 비교 대조하여 학술 검증 리포트를 작성하십시오.\n"
+                        )
                         c_res = call_claude_api(comp_prompt, max_tokens=10000)
                         
                         report_2_html = (
                             f"<div class='page-break-before'></div>\n"
                             f"<div class='report-page'>\n"
-                            f"<div class='vip-inset-frame' style='border-color:#C62828; padding:20px;'>\n"
-                            f"<h1 style='text-align:center; color:#C62828; font-size: 26px; font-weight: 900; border-bottom:2px solid #C62828; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 궁합 감명서 학술 검증 및 1:1 대조 리포트</h1>\n"
+                            f"<div class='vip-inset-frame' style='border-color:#000000; padding:20px;'>\n"
+                            f"<h1 style='text-align:center; color:#000000; font-size: 26px; font-weight: 900; border-bottom:2px solid #000000; padding-bottom:15px; margin-bottom:20px;'>⚖️ 타 궁합 감명서 학술 검증 및 1:1 대조 리포트</h1>\n"
                             f"<div style='margin-top:20px;'>{c_res}</div>\n"
-                            f"<hr style='border:1px dashed #C62828; margin:30px 0;'>\n"
-                            f"<h3 style='color:#555; font-size:18px; font-weight:900; margin-bottom:10px;'>📜 [제출된 타 감명서 원문]</h3>\n"
-                            f"<div style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; line-height: 1.8; color: #444; background:#F9F9F9; padding:15px; border-radius:8px;'>{other_reading_text.replace(chr(10), '<br>')}</div>\n"
+                            f"<hr style='border:1px solid #000000; margin:30px 0;'>\n"
+                            f"<h3 style='color:#000000; font-size:18px; font-weight:900; margin-bottom:10px;'>📜 [제출된 타 감명서 원문]</h3>\n"
+                            f"<div style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; line-height: 1.85; color: #000000; background:#FAFAFA; padding:15px; border-radius:8px;'>{other_reading_text.replace(chr(10), '<br>')}</div>\n"
                             f"</div>\n"
                             f"</div>"
                         )
@@ -1992,7 +1899,7 @@ if st.session_state.get('need_calc', False):
                                 lbl = f"<td rowspan='4' class='header-cell-main' style='border:1px solid #444 !important;'><span style='color:inherit !important;'>합충형파해</span></td>" if l_idx==0 else ""
                                 ji_rel_rows += f"<tr>{lbl}{cells}</tr>"
 
-                            info_str = f"<div style='text-align:center; margin-bottom:15px; font-family:\"Malgun Gothic\", sans-serif;'><span style='font-size:18px; font-weight:900; color:{color};'>{gender_icon} {name}님 ({gender_str}, {marital_str}, {age}세)</span><br><span style='font-size:14px; font-weight:900; color:#222;'>[양력] {sol} | [음력] {lun}{time}</span></div>"
+                            info_str = f"<div style='text-align:center; margin-bottom:15px; font-family:\"Malgun Gothic\", sans-serif;'><span style='font-size:18px; font-weight:900; color:{color};'>{gender_icon} {name}님 ({gender_str}, {marital_str}, {age}세)</span><br><span style='font-size:14px; font-weight:900; color:#000000;'>[양력] {sol} | [음력] {lun}{time}</span></div>"
                             
                             def td(c): return f"<td class='color-{get_color(c)}' style='font-size:20px; font-weight:900; border:1px solid #444 !important;'><span style='color:inherit !important;'>{('?' if c in ['?',' ','-'] else c)}</span></td>"
                             
@@ -2015,7 +1922,7 @@ if st.session_state.get('need_calc', False):
                                 f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:inherit !important;'>십이운성</span></td>{''.join([f'<td style=\"border:1px solid #444; color:#0D47A1; font-weight:bold;\"><span style=\"color:inherit !important;\">{get_unsung(t_ds, t_jjis[i])}</span></td>' for i in range(4)])}</tr>\n"
                                 f"<tr><td class='header-cell-main' style='border:1px solid #444; font-size:15px !important; white-space:nowrap;'><span style='color:inherit !important;'>십이신살</span></td>{''.join([f'<td style=\"border:1px solid #444; color:#C62828; font-weight:bold;\"><span style=\"color:inherit !important;\">{get_12_shinsal(t_yb, t_jjis[i])}</span></td>' for i in range(4)])}</tr>\n"
                                 f"</table>\n"
-                                f"<div style='border:2px solid {color}; margin-top:10px; margin-bottom:20px; padding:6px 8px; display:flex; justify-content:space-between; align-items:center; font-weight:900; font-size:11px; letter-spacing:-0.5px; border-radius:8px; background-color:#FAFAFA;'><div style='white-space:nowrap;'>🔢 대운수: {daeun_su}</div><div style='white-space:nowrap;'>💥 오행: 木({counts['목']}) 火({counts['화']}) 土({counts['토']}) 金({counts['금']}) 水({counts['수']})</div><div style='white-space:nowrap;'>🌟 천을귀인: <span style='color:{color};'>{guiin}</span></div><div style='white-space:nowrap;'>🎯 공망: [년] <span style='color:#C62828;'>{y_gong}</span> [일] <span style='color:#C62828;'>{d_gong}</span></div><div style='white-space:nowrap;'>🌪️ 삼재: {samjae}</div></div>"
+                                f"<div style='border:2px solid {color}; margin-top:10px; margin-bottom:20px; padding:6px 8px; display:flex; justify-content:space-between; align-items:center; font-weight:900; font-size:11px; letter-spacing:-0.5px; border-radius:8px; background-color:#FAFAFA;'><div style='white-space:nowrap; color:#000000;'>🔢 대운수: {daeun_su}</div><div style='white-space:nowrap; color:#000000;'>💥 오행: 木({counts['목']}) 火({counts['화']}) 土({counts['토']}) 金({counts['금']}) 水({counts['수']})</div><div style='white-space:nowrap; color:#000000;'>🌟 천을귀인: <span style='color:#000000;'>{guiin}</span></div><div style='white-space:nowrap; color:#000000;'>🎯 공망: [년] <span style='color:#C62828;'>{y_gong}</span> [일] <span style='color:#C62828;'>{d_gong}</span></div><div style='white-space:nowrap; color:#000000;'>🌪️ 삼재: {samjae}</div></div>"
                             )
 
                         m_marital = u_marital if u_gender == "남성" else p_marital
@@ -2023,24 +1930,24 @@ if st.session_state.get('need_calc', False):
                         
                         guiin_map = {'甲':'丑, 未','乙':'子, 申','丙':'酉, 亥','丁':'酉, 亥','戊':'丑, 未','己':'子, 申','庚':'丑, 未','辛':'午寅','壬':'卯巳','癸':'卯, 巳'}
                         
-                        m_tbl = build_bazi_table("♂️", m_name, "남명", m_marital, m_age, m_sol, m_lun, m_time, m_gans, m_jjis, m_ds, m_yb, m_cnt, guiin_map.get(m_ds, '-'), calculate_gongmang(m_ys, m_yb), calculate_gongmang(m_ds, m_db), get_samjae(m_yb, curr_j), m_calc_d, "#1A237E")
-                        f_tbl = build_bazi_table("♀️", f_name, "여명", f_marital, f_age, f_sol, f_lun, f_time, f_gans, f_jjis, f_ds, f_yb, f_cnt, guiin_map.get(f_ds, '-'), calculate_gongmang(f_ys, f_yb), calculate_gongmang(f_ds, f_db), get_samjae(f_yb, curr_j), f_calc_d, "#2E7D32")
+                        m_tbl = build_bazi_table("♂️", m_name, "남명", m_marital, m_age, m_sol, m_lun, m_time, m_gans, m_jjis, m_ds, m_yb, m_cnt, guiin_map.get(m_ds, '-'), calculate_gongmang(m_ys, m_yb), calculate_gongmang(m_ds, m_db), get_samjae(m_yb, curr_j), m_calc_d, "#000000")
+                        f_tbl = build_bazi_table("♀️", f_name, "여명", f_marital, f_age, f_sol, f_lun, f_time, f_gans, f_jjis, f_ds, f_yb, f_cnt, guiin_map.get(f_ds, '-'), calculate_gongmang(f_ys, f_yb), calculate_gongmang(f_ds, f_db), get_samjae(f_yb, curr_j), f_calc_d, "#000000")
                         
                         def build_daewun_html(name, t_ds, t_ms, t_mb, t_yb, t_calc_d, t_order, age, color):
                             d_str = "순행" if t_order == 1 else "역행"
-                            html = f"<div style='margin-bottom:10px;'><div style='font-size:15px; font-weight:900; color:{color}; margin-bottom:5px;'>[ {name}님 대운 흐름표 (대운수: {t_calc_d}), {d_str} ]</div>"
-                            html += f"<div style='display:flex; flex-direction:row-reverse; width:100%; border:2px solid #3E2723; background:white;'>"
+                            html = f"<div style='margin-bottom:10px;'><div style='font-size:15px; font-weight:900; color:#000000; margin-bottom:5px;'>[ {name}님 대운 흐름표 (대운수: {t_calc_d}), {d_str} ]</div>"
+                            html += f"<div style='display:flex; flex-direction:row-reverse; width:100%; border:2px solid #000000; background:white;'>"
                             for i in range(10):
                                 val = i*10 + t_calc_d
                                 tc = GAN[(GAN.index(t_ms)+(i+1)*t_order)%10]
                                 tj = JI[(JI.index(t_mb)+(i+1)*t_order)%12]
                                 bg = "#FFF9C4" if val <= age < val+10 else "transparent"
                                 brd = "1px solid #ccc" if i != 9 else "none"
-                                html += f"<div style='flex:1; border-left:{brd}; text-align:center; padding-bottom:3px; background-color:{bg};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:11px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:11px;'>{get_ss(t_ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:15px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:15px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:11px;'>{get_ss(t_ds,tj)}</div><div style='font-size:10px; border-top:1px solid #eee;'>{get_unsung(t_ds,tj)}</div><div style='font-size:10px; color:#C62828; border-top:1px solid #eee;'>{get_12_shinsal(t_yb, tj)}</div></div>"
+                                html += f"<div style='flex:1; border-left:{brd}; text-align:center; padding-bottom:3px; background-color:{bg};'><div style='background-color:#222222; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:11px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:11px; color:#000000;'>{get_ss(t_ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:15px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:15px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:11px; color:#000000;'>{get_ss(t_ds,tj)}</div><div style='font-size:10px; border-top:1px solid #eee; color:#0D47A1;'>{get_unsung(t_ds,tj)}</div><div style='font-size:10px; color:#C62828; border-top:1px solid #eee;'>{get_12_shinsal(t_yb, tj)}</div></div>"
                             return html + "</div></div>"
 
-                        m_page_un_html = build_daewun_html(m_name, m_ds, m_ms, m_mb, m_yb, m_calc_d, m_order, m_age, "#1A237E")
-                        f_page_un_html = build_daewun_html(f_name, f_ds, f_ms, f_mb, f_yb, f_calc_d, f_order, f_age, "#2E7D32")
+                        m_page_un_html = build_daewun_html(m_name, m_ds, m_ms, m_mb, m_yb, m_calc_d, m_order, m_age, "#000000")
+                        f_page_un_html = build_daewun_html(f_name, f_ds, f_ms, f_mb, f_yb, f_calc_d, f_order, f_age, "#000000")
                         
                         couple_daewun_tables = f"<div style='margin-bottom: 25px;'>{m_page_un_html}<div style='height:20px;'></div>{f_page_un_html}</div>"
 
@@ -2052,14 +1959,14 @@ if st.session_state.get('need_calc', False):
                         m_main_tendency = m_struct_data[2] if len(m_struct_data) >= 3 else "독자적인 삶의 무대를 개척하는"
                         m_gy_name, m_gy_desc = get_gyukgook_detailed(m_ds, m_ys, m_ms, m_hs, m_mb)
 
-                        m_traditional_text_html = f"""
-                        <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
-                            <p style='text-indent: 15px; margin-bottom: 5px;'>
-                                정통 명리학적으로 풀이하면 <b>{m_name}님</b>은 <b>{m_mb}월</b>에 <b>'{m_gy_name}'</b>의 그릇을 갖추고 태어나셨으며, 성격은 <b>'{m_action_type}'</b>으로 <b>'{m_main_tendency}'</b> 성향이 있습니다.
-                            </p>
-                        </div>
-                        <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
-                        """
+                        m_traditional_text_html = (
+                            f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 16px; line-height: 1.85; color: #000000; margin-bottom: 20px;'>\n"
+                            f"    <p style='text-indent: 15px; margin-bottom: 5px;'>\n"
+                            f"        정통 명리학적으로 풀이하면 <b style='color:#000000;'>{m_name}님</b>은 <b style='color:#000000;'>{m_mb}월</b>에 <b style='color:#000000;'>'{m_gy_name}'</b>의 그릇을 갖추고 태어나셨으며, 성격은 <b style='color:#000000;'>'{m_action_type}'</b>으로 <b style='color:#000000;'>'{m_main_tendency}'</b> 성향이 있습니다.\n"
+                            f"    </p>\n"
+                            f"</div>\n"
+                            f"<hr style='border: 0; border-top: 2px solid #000000; margin: 25px 0;'>\n"
+                        )
 
                         f_ilju_key = f"{f_ds}{f_db}"
                         f_struct_data = ilju_struct_db.get(f_ilju_key, [])
@@ -2067,75 +1974,67 @@ if st.session_state.get('need_calc', False):
                         f_main_tendency = f_struct_data[2] if len(f_struct_data) >= 3 else "독자적인 삶의 무대를 개척하는"
                         f_gy_name, f_gy_desc = get_gyukgook_detailed(f_ds, f_ys, f_ms, f_hs, f_mb)
 
-                        f_traditional_text_html = f"""
-                        <div style='font-family: "Nanum Myeongjo", "바탕체", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000; margin-bottom: 20px;'>
-                            <p style='text-indent: 15px; margin-bottom: 5px;'>
-                                정통 명리학적으로 풀이하면 <b>{f_name}님</b>은 <b>{f_mb}월</b>에 <b>'{f_gy_name}'</b>의 그릇을 갖추고 태어나셨으며, 성격은 <b>'{f_action_type}'</b>으로 <b>'{f_main_tendency}'</b> 성향이 있습니다.
-                            </p>
-                        </div>
-                        <hr style="border: 0; border-top: 2px solid #000000; margin: 25px 0;">
-                        """
+                        f_traditional_text_html = (
+                            f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 16px; line-height: 1.85; color: #000000; margin-bottom: 20px;'>\n"
+                            f"    <p style='text-indent: 15px; margin-bottom: 5px;'>\n"
+                            f"        정통 명리학적으로 풀이하면 <b style='color:#000000;'>{f_name}님</b>은 <b style='color:#000000;'>{f_mb}월</b>에 <b style='color:#000000;'>'{f_gy_name}'</b>의 그릇을 갖추고 태어나셨으며, 성격은 <b style='color:#000000;'>'{f_action_type}'</b>으로 <b style='color:#000000;'>'{f_main_tendency}'</b> 성향이 있습니다.\n"
+                            f"    </p>\n"
+                            f"</div>\n"
+                            f"<hr style='border: 0; border-top: 2px solid #000000; margin: 25px 0;'>\n"
+                        )
 
                         gh_engine = UniversalPrintableGunghap(u_name, p_name, male_data_pack, female_data_pack, 10)
                         gh_engine.run_universal_logic()
                         
-                        essay_prompt = f"""[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
-당신은 정통 명리심리상담사 '초연 박사'입니다.
-
-🚨 [출력 절대 형식 및 내용 생성 규칙]
-1. 각 소제목 아래에 절대로 안내 문구를 그대로 복사해서 출력하지 마십시오!
-2. 반드시 내담자의 명리적 특징을 분석하여 3~4문장 분량의 실제 통변 내용을 직접 작성해야 합니다.
-3. 모든 통변 문장은 HTML 태그 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸하십시오.
-
-[MALE_START]
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
-(이곳에 남성의 사회적 표면 성격을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 감추어진 내 속마음</span>
-(이곳에 남성의 내면과 무의식을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
-(남성의 연애 및 결혼관을 실제 에세이로 작성)
-
-<h3 style='color:#1A237E; font-size: 22px; font-weight: 900; margin-top: 15px;'>2. 사주팔자의 요약</h3>
-{m_traditional_text_html}
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
-(이곳에 남성의 정통 명리적 성향을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>
-(이곳에 남성의 오행 및 조후 에너지를 분석한 실제 에세이 작성)
-[MALE_END]
-
-[FEMALE_START]
-<h3 style='color:#D50000; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>
-(이곳에 여성의 사회적 표면 성격을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 감추어진 내 속마음</span>
-(이곳에 여성의 내면과 무의식을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
-(여성의 연애 및 결혼관을 실제 에세이로 작성)
-
-<h3 style='color:#D50000; font-size: 22px; font-weight: 900; margin-top: 15px;'>2. 사주팔자의 요약</h3>
-{f_traditional_text_html}
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
-(이곳에 여성의 정통 명리적 성향을 분석한 실제 에세이 작성)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>
-(이곳에 여성의 오행 및 조후 에너지를 분석한 실제 에세이 작성)
-[FEMALE_END]
-
-[GUNGHAP_START]
-<h3 style='color: #1B5E20; font-size: 22px; font-weight: 900; margin-top: 10px;'>🍀 두 사람의 운명적 만남에 대하여</h3>
-(이곳에 두 사람의 인연 총평을 깊이 있게 통변한 실제 에세이 작성)
-
-<h3 style='color: #1A237E; font-size: 22px; font-weight: 900; margin-top: 25px;'>🌈 커플의 인생 기상도 분석</h3>
-[COUPLE_DAEWUN_TABLES_HERE]
-(이곳에 상하 대운 교차점에 따른 상생/보완을 분석한 실제 에세이 작성)
-
-<h4 style='color: #1A237E; font-size: 18px; font-weight: 900; margin-top: 25px;'>💞 커플의 상생과 조화 궁합 분석</h4>
-(이곳에 속궁합, 겉궁합, 오행 궁합을 통합 분석한 실제 에세이 작성)
-
-<h4 style='color: #1A237E; font-size: 18px; font-weight: 900; margin-top: 25px;'>⚓ 조율의 지혜</h4>
-(이곳에 갈등 극복 및 개운 처방을 담은 실제 에세이 작성)
-[GUNGHAP_END]
-"""
+                        essay_prompt = (
+                            f"[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]\n"
+                            f"당신은 정통 명리심리상담사 '초연 박사'입니다.\n\n"
+                            f"🚨 [출력 절대 형식 및 내용 생성 규칙]\n"
+                            f"1. 각 소제목 아래에 절대로 안내 문구를 그대로 복사해서 출력하지 마십시오!\n"
+                            f"2. 반드시 내담자의 명리적 특징을 분석하여 3~4문장 분량의 실제 통변 내용을 직접 작성해야 합니다.\n"
+                            f"3. 모든 통변 문장은 HTML 태그 <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.85; color: #000000; text-indent: 1em; text-align: justify;'> 로 감싸하십시오.\n\n"
+                            f"[MALE_START]\n"
+                            f"<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>\n"
+                            f"(이곳에 남성의 사회적 표면 성격을 분석한 실제 에세이 작성)\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>2) 감추어진 내 속마음</span>\n"
+                            f"(이곳에 남성의 내면과 무의식을 분석한 실제 에세이 작성)\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>\n"
+                            f"(남성의 연애 및 결혼관을 실제 에세이로 작성)\n\n"
+                            f"<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 15px;'>2. 사주팔자의 요약</h3>\n"
+                            f"{m_traditional_text_html}\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>\n"
+                            f"(이곳에 남성의 정통 명리적 성향을 분석한 실제 에세이 작성)\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>\n"
+                            f"(이곳에 남성의 오행 및 조후 에너지를 분석한 실제 에세이 작성)\n"
+                            f"[MALE_END]\n\n"
+                            f"[FEMALE_START]\n"
+                            f"<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>\n"
+                            f"(이곳에 여성의 사회적 표면 성격을 분석한 실제 에세이 작성)\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>2) 감추어진 내 속마음</span>\n"
+                            f"(이곳에 여성의 내면과 무의식을 분석한 실제 에세이 작성)\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>\n"
+                            f"(여성의 연애 및 결혼관을 실제 에세이로 작성)\n\n"
+                            f"<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 15px;'>2. 사주팔자의 요약</h3>\n"
+                            f"{f_traditional_text_html}\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>\n"
+                            f"(이곳에 여성의 정통 명리적 성향을 분석한 실제 에세이 작성)\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>\n"
+                            f"(이곳에 여성의 오행 및 조후 에너지를 분석한 실제 에세이 작성)\n"
+                            f"[FEMALE_END]\n\n"
+                            f"[GUNGHAP_START]\n"
+                            f"<h3 style='color: #000000; font-size: 22px; font-weight: 900; margin-top: 10px;'>🍀 두 사람의 운명적 만남에 대하여</h3>\n"
+                            f"(이곳에 두 사람의 인연 총평을 깊이 있게 통변한 실제 에세이 작성)\n\n"
+                            f"<h3 style='color: #000000; font-size: 22px; font-weight: 900; margin-top: 25px;'>🌈 커플의 인생 기상도 분석</h3>\n"
+                            f"[COUPLE_DAEWUN_TABLES_HERE]\n"
+                            f"(이곳에 상하 대운 교차점에 따른 상생/보완을 분석한 실제 에세이 작성)\n\n"
+                            f"<h4 style='color: #000000; font-size: 18px; font-weight: 900; margin-top: 25px;'>💞 커플의 상생과 조화 궁합 분석</h4>\n"
+                            f"(이곳에 속궁합, 겉궁합, 오행 궁합을 통합 분석한 실제 에세이 작성)\n\n"
+                            f"<h4 style='color: #000000; font-size: 18px; font-weight: 900; margin-top: 25px;'>⚓ 조율의 지혜</h4>\n"
+                            f"(이곳에 갈등 극복 및 개운 처방을 담은 실제 에세이 작성)\n"
+                            f"[GUNGHAP_END]\n"
+                        )
                         res_text = call_claude_api(essay_prompt, max_tokens=12000)
                         ai_clean = "\n".join([line.lstrip() for line in res_text.split("\n")])
                         
@@ -2157,7 +2056,7 @@ if st.session_state.get('need_calc', False):
                         if count == 0:
                             g_ess = re.sub(r'(<h3[^>]*>🌈 커플의 인생 기상도 분석</h3>)', r'\1\n<div style="margin-top:15px;">' + couple_daewun_tables + '</div>', g_ess)
 
-                        def wrap_a4(content, title_color="#1A237E", title="[ 초연 전통 명리사주 풀이 ]"):
+                        def wrap_a4(content, title_color="#000000", title="[ 초연 전통 명리사주 풀이 ]"):
                             return (
                                 f"<div class='report-page'>\n"
                                 f"<div class='vip-inset-frame' style='border-color:{title_color}; padding:20px;'>\n"
@@ -2167,56 +2066,60 @@ if st.session_state.get('need_calc', False):
                                 f"</div>"
                             )
 
-                        t_col = "#3498db" if gh_engine.final_score >= 70 else ("#f39c12" if gh_engine.final_score >= 60 else "#e74c3c")
-                        bars = "".join([f"<div style='display:flex; align-items:center; margin-bottom:12px;'><div style='width:130px; font-size:13px; font-weight:bold; color:#555;'>{d['label']}</div><div style='flex:1; height:12px; margin:0 10px;'><svg width='100%' height='12'><rect width='100%' height='12' rx='6' ry='6' fill='#eee' /><rect width='{d['pct']}%' height='12' rx='6' ry='6' fill='{d['color']}' /></svg></div><div style='width:35px; font-size:12px; font-weight:bold;'>{d['pct']}%</div></div>" for d in gh_engine.details])
+                        t_col = "#38B6FF"
+                        bars = "".join([f"<div style='display:flex; align-items:center; margin-bottom:12px;'><div style='width:130px; font-size:14px; font-weight:800; color:#000000;'>{d['label']}</div><div style='flex:1; height:12px; margin:0 10px;'><svg width='100%' height='12'><rect width='100%' height='12' rx='6' ry='6' fill='#eee' /><rect width='{d['pct']}%' height='12' rx='6' ry='6' fill='#000000' /></svg></div><div style='width:35px; font-size:13px; font-weight:800; color:#000000;'>{d['pct']}%</div></div>" for d in gh_engine.details])
                         
                         closing_original = (
-                            f"<div style='margin-top: 40px; padding-top: 30px; page-break-inside: avoid;'>\n"
-                            f"<p style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.8; color: #333;'>&nbsp;&nbsp;&nbsp;&nbsp;두 분의 <b style='color:#1A237E;'>'만남'</b>은 결코 우연이 아닌, <b style='color:#1A237E;'>'수많은 인연의 이치 속에서 기적처럼 찾아온 귀한 인연'</b>입니다. 사주팔자는 각자의 명식이지만, <b style='color:#1A237E;'>'궁합(宮合)'</b>은 두 명식이 만나 그려내는 새로운 <b style='color:#1A237E;'>'조화와 상생'</b>입니다.</p>\n"
-                            f"<p style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.8; color: #333; margin-top: 10px;'>&nbsp;&nbsp;&nbsp;&nbsp;서로의 기운을 보완하고 다독여주는 든든한 <b style='color:#1A237E;'>'반려자'</b>가 되시기를 진심으로 기원하며, 두 분의 앞날에 늘 전통 명리의 축복이 가득하시길 소망합니다.</p>\n"
-                            f"<div style='text-align: right; margin-top: 25px;'><span style='font-weight: 900; font-size: 16px; color: #1A237E; font-family: \"Nanum Myeongjo\", serif;'>- 초연 전통명리 연구소 드림 -</span></div>\n"
-                            f"</div>"
+                            f"<div style='margin-top: 30px; border-top: 2px solid #000000; padding-top: 25px; font-family: \"Nanum Myeongjo\", serif; page-break-inside: avoid;'>\n"
+                            f"<p style='font-size: 15px !important; font-weight: 500 !important; text-indent: 14px; text-align: justify; line-height: 1.85; margin-bottom: 12px; color: #000000; word-break: keep-all;'>\n"
+                            f"<b style=\"font-weight:900; color:#000000;\">{m_name}님</b>과 <b style=\"font-weight:900; color:#000000;\">{f_name}님</b>의 만남은 결코 우연이 아닌, <b style=\"font-weight:900; color:#000000;\">'수많은 인연의 이치 속에서 기적처럼 찾아온 귀한 인연'</b>입니다. 사주팔자는 각자의 명식이지만, <b style=\"font-weight:900; color:#000000;\">'궁합(宮合)'</b>은 두 명식이 만나 그려내는 새로운 <b style=\"font-weight:900; color:#000000;\">'조화와 상생'</b>입니다.</p>\n"
+                            f"<p style='font-size: 15px !important; font-weight: 500 !important; text-indent: 14px; text-align: justify; line-height: 1.85; margin-bottom: 12px; color: #000000; word-break: keep-all;'>서로의 기운을 보완하고 다독여주는 든든한 <b style=\"font-weight:900; color:#000000;\">'반려자'</b>가 되시기를 진심으로 기원하며, 두 분의 앞날에 늘 초연 시공명리의 축복이 가득하시길 소망합니다.</p>\n"
+                            f"<p style='font-size: 15px !important; font-weight: 900 !important; text-indent: 14px; line-height: 1.85; margin-bottom: 0px; color: #000000; word-break: keep-all;'>오늘 닿은 귀한 인연에 다시 한 번 깊이 감사드립니다.</p>\n"
+                            f"<div style='text-align: right; margin-top: 30px; margin-bottom: 15px;'>\n"
+                            f"<span style='font-weight: 900; font-size: 18px !important; color: #000000;'>- 초연 시공명리 연구소 드림 -</span>\n"
+                            f"</div>\n"
+                            f"</div>\n"
                         )
 
                         g_full_content = (
                             f"<div class='choyeon-premium-report'>\n{g_ess}\n</div>\n"
-                            f"<h2 style='text-align:center; margin-top:40px; font-size:22px; font-weight:900;'>📊 최종 궁합 점수</h2>\n"
+                            f"<h2 style='font-family:\"Nanum Myeongjo\", serif; text-align:center; margin-top:35px; font-size:24px; font-weight:900; color:#000000;'>📊 최종 궁합 점수</h2>\n"
                             f"<div style='display:flex; justify-content:center; align-items:center; margin:20px 0;'>\n"
-                            f"<div style='width:130px; height:130px; border-radius:50%; background:conic-gradient({t_col} {gh_engine.final_score}%, #eee 0); display:flex; justify-content:center; align-items:center; -webkit-print-color-adjust: exact;'>\n"
+                            f"<div style='width:130px; height:130px; border-radius:50%; background:conic-gradient(#000000 {gh_engine.final_score}%, #eee 0); display:flex; justify-content:center; align-items:center; -webkit-print-color-adjust: exact;'>\n"
                             f"<div style='width:98px; height:98px; background:#fff; border-radius:50%; display:flex; flex-direction:column; justify-content:center; align-items:center;'>\n"
-                            f"<span style='font-size:32px; font-weight:900; color:{t_col};'>{gh_engine.final_score}</span>\n"
-                            f"<span style='font-size:10px; color:#888; font-weight:bold;'>SCORE</span>\n"
+                            f"<span style='font-family:\"Nanum Myeongjo\", serif; font-size:32px; font-weight:900; color:#000000;'>{gh_engine.final_score}</span>\n"
+                            f"<span style='font-size:10px; color:#000000; font-weight:900;'>SCORE</span>\n"
                             f"</div>\n"
                             f"</div>\n"
                             f"</div>\n"
-                            f"<div style='text-align:center; margin-bottom:20px;'><span style='font-size:16px; font-weight:bold; color:#fff; background:{t_col}; padding:8px 32px; border-radius:30px; -webkit-print-color-adjust: exact;'>{gh_engine.grade}</span></div>\n"
-                            f"<div style='max-width:500px; margin:0 auto;'>\n{bars}\n</div>\n"
+                            f"<div style='text-align:center; margin-bottom:20px;'><span style='font-family:\"Nanum Myeongjo\", serif; font-size:16px; font-weight:800; color:#fff; background:#000000; padding:8px 32px; border-radius:30px; -webkit-print-color-adjust: exact;'>{gh_engine.grade}</span></div>\n"
+                            f"<div style='max-width:500px; margin:0 auto; margin-bottom:20px;'>\n{bars}\n</div>\n"
                             f"{closing_original}"
                         )
 
                         cover_html = (
                             f"<div class='report-page cover-page' style='padding:40px 0; margin:0 auto; width:100%; height:auto; min-height:250mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
-                            f"    <div style='border: 4px solid #1A237E; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 80%; max-width: 600px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto;'>\n"
-                            f"        <div style='border-bottom:4px double #1A237E; padding-bottom:20px; margin-bottom:40px;'>\n"
-                            f"            <h1 class='title-gothic' style='font-size: 28px !important; margin:0 !important; white-space: nowrap !important; letter-spacing: -1px !important;'>초연 전통 명리궁합 풀이</h1>\n"
-                            f"            <div style='text-align: right; margin-top: 10px;'>\n"
-                            f"                <span class='ver-gothic' style='font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
+                            f"    <div style='border: 4px solid #000000; padding: 42px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
+                            f"        <div style='border-bottom: 4px double #000000; padding-bottom: 16px; margin-bottom: 28px; width: 100%; box-sizing: border-box;'>\n"
+                            f"            <h1 style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 30px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #000000 !important; letter-spacing: -1px !important; white-space: nowrap !important; line-height: 1.4 !important; text-align: center; border-bottom: none !important;'>초연 전통 명리궁합 풀이</h1>\n"
+                            f"            <div style='text-align: right; margin-top: 8px;'>\n"
+                            f"                <span style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; font-weight: 700; color: #000000; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 25px 20px; border-radius: 15px; margin-bottom: 20px;'>\n"
-                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #1A237E; margin-bottom: 15px;'>♂️ 남명 : {m_name} 님 <span style='font-size:16px; color:#555;'>( {m_age}세 )</span></h2>\n"
-                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
-                            f"                <p style='margin: 0; white-space: nowrap;'>[양력] {m_sol} | [음력] {m_lun}</p>\n"
+                            f"        <div style='background: #FAFAFA; border: 1px solid #000000; padding: 18px 20px; border-radius: 14px; margin-bottom: 15px;'>\n"
+                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>{u_icon} {m_name} 님 ({m_age}세)</h2>\n"
+                            f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.6;'>\n"
+                            f"                <p style='margin: 0; color: #000000;'><strong style='font-weight: 800 !important;'>[양력] {m_sol} | [음력] {m_lun}</strong></p>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 25px 20px; border-radius: 15px;'>\n"
-                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #1A237E; margin-bottom: 15px;'>♀️ 여명 : {f_name} 님 <span style='font-size:16px; color:#555;'>( {f_age}세 )</span></h2>\n"
-                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
-                            f"                <p style='margin: 0; white-space: nowrap;'>[양력] {f_sol} | [음력] {f_lun}</p>\n"
+                            f"        <div style='background: #FAFAFA; border: 1px solid #000000; padding: 18px 20px; border-radius: 14px; margin-bottom: 24px;'>\n"
+                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>{p_icon} {f_name} 님 ({f_age}세)</h2>\n"
+                            f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.6;'>\n"
+                            f"                <p style='margin: 0; color: #000000;'><strong style='font-weight: 800 !important;'>[양력] {f_sol} | [음력] {f_lun}</strong></p>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <p style='font-size: 18px; margin-top: 40px; font-weight: 800;'>{today_str}</p>\n"
-                            f"        <p style='font-size: 22px; font-weight: 800; color: #1A237E; margin-top: 15px;'>초연 전통명리 연구소</p>\n"
+                            f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 17px; margin-top: 25px; margin-bottom: 0; font-weight: 800; color: #000000; letter-spacing: 0.5px;'>{today_str}</p>\n"
+                            f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 24px; font-weight: 900; color: #000000; margin-top: 8px; margin-bottom: 0; letter-spacing: 1px;'>초연 시공명리 연구소</p>\n"
                             f"    </div>\n"
                             f"</div>"
                         )
@@ -2225,9 +2128,9 @@ if st.session_state.get('need_calc', False):
                         m_page_content = f"{m_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
                         f_page_content = f"{f_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
                         
-                        st.session_state['saved_report_gh_m'] = wrap_a4(m_page_content, "#1A237E", "[ 남명 사주팔자표 및 요약 ]")
-                        st.session_state['saved_report_gh_f'] = wrap_a4(f_page_content, "#D50000", "[ 여명 사주팔자표 및 요약 ]")
-                        st.session_state['saved_report_gh_g'] = wrap_a4(g_full_content, "#1B5E20", "[ 초연 전통명리 종합 궁합풀이 ]")
+                        st.session_state['saved_report_gh_m'] = wrap_a4(m_page_content, "#000000", "[ ♂️ 남명 사주 요약 ]")
+                        st.session_state['saved_report_gh_f'] = wrap_a4(f_page_content, "#000000", "[ ♀️ 여명 사주 요약 ]")
+                        st.session_state['saved_report_gh_g'] = wrap_a4(g_full_content, "#000000", "[ 🍀 초연 시공명리 궁합 풀이 ]")
 
                         if u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"]:
                             s_d_val = start_date if start_date else dt_mod.date.today()
@@ -2239,24 +2142,24 @@ if st.session_state.get('need_calc', False):
                             delivery_days = get_optimized_delivery_days(s_d_val, e_d_val, m_jj_list, f_jj_list, FORBIDDEN_LIST)
                             
                             t_title = "💍 최고의 결혼 길일 추천 리포트" if u_product == "3-2. 결혼 택일" else "👶 새 생명 마중 출산 길일 추천"
-                            del_content = f"<h2 style='text-align:center; color:#4A148C;'>{t_title}</h2><p style='text-align:center; font-weight:bold; color:#555;'>탐색 기간: {s_d_val} ~ {e_d_val} (태아 성별: {baby_gender})</p><hr style='border:1px dashed #4A148C; margin:15px 0;'>\n"
+                            del_content = f"<h2 style='text-align:center; color:#000000;'>{t_title}</h2><p style='text-align:center; font-weight:bold; color:#000000;'>탐색 기간: {s_d_val} ~ {e_d_val} (태아 성별: {baby_gender})</p><hr style='border:1px solid #000000; margin:15px 0;'>\n"
                             for day_info in delivery_days:
-                                del_content += f"<div style='font-size:16px; font-weight:bold; margin-bottom:8px; padding:8px; background:#F8F9FA; border-radius:6px;'>✅ 추천 길일: <b>{day_info['date']}</b> (조화 점수: {day_info['score']}점)</div>\n"
+                                del_content += f"<div style='font-size:16px; font-weight:bold; margin-bottom:8px; padding:8px; background:#F8F9FA; border-radius:6px; color:#000000;'>✅ 추천 길일: <b style='color:#000000;'>{day_info['date']}</b> (조화 점수: {day_info['score']}점)</div>\n"
                             
-                            delivery_prompt = f"""
-[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
-당신은 정통 명리심리상담사 '초연 박사'입니다. 부모의 사주 원국 기운을 바탕으로 탐색 기간 내에 태어날 아기에게 가장 길하고 복된 최고의 프리미엄 희망일/길일을 선정하여 전통 명리 에세이로 상세히 풀어내십시오.
-- 부모 원국: 남명({m_name}) / 여명({f_name})
-- 탐색 기간: {s_d_val} ~ {e_d_val} / 태아 성별: {baby_gender}
-"""
+                            delivery_prompt = (
+                                f"[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]\n"
+                                f"당신은 정통 명리심리상담사 '초연 박사'입니다. 부모의 사주 원국 기운을 바탕으로 탐색 기간 내에 태어날 아기에게 가장 길하고 복된 최고의 프리미엄 희망일/길일을 선정하여 전통 명리 에세이로 상세히 풀어내십시오.\n"
+                                f"- 부모 원국: 남명({m_name}) / 여명({f_name})\n"
+                                f"- 탐색 기간: {s_d_val} ~ {e_d_val} / 태아 성별: {baby_gender}\n"
+                            )
                             del_res = model.generate_content(delivery_prompt)
                             ai_delivery_html = del_res.text.strip().replace("\n", "<br>")
-                            del_content += f"<div class='content-box-loose' style='font-size:15px; line-height:1.8; margin-top:20px;'>\n{ai_delivery_html}\n</div>"
+                            del_content += f"<div class='content-box-loose' style='font-size:15px; line-height:1.85; margin-top:20px; color:#000000;'>\n{ai_delivery_html}\n</div>"
 
-                            def wrap_takil_a4(content, title_color="#4A148C", title="[ 초연 전통명리 택일 리포트 ]"):
+                            def wrap_takil_a4(content, title_color="#000000", title="[ 초연 전통명리 택일 리포트 ]"):
                                 return f"<div class='report-page'>\n<div class='vip-inset-frame' style='border-color:{title_color}; padding:20px;'>\n<h1 style='text-align:center; color:{title_color}; font-family:\"Malgun Gothic\", sans-serif; font-weight:900; border-bottom:2px solid {title_color}; padding-bottom:15px; margin-bottom:30px;'>{title}</h1>\n{content}\n</div>\n</div>"
 
-                            st.session_state['saved_report_del'] = wrap_takil_a4(del_content, "#4A148C", f"[ 초연 전통명리 {u_product} ]")
+                            st.session_state['saved_report_del'] = wrap_takil_a4(del_content, "#000000", f"[ 초연 전통명리 {u_product} ]")
 
                 except Exception as e:
                     st.error(f"3단계 궁합 종합 분석 가동 장애: {e}")
@@ -2315,7 +2218,7 @@ if st.session_state.get('app_running', False) and st.session_state.get('run_wate
             for idx, label in enumerate(labels_gan):
                 rel = get_gan_rel_simple(gans_list[idx], target_il[0])
                 if rel != "-":
-                    gan_res.append(f"☁️ <b>{label}({gans_list[idx]})</b> → <span style='color:#1976D2; font-weight:bold;'>천간 {rel}</span>")
+                    gan_res.append(f"☁️ <b style='color:#000000;'>{label}({gans_list[idx]})</b> → <span style='color:#000000; font-weight:bold;'>천간 {rel}</span>")
             gan_res_html = '<br>'.join(gan_res) if gan_res else '특이 천간 파동 없음'
 
             r_res = []
@@ -2323,21 +2226,20 @@ if st.session_state.get('app_running', False) and st.session_state.get('run_wate
             for idx, label in enumerate(labels_ji):
                 rel_full = get_ji_rel_set_simple(jjis_list[idx], target_il[1])
                 if rel_full != "-":
-                    r_res.append(f"🌊 <b>{label}({jjis_list[idx]})</b> → <span style='color:#D50000; font-weight:bold;'>{rel_full}</span>")
+                    r_res.append(f"🌊 <b style='color:#000000;'>{label}({jjis_list[idx]})</b> → <span style='color:#000000; font-weight:bold;'>{rel_full}</span>")
 
             r_res_html = '<br>'.join(r_res) if r_res else '특이 지지 파동 없음'
 
-            iljin_prompt = f"""
-당신은 정통 명리심리상담사 초연 박사입니다. 아래의 정밀 연산된 팩트를 바탕으로 오늘 하루(일진)의 흐름을 날카롭게 분석하십시오.
-- 내담자 일주: {m_ilgan}{m_ilji}
-- 일진 날짜: {t_date.year}년 {t_date.month}월 {t_date.day}일 ({target_year}년 {target_wol}월 {target_il}일)
-- 천간 파동: {gan_res_html}
-- 지지 형충파해: {r_res_html}
-
-[출력 템플릿]
-<br><b>🌅 전반부 (자시~오시):</b> (내용 상세 작성)
-<br><b>🌃 후반부 (미시~야자시):</b> (내용 상세 작성)
-"""
+            iljin_prompt = (
+                f"당신은 정통 명리심리상담사 초연 박사입니다. 아래의 정밀 연산된 팩트를 바탕으로 오늘 하루(일진)의 흐름을 날카롭게 분석하십시오.\n"
+                f"- 내담자 일주: {m_ilgan}{m_ilji}\n"
+                f"- 일진 날짜: {t_date.year}년 {t_date.month}월 {t_date.day}일 ({target_year}년 {target_wol}월 {target_il}일)\n"
+                f"- 천간 파동: {gan_res_html}\n"
+                f"- 지지 형충파해: {r_res_html}\n\n"
+                f"[출력 템플릿]\n"
+                f"<br><b>🌅 전반부 (자시~오시):</b> (내용 상세 작성)\n"
+                f"<br><b>🌃 후반부 (미시~야자시):</b> (내용 상세 작성)\n"
+            )
             with st.spinner("⏳ 메인 사주풀이 보존 완료! 하단에 [일진 정밀 분석] 추가 가동 중..."):
                 try:
                     res = model.generate_content(iljin_prompt)
@@ -2428,23 +2330,23 @@ if st.session_state.get('app_running', False):
     elif main_category == "3. 커플 연애/결혼운 (궁합) 풀이" or u_product == "4-2. 타 감명서 비교 (궁합)":
         if st.session_state.get('saved_report_gh_cover'):
             st.markdown(st.session_state.get('saved_report_gh_cover', ''), unsafe_allow_html=True)
-            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
             
         if st.session_state.get('saved_report_gh_m'):
             st.markdown(st.session_state.get('saved_report_gh_m', ''), unsafe_allow_html=True)
-            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_gh_f'):
             st.markdown(st.session_state.get('saved_report_gh_f', ''), unsafe_allow_html=True)
-            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_gh_g'):
             st.markdown(st.session_state.get('saved_report_gh_g', ''), unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_del'):
-            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
             st.markdown(st.session_state.get('saved_report_del', ''), unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_2'):
-            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
             st.markdown(st.session_state.get('saved_report_2', ''), unsafe_allow_html=True)
