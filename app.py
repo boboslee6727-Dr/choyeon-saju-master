@@ -1,5 +1,5 @@
 # ==============================================================================
-# app.py (ver 50.5 Master - 초연 전통명리 완결판 - 오류 완벽 박멸/올블랙/표지독립 버전)
+# app.py (ver 50.6 Master - 초연 전통명리 완결판 - 오류 완벽 박멸/올블랙/표지독립 버전)
 # ====================================================================
 import streamlit as st
 import pandas as pd
@@ -20,7 +20,7 @@ import re
 # ==============================================================================
 # 🎯 [버전 컨트롤 타워]
 # ==============================================================================
-APP_VERSION = "Ver 50.5 (Master & 14종 세분화 완결본)"
+APP_VERSION = "Ver 50.6 (Master & 14종 세분화 완결본)"
 
 # ==============================================================================
 # 0. VIP 인셋 프레임 및 초강력 프린트 CSS
@@ -128,15 +128,22 @@ st.markdown("""<style>
         
         .report-page { box-shadow: none !important; margin: 0 auto !important; width: 100% !important; padding: 0 !important; height: auto !important; min-height: auto !important; page-break-after: auto !important; }
         
-        /* 🚨 [추가] 표지만 무조건 독립된 페이지로 분리되도록 강제 속성 부여 */
-        .report-page.cover-page { page-break-after: always !important; break-after: page !important; }
+        /* 🚨 [핵심 수술] 표지를 A4 꽉 차게(100vh) 만들고 내용물을 정중앙에 고정! */
+        .report-page.cover-page { 
+            height: 100vh !important; 
+            min-height: 100vh !important; 
+            display: flex !important; 
+            flex-direction: column !important;
+            justify-content: center !important; 
+            align-items: center !important; 
+            page-break-after: always !important; 
+            break-after: page !important; 
+        }
         
         .page-break { display: block !important; page-break-after: always !important; break-after: page !important; height: 1px; }
         
-        /* 표지 타이틀 줄바꿈 강제 방지 (nowrap 및 크기 최적화) */
         .cover-page h1 { font-size: 30px !important; white-space: nowrap !important; letter-spacing: -1px !important; word-break: keep-all !important; }
     }
-</style>""", unsafe_allow_html=True)
 
 # ==============================================================================
 # 0.5 [외부 choyeon_db.json 완벽 동적 연계]
@@ -1195,10 +1202,10 @@ if st.session_state.get('need_calc', False):
                 f"</div>\n"
             )
 
+            # 🚨 [수술 2]: 첫 장 백지 출력 원천 차단! (중복된 page-break div와 style 속성 제거)
             report_1_full_html = (
                 f"{cover_html}\n"
-                f"<div class='page-break'></div>\n"
-                f"<div class='report-page' style='page-break-before: always;'>\n"
+                f"<div class='report-page'>\n"
                 f"<div class='vip-inset-frame' style='border:2px solid #000000; box-sizing: border-box; padding: 20px; border-radius:15px; margin-top: 0;'>\n"
                 f"<h1 style='text-align:center; font-size: 26px; font-weight: 900; white-space: nowrap; color:#000000; border-bottom:3px solid #000000; padding-bottom:10px; margin-bottom:25px;'>{report_title}</h1>\n"
                 f"{table_html}\n"
@@ -2330,23 +2337,23 @@ if st.session_state.get('app_running', False):
     elif main_category == "3. 커플 연애/결혼운 (궁합) 풀이" or u_product == "4-2. 타 감명서 비교 (궁합)":
         if st.session_state.get('saved_report_gh_cover'):
             st.markdown(st.session_state.get('saved_report_gh_cover', ''), unsafe_allow_html=True)
-            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+            # 🚨 표지 바로 뒤의 빈 페이지 찌꺼기 완벽 삭제
             
         if st.session_state.get('saved_report_gh_m'):
             st.markdown(st.session_state.get('saved_report_gh_m', ''), unsafe_allow_html=True)
-            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_gh_f'):
             st.markdown(st.session_state.get('saved_report_gh_f', ''), unsafe_allow_html=True)
-            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_gh_g'):
             st.markdown(st.session_state.get('saved_report_gh_g', ''), unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_del'):
-            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
             st.markdown(st.session_state.get('saved_report_del', ''), unsafe_allow_html=True)
 
         if st.session_state.get('saved_report_2'):
-            st.markdown("<div class='page-break-before'></div>", unsafe_allow_html=True)
+            st.markdown("<div class='page-break'></div>", unsafe_allow_html=True)
             st.markdown(st.session_state.get('saved_report_2', ''), unsafe_allow_html=True)
