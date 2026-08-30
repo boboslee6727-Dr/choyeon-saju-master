@@ -2086,7 +2086,9 @@ if st.session_state.get('need_calc', False):
                         essay_prompt = f"""[SYSTEM ROLE: 초연시공명리 최고위 커플 궁합 & 부부 심리 컨설턴트]
 제공된 남명과 여명의 사주 원국 및 시공간 팩트 데이터를 꼼꼼하게 훑어 바탕으로 삼고, 두 사람의 음양오행적 조화, 심리적 기류, 대운 궤도의 동조성을 엄정하고 입체적으로 통변할 것.
 
-🚨 [절대 강제: 3분할 파싱 태그 서식 엄수]
+🚨 [절대 강제: 목차 및 서식 위계 절대 규칙]
+■ 대제목: 1., 2., 3. / 중제목: 1), 2), 3) / 소제목: (1), (2), (3) / 강조 기호: ◆, ▶, ▷ (※ 원숫자 ①, ②, ③ 사용을 절대 금지한다.)
+■ [콜론(:) 병기 절대 금지]: 소제목(예: (1) 서로의 성장 환경 조성) 작성 후 콜론(:)을 표기하거나 같은 줄에 부연 설명을 덧붙이는 것을 절대 금지한다. 소제목 작성 후 반드시 강제 줄바꿈(<br> 또는 Enter)을 실행하여 다음 줄에서 온전한 서술형 문장으로 전개할 것.
 ■ 시스템이 남명 풀이, 여명 풀이, 종합 궁합 풀이를 개별 페이지로 분리하여 렌더링할 수 있도록 반드시 아래 태그 구조를 정확히 사용하여 작성할 것.
 ■ 모든 통변 문장은 반드시 HTML 태그 <p style='font-family: "Nanum Myeongjo", serif; font-size: 15px; line-height: 1.8; color: #000; text-indent: 1em; text-align: justify;'> 로 감싸서 작성하십시오.
 
@@ -2099,7 +2101,7 @@ if st.session_state.get('need_calc', False):
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
 (무의식적으로 갈망하는 이상형과 결혼관 통변)
 
-<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 25px;'>2. 타고난 삶의 구조 요약</h3>
+<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 25px;'>2. 남명 사주의 요약</h3>
 {m_traditional_text_html}
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
 (명리 용어를 배제하고 순화하여 삶의 주된 환경 그릇 통변)
@@ -2116,7 +2118,7 @@ if st.session_state.get('need_calc', False):
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>
 (무의식적으로 갈망하는 이상형과 결혼관 통변)
 
-<h3 style='color:#000000; font-size: 22px; font-weight: 900; margin-top: 25px;'>2. 타고난 삶의 구조 요약</h3>
+<h3 style='color:#D50000; font-size: 22px; font-weight: 900; margin-top: 25px;'>2. 여명 사주의 요약</h3>
 {f_traditional_text_html}
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 타고난 삶의 무대와 기본 성향</span>
 (명리 용어를 배제하고 순화하여 삶의 주된 환경 그릇 통변)
@@ -2138,7 +2140,7 @@ if st.session_state.get('need_calc', False):
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 관계의 결정적 전환기</span>
 (일주 복음 세운 및 대운 전환기 작용 등 두 사람 관계의 결정적 분기점 정밀 분석)
 
-<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>3. 종합 궁합 점수({gh_engine.final_score}점) 및 5대 핵심 조화도 분석</h3>
+<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>3. 종합 궁합 점수 및 5대 핵심 조화도 분석</h3>
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 두 사람의 운명적 인연 종합점수</span>
 (종합 궁합 점수 {gh_engine.final_score}점과 인연 등급 '{gh_engine.grade}'의 의미를 묵직하게 통변)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 내면의 유대감</span>
@@ -2148,13 +2150,13 @@ if st.session_state.get('need_calc', False):
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>4) 기운 상호보완</span>
 (두 사람의 오행 분포 쏠림과 조후 밸런스가 서로의 약점을 어떻게 채워주는지 분석)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>5) 특수 기운</span>
-(원국 내 특수 신살(천을귀인, 고란살, 원진 등)이 두 사람 관계에 미치는 독특한 작용력 통변)
+(원국 내 특수 신살이 두 사람 관계에 미치는 독특한 작용력 통변)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>6) 대운 기상도 조화</span>
 (커플의 대운 흐름을 비교하여 인생의 상승/하락 주기 동조성과 상호 방어력 분석)
 
 <h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>4. 다름을 이해하고 맞춰가는 건강한 연애 가이드</h3>
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 흔들림 없는 롱런(Long-run) 솔루션</span>
-(4대 실전 행동 수칙을 (1), (2), (3), (4) 기호를 사용한 단답형 소제목으로 먼저 작성한 후, 다음 줄에 오랜 만남을 이어갈 수 있는 가이드를 명리적 환경 보완 관점에서 조언)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 행복한 가정을 유지하기 위한 행동수칙</span>
+[※ AI 통변 지시: 4대 실전 행동 수칙을 반드시 (1), (2), (3), (4) 단답형 소제목으로 작성하되, 콜론(:) 사용을 절대 금지하고 소제목 작성 후 무조건 줄바꿈(<br> 또는 Enter)을 하여 다음 줄에 상세 가이드를 서술하십시오.]
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 관계 안정을 위한 실천 마인드셋</span>
 (서로의 신뢰를 깊게 다지기 위해 일상에서 실천해야 할 구체적인 상호 존중의 태도를 세련되게 조언)
 [GUNGHAP_END]
