@@ -2140,19 +2140,23 @@ if st.session_state.get('need_calc', False):
 
 <h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>3. 종합 궁합 점수({gh_engine.final_score}점) 및 5대 핵심 조화도 분석</h3>
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 두 사람의 운명적 인연 종합점수</span>
-(종합 궁합 점수 {gh_engine.final_score}점과 인연 등급 '{gh_engine.grade}'의 의미를 묵직하게 통변하고, 다음 5대 조화도에 대해 심층 서술: (1) 사회적 가치관과 소통 조화, (2) 내면적 정서와 애정 밀착도, (3) 경제 및 자산 운용 시너지, (4) 위기 극복 및 가정 안정성, (5) 오행 유통과 조후 상보성)
+(종합 궁합 점수 {gh_engine.final_score}점과 인연 등급 '{gh_engine.grade}'의 의미를 묵직하게 통변)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 내면의 유대감</span>
+(일지 간의 합충 작용을 바탕으로 한 두 사람의 무의식적 정서 교감과 애정 밀착도 분석)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>3) 환경 조화</span>
+(년/월/시지의 합충형해파를 분석하여 두 사람의 대외적 환경, 사회적 가치관, 소통 방식의 어우러짐 통변)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>4) 기운 상호보완</span>
+(두 사람의 오행 분포 쏠림과 조후 밸런스가 서로의 약점을 어떻게 채워주는지 분석)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>5) 특수 기운</span>
+(원국 내 특수 신살(천을귀인, 고란살, 원진 등)이 두 사람 관계에 미치는 독특한 작용력 통변)
+<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>6) 대운 기상도 조화</span>
+(커플의 대운 흐름을 비교하여 인생의 상승/하락 주기 동조성과 상호 방어력 분석)
 
 <h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>4. 다름을 이해하고 맞춰가는 건강한 연애 가이드</h3>
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 흔들림 없는 롱런(Long-run) 솔루션</span>
 (4대 실전 행동 수칙을 (1), (2), (3), (4) 기호를 사용한 단답형 소제목으로 먼저 작성한 후, 다음 줄에 오랜 만남을 이어갈 수 있는 가이드를 명리적 환경 보완 관점에서 조언)
 <span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 관계 안정을 위한 실천 마인드셋</span>
 (서로의 신뢰를 깊게 다지기 위해 일상에서 실천해야 할 구체적인 상호 존중의 태도를 세련되게 조언)
-
-<h3 style='color: #1A237E; font-size: 24px; font-weight: 900; margin-top: 25px;'>5. 💡 [커플의 평행이론] 1:1 심층 솔루션</h3>
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>1) 부부 갈등 공감 및 진짜 원인 규명</span>
-(사주의 합충, 오행 쏠림, 대운 교차 등 명리적 원인을 바탕으로 부부간 발생할 수 있는 갈등에 깊이 공감하고 원인을 규명)
-<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #111; margin-top: 15px; margin-bottom: 5px;'>2) 화목한 결합을 위한 현실적 해법</span>
-(서로의 성향 차이를 보완하며 화목하게 잘 살 수 있는 명쾌하고 현실적인 해법 조언)
 [GUNGHAP_END]
 """
                         res_text = call_claude_api(essay_prompt, max_tokens=12000)
