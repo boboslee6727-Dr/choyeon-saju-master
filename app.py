@@ -2295,21 +2295,35 @@ if st.session_state.get('app_running', False) and st.session_state.get('run_deli
             for day_info in delivery_days:
                 del_content += f"<div style='font-size:16px; font-weight:bold; margin-bottom:8px; padding:8px; background:#F8F9FA; border-radius:6px;'>✅ 추천 길일: <b>{day_info['date']}</b> (조화 점수: {day_info['score']}점)</div>\n"
             
-            delivery_prompt = f"""
-[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]
-당신은 정통 명리심리상담사 '초연 박사'입니다. 부모의 사주 원국 기운을 바탕으로 탐색 기간 내에 태어날 아기에게 가장 길하고 복된 최고의 프리미엄 희망일/길일을 선정하여 전통 명리 에세이로 상세히 풀어내십시오.
-- 부모 원국: 남명/여명 사주기운 ({gans} / {jjis})
-- 탐색 기간: {s_d_val} ~ {e_d_val} / 태아 성별: {baby_gender}
-"""
+            delivery_prompt = (
+                f"[SYSTEM ROLE: CHOYEON TRADITIONAL MASTER]\n"
+                f"당신은 정통 명리심리상담사 '초연 박사'입니다. 부모의 사주 원국 기운을 바탕으로 탐색 기간 내에 태어날 아기에게 가장 길하고 복된 최고의 프리미엄 희망일/길일을 선정하여 전통 명리 에세이로 상세히 풀어내십시오.\n"
+                f"- 부모 원국: 남명/여명 사주기운 ({gans} / {jjis})\n"
+                f"- 탐색 기간: {s_d_val} ~ {e_d_val} / 태아 성별: {baby_gender}\n"
+            )
+            
             del_res = model.generate_content(delivery_prompt)
             ai_delivery_html = del_res.text.strip().replace("\n", "<br>")
-            del_content += f"<div class='content-box-loose' style='font-size:15px; line-height:1.8; margin-top:20px;'>\n{ai_delivery_html}\n</div>"
+            
+            del_content += (
+                f"<div class='content-box-loose' style='font-size:15px; line-height:1.8; margin-top:20px;'>\n"
+                f"    {ai_delivery_html}\n"
+                f"</div>"
+            )
 
             def wrap_takil_a4(content, title_color="#4A148C", title="[ 초연 전통명리 택일 리포트 ]"):
-                return f"<div class='report-page'>\n<div class='vip-inset-frame' style='border-color:{title_color}; padding:20px;'>\n<h1 style='text-align:center; color:{title_color}; font-family:\"Malgun Gothic\", sans-serif; font-weight:900; border-bottom:2px solid {title_color}; padding-bottom:15px; margin-bottom:30px;'>{title}</h1>\n{content}\n</div>\n</div>"
+                return (
+                    f"<div class='report-page'>\n"
+                    f"    <div class='vip-inset-frame' style='border-color:{title_color}; padding:20px;'>\n"
+                    f"        <h1 style='text-align:center; color:{title_color}; font-family:\"Malgun Gothic\", sans-serif; font-weight:900; border-bottom:2px solid {title_color}; padding-bottom:15px; margin-bottom:30px;'>{title}</h1>\n"
+                    f"        {content}\n"
+                    f"    </div>\n"
+                    f"</div>"
+                )
 
             st.session_state['saved_report_del'] = wrap_takil_a4(del_content, "#4A148C", f"[ 초연 전통명리 {u_product} ]")
             st.session_state['run_delivery_only'] = False
+            
         except Exception as e:
             st.error(f"출산택일 연산 장애: {e}")
             st.session_state['run_delivery_only'] = False
