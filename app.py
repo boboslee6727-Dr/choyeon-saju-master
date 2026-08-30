@@ -2240,6 +2240,8 @@ if st.session_state.get('need_calc', False):
                             f"    </div>\n"
                             f"</div>"
                         )
+                        st.session_state['saved_report_gh_cover'] = cover_html
+
                         m_page_content = f"{m_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
                         f_page_content = f"{f_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
                         
