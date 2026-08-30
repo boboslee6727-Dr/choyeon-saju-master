@@ -2214,40 +2214,43 @@ if st.session_state.get('need_calc', False):
                             f"{closing_original}"
                         )
 
-                        cover_html = (
+                        # 🚨 [수술 완료] 궁합 전용 표지 변수명 독립 (gh_cover_html) 및 다이어트 완료
+                        gh_cover_html = (
                             f"<div class='report-page cover-page' style='margin:0 auto; width:100%; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; -webkit-print-color-adjust: exact; box-sizing: border-box;'>\n"
-                            f"    <div style='border: 4px solid #1A237E; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 90%; max-width: 700px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto; box-sizing: border-box;'>\n"
-                            f"        <div style='border-bottom:4px double #1A237E; padding-bottom:20px; margin-bottom:40px;'>\n"
-                            f"            <h1 class='title-gothic' style='font-size: 26px !important; margin:0 !important; white-space: nowrap !important; letter-spacing: -2px !important;'>초연&nbsp;전통&nbsp;명리궁합&nbsp;풀이</h1>\n"
+                            f"    <div style='border: 4px solid #1A237E; padding: 30px 20px; border-radius: 20px; text-align: center; background: white; width: 90%; max-width: 700px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto; box-sizing: border-box;'>\n"
+                            f"        <div style='border-bottom:4px double #1A237E; padding-bottom:15px; margin-bottom:25px;'>\n"
+                            f"            <h1 class='title-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 26px !important; margin:0 !important; white-space: nowrap !important; letter-spacing: -2px !important;'>초연&nbsp;전통&nbsp;명리궁합&nbsp;풀이</h1>\n"
                             f"            <div style='text-align: right; margin-top: 10px;'>\n"
                             f"                <span class='ver-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 25px 20px; border-radius: 15px; margin-bottom: 20px;'>\n"
-                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #1A237E; margin-bottom: 15px;'>♂️ 남명 : {m_name} 님 <span style='font-size:16px; color:#555;'>( {m_age}세 )</span></h2>\n"
-                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
+                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 15px 20px; border-radius: 15px; margin-bottom: 15px;'>\n"
+                            f"            <h2 style='font-size: 22px; font-weight: 800; color: #1A237E; margin-bottom: 10px;'>♂️ 남명 : {m_name} 님 <span style='font-size:15px; color:#555;'>( {m_age}세 )</span></h2>\n"
+                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.6;'>\n"
                             f"                <p style='margin: 0; white-space: nowrap;'>[양력] {m_sol} | [음력] {m_lun}</p>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 25px 20px; border-radius: 15px;'>\n"
-                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #1A237E; margin-bottom: 15px;'>♀️ 여명 : {f_name} 님 <span style='font-size:16px; color:#555;'>( {f_age}세 )</span></h2>\n"
-                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
+                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 15px 20px; border-radius: 15px;'>\n"
+                            f"            <h2 style='font-size: 22px; font-weight: 800; color: #1A237E; margin-bottom: 10px;'>♀️ 여명 : {f_name} 님 <span style='font-size:15px; color:#555;'>( {f_age}세 )</span></h2>\n"
+                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.6;'>\n"
                             f"                <p style='margin: 0; white-space: nowrap;'>[양력] {f_sol} | [음력] {f_lun}</p>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <p style='font-size: 18px; margin-top: 40px; font-weight: 800;'>{today_str}</p>\n"
-                            f"        <p style='font-size: 22px; font-weight: 800; color: #1A237E; margin-top: 15px;'>초연 전통명리 연구소</p>\n"
+                            f"        <p style='font-size: 18px; margin-top: 25px; font-weight: 800;'>{today_str}</p>\n"
+                            f"        <p style='font-size: 22px; font-weight: 800; color: #1A237E; margin-top: 10px;'>초연 전통명리 연구소</p>\n"
                             f"    </div>\n"
                             f"</div>"
                         )
-                        st.session_state['saved_report_gh_cover'] = cover_html
-
+                        
                         m_page_content = f"{m_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
                         f_page_content = f"{f_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
                         
                         st.session_state['saved_report_gh_m'] = wrap_a4(m_page_content, "#1A237E", "[ 남명 사주의 요약 ]")
                         st.session_state['saved_report_gh_f'] = wrap_a4(f_page_content, "#E91E63", "[ 여명 사주의 요약 ]")
                         st.session_state['saved_report_gh_g'] = wrap_a4(g_full_content, "#1B5E20", "[ 초연 전통명리 종합 궁합풀이 ]")
+                        
+                        # 🚨 [수술 완료] 독립된 변수명(gh_cover_html)으로 세션 정상 저장
+                        st.session_state['saved_report_gh_cover'] = gh_cover_html
 
                         if u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"]:
                             s_d_val = start_date if start_date else dt_mod.date.today()
