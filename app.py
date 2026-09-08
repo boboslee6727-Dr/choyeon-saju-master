@@ -1636,69 +1636,7 @@ if st.session_state.get('need_calc', False):
 
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 현재 고민에 대한 원인 진단</span>\n"
                         f"[※ AI 통변 지시: 신청자의 고민이 없다면 일반적 조언을, 있다면 현 상황에 공감하고 사주적 원인을 진단하십시오.]\n"
-                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 답답함을 풀어줄 명확한 해법과 타개 시기</span>\n"
-                        f"[※ AI 통변 지시: 언제쯤 고비가 풀리는지 시기를 명시하고 현실적 행동 지침을 세련되게 처방하십시오.]\n"
-                        f"</div>\n"
-                    ) # 👈 프롬프트가 끝나는 괄호
-
-                # ==============================================================================
-                # 🚨 [여기입니다!] 이 아래에 아까 드린 코드를 통째로 덮어쓰시면 됩니다!
-                # ==============================================================================
-                try:
-                    # AI API 호출
-                    res = model.generate_content(prompt)
-                    ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
-                    
-                    # 1. 옥의 티 수술 (마크다운 볼드체 html 변환)
-                    ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
-                    
-                    # 2. 골든 텍스트 치환
-                    if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
-                        ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
-                    
-                    # 3. 표 HTML 정리
-                    un_html_clean = un_html.replace("\n", " ").replace("\r", "")
-                    se_html_clean = se_html.replace("\n", " ").replace("\r", "")
-                    
-                    daeoun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{un_html_clean}</div>"
-                    sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
-                    
-                    # 4. AI 텍스트 내 마커 정리
-                    clean_ai_text = re.sub(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', '', ai_text, flags=re.IGNORECASE)
-                    clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
-                    
-                    if count_s == 0 and "table" not in clean_ai_text.lower():
-                        clean_ai_text += f"<br><br><span style='color:red; font-weight:bold;'>⚠️ (AI 세운표 마커 누락 비상 출력)</span><br>{sewun_target}"
-                    
-                    # 5. 🚨 [최종 조립] 박사님 지시사항 100% 반영 레이아웃!
-                    bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #000000; margin: 35px 0 20px 0;'>{closing_html}"
-                    
-                    full_content_clean = (
-                        f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>"
-                        f"{daeoun_target}\n"        # 사주 원국표 바로 밑에 대운표 고정
-                        f"{intro_html}\n"           # 1-1 전용 철학소개 고정
-                        f"{clean_ai_text}\n<br><br>"# AI 에세이 (세운표 포함)
-                        f"{bordered_closing_html}"  # 맺음말
-                        f"</div>"
-                    )
-                    
-                    # 6. 표지 타이틀 교체 및 여백 강제 축소
-                    import re
-                    dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
-                    
-                    report_1_full_html = re.sub(r'(<h1[^>]*>).*?(<\/h1>)', r'\g<1>' + dynamic_title + r'\2', report_1_full_html, count=1, flags=re.IGNORECASE|re.DOTALL)
-                    report_1_full_html = re.sub(r'min-height:\s*250mm\s*;?', 'min-height: 120mm;', report_1_full_html, flags=re.IGNORECASE)
-                    report_1_full_html = re.sub(r'padding:\s*40px\s+0\s*;?', 'padding: 10px 0;', report_1_full_html, flags=re.IGNORECASE)
-                    report_1_full_html = re.sub(r'padding:\s*42px\s+24px\s*;?', 'padding: 20px 24px;', report_1_full_html, flags=re.IGNORECASE)
-                    report_1_full_html = re.sub(r'margin-bottom:\s*28px\s*;?', 'margin-bottom: 15px;', report_1_full_html, flags=re.IGNORECASE)
-
-                    # 7. 최종 렌더링 세팅
-                    report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
-                    
-                    st.session_state['saved_report_html'] = report_1_full_html
-                    
-                except Exception as e:
-                    st.error(f"1-1번 사주풀이 가동 장애: {e}")
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2)
 
                 elif u_product == "1-2. 올해 운세 상세분석":
                     target_year_val = st.session_state.get('target_year_input', curr_y)
