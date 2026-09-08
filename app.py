@@ -1853,19 +1853,23 @@ if st.session_state.get('need_calc', False):
 
                         full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{clean_ai_text}<br><br>{bordered_closing_html}</div>"
 
-                        # 🚨 1-4 전용: 표지 타이틀을 선택상품명으로 동적 연계 및 박스 상하 여백 대폭 슬림화
+                        # 🚨 1-4 전용: 표지 타이틀 및 여백 강제 수정 (띄어쓰기 무시하는 절대 규칙 적용)
+                        import re
                         dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
-                        report_1_full_html = report_1_full_html.replace("초연 전통 명리사주 풀이", dynamic_title)
                         
-                        report_1_full_html = report_1_full_html.replace("min-height:250mm;", "min-height:120mm;").replace("padding:40px 0;", "padding:10px 0;")
-                        report_1_full_html = report_1_full_html.replace("padding: 42px 24px;", "padding: 20px 24px;").replace("margin-bottom: 28px;", "margin-bottom: 15px;")
+                        # 1. <h1> 태그 안의 텍스트가 무엇이든 무조건 찾아서 dynamic_title(선택상품명)로 강제 교체!
+                        report_1_full_html = re.sub(r'(<h1[^>]*>).*?(<\/h1>)', r'\g<1>' + dynamic_title + r'\2', report_1_full_html, count=1, flags=re.IGNORECASE|re.DOTALL)
+                        
+                        # 2. 띄어쓰기(여백)가 다르더라도 무조건 찾아서 박스 상하 길이 대폭 축소!
+                        report_1_full_html = re.sub(r'min-height:\s*250mm\s*;?', 'min-height: 120mm;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'padding:\s*40px\s+0\s*;?', 'padding: 10px 0;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'padding:\s*42px\s+24px\s*;?', 'padding: 20px 24px;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'margin-bottom:\s*28px\s*;?', 'margin-bottom: 15px;', report_1_full_html, flags=re.IGNORECASE)
 
+                        # 3. 본문 내용 삽입
                         report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
                         
                         st.session_state['saved_report_html'] = report_1_full_html
-                        
-                    except Exception as e: 
-                        st.error(f"1번 개인 사주풀이 AI 연산 오류: {e}")
 
             # ==============================================================
             # [A-2] 2. 테마별 특성화 상담 (85.5버전 프롬프트 완벽 이식 & Q&A 추가)
