@@ -1550,27 +1550,34 @@ if st.session_state.get('need_calc', False):
 
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 내면과 외면의 심리 스케치</h3>\n"
                         f"<div class='content-box-loose'>\n"
-                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 사회적 무대에서 드러나는 나의 모습</span>\n"
+
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 겉으로 드러나는 내 모습</span>\n"
                         f"[※ AI 통변 지시: 원국의 오행 분포와 일간을 기반으로 겉으로 드러나는 태도와 행동 양식을 부드러운 에세이로 서술하십시오.]\n"
-                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 타인에게 감추어진 깊은 속마음</span>\n"
+
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 감추어진 깊은 속마음</span>\n"
                         f"[※ AI 통변 지시: 지장간 및 일지/시지 구조와 내적 갈등, 본능적 욕구를 따뜻한 심리 상담가처럼 깊이 있게 서술하십시오.]\n"
                         f"</div>\n\n"
 
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 타고난 삶의 구조와 운명의 나침반</h3>\n"
                         f"<div class='content-box-loose'>\n"
-                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 내 삶의 그릇과 기본적인 삶의 궤도</span>\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 내 삶의 그릇과 궤도</span>\n"
                         f"[CHOYEON_GOLDEN_TEXT_HERE]\n"
                         f"[※ AI 통변 지시: 아래 (1), (2), (3) 소제목을 순서대로 출력하며 서술하십시오.]\n"
+
                         f"<br><b>(1) 내 삶을 담는 그릇과 타고난 에너지</b>\n"
                         f"[※ AI 통변 지시: 격국({gyukgook_detail})과 오행 분포를 바탕으로 주된 환경과 그릇을 명리 용어를 순화하여 서술하십시오.]\n"
+
                         f"<br><b>(2) 내 마음의 온도와 삶의 균형점</b>\n"
                         f"[※ AI 통변 지시: 조후(계절감)와 억부의 균형 상태를 심리적, 환경적 요인으로 풀어내십시오.]\n"
+
                         f"<br><b>(3) 숨겨진 특별한 재능과 잠재력</b>\n"
                         f"[※ AI 통변 지시: 원국의 특징적 글자 조합을 분석하여 타고난 총명함과 직업적 잠재력을 짚어내십시오.]\n\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 인생의 역동성과 관계의 흐름</span>\n"
                         f"[※ AI 통변 지시: 아래 (1), (2) 소제목을 순서대로 출력하며 서술하십시오.]\n"
+
                         f"<br><b>(1) 시기별 삶의 무대와 행동 패턴</b>\n"
                         f"[※ AI 통변 지시: 궁위별 에너지를 기반으로 육친·심리·사회적 변화를 알기 쉽게 서술하십시오. 항목이 여럿일 경우 강조 기호(▶, ▷) 사용 및 줄바꿈 준수.]\n"
+
                         f"<br><b>(2) 내 삶을 흔드는 변화와 도약의 타이밍</b>\n"
                         f"◆ 인연의 끌림과 환경의 변화\n"
                         f"[※ AI 통변 지시: 원국의 합충형파해({hap_chung_hyoung_pa_hae})를 실제 겪는 사건으로 번역하여 서술하십시오. 줄바꿈 엄수.]\n"
@@ -1582,6 +1589,7 @@ if st.session_state.get('need_calc', False):
                         f"[※ AI 통변 지시: 억압된 합충 기운을 대인관계와 직업적 굴곡의 팩트로 풀어내십시오. 줄바꿈 엄수.]\n"
                         f"◆ 심리적 정체와 낯선 환경의 경험\n"
                         f"[※ AI 통변 지시: 심리적 단절감 등을 위로와 함께 풀어주십시오. 줄바꿈 엄수.]\n\n"
+
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>3) 삶에 작용하는 특별한 행운과 전환점</span>\n"
                         f"<br><b>(1) 나를 도와주는 수호 천사의 기운</b>\n"
                         f"[※ AI 통변 지시: 천을귀인({guiin_str})의 도움과 활용법을 부드럽게 설명하십시오.]\n"
@@ -1598,7 +1606,6 @@ if st.session_state.get('need_calc', False):
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 세월 따라 달라지는 삶의 결</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 10년 단위의 큰 인생 궤도</span>\n"
-                        f"[DAEWUN_TABLE_HERE]\n"
                         f"[※ AI 통변 지시: 전체 대운(초/중/말년)의 거대한 흐름과 큰 줄기를 조망하십시오. 임의로 나이나 연도를 추정하지 말고 대운표의 흐름을 반영하여 에세이처럼 풀어내십시오.]\n"
                         f"</div>\n\n"
                         f"<div class='content-box-loose'>\n"
@@ -1636,16 +1643,74 @@ if st.session_state.get('need_calc', False):
 
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 현재 고민에 대한 원인 진단</span>\n"
                         f"[※ AI 통변 지시: 신청자의 고민이 없다면 일반적 조언을, 있다면 현 상황에 공감하고 사주적 원인을 진단하십시오.]\n"
-                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2)
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 답답함을 풀어줄 명확한 해법과 타개 시기</span>\n"
+                        f"[※ AI 통변 지시: 언제쯤 고비가 풀리는지 시기를 명시하고 현실적 행동 지침을 세련되게 처방하십시오.]\n"
+                        f"</div>\n"
+                    )
+                    
+                    # 🚨 여기서부터 아래로 쭈욱 덮어써 주십시오! (들여쓰기 20칸)
+                    try:
+                        # AI API 호출
+                        res = model.generate_content(prompt)
+                        ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
+                        
+                        # 1. 옥의 티 수술 (마크다운 볼드체 html 변환)
+                        ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
+                        
+                        # 2. 골든 텍스트 치환
+                        if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
+                            ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
+                        
+                        # 3. 표 HTML 정리
+                        un_html_clean = un_html.replace("\n", " ").replace("\r", "")
+                        se_html_clean = se_html.replace("\n", " ").replace("\r", "")
+                        
+                        daeoun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{un_html_clean}</div>"
+                        sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
+                        
+                        # 4. AI 텍스트 내 마커 정리 (대운표 마커 삭제, 세운표 삽입)
+                        clean_ai_text = re.sub(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', '', ai_text, flags=re.IGNORECASE)
+                        clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
+                        
+                        if count_s == 0 and "table" not in clean_ai_text.lower():
+                            clean_ai_text += f"<br><br><span style='color:red; font-weight:bold;'>⚠️ (AI 세운표 마커 누락 비상 출력)</span><br>{sewun_target}"
+                        
+                        # 5. [최종 조립] 원국표 -> 대운표 -> intro_html -> AI통변 -> 맺음말
+                        bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #000000; margin: 35px 0 20px 0;'>{closing_html}"
+                        
+                        full_content_clean = (
+                            f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>"
+                            f"{daeoun_target}\n"
+                            f"{intro_html}\n"
+                            f"{clean_ai_text}\n<br><br>"
+                            f"{bordered_closing_html}"
+                            f"</div>"
+                        )
+                        
+                        # 6. 표지 타이틀 교체 및 여백 강제 축소
+                        import re
+                        dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
+                        
+                        report_1_full_html = re.sub(r'(<h1[^>]*>).*?(<\/h1>)', r'\g<1>' + dynamic_title + r'\2', report_1_full_html, count=1, flags=re.IGNORECASE|re.DOTALL)
+                        report_1_full_html = re.sub(r'min-height:\s*250mm\s*;?', 'min-height: 120mm;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'padding:\s*40px\s+0\s*;?', 'padding: 10px 0;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'padding:\s*42px\s+24px\s*;?', 'padding: 20px 24px;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'margin-bottom:\s*28px\s*;?', 'margin-bottom: 15px;', report_1_full_html, flags=re.IGNORECASE)
+
+                        # 7. 최종 렌더링 세팅
+                        report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
+                        
+                        st.session_state['saved_report_html'] = report_1_full_html
+                        
+                    except Exception as e:
+                        st.error(f"1-1번 사주풀이 가동 장애: {e}")
 
                 elif u_product == "1-2. 올해 운세 상세분석":
                     target_year_val = st.session_state.get('target_year_input', curr_y)
                     prompt = (
                         f"{db_header}\n"
                         f"{ilju_master_prompt_context}\n\n"
-                        f"================================================================================\n"
                         f"🧠 [1-2. {target_year_val}년 운세 상세분석 정밀 지침]\n"
-                        f"================================================================================\n"
                         f"[SYSTEM ROLE: 초연시공명리 최고위 전문가]\n"
                         f"🚨 아래 목차는 정확히 '1. / 2. / 3. / 4. 고민 상담 Q&A' 4개 대제목으로만 구성되어 있다.\n"
                         f"이 4개 외에 새로운 대제목을 임의로 추가하거나, 목차를 확장하는 것을 절대 금지한다.\n"
@@ -1684,6 +1749,48 @@ if st.session_state.get('need_calc', False):
                         f"[※ AI 통변 지시: 올해 내로 가장 성과가 좋거나 갈등이 풀릴 달(월)과 시기를 짚어주고, 즉각적인 행동 지침을 세련되게 처방하십시오.]\n"
                         f"</div>\n"
                     )
+                    try:
+                        res = model.generate_content(prompt)
+                        ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
+                        ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
+                        
+                        if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
+                            ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
+                        
+                        un_html_clean = un_html.replace("\n", " ").replace("\r", "")
+                        se_html_clean = se_html.replace("\n", " ").replace("\r", "")
+                        
+                        daeoun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{un_html_clean}</div>"
+                        sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
+                        
+                        # 🚨 대운표 마커 삭제 (상단 고정할 것이므로) 및 세운표 본문 삽입
+                        clean_ai_text = re.sub(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', '', ai_text, flags=re.IGNORECASE)
+                        clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
+                        
+                        # 🚨 [최종 조립] 원국표 -> 대운표 -> AI통변(intro_html 제외) -> 맺음말
+                        bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #000000; margin: 35px 0 20px 0;'>{closing_html}"
+                        full_content_clean = (
+                            f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>"
+                            f"{daeoun_target}\n"
+                            f"{clean_ai_text}\n<br><br>"
+                            f"{bordered_closing_html}"
+                            f"</div>"
+                        )
+                        
+                        # 🚨 표지 타이틀 교체 및 여백 강제 축소
+                        dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
+                        report_1_full_html = re.sub(r'(<h1[^>]*>).*?(<\/h1>)', r'\g<1>' + dynamic_title + r'\2', report_1_full_html, count=1, flags=re.IGNORECASE|re.DOTALL)
+                        report_1_full_html = re.sub(r'min-height:\s*250mm\s*;?', 'min-height: 120mm;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'padding:\s*40px\s+0\s*;?', 'padding: 10px 0;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'padding:\s*42px\s+24px\s*;?', 'padding: 20px 24px;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'margin-bottom:\s*28px\s*;?', 'margin-bottom: 15px;', report_1_full_html, flags=re.IGNORECASE)
+
+                        report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
+                        st.session_state['saved_report_html'] = report_1_full_html
+                        
+                    except Exception as e:
+                        st.error(f"1-2번 연산 오류: {e}")
+
 
                 elif u_product == "1-3. 이번달 운세 상세분석":
                     prompt = (
@@ -1730,6 +1837,47 @@ if st.session_state.get('need_calc', False):
                         f"[※ AI 통변 지시: 이번 달 내로 가장 성과가 좋거나 갈등이 풀릴 주간이나 일자를 짚어주고, 즉각적인 행동 지침을 세련되게 처방하십시오.]\n"
                         f"</div>\n"
                     )
+                    try:
+                        res = model.generate_content(prompt)
+                        ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
+                        ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
+                        
+                        if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
+                            ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
+                        
+                        un_html_clean = un_html.replace("\n", " ").replace("\r", "")
+                        se_html_clean = se_html.replace("\n", " ").replace("\r", "")
+                        wol_html_clean = wol_html.replace("\n", " ").replace("\r", "")
+                        
+                        daeoun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{un_html_clean}</div>"
+                        sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
+                        wolwun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{wol_html_clean}</div>"
+                        
+                        clean_ai_text = re.sub(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', '', ai_text, flags=re.IGNORECASE)
+                        clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
+                        clean_ai_text, count_w = re.subn(r'[\#\*\_\s]*\[\s*WOLWUN_TABLE_HERE\s*\][\#\*\_\s]*', wolwun_target, clean_ai_text, flags=re.IGNORECASE)
+                        
+                        bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #000000; margin: 35px 0 20px 0;'>{closing_html}"
+                        full_content_clean = (
+                            f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>"
+                            f"{daeoun_target}\n"
+                            f"{clean_ai_text}\n<br><br>"
+                            f"{bordered_closing_html}"
+                            f"</div>"
+                        )
+                        
+                        dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
+                        report_1_full_html = re.sub(r'(<h1[^>]*>).*?(<\/h1>)', r'\g<1>' + dynamic_title + r'\2', report_1_full_html, count=1, flags=re.IGNORECASE|re.DOTALL)
+                        report_1_full_html = re.sub(r'min-height:\s*250mm\s*;?', 'min-height: 120mm;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'padding:\s*40px\s+0\s*;?', 'padding: 10px 0;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'padding:\s*42px\s+24px\s*;?', 'padding: 20px 24px;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'margin-bottom:\s*28px\s*;?', 'margin-bottom: 15px;', report_1_full_html, flags=re.IGNORECASE)
+
+                        report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
+                        st.session_state['saved_report_html'] = report_1_full_html
+                        
+                    except Exception as e:
+                        st.error(f"1-3번 연산 오류: {e}")
 
                 elif u_product == "1-4. 주간 및 일운 상세분석":
                     t_date = st.session_state.get('target_date', dt_mod.date.today())
@@ -1752,7 +1900,6 @@ if st.session_state.get('need_calc', False):
                         f"3. 표(Table) 생성 절대 금지.\n\n"
 
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 이번 주간 및 오늘의 운 분석</h3>\n"
-                        f"[DAEWUN_TABLE_HERE]\n"
                         f"[SEWUN_TABLE_HERE]\n"
                         f"[WOLWUN_TABLE_HERE]\n"
                         f"[WEEKLY_CALENDAR_HERE]\n"
@@ -1785,13 +1932,14 @@ if st.session_state.get('need_calc', False):
                         f"</div>\n"
                     )
                     try:
+                        # 1. 캘린더 생성부 (이전 교정사항 모두 유지)
                         klc = KoreanLunarCalendar()
-                        
                         days_offset = (t_date.weekday() + 1) % 7
                         start_of_week = t_date - dt_mod.timedelta(days=days_offset)
                         
                         weekly_html = f"<div style='margin-bottom: 20px;'><div style='margin-top: 5px; margin-bottom: 10px; font-size: 18px; font-weight: 900; color: #000000;'>[ 주간 일진 흐름표 ({t_date.strftime('%Y-%m-%d')} 기준) ]</div>"
-                        weekly_html += "<div style='display:flex; width:100%; border:2px solid #000000; background:white;'>"                        
+                        weekly_html += "<div style='display:flex; width:100%; border:2px solid #000000; background:white;'>"
+                        
                         day_names = ["일", "월", "화", "수", "목", "금", "토"]
                         day_colors = ["#D50000", "#555555", "#555555", "#555555", "#555555", "#555555", "#1565C0"]
                         
@@ -1842,6 +1990,7 @@ if st.session_state.get('need_calc', False):
                             
                         weekly_html += "</div></div>"
 
+                        # 2. AI 호출 및 파싱
                         res = model.generate_content(prompt)
                         ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                         ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
@@ -1859,39 +2008,35 @@ if st.session_state.get('need_calc', False):
                         wolwun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{wol_html_clean}</div>"
                         weekly_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{weekly_html_clean}</div>"
 
-                        clean_ai_text, count_d = re.subn(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', daeoun_target, ai_text, flags=re.IGNORECASE)
+                        # 3. 마커 치환 및 조립
+                        clean_ai_text = re.sub(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', '', ai_text, flags=re.IGNORECASE)
                         clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
                         clean_ai_text, count_w = re.subn(r'[\#\*\_\s]*\[\s*WOLWUN_TABLE_HERE\s*\][\#\*\_\s]*', wolwun_target, clean_ai_text, flags=re.IGNORECASE)
                         clean_ai_text, count_wk = re.subn(r'[\#\*\_\s]*\[\s*WEEKLY_CALENDAR_HERE\s*\][\#\*\_\s]*', weekly_target, clean_ai_text, flags=re.IGNORECASE)
 
-                        if count_d == 0 and "table" not in clean_ai_text.lower():
-                            clean_ai_text = clean_ai_text + f"<br><br><span style='color:red; font-weight:bold;'>⚠️ (AI 표 마커 누락으로 비상 출력된 운의 흐름표)</span><br>{un_html_clean}{se_html_clean}{wol_html_clean}"
+                        bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #000000; margin: 35px 0 20px 0;'>{closing_html}"
+                        full_content_clean = (
+                            f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>"
+                            f"{daeoun_target}\n"
+                            f"{clean_ai_text}\n<br><br>"
+                            f"{bordered_closing_html}"
+                            f"</div>"
+                        )
 
-                        bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #1A237E; margin: 35px 0 20px 0;'>{closing_html}"
-
-                        full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{clean_ai_text}<br><br>{bordered_closing_html}</div>"
-
-                        # 🚨 1-4 전용: 표지 타이틀 및 여백 강제 수정 (띄어쓰기 무시하는 절대 규칙 적용)
+                        # 4. 표지 타이틀 교체 및 여백 강제 축소
                         import re
                         dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
-                        
-                        # 1. <h1> 태그 안의 텍스트가 무엇이든 무조건 찾아서 dynamic_title(선택상품명)로 강제 교체!
                         report_1_full_html = re.sub(r'(<h1[^>]*>).*?(<\/h1>)', r'\g<1>' + dynamic_title + r'\2', report_1_full_html, count=1, flags=re.IGNORECASE|re.DOTALL)
-                        
-                        # 2. 띄어쓰기(여백)가 다르더라도 무조건 찾아서 박스 상하 길이 대폭 축소!
                         report_1_full_html = re.sub(r'min-height:\s*250mm\s*;?', 'min-height: 120mm;', report_1_full_html, flags=re.IGNORECASE)
                         report_1_full_html = re.sub(r'padding:\s*40px\s+0\s*;?', 'padding: 10px 0;', report_1_full_html, flags=re.IGNORECASE)
                         report_1_full_html = re.sub(r'padding:\s*42px\s+24px\s*;?', 'padding: 20px 24px;', report_1_full_html, flags=re.IGNORECASE)
                         report_1_full_html = re.sub(r'margin-bottom:\s*28px\s*;?', 'margin-bottom: 15px;', report_1_full_html, flags=re.IGNORECASE)
 
-                        # 3. 본문 내용 삽입
                         report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
-                        
                         st.session_state['saved_report_html'] = report_1_full_html
-                    
-                    # 🚨 [여기!] 지워졌던 1-4의 except 뚜껑을 복구합니다. (들여쓰기 16칸)
-                    except Exception as e: 
-                        st.error(f"1-4 연산 오류: {e}")
+                        
+                    except Exception as e:
+                        st.error(f"1-4번 연산 오류: {e}")
 
             # ==============================================================
             # [A-2] 2. 테마별 특성화 상담 (85.5버전 프롬프트 완벽 이식 & Q&A 추가)
@@ -1927,7 +2072,6 @@ if st.session_state.get('need_calc', False):
                         f"3. 표(Table) 생성 절대 금지.\n\n"
 
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 타고난 재물 그릇 및 고민({wealth_goal}) 정밀 진단</h3>\n"
-                        f"[DAEWUN_TABLE_HERE]\n"
                         f"[SEWUN_TABLE_HERE]\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 재물 그릇과 정재 vs 편재 성향</span>\n"
@@ -1989,8 +2133,6 @@ if st.session_state.get('need_calc', False):
                         f"3. 표(Table) 생성 절대 금지.\n\n"
 
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 타고난 연애 성향 및 고민({love_goal}) 정밀 진단</h3>\n"
-                        f"[DAEWUN_TABLE_HERE]\n"
-                        f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 이상형과 애정 표현 스타일</span>\n"
                         f"[※ AI 통변 지시: 일지(배우자궁)와 배우자성의 십성을 분석하여 이상형과 연애 스타일을 서술하십시오.]\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 배우자궁 인연 패턴과 기질</span>\n"
@@ -2026,10 +2168,10 @@ if st.session_state.get('need_calc', False):
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 애정 고민 공감 및 원인 분석</span>\n"
                         f"[※ AI 통변 지시: 신청자의 이별/애정 고민({love_goal})에 따뜻하게 공감하고, 꼬인 관계의 원인을 일지 충형, 도화살 등 기류로 분석하십시오.]\n"
-                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 관계 개선 타이밍과 현명한 처세술</span>\n"
-                        f"[※ AI 통변 지시: 새로운 인연 시기나 갈등 해소 시기를 짚어주고 가장 현명한 처세술을 조언하십시오.]\n"
+                        f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 대박을 위한 실전 사업가 마인드</span>\n"
+                        f"[※ AI 통변 지시: 완벽한 길일이 선사할 재물 파동을 믿고 돌격할 수 있도록 실전 사업가 마인드를 조언하십시오.]\n"
                         f"</div>\n"
-                    )
+                    ) 
 
                 elif u_product == "2-3. 진학/입시운 특화 분석":
                     prompt = (
@@ -2048,7 +2190,6 @@ if st.session_state.get('need_calc', False):
                         f"3. 표(Table) 생성 절대 금지.\n\n"
 
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 타고난 학업 성향 및 고민({career_goal}) 정밀 진단</h3>\n"
-                        f"[DAEWUN_TABLE_HERE]\n"
                         f"[SEWUN_TABLE_HERE]\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 두뇌 기질과 학습 스타일 분석</span>\n"
@@ -2276,26 +2417,59 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 대박을 위한 실전 사업가 마인드</span>\n"
                         f"[※ AI 통변 지시: 완벽한 길일이 선사할 재물 파동을 믿고 돌격할 수 있도록 실전 사업가 마인드를 조언하십시오.]\n"
                         f"</div>\n"
-                    )
-
-                try:
-                    res = model.generate_content(prompt)
-                    ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
+                    ) # 👈 2-7 개업 택일 프롬프트가 끝나는 괄호
                     
-                    ai_text = ai_text.replace("[WEEKLY_CALENDAR_HERE]", "").replace("[DAEWUN_TABLE_HERE]", "").replace("[SEWUN_TABLE_HERE]", "")
+                    try:
+                        # 1. AI API 호출 및 기본 텍스트 파싱
+                        res = model.generate_content(prompt)
+                        ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
+                        ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
                     
-                    extra_html = ""
-                    if u_product in ["2-6. 이사 택일", "2-7. 개업 택일"]:
-                        FORBIDDEN_LIST = ['병오', '임자', '계해', '신유', '경신']
-                        recommended_days = get_optimized_delivery_days(s_d_val, e_d_val, jjis, jjis, FORBIDDEN_LIST)
+                        # 2. 표 HTML 정리
+                        un_html_clean = un_html.replace("\n", " ").replace("\r", "")
+                        se_html_clean = se_html.replace("\n", " ").replace("\r", "")
+                    
+                        daeoun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{un_html_clean}</div>"
+                        sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
+                    
+                        # 3. AI 텍스트 내 마커 정리
+                        # 🚨 대운표는 상단에 강제 고정되므로 AI 텍스트 안에서는 무조건 삭제! 세운표만 본문 치환!
+                        clean_ai_text = re.sub(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', '', ai_text, flags=re.IGNORECASE)
+                        clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
+                    
+                        # 4. 택일 상품(2-6, 2-7) 전용 추천 길일 생성 로직
+                        extra_html = ""
+                        if u_product in ["2-6. 이사 택일", "2-7. 개업 택일"]:
+                            FORBIDDEN_LIST = ['병오', '임자', '계해', '신유', '경신']
+                            recommended_days = get_optimized_delivery_days(s_d_val, e_d_val, jjis, jjis, FORBIDDEN_LIST)
                         
-                        extra_html += f"<h3 style='color:#000000; text-align:center; margin-top:20px;'>📅 추천 길일 (탐색기간: {s_d_val} ~ {e_d_val})</h3>\n"
-                        for day_info in recommended_days:
-                            extra_html += f"<div style='font-size:16px; font-weight:bold; margin-bottom:8px; padding:8px; background:#F8F9FA; border-radius:6px; text-align:center; color:#000000;'>✅ 추천 길일: <b style='color:#000000;'>{day_info['date']}</b> (명리 적합도: {day_info['score']}점)</div>\n"
-                        extra_html += "<hr style='border:1px solid #000000; margin:15px 0;'>\n"
+                            extra_html += f"<h3 style='color:#000000; text-align:center; margin-top:20px;'>📅 추천 길일 (탐색기간: {s_d_val} ~ {e_d_val})</h3>\n"
+                            for day_info in recommended_days:
+                                extra_html += f"<div style='font-size:16px; font-weight:bold; margin-bottom:8px; padding:8px; background:#F8F9FA; border-radius:6px; text-align:center; color:#000000;'>✅ 추천 길일: <b style='color:#000000;'>{day_info['date']}</b> (명리 적합도: {day_info['score']}점)</div>\n"
+                            extra_html += "<hr style='border:1px solid #000000; margin:15px 0;'>\n"
 
-                    full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 16px; line-height: 1.85; color: #000000;'>{extra_html}{ai_text}<br><br>{closing_html}</div>"
+                        # 5. 🚨 [최종 조립] 원국표 -> 대운표 -> 택일(있다면) -> AI통변 -> 맺음말
+                        bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #000000; margin: 35px 0 20px 0;'>{closing_html}"
+                    
+                        full_content_clean = (
+                            f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>"
+                            f"{daeoun_target}\n"        # 원국표 바로 아래에 대운표 고정
+                            f"{extra_html}"             # 택일 상품일 경우 추천 길일 표기
+                            f"{clean_ai_text}\n<br><br>"# AI 맞춤형 에세이 (세운표 포함)
+                            f"{bordered_closing_html}"  # 맺음말
+                            f"</div>"
+                        )
 
+                        # 6. 표지 타이틀 교체 및 여백 강제 축소
+                        dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
+                    
+                        report_1_full_html = re.sub(r'(<h1[^>]*>).*?(<\/h1>)', r'\g<1>' + dynamic_title + r'\2', report_1_full_html, count=1, flags=re.IGNORECASE|re.DOTALL)
+                        report_1_full_html = re.sub(r'min-height:\s*250mm\s*;?', 'min-height: 120mm;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'padding:\s*40px\s+0\s*;?', 'padding: 10px 0;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'padding:\s*42px\s+24px\s*;?', 'padding: 20px 24px;', report_1_full_html, flags=re.IGNORECASE)
+                    report_1_full_html = re.sub(r'margin-bottom:\s*28px\s*;?', 'margin-bottom: 15px;', report_1_full_html, flags=re.IGNORECASE)
+
+                    # 7. 최종 렌더링 세팅
                     report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
                     
                     st.session_state['saved_report_html'] = report_1_full_html
@@ -2626,6 +2800,7 @@ if st.session_state.get('need_calc', False):
                             f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                             f"3. 표(Table) 생성 절대 금지.\n\n"
                             f"[MALE_START]\n"
+
                             f"<h3 style='color:#000000; font-size: 24px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>\n"
                             f"<div class='content-box-loose'>\n"
                             f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>\n"
@@ -2635,6 +2810,7 @@ if st.session_state.get('need_calc', False):
                             f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>\n"
                             f"[※ AI 통변 지시: 남성의 연애 및 결혼관을 에세이로 작성하십시오.]\n"
                             f"</div>\n\n"
+
                             f"<h3 style='color:#000000; font-size: 24px; font-weight: 900; margin-top: 15px;'>2. 사주팔자의 요약</h3>\n"
                             f"{m_traditional_text_html}\n"
                             f"<div class='content-box-loose'>\n"
@@ -2645,6 +2821,7 @@ if st.session_state.get('need_calc', False):
                             f"</div>\n"
                             f"[MALE_END]\n\n"
                             f"[FEMALE_START]\n"
+
                             f"<h3 style='color:#000000; font-size: 24px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>\n"
                             f"<div class='content-box-loose'>\n"
                             f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>\n"
@@ -2664,11 +2841,13 @@ if st.session_state.get('need_calc', False):
                             f"</div>\n"
                             f"[FEMALE_END]\n\n"
                             f"[GUNGHAP_START]\n"
+
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 10px;'>1. 두 사람의 운명적 만남에 대하여</h3>\n"
                             f"<div class='content-box-loose'>\n"
                             f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 인연의 명리적 의미와 첫 기류 총평</span>\n"
                             f"[※ AI 통변 지시: 두 사람의 인연이 갖는 명리적 의미와 인연의 깊이를 서술하십시오.]\n"
                             f"</div>\n\n"
+
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 25px;'>2. 커플의 대운 비교 분석</h3>\n"
                             f"[COUPLE_DAEWUN_TABLES_HERE]\n"
                             f"<div class='content-box-loose'>\n"
@@ -2679,6 +2858,7 @@ if st.session_state.get('need_calc', False):
                             f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>3) 복음 및 대운 전환기 변곡점</span>\n"
                             f"[※ AI 통변 지시: 일주 복음 세운 및 대운 전환기에 발생하는 부부 관계의 결정적 분기점을 정밀 분석하십시오.]\n"
                             f"</div>\n\n"
+
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 25px;'>3. 커플의 상생과 조화 궁합 분석</h3>\n"
                             f"<div class='content-box-loose'>\n"
                             f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 배우자 인연 복합 파동 분석</span>\n"
@@ -2688,6 +2868,7 @@ if st.session_state.get('need_calc', False):
                             f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>3) 커플의 유통성과 적합성</span>\n"
                             f"[※ AI 통변 지시: 특정 오행이나 조후가 실질적으로 서로에게 미치는 적합성을 판별하십시오.]\n"
                             f"</div>\n\n"
+
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 25px;'>4. 조율의 지혜</h3>\n"
                             f"<div class='content-box-loose'>\n"
                             f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 부 vs 내면평화 지수 분석</span>\n"
@@ -2695,6 +2876,7 @@ if st.session_state.get('need_calc', False):
                             f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 4대 실전 처세와 백년해로 솔루션</span>\n"
                             f"[※ AI 통변 지시: 실전 처세 솔루션을 소제목으로 나열 후 백년해로 실전 가이드를 서술하십시오.]\n"
                             f"</div>\n\n"
+
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 25px;'>5. 고민 상담 Q&A</h3>\n"
                             f"<div class='content-box-loose'>\n"
                             f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 부부 갈등 공감 및 진짜 원인 규명</span>\n"
@@ -2704,6 +2886,7 @@ if st.session_state.get('need_calc', False):
                             f"</div>\n"
                             f"[GUNGHAP_END]\n"
                         )
+
                         res_text = call_claude_api(essay_prompt, max_tokens=12000)
                         ai_clean = "\n".join([line.lstrip() for line in res_text.split("\n")])
                         
@@ -2766,7 +2949,7 @@ if st.session_state.get('need_calc', False):
                             f"{closing_original}"
                         )
 
-                        # 🚨 괄호 밖에서 상품명을 추출해야 에러가 나지 않습니다.
+                        # 🚨 1. 표지 강제 슬림화 및 타이틀을 선택상품명으로 동적 연계
                         dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
                         
                         cover_html = (
@@ -2774,6 +2957,7 @@ if st.session_state.get('need_calc', False):
                             f"    <div style='border: 4px solid #000000; padding: 20px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
                             f"        <div style='border-bottom: 4px double #000000; padding-bottom: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box;'>\n"
                             f"            <h1 style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 30px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #000000 !important; letter-spacing: -1px !important; white-space: nowrap !important; line-height: 1.4 !important; text-align: center; border-bottom: none !important;'>{dynamic_title}</h1>\n"
+                            f"            <div style='text-align: right; margin-top: 8px;'>\n"
                             f"                <span style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; font-weight: 700; color: #000000; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                             f"            </div>\n"
                             f"        </div>\n"
@@ -2796,12 +2980,13 @@ if st.session_state.get('need_calc', False):
                         )
                         st.session_state['saved_report_gh_cover'] = cover_html
 
-                        m_page_content = f"{m_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
-                        f_page_content = f"{f_tbl}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
+                        # 🚨 2. 남/녀 개별 분석 페이지 조립 규칙 동기화: [원국표 -> 대운표 -> AI본문]
+                        m_page_content = f"{m_tbl}\n{m_page_un_html}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{m_ess}\n</div>"
+                        f_page_content = f"{f_tbl}\n{f_page_un_html}\n<div class='choyeon-premium-report' style='margin-top:20px;'>\n{f_ess}\n</div>"
                         
                         st.session_state['saved_report_gh_m'] = wrap_a4(m_page_content, "#000000", "[ ♂️ 남명 사주 요약 ]")
                         st.session_state['saved_report_gh_f'] = wrap_a4(f_page_content, "#000000", "[ ♀️ 여명 사주 요약 ]")
-                        st.session_state['saved_report_gh_g'] = wrap_a4(g_full_content, "#000000", "[ 🍀 초연 시공명리 궁합 풀이 ]")
+                        st.session_state['saved_report_gh_g'] = wrap_a4(g_full_content, "#000000", "[ 🍀 초연 전통명리 궁합 풀이 ]")
 
                         if u_product in ["3-2. 결혼 택일", "3-3. 출산 택일"]:
                             s_d_val = start_date if start_date else dt_mod.date.today()
@@ -2812,7 +2997,7 @@ if st.session_state.get('need_calc', False):
                             FORBIDDEN_LIST = ['병오', '임자', '계해', '신유', '경신']
                             delivery_days = get_optimized_delivery_days(s_d_val, e_d_val, m_jj_list, f_jj_list, FORBIDDEN_LIST)
                             
-                            t_title = "💍 최고의 결혼 길일 추천 리포트" if u_product == "3-2. 결혼 택일" else "👶 새 생명 마중 출산 길일 추천"
+                            t_title = "결혼 택일 추천" if u_product == "3-2. 결혼 택일" else "출산택일 추천"
                             del_content = f"<h2 style='text-align:center; color:#000000;'>{t_title}</h2><p style='text-align:center; font-weight:bold; color:#000000;'>탐색 기간: {s_d_val} ~ {e_d_val} (태아 성별: {baby_gender})</p><hr style='border:1px solid #000000; margin:15px 0;'>\n"
                             for day_info in delivery_days:
                                 del_content += f"<div style='font-size:16px; font-weight:bold; margin-bottom:8px; padding:8px; background:#F8F9FA; border-radius:6px; color:#000000;'>✅ 추천 길일: <b style='color:#000000;'>{day_info['date']}</b> (조화 점수: {day_info['score']}점)</div>\n"
@@ -2826,6 +3011,7 @@ if st.session_state.get('need_calc', False):
                                     f"1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.\n"
                                     f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                                     f"3. 표(Table) 생성 절대 금지.\n\n"
+
                                     f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 부부 원국·대운 분석과 혼례 택일의 원칙</h3>\n"
                                     f"<div class='content-box-loose'>\n"
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 신랑의 기본 성향과 삶의 무대</span>\n"
@@ -2833,6 +3019,7 @@ if st.session_state.get('need_calc', False):
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 신부의 기본 성향과 조후 균형</span>\n"
                                     f"[※ AI 통변 지시: 여명 원국의 오행 분포, 조후 균형 및 기혈 순환의 특징을 통변하십시오.]\n"
                                     f"</div>\n\n"
+
                                     f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 최적의 결혼 길일 정밀 통변 및 살성 방어</h3>\n"
                                     f"<div class='content-box-loose'>\n"
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 길일과 배우자궁·용신의 상생 조화</span>\n"
@@ -2840,15 +3027,18 @@ if st.session_state.get('need_calc', False):
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 대흉일 배제 및 살성 완벽 방어</span>\n"
                                     f"[※ AI 통변 지시: 흉살을 철저히 배제하고 방어한 근거를 서술하십시오.]\n"
                                     f"</div>\n\n"
+
                                     f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 예식 진행을 위한 최적의 길시(吉時)</h3>\n"
                                     f"<div class='content-box-loose'>\n"
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 최상의 예식 시간대와 시충 안내</span>\n"
                                     f"[※ AI 통변 지시: 예식을 진행하기에 가장 귀한 최상의 예식 시간대(길시)와 피해야 할 시충(時沖)을 정밀 안내하십시오.]\n"
                                     f"</div>\n\n"
+
                                     f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 부부 화목과 가운 번창을 위한 개운 처세술</h3>\n"
                                     f"<div class='content-box-loose'>\n"
                                     f"[※ AI 통변 지시: 혼례 이후 신혼 생활 전반에서 두 사람의 운을 다스리고 복록을 키워나갈 실전 개운 처세법을 조언하십시오.]\n"
                                     f"</div>\n\n"
+
                                     f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>5. 고민 상담 Q&A</h3>\n"
                                     f"<div class='content-box-loose'>\n"
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 결혼 준비 과정의 현실적 고민 공감</span>\n"
@@ -2868,11 +3058,13 @@ if st.session_state.get('need_calc', False):
                                     f"1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.\n"
                                     f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                                     f"3. 표(Table) 생성 절대 금지.\n\n"
+
                                     f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 새 생명 마중과 시공명리적 택일의 이치</h3>\n"
                                     f"<div class='content-box-loose'>\n"
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 생명 탄생 시공간의 의의와 부모 상생</span>\n"
                                     f"[※ AI 통변 지시: 아이가 첫 호흡을 하는 시공간이 갖는 의의와 부모와의 상생 기준을 해설하십시오.]\n"
                                     f"</div>\n\n"
+
                                     f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 추천 길일별 풀이 및 성별 대운 통변</h3>\n"
                                     f"<div class='content-box-loose'>\n"
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 1순위 최상 길일 분석</span>\n"
@@ -2880,6 +3072,7 @@ if st.session_state.get('need_calc', False):
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 2순위~5순위 길일 요약</span>\n"
                                     f"[※ AI 통변 지시: 나머지 길일의 핵심 특징을 요약 서술하십시오.]\n"
                                     f"</div>\n\n"
+
                                     f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 출산을 위한 최적의 길시 및 보양 가이드</h3>\n"
                                     f"<div class='content-box-loose'>\n"
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 분만 방식별 최적 출산 시간대 안내</span>\n"
@@ -2887,10 +3080,12 @@ if st.session_state.get('need_calc', False):
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 산모와 아기를 위한 보양 처세</span>\n"
                                     f"[※ AI 통변 지시: 출산 전후 산모와 아기의 기운을 북돋을 조언을 서술하십시오.]\n"
                                     f"</div>\n\n"
+
                                     f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 육아 & 양생 개운 전략</h3>\n"
                                     f"<div class='content-box-loose'>\n"
                                     f"[※ AI 통변 지시: 명리적 양육 지침과 맞춤형 환경 배치 비법을 서술하십시오.]\n"
                                     f"</div>\n\n"
+
                                     f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>5. 고민 상담 Q&A</h3>\n"
                                     f"<div class='content-box-loose'>\n"
                                     f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 출산을 앞둔 부모의 불안 공감</span>\n"
