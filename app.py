@@ -1775,11 +1775,10 @@ if st.session_state.get('need_calc', False):
                         days_offset = (t_date.weekday() + 1) % 7
                         start_of_week = t_date - dt_mod.timedelta(days=days_offset)
                         
-                        weekly_html = f"<div style='margin-bottom: 20px;'><div style='font-size: 15px; font-weight: 900; color: #000000; margin-bottom: 5px;'>[ 주간 일진 흐름표 (타겟일: {t_date.strftime('%Y-%m-%d')}) ]</div>"
-                        weekly_html += "<div style='display:flex; width:100%; border:2px solid #000000; background:white;'>"
-                        
+                        weekly_html = f"<div style='margin-bottom: 20px;'><div style='margin-top: 5px; margin-bottom: 10px; font-size: 18px; font-weight: 900; color: #000000;'>[ 주간 일진 흐름표 ({t_date.strftime('%Y-%m-%d')} 기준) ]</div>"
+                        weekly_html += "<div style='display:flex; width:100%; border:2px solid #000000; background:white;'>"                        
                         day_names = ["일", "월", "화", "수", "목", "금", "토"]
-                        day_colors = ["#D50000", "#222222", "#222222", "#222222", "#222222", "#222222", "#1565C0"]
+                        day_colors = ["#D50000", "#555555", "#555555", "#555555", "#555555", "#555555", "#1565C0"]
                         
                         actual_ds = st.session_state['global_gans'][1] if 'global_gans' in st.session_state else ds
                         actual_yb = st.session_state['global_jjis'][3] if 'global_jjis' in st.session_state else yb
@@ -1793,7 +1792,6 @@ if st.session_state.get('need_calc', False):
                             c_hanja = iljin[0]
                             j_hanja = iljin[1]
                             
-                            # 🚨 [수술 완료] engine. 삭제 (50.7 내장 글로벌 함수 직접 호출)
                             ss_gan = get_ss(actual_ds, c_hanja)
                             ss_ji = get_ss(actual_ds, j_hanja)
                             unsung = get_unsung(actual_ds, j_hanja)
