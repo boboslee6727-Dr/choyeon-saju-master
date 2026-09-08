@@ -2964,28 +2964,20 @@ if st.session_state.get('need_calc', False):
                                 f"</div>"
                             )
 
-                        t_col = "#38B6FF"
+                        t_col = "#38B6FF"  # 🚨 원래의 예쁜 하늘색 유지!
                         
-                        # 🚨 [수술 완료] 자체 gh_engine의 점수를 받아 화려한 컬러로 막대를 그려줍니다.
-                        bars_html = ""
-                        for d in gh_engine.details:
-                            val = d['pct']
-                            label = d['label']
-                            if val >= 90: color = "linear-gradient(90deg, #1A237E 0%, #3949AB 100%)"     # 파랑 (최상)
-                            elif val >= 75: color = "linear-gradient(90deg, #2E7D32 0%, #4CAF50 100%)"   # 초록 (우수)
-                            elif val >= 60: color = "linear-gradient(90deg, #F57F17 0%, #FBC02D 100%)"   # 노랑 (보통)
-                            else: color = "linear-gradient(90deg, #B71C1C 0%, #E53935 100%)"             # 빨강 (주의)
-                            
-                            bars_html += (
-                                f"<div style='display:flex; align-items:center; margin-bottom:14px;'>"
-                                f"<div style='width:140px; font-size:14px; font-weight:800; color:#000000;'>{label}</div>"
-                                f"<div style='flex:1; height:14px; margin:0 12px; background-color:#E0E0E0; border-radius:7px; overflow:hidden;'>"
-                                f"<div style='width:{val}%; height:100%; background:{color}; border-radius:7px;'></div>"
-                                f"</div>"
-                                f"<div style='width:35px; font-size:14px; font-weight:900; color:#000000; text-align:right;'>{val}%</div>"
-                                f"</div>"
-                            )
-                        bars = bars_html
+                        # 🚨 1. 가로 막대 그래프 원래 디자인(SVG)과 하늘색으로 완벽 복구!
+                        bars = "".join([
+                            f"<div style='display:flex; align-items:center; margin-bottom:12px;'>"
+                            f"<div style='width:130px; font-size:14px; font-weight:800; color:#000000;'>{d['label']}</div>"
+                            f"<div style='flex:1; height:12px; margin:0 10px;'>"
+                            f"<svg width='100%' height='12'><rect width='100%' height='12' rx='6' ry='6' fill='#eee' />"
+                            f"<rect width='{d['pct']}%' height='12' rx='6' ry='6' fill='{t_col}' /></svg>"
+                            f"</div>"
+                            f"<div style='width:35px; font-size:13px; font-weight:800; color:#000000;'>{d['pct']}%</div>"
+                            f"</div>" 
+                            for d in gh_engine.details
+                        ])
                         
                         closing_original = (
                             f"<div style='margin-top: 30px; border-top: 2px solid #000000; padding-top: 25px; font-family: \"Nanum Myeongjo\", serif; page-break-inside: avoid;'>\n"
@@ -2994,9 +2986,31 @@ if st.session_state.get('need_calc', False):
                             f"<p style='font-size: 15px !important; font-weight: 500 !important; text-indent: 14px; text-align: justify; line-height: 1.85; margin-bottom: 12px; color: #000000; word-break: keep-all;'>서로의 기운을 보완하고 다독여주는 든든한 <b style=\"font-weight:900; color:#000000;\">'반려자'</b>가 되시기를 진심으로 기원하며, 두 분의 앞날에 늘 초연 시공명리의 축복이 가득하시길 소망합니다.</p>\n"
                             f"<p style='font-size: 15px !important; font-weight: 900 !important; text-indent: 14px; line-height: 1.85; margin-bottom: 0px; color: #000000; word-break: keep-all;'>오늘 닿은 귀한 인연에 다시 한 번 깊이 감사드립니다.</p>\n"
                             f"<div style='text-align: right; margin-top: 30px; margin-bottom: 15px;'>\n"
-                            f"<span style='font-weight: 900; font-size: 18px !important; color: #000000;'>- 초연 전통명리 연구소 드림 -</span>\n"
+                            f"<span style='font-weight: 900; font-size: 18px !important; color: #000000;'>- 초연 시공명리 연구소 드림 -</span>\n"
                             f"</div>\n"
                             f"</div>\n"
+                        )
+
+                        # 🚨 2. AI가 멋대로 생성한 잉여 </div> 태그를 강제로 잘라내어 VIP 프레임 밖으로 튀어나가는 것을 원천 차단!
+                        safe_g_ess = g_ess.replace("</div>\n</div>\n</div>", "</div>\n").replace("</div>\n</div>", "</div>\n")
+
+                        # 🚨 3. 도넛 그래프와 등급(Grade) 배경색도 모두 원래의 하늘색({t_col})으로 100% 복구!
+                        g_full_content = (
+                            f"<div class='choyeon-premium-report'>\n{safe_g_ess}\n</div>\n"
+                            f"<div class='choyeon-premium-report'>\n"  # 🚨 그래프 영역 전용 래퍼를 씌워 레이아웃 깨짐 완전 방지!
+                            f"<h2 style='font-family:\"Nanum Myeongjo\", serif; text-align:center; margin-top:35px; font-size:24px; font-weight:900; color:#000000;'>📊 최종 궁합 점수</h2>\n"
+                            f"<div style='display:flex; justify-content:center; align-items:center; margin:20px 0;'>\n"
+                            f"<div style='width:130px; height:130px; border-radius:50%; background:conic-gradient({t_col} {gh_engine.final_score}%, #eee 0); display:flex; justify-content:center; align-items:center; -webkit-print-color-adjust: exact;'>\n"
+                            f"<div style='width:98px; height:98px; background:#fff; border-radius:50%; display:flex; flex-direction:column; justify-content:center; align-items:center;'>\n"
+                            f"<span style='font-family:\"Nanum Myeongjo\", serif; font-size:32px; font-weight:900; color:#000000;'>{gh_engine.final_score}</span>\n"
+                            f"<span style='font-size:10px; color:#000000; font-weight:900;'>SCORE</span>\n"
+                            f"</div>\n"
+                            f"</div>\n"
+                            f"</div>\n"
+                            f"<div style='text-align:center; margin-bottom:20px;'><span style='font-family:\"Nanum Myeongjo\", serif; font-size:16px; font-weight:800; color:#fff; background:{t_col}; padding:8px 32px; border-radius:30px; -webkit-print-color-adjust: exact;'>{gh_engine.grade}</span></div>\n"
+                            f"<div style='max-width:500px; margin:0 auto; margin-bottom:20px;'>\n{bars}\n</div>\n"
+                            f"</div>\n" 
+                            f"{closing_original}"
                         )
 
                         g_full_content = (
