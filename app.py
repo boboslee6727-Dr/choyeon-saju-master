@@ -1807,7 +1807,10 @@ if st.session_state.get('need_calc', False):
                             
                             cell_html = (
                                 f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'>"
-                                f"<div style='background-color:{head_bg}; color:#FFFFFF; font-weight:900; padding:8px 0; font-size:16px; border-bottom:1px solid #ccc;'>{day_str}<br><span style='font-size:14px;'>{date_str}</span></div>"
+                                f"<div style='background-color:{head_bg}; color:#FFFFFF; font-weight:900; padding:8px 0; border-bottom:1px solid #ccc;'>"
+                                f"    <div style='font-size:16px; margin-bottom:4px;'>{day_str}</div>"
+                                f"    <div style='font-size:14px;'>{date_str}</div>"
+                                f"</div>"
                                 f"<div style='padding:2px; font-size:11px; color:#000000;'>{ss_gan}</div>"
                                 f"<div class='{gan_color_cls}' style='font-size:16px; font-weight:900;'>{c_hanja}</div>"
                                 f"<div class='{ji_color_cls}' style='font-size:16px; font-weight:900;'>{j_hanja}</div>"
@@ -1850,10 +1853,11 @@ if st.session_state.get('need_calc', False):
 
                         full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{clean_ai_text}<br><br>{bordered_closing_html}</div>"
 
-                        report_1_full_html = report_1_full_html.replace("초연 전통 명리사주 풀이", "특정 주간 및 특정일운 상세분석")
+                        # 🚨 1-4 전용: 표지 타이틀 교체 (정규식을 사용하여 기존 제목 무시하고 강제 덮어쓰기) 및 여백 슬림화
+                        dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
+                        report_1_full_html = re.sub(r'(<h1[^>]*>).*?(<\/h1>)', r'\g<1>' + dynamic_title + r'\2', report_1_full_html, count=1)
                         report_1_full_html = report_1_full_html.replace("min-height:250mm;", "min-height:120mm;").replace("padding:40px 0;", "padding:10px 0;")
                         report_1_full_html = report_1_full_html.replace("padding: 42px 24px;", "padding: 20px 24px;").replace("margin-bottom: 28px;", "margin-bottom: 15px;")
-
                         report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
                         
                         st.session_state['saved_report_html'] = report_1_full_html
