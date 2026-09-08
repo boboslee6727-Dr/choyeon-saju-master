@@ -2882,29 +2882,37 @@ if st.session_state.get('need_calc', False):
 
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 10px;'>1. 두 사람의 운명적 만남에 대하여</h3>\n"
                             f"<div class='content-box-loose'>\n"
-                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 인연의 명리적 의미와 첫 기류 총평</span>\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 인연의 의미</span>\n"
                             f"[※ AI 통변 지시: 두 사람의 인연이 갖는 명리적 의미와 인연의 깊이를 서술하십시오.]\n"
                             f"</div>\n\n"
 
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 25px;'>2. 커플의 대운 비교 분석</h3>\n"
                             f"[COUPLE_DAEWUN_TABLES_HERE]\n"
                             f"<div class='content-box-loose'>\n"
-                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 부부 대운 비교와 궤도 동조성</span>\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 커플의 인생 주기의 상생조화</span>\n"
                             f"[※ AI 통변 지시: 상하 대운 교차점에 따른 상생과 보완점을 분석하십시오.]\n"
-                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 본기 취약성과 행운 동조 원리</span>\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 커플의 인생 주기의 궤도 동조성</span>\n"
                             f"[※ AI 통변 지시: 각자의 원국 근기가 맞물려 일어나는 상호 공명하는 시공간 궤적을 서술하십시오.]\n"
-                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>3) 복음 및 대운 전환기 변곡점</span>\n"
-                            f"[※ AI 통변 지시: 일주 복음 세운 및 대운 전환기에 발생하는 부부 관계의 결정적 분기점을 정밀 분석하십시오.]\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>3) 커플이 겪게 될 가장 큰 변화의 순간</span>\n"
+                            f"[※ AI 통변 지시: 일주 복음이나 대운 전환기에 발생하는 부부 관계의 결정적 분기점을 정밀 분석하십시오.]\n"
                             f"</div>\n\n"
 
-                            f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 25px;'>3. 커플의 상생과 조화 궁합 분석</h3>\n"
+                            f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 25px;'>3. 커플의 최종 궁합 분석</h3>\n"
                             f"<div class='content-box-loose'>\n"
                             f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 배우자 인연 복합 파동 분석</span>\n"
-                            f"[※ AI 통변 지시: 각자의 기질과 丑未충, 亥亥 복음 등이 부부 관계에 미치는 파동을 심층 분석하십시오.]\n"
-                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 궁위론적 음양 동조 (겉궁합 vs 속궁합)</span>\n"
-                            f"[※ AI 통변 지시: 년지 겉궁합과 일지 속궁합을 분석하여 사회적 가치관과 육체적 교감을 서술하십시오.]\n"
-                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>3) 커플의 유통성과 적합성</span>\n"
-                            f"[※ AI 통변 지시: 특정 오행이나 조후가 실질적으로 서로에게 미치는 적합성을 판별하십시오.]\n"
+                            f"[※ AI 통변 지시: 엔진 팩트를 결합하여 각자의 가주(家主) 기질, 합충형해파와 복음 등이 부부 관계에 미치는 영향을 심층 분석하십시오.]\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 사회적·가문적 무대</span>\n"
+                            f"[※ AI 통변 지시: 연지(年支)와 월지(月支) 간의 상호작용을 통해 사회적 가치관과 집안 배경의 어우러짐을 분석하십시오.]\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>3) 내면의 유대감</span>\n"
+                            f"[※ AI 통변 지시: 일지(日支) 간의 합과 충을 분석하여 무의식적 정서 밀착도를 규명하십시오.]\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>4) 환경 조화</span>\n"
+                            f"[※ AI 통변 지시: 조후(한난조습)를 대조하여 서로가 처한 심리적 온도가 어떻게 어우러지는지 판별하십시오.]\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>5) 기운 상호보완</span>\n"
+                            f"[※ AI 통변 지시: 한 사람에게 부족한 오행(십성)을 상대방이 어떻게 채워주는지 억부적 시너지를 설명하십시오.]\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>6) 특수 기운</span>\n"
+                            f"[※ AI 통변 지시: 특수 신살(원진, 귀문, 천을귀인 등)의 파동을 긍정적 에너지로 승화시킬 비책을 제시하십시오.]\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>7) 리스크 방어력</span>\n"
+                            f"[※ AI 통변 지시: 운세적 위기나 흉의를 상대방의 사주 기운이 어떻게 완충하고 막아주는지 조명하십시오.]\n"
                             f"</div>\n\n"
 
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 25px;'>4. 조율의 지혜</h3>\n"
@@ -2957,7 +2965,27 @@ if st.session_state.get('need_calc', False):
                             )
 
                         t_col = "#38B6FF"
-                        bars = "".join([f"<div style='display:flex; align-items:center; margin-bottom:12px;'><div style='width:130px; font-size:14px; font-weight:800; color:#000000;'>{d['label']}</div><div style='flex:1; height:12px; margin:0 10px;'><svg width='100%' height='12'><rect width='100%' height='12' rx='6' ry='6' fill='#eee' /><rect width='{d['pct']}%' height='12' rx='6' ry='6' fill='#000000' /></svg></div><div style='width:35px; font-size:13px; font-weight:800; color:#000000;'>{d['pct']}%</div></div>" for d in gh_engine.details])
+                        
+                        # 🚨 [수술 완료] 자체 gh_engine의 점수를 받아 화려한 컬러로 막대를 그려줍니다.
+                        bars_html = ""
+                        for d in gh_engine.details:
+                            val = d['pct']
+                            label = d['label']
+                            if val >= 90: color = "linear-gradient(90deg, #1A237E 0%, #3949AB 100%)"     # 파랑 (최상)
+                            elif val >= 75: color = "linear-gradient(90deg, #2E7D32 0%, #4CAF50 100%)"   # 초록 (우수)
+                            elif val >= 60: color = "linear-gradient(90deg, #F57F17 0%, #FBC02D 100%)"   # 노랑 (보통)
+                            else: color = "linear-gradient(90deg, #B71C1C 0%, #E53935 100%)"             # 빨강 (주의)
+                            
+                            bars_html += (
+                                f"<div style='display:flex; align-items:center; margin-bottom:14px;'>"
+                                f"<div style='width:140px; font-size:14px; font-weight:800; color:#000000;'>{label}</div>"
+                                f"<div style='flex:1; height:14px; margin:0 12px; background-color:#E0E0E0; border-radius:7px; overflow:hidden;'>"
+                                f"<div style='width:{val}%; height:100%; background:{color}; border-radius:7px;'></div>"
+                                f"</div>"
+                                f"<div style='width:35px; font-size:14px; font-weight:900; color:#000000; text-align:right;'>{val}%</div>"
+                                f"</div>"
+                            )
+                        bars = bars_html
                         
                         closing_original = (
                             f"<div style='margin-top: 30px; border-top: 2px solid #000000; padding-top: 25px; font-family: \"Nanum Myeongjo\", serif; page-break-inside: avoid;'>\n"
@@ -2966,7 +2994,7 @@ if st.session_state.get('need_calc', False):
                             f"<p style='font-size: 15px !important; font-weight: 500 !important; text-indent: 14px; text-align: justify; line-height: 1.85; margin-bottom: 12px; color: #000000; word-break: keep-all;'>서로의 기운을 보완하고 다독여주는 든든한 <b style=\"font-weight:900; color:#000000;\">'반려자'</b>가 되시기를 진심으로 기원하며, 두 분의 앞날에 늘 초연 시공명리의 축복이 가득하시길 소망합니다.</p>\n"
                             f"<p style='font-size: 15px !important; font-weight: 900 !important; text-indent: 14px; line-height: 1.85; margin-bottom: 0px; color: #000000; word-break: keep-all;'>오늘 닿은 귀한 인연에 다시 한 번 깊이 감사드립니다.</p>\n"
                             f"<div style='text-align: right; margin-top: 30px; margin-bottom: 15px;'>\n"
-                            f"<span style='font-weight: 900; font-size: 18px !important; color: #000000;'>- 초연 시공명리 연구소 드림 -</span>\n"
+                            f"<span style='font-weight: 900; font-size: 18px !important; color: #000000;'>- 초연 전통명리 연구소 드림 -</span>\n"
                             f"</div>\n"
                             f"</div>\n"
                         )
