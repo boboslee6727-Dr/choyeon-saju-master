@@ -2610,32 +2610,44 @@ if st.session_state.get('need_calc', False):
                     partner_bazi = [f"{p_hs}{p_hb}", f"{p_ds}{p_db}", f"{p_ms}{p_mb}", f"{p_ys}{p_yb}"]
                     st.session_state['partner_bazi'] = partner_bazi
 
-                    if u_gender == "남성":
-                        m_name, m_sol, m_lun, m_time, m_age = u_name, sol_str, lun_str, time_str, u_age
+                    # 🚨 [원천 수술 포인트] 신청인/상대방의 이름, 성별, 혼인여부 절대 방어막 세팅!
+                    _u_name = st.session_state.get('u_n', '신청인')
+                    _p_name = st.session_state.get('p_n', '상대방')
+                    _u_gen  = st.session_state.get('u_g', '남성')
+                    _p_gen  = "여성" if _u_gen == "남성" else "남성"  # 🚨 상대방 성별마저 강제 고정하여 에러 원천 차단!
+                    _u_mar  = st.session_state.get('u_m_stat', '미혼')
+                    _p_mar  = st.session_state.get('p_m_stat', '미혼')
+
+                    if _u_gen == "남성":
+                        m_name, m_sol, m_lun, m_time, m_age = _u_name, sol_str, lun_str, time_str, u_age
                         m_gans, m_jjis = gans, jjis
                         m_ys, m_yb, m_ms, m_mb, m_ds, m_db, m_hs, m_hb = ys, yb, ms, mb, ds, db, hs, hb
                         m_calc_d, m_order = calc_d, order
+                        m_marital = _u_mar  # 남명이 신청인이므로 신청인 혼인여부 할당
                         
-                        f_name, f_sol, f_lun, f_time, f_age = p_name, p_sol_str, p_lun_str, f" {p_t.split('(')[0].strip()} ({p_hb})시" if p_t != "시간 모름" else "", p_age
+                        f_name, f_sol, f_lun, f_time, f_age = _p_name, p_sol_str, p_lun_str, f" {p_t.split('(')[0].strip()} ({p_hb})시" if p_t != "시간 모름" else "", p_age
                         f_gans, f_jjis = [p_hs, p_ds, p_ms, p_ys], [p_hb, p_db, p_mb, p_yb]
                         f_ys, f_yb, f_ms, f_mb, f_ds, f_db, f_hs, f_hb = p_ys, p_yb, p_ms, p_mb, p_ds, p_db, p_hs, p_hb
                         p_utc_dt = p_base_dt - dt_mod.timedelta(hours=9) + dt_mod.timedelta(minutes=get_total_time_adjustment(p_base_dt))
-                        p_order = 1 if (GAN.index(p_ys)%2==0) == (p_gender=='남성') else -1
+                        p_order = 1 if (GAN.index(p_ys)%2==0) == (_p_gen=='남성') else -1  # 🚨 불안정한 p_gender 대신 안전한 _p_gen 사용!
                         f_calc_d, f_order = get_daeun_su_accurate(p_utc_dt, p_order), p_order
+                        f_marital = _p_mar  # 여명이 상대방이므로 상대방 혼인여부 할당
                         
                         male_data_pack, female_data_pack = applicant_bazi, partner_bazi
                     else:
-                        m_name, m_sol, m_lun, m_time, m_age = p_name, p_sol_str, p_lun_str, f" {p_t.split('(')[0].strip()} ({p_hb})시" if p_t != "시간 모름" else "", p_age
+                        m_name, m_sol, m_lun, m_time, m_age = _p_name, p_sol_str, p_lun_str, f" {p_t.split('(')[0].strip()} ({p_hb})시" if p_t != "시간 모름" else "", p_age
                         m_gans, m_jjis = [p_hs, p_ds, p_ms, p_ys], [p_hb, p_db, p_mb, p_yb]
                         m_ys, m_yb, m_ms, m_mb, m_ds, m_db, m_hs, m_hb = p_ys, p_yb, p_ms, p_mb, p_ds, p_db, p_hs, p_hb
                         p_utc_dt = p_base_dt - dt_mod.timedelta(hours=9) + dt_mod.timedelta(minutes=get_total_time_adjustment(p_base_dt))
-                        p_order = 1 if (GAN.index(p_ys)%2==0) == (p_gender=='남성') else -1
+                        p_order = 1 if (GAN.index(p_ys)%2==0) == (_p_gen=='남성') else -1  # 🚨 불안정한 p_gender 대신 안전한 _p_gen 사용!
                         m_calc_d, m_order = get_daeun_su_accurate(p_utc_dt, p_order), p_order
+                        m_marital = _p_mar  # 남명이 상대방이므로 상대방 혼인여부 할당
                         
-                        f_name, f_sol, f_lun, f_time, f_age = u_name, sol_str, lun_str, time_str, u_age
+                        f_name, f_sol, f_lun, f_time, f_age = _u_name, sol_str, lun_str, time_str, u_age
                         f_gans, f_jjis = gans, jjis
                         f_ys, f_yb, f_ms, f_mb, f_ds, f_db, f_hs, f_hb = ys, yb, ms, mb, ds, db, hs, hb
                         f_calc_d, f_order = calc_d, order
+                        f_marital = _u_mar  # 여명이 신청인이므로 신청인 혼인여부 할당
                         
                         male_data_pack, female_data_pack = partner_bazi, applicant_bazi
 
