@@ -1334,7 +1334,7 @@ if st.session_state.get('need_calc', False):
                 is_active = val <= u_age < val+10
                 bg_col = "#FFF9C4" if is_active else "transparent"
                 b_left = "1px solid #ccc" if i != 9 else "none"
-                un_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,c)}</div><div class='color-{get_color(c)}' style='font-size:16px; font-weight:900;'>{c}</div><div class='color-{get_color(j)}' style='font-size:16px; font-weight:900;'>{j}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,j)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,j)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(yb, j)}</div><div style='font-size:11px; color:#1565C0; border-top:1px dashed #eee; padding-top:2px;'>{get_12_shinsal(db, j)}</div></div>"
+                un_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,c)}</div><div class='color-{get_color(c)}' style='font-size:16px; font-weight:900;'>{c}</div><div class='color-{get_color(j)}' style='font-size:16px; font-weight:900;'>{j}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,j)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,j)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(yb, j)}</div><div style='font-size:11px; color:#1565C0; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(db, j)}</div></div>"
             un_html += "</div>"
 
             cur_dw_idx = max(0, (u_age - calc_d) // 10)
@@ -1359,7 +1359,7 @@ if st.session_state.get('need_calc', False):
                 is_cur_yr = (ty == curr_y)
                 bg_col = "#E1F5FE" if is_cur_yr else "transparent"
                 b_left = "1px solid #ccc" if i != 9 else "none"
-                se_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; line-height:1.2; border-bottom:1px solid #ccc;'>{ty}년<br>({tage}세)</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(yb, tj)}</div><div style='font-size:11px; color:#1565C0; border-top:1px dashed #eee; padding-top:2px;'>{get_12_shinsal(db, tj)}</div></div>"
+                se_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; line-height:1.2; border-bottom:1px solid #ccc;'>{ty}년<br>({tage}세)</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(yb, tj)}</div><div style='font-size:11px; color:#1565C0; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(db, tj)}</div></div>"
             se_html += "</div>"
 
             wol_gans = ["己", "庚", "辛", "壬", "癸", "甲", "乙", "丙", "丁", "戊", "己", "庚"]
@@ -1373,7 +1373,7 @@ if st.session_state.get('need_calc', False):
                 is_cur_m = (tm == curr_m)
                 bg_col = "#E8F5E9" if is_cur_m else "transparent"
                 b_left = "1px solid #ccc" if i != 11 else "none"
-                wol_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{tm}월</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(yb, tj)}</div><div style='font-size:11px; color:#1565C0; border-top:1px dashed #eee; padding-top:2px;'>{get_12_shinsal(db, tj)}</div></div>"
+                wol_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{tm}월</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(yb, tj)}</div><div style='font-size:11px; color:#1565C0; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(db, tj)}</div></div>"
             wol_html += "</div>"
 
             past_daewun_list = []
@@ -1535,6 +1535,8 @@ if st.session_state.get('need_calc', False):
                 f"4. 괄호 병기 금지: 에세이 작성 시 전문 용어나 한자를 괄호 안에 병기하는 행위를 금지합니다.\n"
                 f"5. HTML 훼손 금지: </div> 태그를 임의로 닫거나 마크다운 기호를 남발하지 마십시오.\n"
                 f"6. 🚨 12신살 통변 필수: 사주 분석 시 '년지 기준(사회적 무대)'과 '일지 기준(개인적/내면적 무대)'의 12신살 작용을 반드시 종합하여 입체적으로 해석하십시오.\n"
+                # 🚨 [수술 적용] AI에게 이름과 강조 단어를 무조건 HTML <b> 태그로 쓰도록 강력 세뇌!
+                f"7. 🚨 이름 및 강조단어 볼드체 강제: 내담자의 이름({disp_name}, {disp_first_name})과 통변의 핵심 강조 단어는 절대로 마크다운(**) 기호를 쓰지 말고, 반드시 HTML 태그인 <b>단어</b> 형태로 감싸서 굵고 진하게 표시하십시오.\n"
             )
 
             if u_gender == '남성':
@@ -1704,12 +1706,11 @@ if st.session_state.get('need_calc', False):
                     
                     # 🚨 여기서부터 아래로 쭈욱 덮어써 주십시오! (들여쓰기 20칸)
                     try:
-                        # AI API 호출
-                        res = model.generate_content(prompt)
-                        ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
-                        
-                        # 1. 옥의 티 수술 (마크다운 볼드체 html 변환)
-                        ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
+                    res = model.generate_content(prompt)
+                    ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
+                    
+                    # 🚨 [수술 적용] 혹시라도 AI가 말귀를 못 알아듣고 ** 를 썼다면 파이썬이 강제로 <b> 태그로 싹 다 바꿔버립니다!
+                    ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
                         
                         # 2. 골든 텍스트 치환
                         if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
@@ -2807,7 +2808,7 @@ if st.session_state.get('need_calc', False):
                                 tj = JI[(JI.index(t_mb)+(i+1)*t_order)%12]
                                 bg = "#FFF9C4" if val <= age < val+10 else "transparent"
                                 brd = "1px solid #ccc" if i != 9 else "none"
-                                html += f"<div style='flex:1; border-left:{brd}; text-align:center; padding-bottom:3px; background-color:{bg};'><div style='background-color:#222222; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:11px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:11px; color:#000000;'>{get_ss(t_ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:15px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:15px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:11px; color:#000000;'>{get_ss(t_ds,tj)}</div><div style='font-size:10px; border-top:1px solid #eee; color:#0D47A1;'>{get_unsung(t_ds,tj)}</div><div style='font-size:10px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(t_yb, tj)}</div><div style='font-size:10px; color:#1565C0; border-top:1px dashed #eee; padding-top:2px;'>{get_12_shinsal(t_db, tj)}</div></div>"
+                                html += f"<div style='flex:1; border-left:{brd}; text-align:center; padding-bottom:3px; background-color:{bg};'><div style='background-color:#222222; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:11px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:11px; color:#000000;'>{get_ss(t_ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:15px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:15px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:11px; color:#000000;'>{get_ss(t_ds,tj)}</div><div style='font-size:10px; border-top:1px solid #eee; color:#0D47A1;'>{get_unsung(t_ds,tj)}</div><div style='font-size:10px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(t_yb, tj)}</div><div style='font-size:10px; color:#1565C0; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(t_db, tj)}</div></div>"
                             return html + "</div></div>"
 
                         # 🚨 함수 호출할 때도 남/녀 각각의 일지(m_db, f_db)를 같이 넘겨주도록 수정합니다!
@@ -2851,9 +2852,17 @@ if st.session_state.get('need_calc', False):
                         gh_engine = UniversalPrintableGunghap(u_name, p_name, male_data_pack, female_data_pack, 10)
                         gh_engine.run_universal_logic()
                         
+                        # 🚨 [수술 1] 남/녀 각각의 년지 및 일지 기준 12신살 팩트 추출
+                        m_s12_y = ", ".join(list(dict.fromkeys([get_12_shinsal(m_yb, j) for j in m_jjis if get_12_shinsal(m_yb, j) != "-"])))
+                        m_s12_d = ", ".join(list(dict.fromkeys([get_12_shinsal(m_db, j) for j in m_jjis if get_12_shinsal(m_db, j) != "-"])))
+                        f_s12_y = ", ".join(list(dict.fromkeys([get_12_shinsal(f_yb, j) for j in f_jjis if get_12_shinsal(f_yb, j) != "-"])))
+                        f_s12_d = ", ".join(list(dict.fromkeys([get_12_shinsal(f_db, j) for j in f_jjis if get_12_shinsal(f_db, j) != "-"])))
+
                         essay_prompt = (
                             f"{db_header}\n"
                             f"[SYSTEM ROLE: 초연시공명리 최고위 커플 궁합 & 부부 심리 컨설턴트]\n"
+                            f"📌 [참고용 보조 팩트 - 남명 12신살] 년지 기준: {m_s12_y} / 일지 기준: {m_s12_d}\n"
+                            f"📌 [참고용 보조 팩트 - 여명 12신살] 년지 기준: {f_s12_y} / 일지 기준: {f_s12_d}\n\n"
                             f"제공된 남명과 여명의 사주 원국 및 시공간 팩트 데이터를 바탕으로, \n"
                             f"두 사람의 음양오행적 조화, 육친적 인연의 깊이, 심리적 기류, 대운 궤도의 교차 동조성 및 시간방향(時間方向) 상호보완성을 엄정하고 입체적으로 통변할 것.\n\n"
                             f"🚨 [절대 강제: 3분할 파싱 태그 서식 엄수]\n"
@@ -2864,9 +2873,11 @@ if st.session_state.get('need_calc', False):
                             f"[ 🚨문단 레이아웃 및 AI 환각 통제 명령 ]\n"
                             f"1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.\n"
                             f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
-                            f"3. 표(Table) 생성 절대 금지.\n\n"
-                            f"[MALE_START]\n"
+                            f"3. 표(Table) 생성 절대 금지.\n"
+                            f"4. 🚨 이름 및 강조단어 볼드체 강제: 두 사람의 이름({m_name}, {f_name})과 핵심 통변 단어는 절대 마크다운(**) 기호를 쓰지 말고, 반드시 HTML 태그인 <b>단어</b> 형태로 감싸서 굵고 진하게 강조할 것.\n"
+                            f"5. 🚨 통변 비중 원칙: 명리 해석의 뼈대는 반드시 '십성(十星)'과 '12운성'에 두십시오. '12신살'은 과도하게 강조하지 말고, 십성의 해석을 거드는 가벼운 보조적 양념으로만 부드럽게 활용하십시오.\n\n"
 
+                            f"[MALE_START]\n"
                             f"<h3 style='color:#000000; font-size: 24px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>\n"
                             f"<div class='content-box-loose'>\n"
                             f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>\n"
@@ -2874,7 +2885,7 @@ if st.session_state.get('need_calc', False):
                             f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>2) 감추어진 내 속마음</span>\n"
                             f"[※ AI 통변 지시: 남명의 내면 가치관, 무의식적 심리 패턴을 서술하십시오.]\n"
                             f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>\n"
-                            f"[※ AI 통변 지시: 남명의 연애 및 결혼관을 에세이로 작성하십시오.]\n"
+                            f"[※ AI 통변 지시: 남성의 연애 및 결혼관을 에세이로 작성하십시오.]\n"
                             f"</div>\n\n"
 
                             f"<h3 style='color:#000000; font-size: 24px; font-weight: 900; margin-top: 15px;'>2. 사주팔자의 요약</h3>\n"
@@ -2884,11 +2895,12 @@ if st.session_state.get('need_calc', False):
                             f"[※ AI 통변 지시: 남성의 정통 명리적 성향을 분석한 에세이를 작성하십시오.]\n"
                             f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>\n"
                             f"[※ AI 통변 지시: 남성의 오행 및 조후 에너지를 분석한 에세이를 작성하십시오.]\n"
-                            f"[※ AI 통변 지시: 남성의 년지 기준 12신살(사회적 무대)과 일지 기준 12신살(내면적 무대)을 종합하여 잠재력을 분석한 실제 에세이 작성하십시오.]\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>3) 숨겨진 잠재력과 보조적 기운</span>\n"
+                            f"[※ AI 통변 지시: 남성의 십성과 12운성을 주축으로 잠재력을 분석하되, 앞서 주입된 년/일지 12신살은 가벼운 보조적 기운으로만 참고하여 에세이 작성]\n"
                             f"</div>\n"
                             f"[MALE_END]\n\n"
-                            f"[FEMALE_START]\n"
 
+                            f"[FEMALE_START]\n"
                             f"<h3 style='color:#000000; font-size: 24px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>\n"
                             f"<div class='content-box-loose'>\n"
                             f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>1) 겉으로 드러난 성격</span>\n"
@@ -2898,6 +2910,7 @@ if st.session_state.get('need_calc', False):
                             f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>3) 무의식이 갈망하는 반려자의 상</span>\n"
                             f"[※ AI 통변 지시: 여성의 연애 및 결혼관을 에세이로 작성하십시오.]\n"
                             f"</div>\n\n"
+
                             f"<h3 style='color:#000000; font-size: 24px; font-weight: 900; margin-top: 15px;'>2. 사주팔자의 요약</h3>\n"
                             f"{f_traditional_text_html}\n"
                             f"<div class='content-box-loose'>\n"
@@ -2905,13 +2918,15 @@ if st.session_state.get('need_calc', False):
                             f"[※ AI 통변 지시: 여성의 정통 명리적 성향을 분석한 에세이를 작성하십시오.]\n"
                             f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>2) 내 삶의 리듬과 에너지 균형</span>\n"
                             f"[※ AI 통변 지시: 여성의 오행 및 조후 에너지를 분석한 에세이를 작성하십시오.]\n"
-                            f"[※ AI 통변 지시: 여성의 년지 기준 12신살(사회적 무대)과 일지 기준 12신살(내면적 무대)을 종합하여 잠재력을 분석한 실제 에세이 작성하십시오.]\n"
+                            f"<span class='sub-title' style='display: block; font-size: 18px; font-weight: 900; color: #000000; margin-top: 15px; margin-bottom: 5px;'>3) 숨겨진 잠재력과 보조적 기운</span>\n"
+                            f"[※ AI 통변 지시: 여성의 십성과 12운성을 주축으로 잠재력을 분석하되, 앞서 주입된 년/일지 12신살은 가벼운 보조적 기운으로만 참고하여 에세이 작성]\n"
                             f"</div>\n"
                             f"[FEMALE_END]\n\n"
-                            f"[GUNGHAP_START]\n"
 
+                            f"[GUNGHAP_START]\n"
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 10px;'>1. 두 사람의 운명적 만남에 대하여</h3>\n"
                             f"<div class='content-box-loose'>\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 인연의 의미</span>\n"
                             f"[※ AI 통변 지시: 두 사람의 명조(남명: {m_ys}{m_yb}년 {m_ms}{m_mb}월 {m_ds}{m_db}일 {m_hs}{m_hb}시 / 여명: {f_ys}{f_yb}년 {f_ms}{f_mb}월 {f_ds}{f_db}일 {f_hs}{f_hb}시)를 파악하여 인연이 갖는 명리적 의미와 인연의 깊이를 에세이로 서술하십시오.]\n"
                             f"</div>\n\n"
 
