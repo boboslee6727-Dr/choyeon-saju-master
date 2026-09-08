@@ -1547,6 +1547,7 @@ if st.session_state.get('need_calc', False):
                         f"- 임의로 명리 용어(격국, 십성 등)를 섞어서 제목을 변경하지 말고, 아래 지정된 감성적이고 대중적인 제목 텍스트를 100% 그대로 출력할 것.\n"
                         f"(단, 대괄호 안의 [※ AI 통변 지시: ...] 내용은 시스템 명령어이므로 절대 출력하지 말 것.)\n\n"
                         f"[출력 서식 및 통변 지침]\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 내면과 외면의 심리 스케치</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 사회적 무대에서 드러나는 나의 모습</span>\n"
@@ -1554,6 +1555,7 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 타인에게 감추어진 깊은 속마음</span>\n"
                         f"[※ AI 통변 지시: 지장간 및 일지/시지 구조와 내적 갈등, 본능적 욕구를 따뜻한 심리 상담가처럼 깊이 있게 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 타고난 삶의 구조와 운명의 나침반</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 내 삶의 그릇과 기본적인 삶의 궤도</span>\n"
@@ -1592,6 +1594,7 @@ if st.session_state.get('need_calc', False):
                         f"<br><b>(5) 삶의 큰 전환점과 극복의 지혜</b>\n"
                         f"[※ AI 통변 지시: 삼형살({samhyung_warn}) 작용을 큰 도약의 변곡점으로 서술하고, 없다면 생략하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 세월 따라 달라지는 삶의 결</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 10년 단위의 큰 인생 궤도</span>\n"
@@ -1606,6 +1609,7 @@ if st.session_state.get('need_calc', False):
                         f"<br><b>(2) 올해의 현실적 사건과 조언</b>\n"
                         f"[※ AI 통변 지시: 올해({curr_y}년)의 현실적 사건과 다정한 조언을 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 삶을 풍요롭게 만드는 실천 플랜</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<br><b>1) 나를 돕는 행운의 에너지와 색상</b>\n"
@@ -1619,6 +1623,7 @@ if st.session_state.get('need_calc', False):
                         f"<br><b>5) 긍정적 기운을 부르는 공간과 방위 활용법</b>\n"
                         f"[※ AI 통변 지시: 긍정적 기운을 끌어당기는 가구 배치 및 인테리어 팁을 제시하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>5. 운의 흐름을 내 편으로 만드는 특별 솔루션</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<br><b>1) 결정적 순간에 나를 돕는 조력자 활용법</b>\n"
@@ -1628,14 +1633,72 @@ if st.session_state.get('need_calc', False):
                         f"<br><b>3) 위기를 기회로 반전시키는 마인드셋</b>\n"
                         f"[※ AI 통변 지시: 변화 속에서도 멘탈을 다잡고 유리한 국면으로 전환할 행동 가이드를 조언하십시오.]\n"
                         f"</div>\n\n"
-                        f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>6. 고민 상담 Q&A</h3>\n"
-                        f"<div class='content-box-loose'>\n"
+
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 현재 고민에 대한 원인 진단</span>\n"
                         f"[※ AI 통변 지시: 신청자의 고민이 없다면 일반적 조언을, 있다면 현 상황에 공감하고 사주적 원인을 진단하십시오.]\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 답답함을 풀어줄 명확한 해법과 타개 시기</span>\n"
                         f"[※ AI 통변 지시: 언제쯤 고비가 풀리는지 시기를 명시하고 현실적 행동 지침을 세련되게 처방하십시오.]\n"
                         f"</div>\n"
+                    ) # 👈 프롬프트가 끝나는 괄호
+
+                # ==============================================================================
+                # 🚨 [여기입니다!] 이 아래에 아까 드린 코드를 통째로 덮어쓰시면 됩니다!
+                # ==============================================================================
+                try:
+                    # AI API 호출
+                    res = model.generate_content(prompt)
+                    ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
+                    
+                    # 1. 옥의 티 수술 (마크다운 볼드체 html 변환)
+                    ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
+                    
+                    # 2. 골든 텍스트 치환
+                    if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
+                        ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
+                    
+                    # 3. 표 HTML 정리
+                    un_html_clean = un_html.replace("\n", " ").replace("\r", "")
+                    se_html_clean = se_html.replace("\n", " ").replace("\r", "")
+                    
+                    daeoun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{un_html_clean}</div>"
+                    sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
+                    
+                    # 4. AI 텍스트 내 마커 정리
+                    clean_ai_text = re.sub(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', '', ai_text, flags=re.IGNORECASE)
+                    clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
+                    
+                    if count_s == 0 and "table" not in clean_ai_text.lower():
+                        clean_ai_text += f"<br><br><span style='color:red; font-weight:bold;'>⚠️ (AI 세운표 마커 누락 비상 출력)</span><br>{sewun_target}"
+                    
+                    # 5. 🚨 [최종 조립] 박사님 지시사항 100% 반영 레이아웃!
+                    bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #000000; margin: 35px 0 20px 0;'>{closing_html}"
+                    
+                    full_content_clean = (
+                        f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>"
+                        f"{daeoun_target}\n"        # 사주 원국표 바로 밑에 대운표 고정
+                        f"{intro_html}\n"           # 1-1 전용 철학소개 고정
+                        f"{clean_ai_text}\n<br><br>"# AI 에세이 (세운표 포함)
+                        f"{bordered_closing_html}"  # 맺음말
+                        f"</div>"
                     )
+                    
+                    # 6. 표지 타이틀 교체 및 여백 강제 축소
+                    import re
+                    dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
+                    
+                    report_1_full_html = re.sub(r'(<h1[^>]*>).*?(<\/h1>)', r'\g<1>' + dynamic_title + r'\2', report_1_full_html, count=1, flags=re.IGNORECASE|re.DOTALL)
+                    report_1_full_html = re.sub(r'min-height:\s*250mm\s*;?', 'min-height: 120mm;', report_1_full_html, flags=re.IGNORECASE)
+                    report_1_full_html = re.sub(r'padding:\s*40px\s+0\s*;?', 'padding: 10px 0;', report_1_full_html, flags=re.IGNORECASE)
+                    report_1_full_html = re.sub(r'padding:\s*42px\s+24px\s*;?', 'padding: 20px 24px;', report_1_full_html, flags=re.IGNORECASE)
+                    report_1_full_html = re.sub(r'margin-bottom:\s*28px\s*;?', 'margin-bottom: 15px;', report_1_full_html, flags=re.IGNORECASE)
+
+                    # 7. 최종 렌더링 세팅
+                    report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
+                    
+                    st.session_state['saved_report_html'] = report_1_full_html
+                    
+                except Exception as e:
+                    st.error(f"1-1번 사주풀이 가동 장애: {e}")
 
                 elif u_product == "1-2. 올해 운세 상세분석":
                     target_year_val = st.session_state.get('target_year_input', curr_y)
@@ -1653,12 +1716,14 @@ if st.session_state.get('need_calc', False):
                         f"1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.\n"
                         f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                         f"3. 표(Table) 생성 절대 금지.\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 지나온 과거 세운 흐름 회고</h3>\n"
                         f"[SEWUN_TABLE_HERE]\n"
                         f"<div class='content-box-loose'>\n"
                         f"🚨 [세운 줄바꿈 절대 규칙]: 각 세운 항목(• ... :)의 쌍점(:) 뒤 해설은 반드시 독립된 <p style='text-indent: 1em; margin-bottom: 12px;'> 태그로 감싸 한 줄씩 완전히 줄바꿈하여 작성하십시오.\n"
                         f"{past_sewun_html}\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. {target_year_val}년 운세 정밀 상세분석</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>▶ {target_year_val}년 전반기(상반기) 상세 분석</span>\n"
@@ -1666,10 +1731,13 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>▶ {target_year_val}년 후반기(하반기) 상세 분석</span>\n"
                         f"[※ AI 통변 지시: 하반기 동안 집중해야 할 핵심 결실, 인연의 길흉, 리스크 방어를 위한 실질적 지침을 서술하십시오.]\n"
                         f"</div>\n\n"
+
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. {target_year_val}년 맞춤형 개운 비법 및 조언</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"[※ AI 통변 지시: 해당 연도의 기운을 극대화하고 리스크를 우회할 실질적 처세술 및 개운 비법을 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 고민 상담 Q&A</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 올해의 고민 상황 공감</span>\n"
@@ -1694,12 +1762,15 @@ if st.session_state.get('need_calc', False):
                         f"1. 난해한 용어 배제, 즉각적 행동 지침 위주.\n"
                         f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                         f"3. 표(Table) 생성 절대 금지.\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 지나온 월운 회고</h3>\n"
+                        f"[SEWUN_TABLE_HERE]\n"
                         f"[WOLWUN_TABLE_HERE]\n"
                         f"<div class='content-box-loose'>\n"
                         f"🚨 [월운 줄바꿈 절대 규칙]: 각 월운 항목(• ... :)의 쌍점(:) 뒤 해설은 반드시 독립된 <p style='text-indent: 1em; margin-bottom: 12px;'> 태그로 감싸 한 줄씩 완전히 줄바꿈하여 작성하십시오.\n"
                         f"{past_months_html}\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 월운 상세 파동 분석</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>{prompt_first_half}</span>\n"
@@ -1707,10 +1778,12 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>{prompt_second_half}</span>\n"
                         f"[※ AI 통변 지시: 이번 달 후반기 동안 맞이할 실질적 사건, 재물/대인관계의 성패, 마무리 대응 전략을 상세히 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 단기 성공을 위한 개운 비법</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"[※ AI 통변 지시: 이번 달 파동을 극대화할 단기 처세술과 행운의 에너지 활용법을 조언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 고민 상담 Q&A</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 이달의 고민 상황 공감</span>\n"
@@ -1739,6 +1812,7 @@ if st.session_state.get('need_calc', False):
                         f"1. 난해한 용어 배제, 즉각적 행동 지침 위주.\n"
                         f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                         f"3. 표(Table) 생성 절대 금지.\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 이번 주간 및 오늘의 운 분석</h3>\n"
                         f"[DAEWUN_TABLE_HERE]\n"
                         f"[SEWUN_TABLE_HERE]\n"
@@ -1750,6 +1824,7 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 오늘의 일진 분석과 융합 기류</span>\n"
                         f"[※ AI 통변 지시: {t_date} 오늘 하루를 지배하는 일진 간지의 자의 형상과 원국의 결합 기류를 바탕으로 컨디션 기복 및 대인관계 핵심 기류를 서술하십시오. 일진의 십성 작용과 시공명리의 합형파해 기류, 시간방향성을 융합하여 실전적인 감정/행동 파동을 짚어내십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 시간대별 운의 분석</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 전반부 흐름 (23:30 ~ 11:29)</span>\n"
@@ -1757,10 +1832,12 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 후반부 흐름 (11:30 ~ 23:29)</span>\n"
                         f"[※ AI 통변 지시: 오시(午時)를 기점으로 낮부터 저녁/야간으로 이어지는 기운의 수렴 양상, 감정 조율, 저녁 시간대 처세 및 피로 관리 가이드를 조언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 오늘의 행동 지침</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"[※ AI 통변 지시: 오늘 하루의 운을 극대화하고 마찰을 완벽히 방어하기 위한 실전 행동 조언을 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 고민 상담 Q&A</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 오늘의 고민 상황 공감</span>\n"
@@ -1910,6 +1987,7 @@ if st.session_state.get('need_calc', False):
                         f"1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.\n"
                         f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                         f"3. 표(Table) 생성 절대 금지.\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 타고난 재물 그릇 및 고민({wealth_goal}) 정밀 진단</h3>\n"
                         f"[DAEWUN_TABLE_HERE]\n"
                         f"[SEWUN_TABLE_HERE]\n"
@@ -1923,6 +2001,7 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>4) 신청인 재물 고민의 명리적 진단</span>\n"
                         f"[※ AI 통변 지시: 신청자의 재물 고민({wealth_goal})에 대해 사주 기운이 어떻게 작용하는지 직언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 재산 축적의 유리한 시기와 현금 흐름 분석</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 대운 및 세운별 재성운 발현 타이밍</span>\n"
@@ -1932,6 +2011,7 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>3) 최적의 재산 증식 수단 추천</span>\n"
                         f"[※ AI 통변 지시: 본인 사주에 가장 부합하는 최적의 재산 증식 수단(부동산, 주식, 사업 등)을 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 손재수 방어 및 리스크 가이드</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 손재수 발생 시기와 경고</span>\n"
@@ -1939,10 +2019,12 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 이재 약점 진단과 방어 가이드</span>\n"
                         f"[※ AI 통변 지시: 본인의 이재 패턴 약점을 진단하고 실전 방어 가이드를 조언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 부를 부르는 맞춤형 개운법</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"[※ AI 통변 지시: 부족한 재성 기운을 활성화하기 위한 실천적 마인드셋과 행운의 팁을 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>5. 고민 상담 Q&A</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 재물 고민 공감 및 원인 분석</span>\n"
@@ -1967,6 +2049,7 @@ if st.session_state.get('need_calc', False):
                         f"1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.\n"
                         f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                         f"3. 표(Table) 생성 절대 금지.\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 타고난 연애 성향 및 고민({love_goal}) 정밀 진단</h3>\n"
                         f"[DAEWUN_TABLE_HERE]\n"
                         f"<div class='content-box-loose'>\n"
@@ -1979,6 +2062,7 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>4) 이성/결혼 고민의 명리적 진단</span>\n"
                         f"[※ AI 통변 지시: 신청자의 이성 고민({love_goal})에 대해 기운이 어떻게 작용하는지 직언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 인연이 도래하는 시기와 만남의 형태</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 대운 및 세운별 인연운 발현 시기</span>\n"
@@ -1986,6 +2070,7 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 운명적 인연 도래 골든타임</span>\n"
                         f"[※ AI 통변 지시: 도화살, 귀인, 일지 합 등을 바탕으로 만남의 골든 타임과 경로를 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. [결혼 전 사전 체크] 갈등 패턴과 흉화 리스크</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 이성 구설 및 감정 소모 리스크</span>\n"
@@ -1993,10 +2078,12 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 배우자궁 충형과 주도권 다툼</span>\n"
                         f"[※ AI 통변 지시: 배우자궁 충형 마찰과 주도권 다툼을 사전에 엄정히 판별하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 백년해로를 위한 사전 개운 백신</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"[※ AI 통변 지시: 시공간적 물리적 이격(주말부부, 각방 등) 및 실천 마인드셋을 조언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>5. 고민 상담 Q&A</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 애정 고민 공감 및 원인 분석</span>\n"
@@ -2021,6 +2108,7 @@ if st.session_state.get('need_calc', False):
                         f"1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.\n"
                         f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                         f"3. 표(Table) 생성 절대 금지.\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 타고난 학업 성향 및 고민({career_goal}) 정밀 진단</h3>\n"
                         f"[DAEWUN_TABLE_HERE]\n"
                         f"[SEWUN_TABLE_HERE]\n"
@@ -2030,6 +2118,7 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 진학/학업 고민의 명리적 진단</span>\n"
                         f"[※ AI 통변 지시: 신청자의 학업 고민({career_goal})에 대해 대운/세운 기운이 어떻게 작용하는지 직언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 최적의 전공 계열 및 문·이과 진로 적성</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 추천 계열 및 대학 전공 학과</span>\n"
@@ -2037,6 +2126,7 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 수시 vs 정시 유리성 판별</span>\n"
                         f"[※ AI 통변 지시: 수시(학생부)가 유리한지, 정시(수능)가 유리한지 명리적 근거를 들어 판별하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 시험운, 합격운 및 입시 성공의 변곡점</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 대운별 관성·인성운 발현 시기</span>\n"
@@ -2044,10 +2134,12 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 시험운 극대화 골든타임</span>\n"
                         f"[※ AI 통변 지시: 시험운을 극대화하는 결정적 골든타임을 명확한 시기(연도/월)로 제시하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 학업 성취를 위한 개운 처세술</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"[※ AI 통변 지시: 집중력 극대화 풍수 팁과 멘탈 관리 전략을 제시하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>5. 고민 상담 Q&A</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 입시 고민 공감 및 원인 진단</span>\n"
@@ -2071,6 +2163,7 @@ if st.session_state.get('need_calc', False):
                         f"1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.\n"
                         f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                         f"3. 표(Table) 생성 절대 금지.\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 내 삶의 무대와 타고난 커리어 성향</h3>\n"
                         f"[DAEWUN_TABLE_HERE]\n"
                         f"[SEWUN_TABLE_HERE]\n"
@@ -2082,6 +2175,7 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>3) 현재의 커리어운 흐름 진단</span>\n"
                         f"[※ AI 통변 지시: 신청자의 커리어 고민({career_goal})에 대해 사주 원국과 대운 기운이 어떻게 작용하는지 직언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 나를 성장시킬 최적의 직무와 환경</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 내 에너지가 가장 잘 발휘되는 산업과 직종</span>\n"
@@ -2089,15 +2183,18 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 가치를 인정받는 슬기로운 직장 처세술</span>\n"
                         f"[※ AI 통변 지시: 직장 내 상호작용 갈등 요인을 짚어내고 현명한 대인관계 처세술을 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 도약과 성취를 이루는 커리어 변곡점</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 승진과 이직을 위한 결정적 골든타임</span>\n"
                         f"[※ AI 통변 지시: 관운, 인성운 도래 시기나 부서 이동, 승진의 결정적 골든 타임을 제시하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 성공적인 커리어를 위한 개운법</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"[※ AI 통변 지시: 조직 내 가치를 극대화하기 위한 실전 개운 수칙을 조언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>5. 고민 상담 Q&A</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 커리어 고민 공감 및 원인 진단</span>\n"
@@ -2121,6 +2218,7 @@ if st.session_state.get('need_calc', False):
                         f"1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.\n"
                         f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                         f"3. 표(Table) 생성 절대 금지.\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 선천적 체질 및 고민({health_goal}) 정밀 진단</h3>\n"
                         f"[DAEWUN_TABLE_HERE]\n"
                         f"[SEWUN_TABLE_HERE]\n"
@@ -2128,20 +2226,24 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 선천적 기질과 체력 분석</span>\n"
                         f"[※ AI 통변 지시: 원국 오행 분포와 불균형 상태를 관찰하여 타고난 신체적 강약점과 취약 장기를 짚어주십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 앞으로의 10년, 그리고 올해의 건강 흐름</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 현재 대운에서 살필 신체 밸런스</span>\n"
                         f"[※ AI 통변 지시: 향후 10년간 기운의 쏠림 현상이 건강(혈관, 대사, 신경계 등)에 미칠 영향을 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 건강한 일상을 지키기 위한 리스크 관리</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 피로와 스트레스가 쌓이는 시기의 대처법</span>\n"
                         f"[※ AI 통변 지시: 만성 피로 및 정신적 스트레스 리스크를 분석하고 관리법을 다독여 주십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 내 몸을 살리는 다정한 섭생과 개운법</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"[※ AI 통변 지시: 부족한 기운을 채우기 위한 섭생 루틴, 음식, 운동법 등을 다정하게 조언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>5. 고민 상담 Q&A</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 건강 고민 공감 및 명리적 원인 진단</span>\n"
@@ -2171,6 +2273,7 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 이사가 나의 운명에 가져올 긍정적인 변화</span>\n"
                         f"[※ AI 통변 지시: 역마살, 지살 등 이동의 기운이 사주에 어떤 활력을 주는지 분석하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 복을 부르는 이사 당일의 지혜와 풍수</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 이사 당일 행운을 부르는 시간대(길시)</span>\n"
@@ -2178,10 +2281,12 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 새로운 집을 안락하게 채울 개운 풍수 팁</span>\n"
                         f"[※ AI 통변 지시: 용희신 방향이나 행운의 색상 등 수맥 차단, 안방 풍수를 조언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 이사 이후의 안락함과 실행 마인드셋</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"[※ AI 통변 지시: 새로운 터전에서 싹틀 가족의 안녕과 평안을 기원하는 따뜻한 메시지를 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 고민 상담 Q&A</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 이사 전 불안 공감 및 개운 이치</span>\n"
@@ -2204,6 +2309,7 @@ if st.session_state.get('need_calc', False):
                         f"1. 난해한 용어 배제, 즉각적 행동 지침 위주.\n"
                         f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                         f"3. 표(Table) 생성 절대 금지.\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 새로운 도약과 사업 시작의 타이밍</h3>\n"
                         f"[DAEWUN_TABLE_HERE]\n"
                         f"[SEWUN_TABLE_HERE]\n"
@@ -2211,6 +2317,7 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 개업이 내 운명에 불어넣을 새로운 성장의 기운</span>\n"
                         f"[※ AI 통변 지시: 사주의 식상생재 기운을 바탕으로 사업 개창의 운기가 발동함을 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>2. 대박을 터뜨릴 오픈 당일의 지혜와 비즈니스 풍수</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 손님을 끌어모을 개업 당일의 최적 시간대(길시)</span>\n"
@@ -2218,10 +2325,12 @@ if st.session_state.get('need_calc', False):
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 재물을 당기는 사업장 풍수와 인테리어 팁</span>\n"
                         f"[※ AI 통변 지시: 카운터 배치 등 재물을 끌어당기는 비즈니스 풍수 비법을 조언하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>3. 개업 이후의 도약과 실행 마인드셋</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"[※ AI 통변 지시: 새로운 사업장에서 겪게 될 번창과 이를 담아낼 사업가의 배포를 응원하는 강력한 메시지를 서술하십시오.]\n"
                         f"</div>\n\n"
+
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>4. 고민 상담 Q&A</h3>\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 개업 전 중압감 공감과 명리적 타이밍</span>\n"
