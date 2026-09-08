@@ -2846,8 +2846,7 @@ if st.session_state.get('need_calc', False):
                 except Exception as e:
                     st.error(f"3단계 궁합 종합 분석 가동 장애: {e}")
 
-    st.session_state['need_calc'] = False
-
+            st.session_state['need_calc'] = False
 # ==============================================================================
 # 🍽️ 9. 화면 출력부 (통합 완결 출력)
 # ==============================================================================
