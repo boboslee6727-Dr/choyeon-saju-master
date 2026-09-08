@@ -2937,7 +2937,6 @@ if st.session_state.get('need_calc', False):
                             f"[GUNGHAP_START]\n"
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 10px;'>1. 두 사람의 운명적 만남에 대하여</h3>\n"
                             f"<div class='content-box-loose'>\n"
-                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 인연의 의미</span>\n"
                             f"[※ AI 통변 지시: 두 사람의 명조(남명: {m_ys}{m_yb}년 {m_ms}{m_mb}월 {m_ds}{m_db}일 {m_hs}{m_hb}시 / 여명: {f_ys}{f_yb}년 {f_ms}{f_mb}월 {f_ds}{f_db}일 {f_hs}{f_hb}시)를 파악하여 인연이 갖는 명리적 의미와 인연의 깊이를 에세이로 서술하십시오.]\n"
                             f"</div>\n\n"
 
@@ -2972,15 +2971,15 @@ if st.session_state.get('need_calc', False):
 
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 25px;'>4. 조율의 지혜</h3>\n"
                             f"<div class='content-box-loose'>\n"
-                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 부 vs 내면평화 지수 분석</span>\n"
-                            f"[※ AI 통변 지시: 두 사람의 성향을 바탕으로 내면평화 지수를 산출하여 서술하십시오.]\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 물질적 성취와 내면의 평화</span>\n"
+                            f"[※ AI 통변 지시: 두 사람의 성향을 바탕으로 물질적 부의 추구와 정신적 안정 중 어느 쪽에 더 가치를 두는지, 부부의 삶의 지향점과 조화로움을 분석하여 서술하십시오.]\n"
                             f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 4대 실전 처세와 백년해로 솔루션</span>\n"
                             f"[※ AI 통변 지시: 실전 처세 솔루션을 소제목으로 나열 후 백년해로 실전 가이드를 서술하십시오.]\n"
                             f"</div>\n\n"
 
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 25px;'>5. 고민 상담 Q&A</h3>\n"
                             f"<div class='content-box-loose'>\n"
-                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 부부 갈등 공감 및 진짜 원인 규명</span>\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 부부 갈등 공감 및 원인 규명</span>\n"
                             f"[※ AI 통변 지시: 신청자가 남긴 갈등 사연에 공감하고 명리적 원인을 짚어주십시오.]\n"
                             f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>2) 화목한 결합을 위한 현실적 해법</span>\n"
                             f"[※ AI 통변 지시: 재물/자식 운의 흐름과 함께 현실적인 해법을 제시하십시오.]\n"
