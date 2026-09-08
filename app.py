@@ -2469,13 +2469,13 @@ if st.session_state.get('need_calc', False):
                         report_1_full_html = re.sub(r'padding:\s*42px\s+24px\s*;?', 'padding: 20px 24px;', report_1_full_html, flags=re.IGNORECASE)
                         report_1_full_html = re.sub(r'margin-bottom:\s*28px\s*;?', 'margin-bottom: 15px;', report_1_full_html, flags=re.IGNORECASE)
 
-                    # 7. 최종 렌더링 세팅
-                    report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
+                        # 7. 최종 렌더링 세팅
+                        report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
                     
-                    st.session_state['saved_report_html'] = report_1_full_html
+                        st.session_state['saved_report_html'] = report_1_full_html
                     
-                except Exception as e: 
-                    st.error(f"테마별 특성화 분석 AI 연산 오류: {e}")
+                    except Exception as e: 
+                        st.error(f"테마별 특성화 분석 AI 연산 오류: {e}")
 
             # ==============================================================
             # [A-3] 4-1. 타 감명서 비교 (사주) 파이프라인
