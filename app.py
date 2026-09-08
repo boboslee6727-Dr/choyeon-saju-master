@@ -2763,8 +2763,13 @@ if st.session_state.get('need_calc', False):
                                 f"<div style='border:2px solid {color}; margin-top:10px; margin-bottom:20px; padding:6px 8px; display:flex; justify-content:space-between; align-items:center; font-weight:900; font-size:11px; letter-spacing:-0.5px; border-radius:8px; background-color:#FAFAFA;'><div style='white-space:nowrap; color:#000000;'>🔢 대운수: {daeun_su}</div><div style='white-space:nowrap; color:#000000;'>💥 오행: 木({counts['목']}) 火({counts['화']}) 土({counts['토']}) 金({counts['금']}) 水({counts['수']})</div><div style='white-space:nowrap; color:#000000;'>🌟 천을귀인: <span style='color:#000000;'>{guiin}</span></div><div style='white-space:nowrap; color:#000000;'>🎯 공망: [년] <span style='color:#C62828;'>{y_gong}</span> [일] <span style='color:#C62828;'>{d_gong}</span></div><div style='white-space:nowrap; color:#000000;'>🌪️ 삼재: {samjae}</div></div>"
                             )
 
-                        m_marital = u_marital if u_gender == "남성" else p_marital
-                        f_marital = p_marital if u_gender == "남성" else u_marital
+                        # 🚨 [원천 수술 포인트] 파이썬 변수가 실종(NameError)되어도 절대 뻗지 않도록 st.session_state에서 강제 호출!
+                        _u_mar = st.session_state.get('u_m_stat', '미혼')
+                        _p_mar = st.session_state.get('p_m_stat', '미혼')
+                        _u_gen = st.session_state.get('u_g', '남성')
+                        
+                        m_marital = _u_mar if _u_gen == "남성" else _p_mar
+                        f_marital = _p_mar if _u_gen == "남성" else _u_mar
                         
                         guiin_map = {'甲':'丑, 未','乙':'子, 申','丙':'酉, 亥','丁':'酉, 亥','戊':'丑, 未','己':'子, 申','庚':'丑, 해','辛':'午寅','壬':'卯巳','癸':'卯, 巳'}
                         
