@@ -1764,10 +1764,105 @@ if st.session_state.get('need_calc', False):
                         f"[※ AI 통변 지시: 이번 주 내로 가장 성과가 좋거나 갈등이 풀릴 요일/시간대와 함께, 즉각적인 행동 지침을 세련되게 처방하십시오.]\n"
                         f"</div>\n"
                     )
-                klc = KoreanLunarCalendar()
                     
-                except Exception as e: 
-                    st.error(f"1번 개인 사주풀이 AI 연산 오류: {e}")
+                    try:
+                        klc = KoreanLunarCalendar()
+                        
+                        # 일요일(Sunday)을 시작일로 계산하기 위한 오프셋 연산
+                        days_offset = (t_date.weekday() + 1) % 7
+                        start_of_week = t_date - dt_mod.timedelta(days=days_offset)
+                        
+                        weekly_html = f"<div style='margin-bottom: 20px;'><div style='font-size: 15px; font-weight: 900; color: #000000; margin-bottom: 5px;'>[ 주간 일진 흐름표 (타겟일: {t_date.strftime('%Y-%m-%d')}) ]</div>"
+                        weekly_html += "<div style='display:flex; width:100%; border:2px solid #000000; background:white;'>"
+                        
+                        day_names = ["일", "월", "화", "수", "목", "금", "토"]
+                        day_colors = ["#D50000", "#222222", "#222222", "#222222", "#222222", "#222222", "#1565C0"]
+                        
+                        actual_ds = st.session_state['global_gans'][1] if 'global_gans' in st.session_state else ds
+                        actual_yb = st.session_state['global_jjis'][3] if 'global_jjis' in st.session_state else yb
+                        actual_db = st.session_state['global_jjis'][1] if 'global_jjis' in st.session_state else db
+                        
+                        for i in range(7):
+                            cur_d = start_of_week + dt_mod.timedelta(days=i)
+                            klc.setSolarDate(cur_d.year, cur_d.month, cur_d.day)
+                            gapja = klc.getChineseGapJaString()
+                            iljin = gapja.split()[2] if len(gapja.split()) >= 3 else "甲子"
+                            c_hanja = iljin[0]
+                            j_hanja = iljin[1]
+                            
+                            ss_gan = engine.get_ss(actual_ds, c_hanja)
+                            ss_ji = engine.get_ss(actual_ds, j_hanja)
+                            unsung = engine.get_unsung(actual_ds, j_hanja)
+                            y_shinsal = engine.get_12_shinsal(actual_yb, j_hanja)
+                            d_shinsal = engine.get_12_shinsal(actual_db, j_hanja)
+                            
+                            b_left = "1px solid #ccc" if i > 0 else "none"
+                            bg_col = "#FFF9C4" if cur_d == t_date else "transparent"
+                            head_bg = day_colors[i]
+                            
+                            date_str = f"{cur_d.month}/{cur_d.day}"
+                            day_str = day_names[i]
+                            
+                            gan_color_cls = f"color-{engine.get_color(c_hanja)}"
+                            ji_color_cls = f"color-{engine.get_color(j_hanja)}"
+                            
+                            cell_html = (
+                                f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'>"
+                                f"<div style='background-color:{head_bg}; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{day_str}<br><span style='font-size:10px;'>{date_str}</span></div>"
+                                f"<div style='padding:2px; font-size:11px; color:#000000;'>{ss_gan}</div>"
+                                f"<div class='{gan_color_cls}' style='font-size:16px; font-weight:900;'>{c_hanja}</div>"
+                                f"<div class='{ji_color_cls}' style='font-size:16px; font-weight:900;'>{j_hanja}</div>"
+                                f"<div style='padding:2px; font-size:11px; color:#000000;'>{ss_ji}</div>"
+                                f"<div style='font-size:10px; border-top:1px solid #eee; color:#0D47A1;'>{unsung}</div>"
+                                f"<div style='font-size:10px; color:#C62828; border-top:1px solid #eee;'>{y_shinsal}</div>"
+                                f"<div style='font-size:10px; color:#1565C0; border-top:1px solid #eee;'>{d_shinsal}</div>"
+                                f"</div>"
+                            )
+                            weekly_html += cell_html
+                            
+                        weekly_html += "</div></div>"
+
+                        # AI API 호출
+                        res = model.generate_content(prompt)
+                        ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
+                        
+                        ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
+                        
+                        if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
+                            ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
+
+                        un_html_clean = un_html.replace("\n", " ").replace("\r", "")
+                        se_html_clean = se_html.replace("\n", " ").replace("\r", "")
+                        wol_html_clean = wol_html.replace("\n", " ").replace("\r", "")
+                        weekly_html_clean = weekly_html.replace("\n", " ").replace("\r", "")
+
+                        daeoun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{un_html_clean}</div>"
+                        sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
+                        wolwun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{wol_html_clean}</div>"
+                        weekly_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{weekly_html_clean}</div>"
+
+                        clean_ai_text, count_d = re.subn(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', daeoun_target, ai_text, flags=re.IGNORECASE)
+                        clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
+                        clean_ai_text, count_w = re.subn(r'[\#\*\_\s]*\[\s*WOLWUN_TABLE_HERE\s*\][\#\*\_\s]*', wolwun_target, clean_ai_text, flags=re.IGNORECASE)
+                        clean_ai_text, count_wk = re.subn(r'[\#\*\_\s]*\[\s*WEEKLY_CALENDAR_HERE\s*\][\#\*\_\s]*', weekly_target, clean_ai_text, flags=re.IGNORECASE)
+
+                        if count_d == 0 and "table" not in clean_ai_text.lower():
+                            clean_ai_text = clean_ai_text + f"<br><br><span style='color:red; font-weight:bold;'>⚠️ (AI 표 마커 누락으로 비상 출력된 운의 흐름표)</span><br>{un_html_clean}{se_html_clean}{wol_html_clean}"
+
+                        bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #1A237E; margin: 35px 0 20px 0;'>{closing_html}"
+
+                        full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{clean_ai_text}<br><br>{bordered_closing_html}</div>"
+
+                        report_1_full_html = report_1_full_html.replace("초연 전통 명리사주 풀이", "특정 주간 및 특정일운 상세분석")
+                        report_1_full_html = report_1_full_html.replace("min-height:250mm;", "min-height:120mm;").replace("padding:40px 0;", "padding:10px 0;")
+                        report_1_full_html = report_1_full_html.replace("padding: 42px 24px;", "padding: 20px 24px;").replace("margin-bottom: 28px;", "margin-bottom: 15px;")
+
+                        report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
+                        
+                        st.session_state['saved_report_html'] = report_1_full_html
+                        
+                    except Exception as e: 
+                        st.error(f"1번 개인 사주풀이 AI 연산 오류: {e}")
 
             # ==============================================================
             # [A-2] 2. 테마별 특성화 상담 (85.5버전 프롬프트 완벽 이식 & Q&A 추가)
