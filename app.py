@@ -790,7 +790,15 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("<div style='font-weight:900; color:#1A237E; margin-bottom:5px;'>👤 신청인 기본 정보</div>", unsafe_allow_html=True)
     u_name = st.text_input("이름", value="", placeholder="홍길동", key="u_n")
-    u_gender = st.selectbox("성별", ["남성", "여성"], index=0, key="u_g")
+    
+    def auto_flip_gender():
+        st.session_state['p_g'] = "여성" if st.session_state['u_g'] == "남성" else "남성"
+
+    if 'p_g' not in st.session_state:
+        st.session_state['p_g'] = "여성"
+        
+    u_gender = st.selectbox("성별", ["남성", "여성"], index=0, key="u_g", on_change=auto_flip_gender)
+    
     u_marital = st.selectbox("혼인여부", ["선택", "미혼", "기혼", "돌싱"], index=1, key="u_m_stat")
     u_cal = st.selectbox("달력", ["양력", "음력(평달)", "음력(윤달)"], index=0, key="u_c")
     
