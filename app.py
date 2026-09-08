@@ -791,19 +791,21 @@ with st.sidebar:
     st.markdown("<div style='font-weight:900; color:#1A237E; margin-bottom:5px;'>👤 신청인 기본 정보</div>", unsafe_allow_html=True)
     u_name = st.text_input("이름", value="", placeholder="홍길동", key="u_n")
     
-    # 🚨 [원천적인 수술 포인트] KeyError의 뿌리 차단! 안전한 .get() 함수를 사용하여 변수 부재 시 시스템 다운 원천 방지
     def auto_flip_gender():
         current_u_g = st.session_state.get('u_g', '남성')
         st.session_state['p_g'] = "여성" if current_u_g == "남성" else "남성"
 
-    # 앱 최초 실행 시 에러 방지용 (기본값 세팅)
     if 'p_g' not in st.session_state:
         st.session_state['p_g'] = "여성"
         
     u_gender = st.selectbox("성별", ["남성", "여성"], index=0, key="u_g", on_change=auto_flip_gender)
+    
+    # 🚨 [수술 완료] 날아갔던 혼인여부와 달력 선택 박스를 50.5 원본 그대로 살려냈습니다!
+    u_marital = st.selectbox("혼인여부", ["선택", "미혼", "기혼", "돌싱"], index=1, key="u_m_stat")
     u_cal = st.selectbox("달력", ["양력", "음력(평달)", "음력(윤달)"], index=0, key="u_c")
     
     col1, col2, col3 = st.columns(3)
+
     u_y = col1.number_input("년", 1900, 2050, value=st.session_state.get('s_y', 2010), key="s_y")
     u_m = col2.number_input("월", 1, 12, value=st.session_state.get('s_m', 1), key="s_m")
     u_d = col3.number_input("일", 1, 31, value=st.session_state.get('s_d', 1), key="s_d")
