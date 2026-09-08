@@ -1706,15 +1706,20 @@ if st.session_state.get('need_calc', False):
                     
                     # 🚨 여기서부터 아래로 쭈욱 덮어써 주십시오! (들여쓰기 20칸)
                     try:
-                    res = model.generate_content(prompt)
-                    ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
-                    
-                    # 🚨 [수술 적용] 혹시라도 AI가 말귀를 못 알아듣고 ** 를 썼다면 파이썬이 강제로 <b> 태그로 싹 다 바꿔버립니다!
-                    ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
+                        res = model.generate_content(prompt)
+                        ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                         
-                        # 2. 골든 텍스트 치환
+                        # 🚨 [수술 적용] 혹시라도 AI가 말귀를 못 알아듣고 ** 를 썼다면 <b> 태그로 싹 다 바꿔버립니다!
+                        import re
+                        ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
+
+                        # 🚨 [수술 2]: AI가 골든텍스트와 소스 코드를 화면에 그대로 토해내는 오지랖 완벽 절단!
                         if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
                             ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
+                        
+                        # 2. 표 HTML 정리
+                        un_html_clean = un_html.replace("\n", " ").replace("\r", "")
+                        se_html_clean = se_html.replace("\n", " ").replace("\r", "")
                         
                         # 3. 표 HTML 정리
                         un_html_clean = un_html.replace("\n", " ").replace("\r", "")
