@@ -1735,8 +1735,10 @@ if st.session_state.get('need_calc', False):
                         f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
                         f"3. 표(Table) 생성 절대 금지.\n\n"
                         f"<h3 style='color:#000000; font-size: 24px; font-weight: 900;'>1. 이번 주간 및 오늘의 운 분석</h3>\n"
+                        f"[DAEWUN_TABLE_HERE]\n"
                         f"[SEWUN_TABLE_HERE]\n"
-                        f"[WOLUN_TABLE_HERE]\n"
+                        f"[WOLWUN_TABLE_HERE]\n"
+                        f"[WEEKLY_CALENDAR_HERE]\n"
                         f"<div class='content-box-loose'>\n"
                         f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 주간 거시 흐름과 체용의 결합</span>\n"
                         f"[※ AI 통변 지시: 원국과 대운/세운의 거대한 기류(체) 속에서, 이번 한 주 동안 전개되는 기운(용)이 어떤 의미를 가지는지 '폭포수 흐름'으로 연결하여 명확히 서술하십시오.]\n"
@@ -1763,29 +1765,59 @@ if st.session_state.get('need_calc', False):
                         f"</div>\n"
                     )
                 try:
+                    # 🚨 [수술 1] 주간 달력표(HTML) 동적 생성 로직 추가
+                    klc = KoreanLunarCalendar()
+                    start_of_week = t_date - dt_mod.timedelta(days=t_date.weekday())
+                    weekly_html = f"<div style='margin-bottom: 20px;'><div style='font-size: 16px; font-weight: 900; color: #000000; margin-bottom: 8px;'>📅 주간 일진표 (타겟일: {t_date.strftime('%Y-%m-%d')})</div>"
+                    weekly_html += "<table style='width:100%; border-collapse: collapse; text-align: center; border: 2px solid #000000;'>"
+                    weekly_html += "<tr style='background-color: #000000; color: #FFFFFF;'>"
+                    for d in ["월", "화", "수", "목", "금", "토", "일"]:
+                        weekly_html += f"<th style='padding: 8px; border: 1px solid #ccc; font-size: 14px;'>{d}</th>"
+                    weekly_html += "</tr><tr>"
+                    
+                    for i in range(7):
+                        cur_d = start_of_week + dt_mod.timedelta(days=i)
+                        klc.setSolarDate(cur_d.year, cur_d.month, cur_d.day)
+                        gapja = klc.getChineseGapJaString()
+                        iljin = gapja.split()[2] if len(gapja.split()) >= 3 else ""
+                        
+                        bg_color = "#FFF9C4" if cur_d == t_date else "transparent"
+                        border_style = "2px solid #D50000" if cur_d == t_date else "1px solid #ccc"
+                        
+                        weekly_html += f"<td style='padding: 8px; border: {border_style}; background-color: {bg_color};'>"
+                        weekly_html += f"<div style='font-size: 12px; color: #444;'>{cur_d.month}/{cur_d.day}</div>"
+                        weekly_html += f"<div style='font-size: 16px; font-weight: 900; color: #000000; margin-top:2px;'>{iljin}</div>"
+                        if cur_d == t_date:
+                            weekly_html += f"<div style='font-size: 10px; font-weight: 900; color: #D50000; margin-top: 2px;'>Target</div>"
+                        weekly_html += "</td>"
+                    weekly_html += "</tr></table></div>"
+
+                    # AI API 호출
                     res = model.generate_content(prompt)
                     ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                     
-                    # 🚨 [옥의 티 수술 1] 마크다운 볼드체(**)를 HTML <b> 태그로 일괄 변환
+                    # 마크다운 볼드체(**)를 HTML <b> 태그로 일괄 변환
                     ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
                     
-                    # 🚨 [수술 2]: AI가 골든텍스트와 소스 코드를 화면에 그대로 토해내는 오지랖 완벽 절단!
                     if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
                         ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
 
                     un_html_clean = un_html.replace("\n", " ").replace("\r", "")
                     se_html_clean = se_html.replace("\n", " ").replace("\r", "")
                     wol_html_clean = wol_html.replace("\n", " ").replace("\r", "")
+                    weekly_html_clean = weekly_html.replace("\n", " ").replace("\r", "")
 
                     daeoun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{un_html_clean}</div>"
                     sewun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{se_html_clean}</div>"
                     wolwun_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{wol_html_clean}</div>"
+                    weekly_target = f"<div style='margin: 15px 0; overflow-x: auto;'>{weekly_html_clean}</div>"
 
+                    # 🚨 [수술 2] 프롬프트에 추가된 마커들을 HTML 표로 모두 치환 (오타 교정 완료)
                     clean_ai_text, count_d = re.subn(r'[\#\*\_\s]*\[\s*DAEWUN_TABLE_HERE\s*\][\#\*\_\s]*', daeoun_target, ai_text, flags=re.IGNORECASE)
                     clean_ai_text, count_s = re.subn(r'[\#\*\_\s]*\[\s*SEWUN_TABLE_HERE\s*\][\#\*\_\s]*', sewun_target, clean_ai_text, flags=re.IGNORECASE)
                     clean_ai_text, count_w = re.subn(r'[\#\*\_\s]*\[\s*WOLWUN_TABLE_HERE\s*\][\#\*\_\s]*', wolwun_target, clean_ai_text, flags=re.IGNORECASE)
+                    clean_ai_text, count_wk = re.subn(r'[\#\*\_\s]*\[\s*WEEKLY_CALENDAR_HERE\s*\][\#\*\_\s]*', weekly_target, clean_ai_text, flags=re.IGNORECASE)
 
-                    # 🚨 [수술 3]: 표가 안 나오고 마크다운 코드가 출력될 경우를 대비한 46.7버전의 강력한 예외 처리 복구!
                     if u_product == "1-1. 사주팔자와 운세풀이":
                         if count_d == 0 and "table" not in clean_ai_text.lower():
                             clean_ai_text = clean_ai_text + f"<br><br><span style='color:red; font-weight:bold;'>⚠️ (AI 표 마커 누락으로 비상 출력된 운의 흐름표)</span><br>{un_html_clean}{se_html_clean}{wol_html_clean}"
@@ -1793,6 +1825,11 @@ if st.session_state.get('need_calc', False):
                     bordered_closing_html = f"<hr style='border: 0; border-top: 2px dashed #1A237E; margin: 35px 0 20px 0;'>{closing_html}"
 
                     full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{clean_ai_text}<br><br>{bordered_closing_html}</div>"
+
+                    # 🚨 [수술 3] 1-4 전용: 표지 타이틀 교체 및 박스 상하 여백 대폭 슬림화
+                    report_1_full_html = report_1_full_html.replace("초연 전통 명리사주 풀이", "특정 주간 및 특정일운 상세분석")
+                    report_1_full_html = report_1_full_html.replace("min-height:250mm;", "min-height:120mm;").replace("padding:40px 0;", "padding:10px 0;")
+                    report_1_full_html = report_1_full_html.replace("padding: 42px 24px;", "padding: 20px 24px;").replace("margin-bottom: 28px;", "margin-bottom: 15px;")
 
                     report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
                     
