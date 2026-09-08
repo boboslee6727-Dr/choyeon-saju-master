@@ -2982,6 +2982,10 @@ if st.session_state.get('need_calc', False):
                         # 🚨 1. 표지 강제 슬림화 및 타이틀을 선택상품명으로 동적 연계
                         dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
                         
+                        # 🚨 [수술 포인트] 기호를 ♂️ / ♀️ 로 변경하고 직관적인 이름(m_icon, f_icon)으로 세팅합니다.
+                        m_icon = "♂️"
+                        f_icon = "♀️"
+                        
                         cover_html = (
                             f"<div class='report-page cover-page' style='padding:20px 0; margin:0 auto; width:100%; height:auto; min-height:120mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
                             f"    <div style='border: 4px solid #000000; padding: 20px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
@@ -2992,13 +2996,13 @@ if st.session_state.get('need_calc', False):
                             f"            </div>\n"
                             f"        </div>\n"
                             f"        <div style='background: #FAFAFA; border: 1px solid #000000; padding: 18px 20px; border-radius: 14px; margin-bottom: 15px;'>\n"
-                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>{u_icon} {m_name} 님 ({m_age}세)</h2>\n"
+                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>{m_icon} {m_name} 님 ({m_age}세)</h2>\n"
                             f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.6;'>\n"
                             f"                <p style='margin: 0; color: #000000;'><strong style='font-weight: 800 !important;'>[양력] {m_sol} | [음력] {m_lun}</strong></p>\n"
                             f"            </div>\n"
                             f"        </div>\n"
                             f"        <div style='background: #FAFAFA; border: 1px solid #000000; padding: 18px 20px; border-radius: 14px; margin-bottom: 24px;'>\n"
-                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>{p_icon} {f_name} 님 ({f_age}세)</h2>\n"
+                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>{f_icon} {f_name} 님 ({f_age}세)</h2>\n"
                             f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.6;'>\n"
                             f"                <p style='margin: 0; color: #000000;'><strong style='font-weight: 800 !important;'>[양력] {f_sol} | [음력] {f_lun}</strong></p>\n"
                             f"            </div>\n"
