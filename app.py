@@ -791,15 +791,16 @@ with st.sidebar:
     st.markdown("<div style='font-weight:900; color:#1A237E; margin-bottom:5px;'>👤 신청인 기본 정보</div>", unsafe_allow_html=True)
     u_name = st.text_input("이름", value="", placeholder="홍길동", key="u_n")
     
+    # 🚨 [원천적인 수술 포인트] KeyError의 뿌리 차단! 안전한 .get() 함수를 사용하여 변수 부재 시 시스템 다운 원천 방지
     def auto_flip_gender():
-        st.session_state['p_g'] = "여성" if st.session_state['u_g'] == "남성" else "남성"
+        current_u_g = st.session_state.get('u_g', '남성')
+        st.session_state['p_g'] = "여성" if current_u_g == "남성" else "남성"
 
+    # 앱 최초 실행 시 에러 방지용 (기본값 세팅)
     if 'p_g' not in st.session_state:
         st.session_state['p_g'] = "여성"
         
     u_gender = st.selectbox("성별", ["남성", "여성"], index=0, key="u_g", on_change=auto_flip_gender)
-    
-    u_marital = st.selectbox("혼인여부", ["선택", "미혼", "기혼", "돌싱"], index=1, key="u_m_stat")
     u_cal = st.selectbox("달력", ["양력", "음력(평달)", "음력(윤달)"], index=0, key="u_c")
     
     col1, col2, col3 = st.columns(3)
