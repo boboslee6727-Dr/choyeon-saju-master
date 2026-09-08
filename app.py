@@ -1853,11 +1853,13 @@ if st.session_state.get('need_calc', False):
 
                         full_content_clean = f"<div style='font-family: \"Nanum Myeongjo\", \"바탕체\", Batang, serif; font-size: 15px; line-height: 1.8; color: #000000;'>{clean_ai_text}<br><br>{bordered_closing_html}</div>"
 
-                        # 🚨 1-4 전용: 표지 타이틀 교체 (정규식을 사용하여 기존 제목 무시하고 강제 덮어쓰기) 및 여백 슬림화
+                        # 🚨 1-4 전용: 표지 타이틀을 선택상품명으로 동적 연계 및 박스 상하 여백 대폭 슬림화
                         dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
-                        report_1_full_html = re.sub(r'(<h1[^>]*>).*?(<\/h1>)', r'\g<1>' + dynamic_title + r'\2', report_1_full_html, count=1)
+                        report_1_full_html = report_1_full_html.replace("초연 전통 명리사주 풀이", dynamic_title)
+                        
                         report_1_full_html = report_1_full_html.replace("min-height:250mm;", "min-height:120mm;").replace("padding:40px 0;", "padding:10px 0;")
                         report_1_full_html = report_1_full_html.replace("padding: 42px 24px;", "padding: 20px 24px;").replace("margin-bottom: 28px;", "margin-bottom: 15px;")
+
                         report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
                         
                         st.session_state['saved_report_html'] = report_1_full_html
