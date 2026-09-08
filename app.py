@@ -626,7 +626,12 @@ with st.sidebar:
     u_product = "1-1. 사주팔자 및 대운 분석"
 
     if main_category == "1. 개인 사주팔자 풀이 (종합)":
-        u_product = st.radio("상세 분석 항목:", ["1-1. 사주팔자와 운세풀이", "1-2. 올해 및 특정연도 운세 상세분석", "1-3. 이번달 및 특정월 운세 상세분석", "1-4. 특정 주간 및 특정일운 상세분석"], key="sub_cat_1")
+        u_product = st.radio("상세 분석 항목:", [
+            "1-1. 사주팔자와 운세풀이", 
+            "1-2. 올해 운세 상세분석", 
+            "1-3. 이번달 운세 상세분석", 
+            "1-4. 주간 및 일운 상세분석"
+        ], key="sub_cat_1")
         
         if u_product == "1-2. 올해 및 특정연도 운세 상세분석":
             curr_yr_val = dt_mod.datetime.now(pytz.timezone('Asia/Seoul')).year
@@ -820,7 +825,7 @@ with st.sidebar:
             is_vip_package = st.checkbox("👑 VIP 패키지 모드", value=st.session_state.get("is_vip_package_val", False), key="is_vip_package_val", on_change=stop_ai)
 
         # 🚨 [수술 1]: 1-1번에서는 일운 스위치 철거! 1-4번에서만 가동되도록 분리!
-        if u_product == "1-4. 특정 주간 및 특정일운 상세분석":
+        if u_product == "1-4. 주간 및 일운 상세분석":
             run_iljin_calc = st.checkbox("🔮 일운 운세 분석 가동", value=False)
             if run_iljin_calc:
                 if 'target_date' not in st.session_state: st.session_state['target_date'] = dt_mod.datetime.now(pytz.timezone('Asia/Seoul')).date()
@@ -1108,39 +1113,39 @@ if st.session_state.get('need_calc', False):
             st.session_state['saved_report_cover'] = cover_html
 
             if u_product == "1-1. 사주팔자와 운세풀이":
-                report_title = "🎯 사주팔자와 운세풀이"
-            elif u_product == "1-2. 올해 및 특정연도 운세 상세분석":
-                report_title = "🎯 올해 및 특정연도 운세 상세분석"
-            elif u_product == "1-3. 이번달 및 특정월 운세 상세분석":
-                report_title = "🎯 이번달 및 특정월 운세 상세분석"
-            elif u_product == "1-4. 특정 주간 및 특정일운 상세분석":
-                report_title = "🎯 특정 주간 및 특정일운 상세분석"
+                report_title = "사주팔자와 운세풀이"
+            elif u_product == "1-2. 올해 운세 상세분석":
+                report_title = "올해 운세 상세분석"
+            elif u_product == "1-3. 이번달 운세 상세분석":
+                report_title = "이번달 운세 상세분석"
+            elif u_product == "1-4. 주간 및 일운 상세분석":
+                report_title = "주간 및 일운 상세분석"
             elif u_product == "2-1. 재물운 특화 분석":
-                report_title = "🎯 재물운 특화 정밀 분석"
+                report_title = "재물운 특화 분석"
             elif u_product == "2-2. 연애/결혼운 특화 분석":
-                report_title = "🎯 연애/결혼운 특화 정밀 분석"
+                report_title = "연애/결혼운 특화 분석"
             elif u_product == "2-3. 진학/입시운 특화 분석":
-                report_title = "🎯 진학/입시운 특화 정밀 분석"
-            elif u_product == "2-4. 직업/커리어운 특화 분석":
-                report_title = "🎯 직업/커리어운 특화 정밀 분석"
+                report_title = "진학/입시운 특화 분석"
+            elif u_product == "2-4. 직업/경력운 특화 분석":
+                report_title = "직업/커리어운 특화 분석"
             elif u_product == "2-5. 건강운 특화 분석":
-                report_title = "🎯 건강운 특화 정밀 분석"
+                report_title = "건강운 특화 분석"
             elif u_product == "2-6. 이사 택일":
-                report_title = "🎯 이사 택일 추천 리포트"
+                report_title = "이사 택일 추천"
             elif u_product == "2-7. 개업 택일":
-                report_title = "🎯 개업 택일 추천 리포트"
+                report_title = "개업 택일 추천"
             elif u_product == "3-1. 연애/결혼운 (궁합) 풀이":
-                report_title = "🎯 커플 연애/결혼운 정밀 궁합 분석"
+                report_title = "커플 연애/결혼운 (궁합) 풀이"
             elif u_product == "3-2. 결혼 택일":
-                report_title = "🎯 최고의 결혼 길일 추천 리포트"
+                report_title = "결혼 택일 추천"
             elif u_product == "3-3. 출산 택일":
-                report_title = "🎯 새 생명 마중 출산 길일 추천 리포트"
+                report_title = "출산 택일 추천"
             elif u_product == "4-1. 타 감명서 비교 (사주)":
-                report_title = "🎯 사주 감명서 학술 검증 및 1:1 대조 리포트"
+                report_title = "타 감명서 비교 (사주)"
             elif u_product == "4-2. 타 감명서 비교 (궁합)":
-                report_title = "🎯 궁합 감명서 학술 검증 및 1:1 대조 리포트"
+                report_title = "타 감명서 비교 (궁합)"
             else:
-                report_title = "🎯 사주팔자 정밀 분석"
+                report_title = "사주팔자 정밀 분석"
 
             ji_rel_rows = ""
             for l_idx, r_idx in enumerate([1, 2, 0, 3]):
@@ -1632,7 +1637,7 @@ if st.session_state.get('need_calc', False):
                         f"</div>\n"
                     )
 
-                elif u_product == "1-2. 올해 및 특정연도 운세 상세분석":
+                elif u_product == "1-2. 올해 운세 상세분석":
                     target_year_val = st.session_state.get('target_year_input', curr_y)
                     prompt = (
                         f"{db_header}\n"
@@ -1674,7 +1679,7 @@ if st.session_state.get('need_calc', False):
                         f"</div>\n"
                     )
 
-                elif u_product == "1-3. 이번달 및 특정월 운세 상세분석":
+                elif u_product == "1-3. 이번달 운세 상세분석":
                     prompt = (
                         f"{db_header}\n"
                         f"{ilju_master_prompt_context}\n\n"
@@ -1715,7 +1720,7 @@ if st.session_state.get('need_calc', False):
                         f"</div>\n"
                     )
 
-                elif u_product == "1-4. 특정 주간 및 특정일운 상세분석":
+                elif u_product == "1-4. 주간 및 일운 상세분석":
                     t_date = st.session_state.get('target_date', dt_mod.date.today())
                     
                     prompt = (
@@ -2054,7 +2059,7 @@ if st.session_state.get('need_calc', False):
                         f"</div>\n"
                     )
 
-                elif u_product == "2-4. 직업/커리어운 특화 분석":
+                elif u_product == "2-4. 직업/경력운 특화 분석":
                     prompt = (
                         f"{공통_시스템_헤더}\n"
                         f"[SYSTEM ROLE: 초연시공명리 최고위 커리어 & 진로 전략가]\n"
