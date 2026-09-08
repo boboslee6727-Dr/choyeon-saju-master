@@ -1147,16 +1147,15 @@ if st.session_state.get('need_calc', False):
                 f"일-시지:{get_ji_rel_set(db, hb)}, 월-년지:{get_ji_rel_set(mb, yb)}"
             )
 
-            # 🚨 [수술 완료] 여명 붉은색 멸종! {p_color}를 날려버리고 남명과 동일한 진한 남색(#1A237E)으로 강제 고정
-            safe_color = "#1A237E"
+            # 🚨 [수술 1] 선택한 상품명(u_product)에서 앞의 숫자(예: '1-1. ', '2-1. ')를 떼어내고 순수 타이틀만 추출합니다.
+            dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
 
-            # 🚨 [표지 복구] 1인용 개인 사주 표지도 50.5 오리지널의 웅장한 디자인(100vh, 남색 테두리)으로 100% 복구!
-            # 🚨 [표지 복구] A4 용지에 쏙 들어가는 50.5 원본의 깔끔한 규격(블랙 테두리)으로 복구!
+            # 🚨 [수술 2] 1인용 표지도 높이를 260mm로 고정하여 A4 정중앙에 배치하고, 밑바닥 실선(border)을 완벽히 제거합니다!
             cover_html = (
-                f"<div class='report-page cover-page' style='padding:20px 0; margin:0 auto; width:100%; height:auto; min-height:120mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
-                f"    <div style='border: 4px solid #000000; padding: 20px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
+                f"<div class='report-page cover-page' style='padding:0; margin:0 auto; width:100%; height:260mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact; border:none !important; box-shadow:none !important;'>\n"
+                f"    <div style='border: 4px solid #000000; padding: 30px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
                 f"        <div style='border-bottom: 4px double #000000; padding-bottom: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box;'>\n"
-                f"            <h1 class='title-gothic' style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 30px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #000000 !important; letter-spacing: -1px !important; white-space: nowrap !important; line-height: 1.4 !important; text-align: center; border-bottom: none !important;'>초연&nbsp;전통&nbsp;명리사주&nbsp;풀이</h1>\n"
+                f"            <h1 class='title-gothic' style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 30px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #000000 !important; letter-spacing: -1px !important; white-space: nowrap !important; line-height: 1.4 !important; text-align: center; border-bottom: none !important;'>{dynamic_title}</h1>\n"
                 f"            <div style='text-align: right; margin-top: 8px;'>\n"
                 f"                <span class='ver-gothic' style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; font-weight: 700; color: #000000; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                 f"            </div>\n"
@@ -3056,10 +3055,10 @@ if st.session_state.get('need_calc', False):
                         
                         # 🚨 [표지 복구] 궁합용 표지도 A4 용지에 맞게 50.5 오리지널로 복구!
                         cover_html = (
-                            f"<div class='report-page cover-page' style='padding:20px 0; margin:0 auto; width:100%; height:auto; min-height:120mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
-                            f"    <div style='border: 4px solid #000000; padding: 20px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
+                            f"<div class='report-page cover-page' style='padding:0; margin:0 auto; width:100%; height:260mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact; border:none !important; box-shadow:none !important;'>\n"
+                            f"    <div style='border: 4px solid #000000; padding: 30px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
                             f"        <div style='border-bottom: 4px double #000000; padding-bottom: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box;'>\n"
-                            f"            <h1 style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 30px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #000000 !important; letter-spacing: -1px !important; white-space: nowrap !important; line-height: 1.4 !important; text-align: center; border-bottom: none !important;'>초연&nbsp;전통&nbsp;명리궁합&nbsp;풀이</h1>\n"
+                            f"            <h1 style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 30px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #000000 !important; letter-spacing: -1px !important; white-space: nowrap !important; line-height: 1.4 !important; text-align: center; border-bottom: none !important;'>{dynamic_title}</h1>\n"
                             f"            <div style='text-align: right; margin-top: 8px;'>\n"
                             f"                <span style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; font-weight: 700; color: #000000; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                             f"            </div>\n"
