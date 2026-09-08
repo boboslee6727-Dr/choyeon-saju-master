@@ -882,7 +882,11 @@ with st.sidebar:
                         clean_rt = p_rt.replace("시", "").strip()
                         if clean_rt:
                             rt_h = K2H_JI.get(clean_rt[-1], clean_rt[-1])
-                            p_rt_val = time_map_rev.get(rt_h, "시간 모름")
+                            # 🚨 [수술 포인트] 입력된 글자에 '야자'가 포함되어 있으면 야자시로 완벽하게 맵핑!
+                            if rt_h == '子' and "야자" in p_rt:
+                                p_rt_val = "23:30 ~ 00:29 (夜子)시"
+                            else:
+                                p_rt_val = time_map_rev.get(rt_h, "시간 모름")
 
                     matched_list = []
                     for y in range(2050, 1800, -1):
