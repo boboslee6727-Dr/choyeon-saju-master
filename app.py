@@ -1812,17 +1812,17 @@ if st.session_state.get('need_calc', False):
                             
                             cell_html = (
                                 f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'>"
-                                f"<div style='background-color:{head_bg}; color:#FFFFFF; font-weight:900; padding:8px 0; border-bottom:1px solid #ccc;'>"
-                                f"    <div style='font-size:16px; margin-bottom:4px;'>{day_str}</div>"
-                                f"    <div style='font-size:14px;'>{date_str}</div>"
-                                f"</div>"
-                                f"<div style='padding:2px; font-size:11px; color:#000000;'>{ss_gan}</div>"
-                                f"<div class='{gan_color_cls}' style='font-size:16px; font-weight:900;'>{c_hanja}</div>"
-                                f"<div class='{ji_color_cls}' style='font-size:16px; font-weight:900;'>{j_hanja}</div>"
-                                f"<div style='padding:2px; font-size:11px; color:#000000;'>{ss_ji}</div>"
-                                f"<div style='font-size:10px; border-top:1px solid #eee; color:#0D47A1;'>{unsung}</div>"
-                                f"<div style='font-size:10px; color:#C62828; border-top:1px solid #eee;'>{y_shinsal}</div>"
-                                f"<div style='font-size:10px; color:#1565C0; border-top:1px solid #eee;'>{d_shinsal}</div>"
+                                f"    <div style='background-color:{head_bg}; color:#FFFFFF; font-weight:900;'>"
+                                f"        <div style='padding:6px 0; font-size:16px; border-bottom:1px solid rgba(255,255,255,0.4);'>{day_str}</div>"
+                                f"        <div style='padding:4px 0; font-size:13px; border-bottom:1px solid #ccc;'>{date_str}</div>"
+                                f"    </div>"
+                                f"    <div style='padding:2px; font-size:11px; color:#000000;'>{ss_gan}</div>"
+                                f"    <div class='{gan_color_cls}' style='font-size:16px; font-weight:900;'>{c_hanja}</div>"
+                                f"    <div class='{ji_color_cls}' style='font-size:16px; font-weight:900;'>{j_hanja}</div>"
+                                f"    <div style='padding:2px; font-size:11px; color:#000000;'>{ss_ji}</div>"
+                                f"    <div style='font-size:10px; border-top:1px solid #eee; color:#0D47A1;'>{unsung}</div>"
+                                f"    <div style='font-size:10px; color:#C62828; border-top:1px solid #eee;'>{y_shinsal}</div>"
+                                f"    <div style='font-size:10px; color:#1565C0; border-top:1px solid #eee;'>{d_shinsal}</div>"
                                 f"</div>"
                             )
                             weekly_html += cell_html
