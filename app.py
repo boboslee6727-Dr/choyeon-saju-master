@@ -1149,24 +1149,25 @@ if st.session_state.get('need_calc', False):
             safe_color = "#1A237E"
 
             # 🚨 [표지 복구] 1인용 개인 사주 표지도 50.5 오리지널의 웅장한 디자인(100vh, 남색 테두리)으로 100% 복구!
+            # 🚨 [표지 복구] A4 용지에 쏙 들어가는 50.5 원본의 깔끔한 규격(블랙 테두리)으로 복구!
             cover_html = (
-                f"<div class='report-page cover-page' style='margin:0 auto; width:100%; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; -webkit-print-color-adjust: exact; box-sizing: border-box;'>\n"
-                f"    <div style='border: 4px solid #1A237E; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 90%; max-width: 700px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto; box-sizing: border-box;'>\n"
-                f"        <div style='border-bottom:4px double #1A237E; padding-bottom:20px; margin-bottom:40px;'>\n"
-                f"            <h1 class='title-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 26px !important; font-weight: 900; margin:0 !important; white-space: nowrap !important; letter-spacing: -2px !important;'>초연&nbsp;전통&nbsp;명리사주&nbsp;풀이</h1>\n"
-                f"            <div style='text-align: right; margin-top: 10px;'>\n"
-                f"                <span class='ver-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 14px; font-weight: 700; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
+                f"<div class='report-page cover-page' style='padding:20px 0; margin:0 auto; width:100%; height:auto; min-height:120mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
+                f"    <div style='border: 4px solid #000000; padding: 20px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
+                f"        <div style='border-bottom: 4px double #000000; padding-bottom: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box;'>\n"
+                f"            <h1 class='title-gothic' style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 30px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #000000 !important; letter-spacing: -1px !important; white-space: nowrap !important; line-height: 1.4 !important; text-align: center; border-bottom: none !important;'>초연&nbsp;전통&nbsp;명리사주&nbsp;풀이</h1>\n"
+                f"            <div style='text-align: right; margin-top: 8px;'>\n"
+                f"                <span class='ver-gothic' style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; font-weight: 700; color: #000000; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                 f"            </div>\n"
                 f"        </div>\n"
-                f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 30px 20px; border-radius: 15px;'>\n"
-                f"            <h2 style='font-family: \"Nanum Gothic\", sans-serif; font-size: 24px; font-weight: 800; color: {safe_color}; margin-bottom: 20px;'>{p_icon} 신청인 : {u_name} 님</h2>\n"
-                f"            <div style='font-family: \"Nanum Gothic\", sans-serif; font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
-                f"                <p style='margin: 0; white-space: nowrap;'>[양력] {sol_str} | [음력] {lun_str}</p>\n"
-                f"                <p style='margin: 5px 0 0 0; color: {safe_color}; white-space: nowrap;'>{time_str}</p>\n"
+                f"        <div style='background: #FAFAFA; border: 1px solid #000000; padding: 18px 20px; border-radius: 14px; margin-bottom: 15px;'>\n"
+                f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>{p_icon} 신청인 : {u_name} 님</h2>\n"
+                f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.6;'>\n"
+                f"                <p style='margin: 0; color: #000000;'><strong style='font-weight: 800 !important;'>[양력] {sol_str} | [음력] {lun_str}</strong></p>\n"
+                f"                <p style='margin: 5px 0 0 0; color: #000000; white-space: nowrap;'>{time_str}</p>\n"
                 f"            </div>\n"
                 f"        </div>\n"
-                f"        <p style='font-family: \"Nanum Gothic\", sans-serif; font-size: 18px; margin-top: 50px; font-weight: 800;'>{today_str}</p>\n"
-                f"        <p style='font-family: \"Nanum Gothic\", sans-serif; font-size: 22px; font-weight: 800; color: #1A237E; margin-top: 20px;'>초연 전통명리 연구소</p>\n"
+                f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 17px; margin-top: 25px; margin-bottom: 0; font-weight: 800; color: #000000; letter-spacing: 0.5px;'>{today_str}</p>\n"
+                f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 24px; font-weight: 900; color: #000000; margin-top: 8px; margin-bottom: 0; letter-spacing: 1px;'>초연 전통명리 연구소</p>\n"
                 f"    </div>\n"
                 f"</div>"
             )
@@ -1332,7 +1333,7 @@ if st.session_state.get('need_calc', False):
                 is_active = val <= u_age < val+10
                 bg_col = "#FFF9C4" if is_active else "transparent"
                 b_left = "1px solid #ccc" if i != 9 else "none"
-                un_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,c)}</div><div class='color-{get_color(c)}' style='font-size:16px; font-weight:900;'>{c}</div><div class='color-{get_color(j)}' style='font-size:16px; font-weight:900;'>{j}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,j)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,j)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px; line-height:1.2;'>년:{get_12_shinsal(yb, j)}<br><span style='color:#1565C0;'>일:{get_12_shinsal(db, j)}</span></div></div>"
+                un_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,c)}</div><div class='color-{get_color(c)}' style='font-size:16px; font-weight:900;'>{c}</div><div class='color-{get_color(j)}' style='font-size:16px; font-weight:900;'>{j}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,j)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,j)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(yb, j)}</div><div style='font-size:11px; color:#1565C0; border-top:1px dashed #eee; padding-top:2px;'>{get_12_shinsal(db, j)}</div></div>"
             un_html += "</div>"
 
             cur_dw_idx = max(0, (u_age - calc_d) // 10)
@@ -1357,7 +1358,7 @@ if st.session_state.get('need_calc', False):
                 is_cur_yr = (ty == curr_y)
                 bg_col = "#E1F5FE" if is_cur_yr else "transparent"
                 b_left = "1px solid #ccc" if i != 9 else "none"
-                se_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; line-height:1.2; border-bottom:1px solid #ccc;'>{ty}년<br>({tage}세)</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px; line-height:1.2;'>년:{get_12_shinsal(yb, tj)}<br><span style='color:#1565C0;'>일:{get_12_shinsal(db, tj)}</span></div></div>"
+                se_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; line-height:1.2; border-bottom:1px solid #ccc;'>{ty}년<br>({tage}세)</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(yb, tj)}</div><div style='font-size:11px; color:#1565C0; border-top:1px dashed #eee; padding-top:2px;'>{get_12_shinsal(db, tj)}</div></div>"
             se_html += "</div>"
 
             wol_gans = ["己", "庚", "辛", "壬", "癸", "甲", "乙", "丙", "丁", "戊", "己", "庚"]
@@ -1371,7 +1372,7 @@ if st.session_state.get('need_calc', False):
                 is_cur_m = (tm == curr_m)
                 bg_col = "#E8F5E9" if is_cur_m else "transparent"
                 b_left = "1px solid #ccc" if i != 11 else "none"
-                wol_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{tm}월</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px; line-height:1.2;'>년:{get_12_shinsal(yb, tj)}<br><span style='color:#1565C0;'>일:{get_12_shinsal(db, tj)}</span></div></div>"
+                wol_html += f"<div style='flex:1; border-left:{b_left}; text-align:center; padding-bottom:3px; background-color:{bg_col};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:12px; border-bottom:1px solid #ccc;'>{tm}월</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:16px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:16px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:12px;'>{get_ss(ds,tj)}</div><div style='font-size:11px; border-top:1px solid #ccc;'>{get_unsung(ds,tj)}</div><div style='font-size:11px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(yb, tj)}</div><div style='font-size:11px; color:#1565C0; border-top:1px dashed #eee; padding-top:2px;'>{get_12_shinsal(db, tj)}</div></div>"
             wol_html += "</div>"
 
             past_daewun_list = []
@@ -2792,26 +2793,25 @@ if st.session_state.get('need_calc', False):
                         # 🚨 [수술 2] 중복 코드 청소: 최상단에서 이미 완벽하게 세팅했으므로 중복 선언된 변수들을 깔끔하게 삭제합니다!
                         guiin_map = {'甲':'丑, 未','乙':'子, 申','丙':'酉, 亥','丁':'酉, 亥','戊':'丑, 未','己':'子, 申','庚':'丑, 해','辛':'午寅','壬':'卯巳','癸':'卯, 巳'}
                         
-                        m_tbl = build_bazi_table("♂️", m_name, "남명", m_marital, m_age, m_sol, m_lun, m_time, m_gans, m_jjis, m_ds, m_yb, m_cnt, guiin_map.get(m_ds, '-'), calculate_gongmang(m_ys, m_yb), calculate_gongmang(m_ds, m_db), get_samjae(m_yb, curr_j), m_calc_d, "#000000")
-                        f_tbl = build_bazi_table("♀️", f_name, "여명", f_marital, f_age, f_sol, f_lun, f_time, f_gans, f_jjis, f_ds, f_yb, f_cnt, guiin_map.get(f_ds, '-'), calculate_gongmang(f_ys, f_yb), calculate_gongmang(f_ds, f_db), get_samjae(f_yb, curr_j), f_calc_d, "#000000")
-                        
-                        # 🚨 [수술 4] 일지 12신살을 구하기 위해 함수 인자에 t_db를 추가하고 HTML을 개조합니다!
+                        m_tbl = build_bazi_table("♂️", m_name, "남명", m_marital, m_age, m_sol, m_lun, m_time, m_gans, m_jjis, m_ds, m_yb, m_cnt, guiin_map.get(m_ds, '-'), calculate_gongmang(m_ys, m_yb), calculate_gongmang(m_ds, m_db), get_samjae(m_yb, curr_j), m_calc_d, "#1A237E")
+                        f_tbl = build_bazi_table("♀️", f_name, "여명", f_marital, f_age, f_sol, f_lun, f_time, f_gans, f_jjis, f_ds, f_yb, f_cnt, guiin_map.get(f_ds, '-'), calculate_gongmang(f_ys, f_yb), calculate_gongmang(f_ds, f_db), get_samjae(f_yb, curr_j), f_calc_d, "#1A237E")                        
+                        # 🚨 [수술 완료] 궁합 대운표도 년지/일지 12신살 2줄로 완벽 분리 적용!
                         def build_daewun_html(name, t_ds, t_db, t_ms, t_mb, t_yb, t_calc_d, t_order, age, color):
                             d_str = "순행" if t_order == 1 else "역행"
                             html = f"<div style='margin-bottom:10px;'><div style='font-size:15px; font-weight:900; color:{color}; margin-bottom:5px;'>[ {name}님 대운 흐름표 (대운수: {t_calc_d}), {d_str} ]</div>"
-                            html += f"<div style='display:flex; flex-direction:row-reverse; width:100%; border:2px solid #3E2723; background:white;'>"
+                            html += f"<div style='display:flex; flex-direction:row-reverse; width:100%; border:2px solid #000000; background:white;'>"
                             for i in range(10):
                                 val = i*10 + t_calc_d
                                 tc = GAN[(GAN.index(t_ms)+(i+1)*t_order)%10]
                                 tj = JI[(JI.index(t_mb)+(i+1)*t_order)%12]
                                 bg = "#FFF9C4" if val <= age < val+10 else "transparent"
                                 brd = "1px solid #ccc" if i != 9 else "none"
-                                html += f"<div style='flex:1; border-left:{brd}; text-align:center; padding-bottom:3px; background-color:{bg};'><div style='background-color:#3E2723; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:11px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:11px;'>{get_ss(t_ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:15px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:15px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:11px;'>{get_ss(t_ds,tj)}</div><div style='font-size:10px; border-top:1px solid #eee;'>{get_unsung(t_ds,tj)}</div><div style='font-size:10px; color:#C62828; border-top:1px solid #eee; padding-top:2px; line-height:1.2;'>년:{get_12_shinsal(t_yb, tj)}<br><span style='color:#1565C0;'>일:{get_12_shinsal(t_db, tj)}</span></div></div>"
+                                html += f"<div style='flex:1; border-left:{brd}; text-align:center; padding-bottom:3px; background-color:{bg};'><div style='background-color:#222222; color:#FFFFFF; font-weight:900; padding:4px 0; font-size:11px; border-bottom:1px solid #ccc;'>{val}세</div><div style='padding:2px; font-size:11px; color:#000000;'>{get_ss(t_ds,tc)}</div><div class='color-{get_color(tc)}' style='font-size:15px; font-weight:900;'>{tc}</div><div class='color-{get_color(tj)}' style='font-size:15px; font-weight:900;'>{tj}</div><div style='padding:2px; font-size:11px; color:#000000;'>{get_ss(t_ds,tj)}</div><div style='font-size:10px; border-top:1px solid #eee; color:#0D47A1;'>{get_unsung(t_ds,tj)}</div><div style='font-size:10px; color:#C62828; border-top:1px solid #ccc; padding-top:2px;'>{get_12_shinsal(t_yb, tj)}</div><div style='font-size:10px; color:#1565C0; border-top:1px dashed #eee; padding-top:2px;'>{get_12_shinsal(t_db, tj)}</div></div>"
                             return html + "</div></div>"
 
                         # 🚨 함수 호출할 때도 남/녀 각각의 일지(m_db, f_db)를 같이 넘겨주도록 수정합니다!
                         m_page_un_html = build_daewun_html(m_name, m_ds, m_db, m_ms, m_mb, m_yb, m_calc_d, m_order, m_age, "#1A237E")
-                        f_page_un_html = build_daewun_html(f_name, f_ds, f_db, f_ms, f_mb, f_yb, f_calc_d, f_order, f_age, "#2E7D32")
+                        f_page_un_html = build_daewun_html(f_name, f_ds, f_db, f_ms, f_mb, f_yb, f_calc_d, f_order, f_age, "#1A237E")
                         
                         couple_daewun_tables = f"<div style='margin-bottom: 25px;'>{m_page_un_html}<div style='height:20px;'></div>{f_page_un_html}</div>"
 
@@ -2911,7 +2911,7 @@ if st.session_state.get('need_calc', False):
 
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 10px;'>1. 두 사람의 운명적 만남에 대하여</h3>\n"
                             f"<div class='content-box-loose'>\n"
-                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>1) 인연의 의미</span>\n"
+                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>
                             f"[※ AI 통변 지시: 두 사람의 인연이 갖는 명리적 의미와 인연의 깊이를 서술하십시오.]\n"
                             f"</div>\n\n"
 
@@ -2983,7 +2983,7 @@ if st.session_state.get('need_calc', False):
                         
                         g_ess, count = re.subn(r'\[\s*COUPLE_DAEWUN_TABLES_HERE\s*\]', couple_daewun_tables, g_ess, flags=re.IGNORECASE)
                         if count == 0:
-                            g_ess = re.sub(r'(<h3[^>]*>🌈 커플의 인생 기상도 분석</h3>)', r'\1\n<div style="margin-top:15px;">' + couple_daewun_tables + '</div>', g_ess)
+                            g_ess = re.sub(r'(<h3[^>]*>🌈 커플의 대운 비교 분석</h3>)', r'\1\n<div style="margin-top:15px;">' + couple_daewun_tables + '</div>', g_ess)
 
                         def wrap_a4(content, title_color="#000000", title="[ 초연 전통 명리사주 풀이 ]"):
                             return (
@@ -3053,29 +3053,30 @@ if st.session_state.get('need_calc', False):
                         m_icon = "♂️"
                         f_icon = "♀️"
                         
+                        # 🚨 [표지 복구] 궁합용 표지도 A4 용지에 맞게 50.5 오리지널로 복구!
                         cover_html = (
-                            f"<div class='report-page cover-page' style='margin:0 auto; width:100%; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; -webkit-print-color-adjust: exact; box-sizing: border-box;'>\n"
-                            f"    <div style='border: 4px solid #1A237E; padding: 50px 30px; border-radius: 20px; text-align: center; background: white; width: 90%; max-width: 700px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto; box-sizing: border-box;'>\n"
-                            f"        <div style='border-bottom:4px double #1A237E; padding-bottom:20px; margin-bottom:40px;'>\n"
-                            f"            <h1 class='title-gothic' style='font-size: 26px !important; margin:0 !important; white-space: nowrap !important; letter-spacing: -2px !important;'>초연&nbsp;전통&nbsp;명리궁합&nbsp;풀이</h1>\n"
-                            f"            <div style='text-align: right; margin-top: 10px;'>\n"
-                            f"                <span class='ver-gothic' style='font-family: \"Nanum Gothic\", sans-serif; font-size: 14px; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
+                            f"<div class='report-page cover-page' style='padding:20px 0; margin:0 auto; width:100%; height:auto; min-height:120mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
+                            f"    <div style='border: 4px solid #000000; padding: 20px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
+                            f"        <div style='border-bottom: 4px double #000000; padding-bottom: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box;'>\n"
+                            f"            <h1 style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 30px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #000000 !important; letter-spacing: -1px !important; white-space: nowrap !important; line-height: 1.4 !important; text-align: center; border-bottom: none !important;'>초연&nbsp;전통&nbsp;명리궁합&nbsp;풀이</h1>\n"
+                            f"            <div style='text-align: right; margin-top: 8px;'>\n"
+                            f"                <span style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; font-weight: 700; color: #000000; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 25px 20px; border-radius: 15px; margin-bottom: 20px;'>\n"
-                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #1A237E; margin-bottom: 15px;'>♂️ 남명 : {m_name} 님 <span style='font-size:16px; color:#555;'>( {m_age}세 )</span></h2>\n"
-                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
-                            f"                <p style='margin: 0; white-space: nowrap;'>[양력] {m_sol} | [음력] {m_lun}</p>\n"
+                            f"        <div style='background: #FAFAFA; border: 1px solid #000000; padding: 18px 20px; border-radius: 14px; margin-bottom: 15px;'>\n"
+                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>♂️ 남명 : {m_name} 님 ({m_age}세)</h2>\n"
+                            f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.6;'>\n"
+                            f"                <p style='margin: 0; color: #000000;'><strong style='font-weight: 800 !important;'>[양력] {m_sol} | [음력] {m_lun}</strong></p>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <div style='background:#F8F9FA; border: 1px solid #E8EAF6; padding: 25px 20px; border-radius: 15px;'>\n"
-                            f"            <h2 style='font-size: 24px; font-weight: 800; color: #1A237E; margin-bottom: 15px;'>♀️ 여명 : {f_name} 님 <span style='font-size:16px; color:#555;'>( {f_age}세 )</span></h2>\n"
-                            f"            <div style='font-size: 15px; font-weight: 600; color: #555; line-height: 1.8;'>\n"
-                            f"                <p style='margin: 0; white-space: nowrap;'>[양력] {f_sol} | [음력] {f_lun}</p>\n"
+                            f"        <div style='background: #FAFAFA; border: 1px solid #000000; padding: 18px 20px; border-radius: 14px; margin-bottom: 24px;'>\n"
+                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>♀️ 여명 : {f_name} 님 ({f_age}세)</h2>\n"
+                            f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.6;'>\n"
+                            f"                <p style='margin: 0; color: #000000;'><strong style='font-weight: 800 !important;'>[양력] {f_sol} | [음력] {f_lun}</strong></p>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <p style='font-size: 18px; margin-top: 40px; font-weight: 800;'>{today_str}</p>\n"
-                            f"        <p style='font-size: 22px; font-weight: 800; color: #1A237E; margin-top: 15px;'>초연 전통명리 연구소</p>\n"
+                            f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 17px; margin-top: 25px; margin-bottom: 0; font-weight: 800; color: #000000; letter-spacing: 0.5px;'>{today_str}</p>\n"
+                            f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 24px; font-weight: 900; color: #000000; margin-top: 8px; margin-bottom: 0; letter-spacing: 1px;'>초연 전통명리 연구소</p>\n"
                             f"    </div>\n"
                             f"</div>"
                         )
