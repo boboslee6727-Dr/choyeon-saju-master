@@ -2911,8 +2911,7 @@ if st.session_state.get('need_calc', False):
 
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 10px;'>1. 두 사람의 운명적 만남에 대하여</h3>\n"
                             f"<div class='content-box-loose'>\n"
-                            f"<span class='sub-title' style='font-size: 18px; font-weight: 900; color: #000000;'>
-                            f"[※ AI 통변 지시: 두 사람의 인연이 갖는 명리적 의미와 인연의 깊이를 서술하십시오.]\n"
+                            f"[※ AI 통변 지시: 두 사람의 명조(남명: {m_ys}{m_yb}년 {m_ms}{m_mb}월 {m_ds}{m_db}일 {m_hs}{m_hb}시 / 여명: {f_ys}{f_yb}년 {f_ms}{f_mb}월 {f_ds}{f_db}일 {f_hs}{f_hb}시)를 파악하여 인연이 갖는 명리적 의미와 인연의 깊이를 에세이로 서술하십시오.]\n"
                             f"</div>\n\n"
 
                             f"<h3 style='color: #000000; font-size: 24px; font-weight: 900; margin-top: 25px;'>2. 커플의 대운 비교 분석</h3>\n"
