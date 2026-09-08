@@ -2467,7 +2467,7 @@ if st.session_state.get('need_calc', False):
                         report_1_full_html = re.sub(r'min-height:\s*250mm\s*;?', 'min-height: 120mm;', report_1_full_html, flags=re.IGNORECASE)
                         report_1_full_html = re.sub(r'padding:\s*40px\s+0\s*;?', 'padding: 10px 0;', report_1_full_html, flags=re.IGNORECASE)
                         report_1_full_html = re.sub(r'padding:\s*42px\s+24px\s*;?', 'padding: 20px 24px;', report_1_full_html, flags=re.IGNORECASE)
-                    report_1_full_html = re.sub(r'margin-bottom:\s*28px\s*;?', 'margin-bottom: 15px;', report_1_full_html, flags=re.IGNORECASE)
+                        report_1_full_html = re.sub(r'margin-bottom:\s*28px\s*;?', 'margin-bottom: 15px;', report_1_full_html, flags=re.IGNORECASE)
 
                     # 7. 최종 렌더링 세팅
                     report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
