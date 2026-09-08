@@ -1870,6 +1870,10 @@ if st.session_state.get('need_calc', False):
                         report_1_full_html = report_1_full_html.replace("{full_content_clean_placeholder}", full_content_clean)
                         
                         st.session_state['saved_report_html'] = report_1_full_html
+                    
+                    # 🚨 [여기!] 지워졌던 1-4의 except 뚜껑을 복구합니다. (들여쓰기 16칸)
+                    except Exception as e: 
+                        st.error(f"1-4 연산 오류: {e}")
 
             # ==============================================================
             # [A-2] 2. 테마별 특성화 상담 (85.5버전 프롬프트 완벽 이식 & Q&A 추가)
