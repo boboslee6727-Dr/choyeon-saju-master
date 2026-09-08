@@ -2702,13 +2702,14 @@ if st.session_state.get('need_calc', False):
                             f"{closing_original}"
                         )
 
+                        # 🚨 괄호 밖에서 상품명을 추출해야 에러가 나지 않습니다.
+                        dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
+                        
                         cover_html = (
-                            dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
-
-                            f"<div class='report-page cover-page' style='padding:20px 0; margin:0 auto; width:100%; height:auto; min-height:120mm; ...'>\n"
-                            f"    <div style='border: 4px solid #000000; padding: 20px 24px; border-radius: 20px; text-align: center; ...'>\n"
-                            f"        <div style='border-bottom: 4px double #000000; padding-bottom: 12px; margin-bottom: 15px; ...'>\n"
-                            f"            <h1 style='...'>{dynamic_title}</h1>\n"                            f"            <div style='text-align: right; margin-top: 8px;'>\n"
+                            f"<div class='report-page cover-page' style='padding:20px 0; margin:0 auto; width:100%; height:auto; min-height:120mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact;'>\n"
+                            f"    <div style='border: 4px solid #000000; padding: 20px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
+                            f"        <div style='border-bottom: 4px double #000000; padding-bottom: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box;'>\n"
+                            f"            <h1 style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 30px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #000000 !important; letter-spacing: -1px !important; white-space: nowrap !important; line-height: 1.4 !important; text-align: center; border-bottom: none !important;'>{dynamic_title}</h1>\n"
                             f"                <span style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; font-weight: 700; color: #000000; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                             f"            </div>\n"
                             f"        </div>\n"
