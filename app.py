@@ -2520,12 +2520,13 @@ if st.session_state.get('need_calc', False):
                         ai_text = "\n".join([line.lstrip() for line in res.text.split("\n")])
                         
                         # 🚨 [수술 적용] 혹시라도 AI가 말귀를 못 알아듣고 ** 를 썼다면 <b> 태그로 싹 다 바꿔버립니다!
-                        import re
                         ai_text = re.sub(r'\*\*(.*?)\*\*', r'<b>\1</b>', ai_text)
-
+                        
                         # 🚨 [수술 2]: AI가 골든텍스트와 소스 코드를 화면에 그대로 토해내는 오지랖 완벽 절단!
                         if "[CHOYEON_GOLDEN_TEXT_HERE]" in ai_text:
-                            ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", choyeon_golden_text)
+                            # 마크다운의 4칸 들여쓰기(코드블록) 인식 오류를 막기 위해 공백 싹 제거 후 밀착!
+                            clean_golden = choyeon_golden_text.replace("\n", "").replace("    ", "").replace("  ", "")
+                            ai_text = ai_text.replace("[CHOYEON_GOLDEN_TEXT_HERE]", clean_golden)
                         
                         # 2. 표 HTML 정리
                         un_html_clean = un_html.replace("\n", " ").replace("\r", "")
