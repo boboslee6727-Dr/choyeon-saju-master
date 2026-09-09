@@ -2905,7 +2905,7 @@ if st.session_state.get('need_calc', False):
                         f_s12_y = ", ".join(list(dict.fromkeys([get_12_shinsal(f_yb, j) for j in f_jjis if get_12_shinsal(f_yb, j) != "-"])))
                         f_s12_d = ", ".join(list(dict.fromkeys([get_12_shinsal(f_db, j) for j in f_jjis if get_12_shinsal(f_db, j) != "-"])))
 
-essay_prompt = (
+                        essay_prompt = (
                             f"{db_header}\n"
                             f"[SYSTEM ROLE: 초연시공명리 최고위 커플 궁합 & 부부 심리 컨설턴트]\n"
                             f"📌 [참고용 보조 팩트 - 남명 12신살] 년지 기준: {m_s12_y} / 일지 기준: {m_s12_d}\n"
