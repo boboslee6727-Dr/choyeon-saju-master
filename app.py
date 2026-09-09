@@ -101,7 +101,32 @@ st.markdown("""<style>
         background-color: #008937 !important;
         color: #FFFFFF !important;
     }
-
+    /* 🛡️ [수술 장착] 박사님이 하사하신 표지 전용 철벽 CSS (Ver 86 모듈식 이식) */
+    /* 1. 표지 영역: 나눔명조(Nanum Myeongjo) 최우선 보장 (일반 문장체 풀림 차단) */
+    .cover-page, .cover-page *, div.cover-page, div.cover-page * { 
+        font-family: 'Nanum Myeongjo', serif !important; 
+        box-sizing: border-box !important; 
+    }
+    /* 2. 표지 내부 텍스트 여백 및 들여쓰기 초기화 (중앙 정렬 삐뚤어짐 방지) */
+    .cover-page p, .cover-page div, .cover-page span, .cover-page h1, .cover-page h2 { 
+        text-indent: 0 !important; 
+    }
+    /* 3. 표지 박스 기본 속성 (A4 인쇄 정밀 대응 및 완벽 중앙 정렬) */
+    .cover-page { 
+        display: flex !important; 
+        flex-direction: column; 
+        justify-content: center; 
+        align-items: center; 
+        padding: 0 !important; 
+        background: #ffffff; 
+        margin: 0 auto; 
+        box-sizing: border-box; 
+        width: 210mm; 
+        height: 297mm; 
+        min-height: 297mm; 
+        page-break-after: always; 
+        -webkit-print-color-adjust: exact; 
+    }
     .ai-title-l1 { font-size: 22px !important; font-weight: 900 !important; color: #000000 !important; margin-top: 35px !important; margin-bottom: 15px !important; border-bottom: 2px solid #000000 !important; padding-bottom: 5px !important; line-height: 1.4 !important; font-family: sans-serif !important; display: block !important; }
     .ai-title-l2 { font-size: 18px !important; font-weight: 900 !important; color: #000000 !important; margin-top: 22px !important; margin-bottom: 10px !important; line-height: 1.4 !important; font-family: sans-serif !important; display: block !important; }
     .vip-inset-frame { border: 2px solid #3E2723 !important; border-radius: 12px !important; padding: 30px 25px !important; background-color: #FFFFFF !important; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
@@ -1147,30 +1172,34 @@ if st.session_state.get('need_calc', False):
                 f"일-시지:{get_ji_rel_set(db, hb)}, 월-년지:{get_ji_rel_set(mb, yb)}"
             )
 
-            # 🚨 [수술 1] 선택한 상품명(u_product)에서 앞의 숫자(예: '1-1. ', '2-1. ')를 떼어내고 순수 타이틀만 추출합니다.
-            dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
+            # 🚨 [수술 1] 모듈식 로직 이식: 불필요한 기호 멸종 및 타이틀 정제
+            raw_title = str(u_product or "초연 전통 명리 사주풀이").replace("🏮", "").replace("🎯", "")
+            for tag in ["<br>", "<br/>", "<br />", "\n", "\r"]:
+                raw_title = raw_title.replace(tag, " ")
+            clean_title = " ".join(raw_title.split()).split('. ')[-1] if '. ' in " ".join(raw_title.split()) else " ".join(raw_title.split())
+            clean_u_name = str(u_name or "무명").strip()
 
-            # 🚨 [수술 2] 1인용 표지도 높이를 260mm로 고정하여 A4 정중앙에 배치하고, 밑바닥 실선(border)을 완벽히 제거합니다!
+            # 🚨 [수술 2] 모듈식 디자인 완벽 이식: 진남색 테두리와 그림자(box-shadow), 나눔명조 강제 통일
             cover_html = (
-                f"<div class='report-page cover-page' style='padding:0; margin:0 auto; width:100%; height:260mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact; border:none !important; box-shadow:none !important;'>\n"
-                f"    <div style='border: 4px solid #000000; padding: 30px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
-                f"        <div style='border-bottom: 4px double #000000; padding-bottom: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box;'>\n"
-                f"            <h1 class='title-gothic' style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 30px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #000000 !important; letter-spacing: -1px !important; white-space: nowrap !important; line-height: 1.4 !important; text-align: center; border-bottom: none !important;'>{dynamic_title}</h1>\n"
+                f"<div class='report-page cover-page' style='padding:0; margin:0 auto; width:210mm; height:297mm; min-height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; box-sizing: border-box; -webkit-print-color-adjust: exact;'>\n"
+                f"    <div style='border: 4px solid #1A237E; padding: 42px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto; box-sizing: border-box;'>\n"
+                f"        <div style='border-bottom: 4px double #1A237E; padding-bottom: 16px; margin-bottom: 28px; width: 100%; box-sizing: border-box;'>\n"
+                f"            <h1 style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 28px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #111111 !important; letter-spacing: -1.2px !important; white-space: nowrap !important; word-break: keep-all !important; line-height: 1.2 !important; text-align: center;'>{clean_title}</h1>\n"
                 f"            <div style='text-align: right; margin-top: 8px;'>\n"
-                f"                <span class='ver-gothic' style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; font-weight: 700; color: #000000; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
+                f"                <span style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; font-weight: 700; color: #555555; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                 f"            </div>\n"
                 f"        </div>\n"
-                f"        <div style='background: #FAFAFA; border: 1px solid #000000; padding: 18px 20px; border-radius: 14px; margin-bottom: 15px;'>\n"
-                f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>{p_icon} 신청인 : {u_name} 님</h2>\n"
-                f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.6;'>\n"
-                f"                <p style='margin: 0; color: #000000;'><strong style='font-weight: 800 !important;'>[양력] {sol_str} | [음력] {lun_str}</strong></p>\n"
-                f"                <p style='margin: 5px 0 0 0; color: #000000; white-space: nowrap;'>{time_str}</p>\n"
+                f"        <div style='background: #F8F9FA; border: 1px solid #E8EAF6; padding: 22px 20px; border-radius: 14px; margin-bottom: 24px;'>\n"
+                f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 24px; font-weight: 900; color: #1A237E; margin: 0 0 10px 0;'>{p_icon} {clean_u_name} 님</h2>\n"
+                f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 16px; line-height: 1.8;'>\n"
+                f"                <p style='margin: 0; white-space: nowrap; color: #000000;'><strong style='font-weight: 900 !important;'>[양력] {sol_str} | [음력] {lun_str}</strong></p>\n"
+                f"                <p style='margin: 4px 0 0 0; white-space: nowrap; font-weight: 800; color: #1A237E;'>태어난 시간 : {time_str}</p>\n"
                 f"            </div>\n"
                 f"        </div>\n"
-                f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 17px; margin-top: 25px; margin-bottom: 0; font-weight: 800; color: #000000; letter-spacing: 0.5px;'>{today_str}</p>\n"
-                f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 24px; font-weight: 900; color: #000000; margin-top: 8px; margin-bottom: 0; letter-spacing: 1px;'>초연 전통명리 연구소</p>\n"
+                f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 18px; margin-top: 35px; margin-bottom: 0; font-weight: 800; color: #000000; letter-spacing: 0.5px;'>{today_str}</p>\n"
+                f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 24px; font-weight: 900; color: #1A237E; margin-top: 20px; margin-bottom: 0; letter-spacing: 1px;'>초연 전통명리 연구소</p>\n"
                 f"    </div>\n"
-                f"</div>"
+                f"</div>\n"
             )
             st.session_state['saved_report_cover'] = cover_html
 
@@ -1495,7 +1524,7 @@ if st.session_state.get('need_calc', False):
 
             if ilju_master_data:
                 ilju_master_prompt_context = (
-                    f"🎯 [초연 전통명리의 뼈때리는 팩트폭격 - {user_ilju_key}일주 전용 마스터 비기]\n"
+                    f" {user_ilju_key}일주 전용 마스터 비기]\n"
                     f"- 물상 및 성향 요약: {ilju_master_data.get('summary', '')}\n"
                     f"- 심리적 관점: {ilju_master_data.get('psychology', '')}\n"
                     f"- 육친적 관점: {ilju_master_data.get('family', '')}\n"
@@ -1503,7 +1532,7 @@ if st.session_state.get('need_calc', False):
                     f"- 지장간 좌법(座法) 분석: {ilju_master_data.get('jijanggan_zaBeob', '')}\n"
                     f"- 인종법(引從法) 숨겨진 내면: {ilju_master_data.get('injong_beob', '')}\n"
                     f"- 신살, 변곡점, 건강, 과숙/고신, 도망역: {ilju_master_data.get('shinsal_warnings', '')}\n"
-                    f"- 💥 뼈때리는 팩트폭격 핵심 비기: {ilju_master_data.get('choyeon_secret', '')}\n"
+                    f"- 초연 사주박사 핵심 비기: {ilju_master_data.get('choyeon_secret', '')}\n"
                 )
             else:
                 ilju_master_prompt_context = ""
@@ -1522,21 +1551,28 @@ if st.session_state.get('need_calc', False):
                 f"- marital_status: {u_marital}\n"
                 f"- 선택 상품: {u_product}\n"
                 f"- 격국 팩트: {gyukgook_detail}\n"
-                f"- 12신살 팩트: 년지 기준({s12_y_str}), 일지 기준({s12_d_str})\n"  # 🚨 12신살 팩트 추가!
+                f"- 12신살 팩트 (보조 참고용): 년지 기준({s12_y_str}), 일지 기준({s12_d_str})\n"  # 🚨 참고용으로 힘 빼기!
                 f"- 실제 타격받는 공망 궁위 팩트: {gongmang_actual}\n"
                 f"- 올해({curr_y}년) 삼재 여부: {cur_samjae}\n" 
                 f"- 원국 삼형살(인사신/축술미) 팩트: {samhyung_warn}\n"
                 f"- 원국 내부 묘고(입고/개고) 작용: {won_guk_vaults_str}\n"
-                f"- 현재 행운(대/세/월운) 외부 충격에 의한 묘고 작용: {hang_un_vaults_str}\n"
+                f"- 현재 행운(대/세/월운) 외부 충격에 의한 묘고 작용: {hang_un_vaults_str}\n\n"
+                
+                f"[ 🚨 최상위 HTML 렌더링 서식 통제 규칙 (후처리 파서 대체용) ]\n"
+                f"AI는 텍스트를 출력할 때 마크다운(##, **, -, *)을 절대 사용하지 말고, 반드시 아래 지정된 HTML 태그 서식만을 사용하여 직접 렌더링할 것.\n"
+                f"1. 일반 본문 문단 (모든 설명글): 반드시 아래 p 태그로 감싸서 출력할 것.\n"
+                f"   <p style='font-size: 16px; font-weight: 400; line-height: 1.85; text-indent: 1.0em; margin-bottom: 12px; color: #222222;'>내용</p>\n"
+                f"2. 내용 중 하위 소제목 (◆, ▶, (1) 등으로 소주제를 분리할 때): 반드시 아래 div 태그로 감쌀 것.\n"
+                f"   <div style='font-size: 16.5px; font-weight: 900; color: #1A237E; margin-top: 16px; margin-bottom: 14px;'><b>◆ 소제목</b></div>\n"
+                f"3. 🚨 이름 및 강조단어 볼드체 강제: 내담자의 이름({disp_name}, {disp_first_name})과 통변의 핵심 강조 단어는 절대로 마크다운(**) 기호를 쓰지 말고, 반드시 HTML 태그인 <b>단어</b> 형태로 감싸서 굵고 진하게 표시할 것.\n\n"
+                
                 f"🚨 [AI 환각 및 UI 파괴 원천 차단 절대 규칙]\n"
                 f"1. 서론 철저 금지: '안녕하십니까', '기쁩니다' 등의 인사말이나 감성적인 도입부를 절대로 작성하지 마십시오.\n"
                 f"2. 호칭 절대 규칙: 각 대목차의 첫 문장은 반드시 '{disp_name}님은~'으로 격식있게 시작하고, 그 이후 본문에서는 친근하게 '{disp_first_name}님은~'으로 부르십시오.\n"
                 f"3. 🚨 공망 소설 금지: 위 '실제 타격받는 공망 궁위 팩트'에 명시된 자리만 공망으로 해석하십시오.\n"
                 f"4. 괄호 병기 금지: 에세이 작성 시 전문 용어나 한자를 괄호 안에 병기하는 행위를 금지합니다.\n"
                 f"5. HTML 훼손 금지: </div> 태그를 임의로 닫거나 마크다운 기호를 남발하지 마십시오.\n"
-                f"6. 🚨 12신살 통변 필수: 사주 분석 시 '년지 기준(사회적 무대)'과 '일지 기준(개인적/내면적 무대)'의 12신살 작용을 반드시 종합하여 입체적으로 해석하십시오.\n"
-                # 🚨 [수술 적용] AI에게 이름과 강조 단어를 무조건 HTML <b> 태그로 쓰도록 강력 세뇌!
-                f"7. 🚨 이름 및 강조단어 볼드체 강제: 내담자의 이름({disp_name}, {disp_first_name})과 통변의 핵심 강조 단어는 절대로 마크다운(**) 기호를 쓰지 말고, 반드시 HTML 태그인 <b>단어</b> 형태로 감싸서 굵고 진하게 표시하십시오.\n"
+                f"6. 🚨 통변 비중 원칙 (십성/운성 중심): 명리 해석의 뼈대는 반드시 '십성(十星)'과 '12운성'에 두고, 제공된 '12신살' 팩트는 과도하게 강조하지 말고 십성 해석을 거드는 가벼운 양념(보조 기표)으로만 활용하십시오.\n"
             )
 
             if u_gender == '남성':
@@ -2869,24 +2905,17 @@ if st.session_state.get('need_calc', False):
                         f_s12_y = ", ".join(list(dict.fromkeys([get_12_shinsal(f_yb, j) for j in f_jjis if get_12_shinsal(f_yb, j) != "-"])))
                         f_s12_d = ", ".join(list(dict.fromkeys([get_12_shinsal(f_db, j) for j in f_jjis if get_12_shinsal(f_db, j) != "-"])))
 
-                        essay_prompt = (
+essay_prompt = (
                             f"{db_header}\n"
                             f"[SYSTEM ROLE: 초연시공명리 최고위 커플 궁합 & 부부 심리 컨설턴트]\n"
                             f"📌 [참고용 보조 팩트 - 남명 12신살] 년지 기준: {m_s12_y} / 일지 기준: {m_s12_d}\n"
                             f"📌 [참고용 보조 팩트 - 여명 12신살] 년지 기준: {f_s12_y} / 일지 기준: {f_s12_d}\n\n"
                             f"제공된 남명과 여명의 사주 원국 및 시공간 팩트 데이터를 바탕으로, \n"
                             f"두 사람의 음양오행적 조화, 육친적 인연의 깊이, 심리적 기류, 대운 궤도의 교차 동조성 및 시간방향(時間方向) 상호보완성을 엄정하고 입체적으로 통변할 것.\n\n"
-                            f"🚨 [절대 강제: 3분할 파싱 태그 서식 엄수]\n"
-                            f"■ 시스템이 남명 풀이, 여명 풀이, 종합 궁합 풀이를 개별 페이지로 분리하여 렌더링할 수 있도록 반드시 아래 태그 구조를 정확히 사용하여 작성할 것.\n"
-                            f"■ [목차 임의 변경 절대 금지]: [MALE_START]~[MALE_END], [FEMALE_START]~[FEMALE_END] 구간 안에서는 \n"
-                            f"반드시 아래 지정된 '1. 성격 및 가치관 / 2. 사주팔자의 요약' 목차와 그 하위 소제목만 사용할 것.\n"
-                            f"이 구간 안에서 다른 개인 사주 상품(1-1 등)에서 쓰는 것과 같은 별도의 대제목(예: 'OO일주의 진정한 초상', '육친관계' 등)을 새로 만들어내거나, 목차를 늘리는 것을 절대 금지한다.\n\n"
-                            f"[ 🚨문단 레이아웃 및 AI 환각 통제 명령 ]\n"
-                            f"1. 난해한 명리학 용어 해설 배제, 현실적 결론 직행.\n"
-                            f"2. 모든 문단은 <p style='text-indent: 1em;'> 태그 적용.\n"
-                            f"3. 표(Table) 생성 절대 금지.\n"
-                            f"4. 🚨 이름 및 강조단어 볼드체 강제: 두 사람의 이름({m_name}, {f_name})과 핵심 통변 단어는 절대 마크다운(**) 기호를 쓰지 말고, 반드시 HTML 태그인 <b>단어</b> 형태로 감싸서 굵고 진하게 강조할 것.\n"
-                            f"5. 🚨 통변 비중 원칙: 명리 해석의 뼈대는 반드시 '십성(十星)'과 '12운성'에 두십시오. '12신살'은 과도하게 강조하지 말고, 십성의 해석을 거드는 가벼운 보조적 양념으로만 부드럽게 활용하십시오.\n\n"
+                            
+                            f"🚨 [절대 강제: 3분할 파싱 태그 서식 및 목차 엄수]\n"
+                            f"■ 시스템이 남명 풀이, 여명 풀이, 종합 궁합 풀이를 개별 페이지로 분리하여 렌더링할 수 있도록 반드시 아래 구조를 정확히 사용하여 작성할 것.\n"
+                            f"■ [MALE_START]~[MALE_END], [FEMALE_START]~[FEMALE_END] 구간 안에서는 반드시 아래 지정된 '1. 성격 및 가치관 / 2. 사주팔자의 요약' 목차와 하위 소제목만 사용할 것 (임의 추가 절대 금지).\n\n"
 
                             f"[MALE_START]\n"
                             f"<h3 style='color:#000000; font-size: 24px; font-weight: 900; margin-top: 15px;'>1. 성격 및 가치관</h3>\n"
@@ -3071,39 +3100,44 @@ if st.session_state.get('need_calc', False):
                         safe_g_ess = g_ess.replace("</div>\n</div>\n</div>", "</div>\n").replace("</div>\n</div>", "</div>\n")
 
 
-                        # 🚨 1. 표지 강제 슬림화 및 타이틀을 선택상품명으로 동적 연계
-                        dynamic_title = u_product.split('. ')[-1] if '. ' in u_product else u_product
-                        
-                        # 🚨 [수술 포인트] 기호를 ♂️ / ♀️ 로 변경하고 직관적인 이름(m_icon, f_icon)으로 세팅합니다.
+                        # 🚨 [수술 1] 모듈식 로직 이식: 불필요한 기호 멸종 및 타이틀 정제
+                        raw_title = str(u_product or "초연 시공명리 궁합풀이").replace("🏮", "").replace("🎯", "")
+                        for tag in ["<br>", "<br/>", "<br />", "\n", "\r"]:
+                            raw_title = raw_title.replace(tag, " ")
+                        clean_title = " ".join(raw_title.split()).split('. ')[-1] if '. ' in " ".join(raw_title.split()) else " ".join(raw_title.split())
+                        clean_u_name = str(m_name or "무명").strip()
+                        clean_p_name = str(f_name or "무명").strip()
+
+                        # 🚨 [수술 포인트] 직관적인 기호 세팅
                         m_icon = "♂️"
                         f_icon = "♀️"
-                        
-                        # 🚨 [표지 복구] 궁합용 표지도 A4 용지에 맞게 50.5 오리지널로 복구!
+
+                        # 🚨 [수술 2] 모듈식 디자인 완벽 이식: 진남색(남명)과 적색(여명) 박스 컬러 분리!
                         cover_html = (
-                            f"<div class='report-page cover-page' style='padding:0; margin:0 auto; width:100%; height:260mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; -webkit-print-color-adjust: exact; border:none !important; box-shadow:none !important;'>\n"
-                            f"    <div style='border: 4px solid #000000; padding: 30px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; margin: auto; box-sizing: border-box;'>\n"
-                            f"        <div style='border-bottom: 4px double #000000; padding-bottom: 12px; margin-bottom: 15px; width: 100%; box-sizing: border-box;'>\n"
-                            f"            <h1 style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 30px !important; font-weight: 900 !important; margin: 0 !important; padding: 0 !important; color: #000000 !important; letter-spacing: -1px !important; white-space: nowrap !important; line-height: 1.4 !important; text-align: center; border-bottom: none !important;'>{dynamic_title}</h1>\n"
+                            f"<div class='report-page cover-page' style='padding:0; margin:0 auto; width:210mm; height:297mm; min-height:297mm; display:flex; flex-direction:column; justify-content:center; align-items:center; page-break-after: always; box-sizing: border-box; -webkit-print-color-adjust: exact;'>\n"
+                            f"    <div style='border: 4px solid #1A237E; padding: 42px 24px; border-radius: 20px; text-align: center; background: #FFFFFF; width: 92%; max-width: 680px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); margin: auto; box-sizing: border-box;'>\n"
+                            f"        <div style='border-bottom: 4px double #1A237E; padding-bottom: 16px; margin-bottom: 28px; width: 100%; box-sizing: border-box;'>\n"
+                            f"            <h1 style='font-family: \"Nanum Myeongjo\", serif !important; font-size: 28px !important; font-weight: 800 !important; margin: 0 !important; padding: 0 !important; color: #111111 !important; letter-spacing: -1.2px !important; white-space: nowrap !important; word-break: keep-all !important; line-height: 1.2 !important; text-align: center;'>{clean_title}</h1>\n"
                             f"            <div style='text-align: right; margin-top: 8px;'>\n"
-                            f"                <span style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; font-weight: 700; color: #000000; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
+                            f"                <span style='font-family: \"Nanum Myeongjo\", serif; font-size: 14px; font-weight: 700; color: #555555; letter-spacing: 1px;'>{APP_VERSION}</span>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <div style='background: #FAFAFA; border: 1px solid #000000; padding: 18px 20px; border-radius: 14px; margin-bottom: 15px;'>\n"
-                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>♂️ 남명 : {m_name} 님 ({m_age}세)</h2>\n"
-                            f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.6;'>\n"
-                            f"                <p style='margin: 0; color: #000000;'><strong style='font-weight: 800 !important;'>[양력] {m_sol} | [음력] {m_lun}</strong></p>\n"
+                            f"        <div style='background: #F8F9FA; border: 1px solid #E8EAF6; padding: 16px 18px; border-radius: 14px; margin-bottom: 14px;'>\n"
+                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 24px; font-weight: 800; color: #1565C0; margin: 0 0 6px 0;'>{m_icon} 남명 : {clean_u_name} 님 ({m_age}세)</h2>\n"
+                            f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 16px; line-height: 1.6;'>\n"
+                            f"                <p style='margin: 0; text-align: center; white-space: nowrap; color: #000000;'><strong style='font-weight: 800;'>[양력] {m_sol} | [음력] {m_lun}</strong></p>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <div style='background: #FAFAFA; border: 1px solid #000000; padding: 18px 20px; border-radius: 14px; margin-bottom: 24px;'>\n"
-                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 20px; font-weight: 800; color: #000000; margin: 0 0 8px 0; border-bottom: none !important;'>♀️ 여명 : {f_name} 님 ({f_age}세)</h2>\n"
-                            f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 15px; line-height: 1.6;'>\n"
-                            f"                <p style='margin: 0; color: #000000;'><strong style='font-weight: 800 !important;'>[양력] {f_sol} | [음력] {f_lun}</strong></p>\n"
+                            f"        <div style='background: #FFF3E0; border: 1px solid #FBE9E7; padding: 16px 18px; border-radius: 14px; margin-bottom: 22px;'>\n"
+                            f"            <h2 style='font-family: \"Nanum Myeongjo\", serif; font-size: 24px; font-weight: 800; color: #C62828; margin: 0 0 6px 0;'>{f_icon} 여명 : {clean_p_name} 님 ({f_age}세)</h2>\n"
+                            f"            <div style='font-family: \"Nanum Myeongjo\", serif; font-size: 16px; line-height: 1.6;'>\n"
+                            f"                <p style='margin: 0; text-align: center; white-space: nowrap; color: #000000;'><strong style='font-weight: 800;'>[양력] {f_sol} | [음력] {f_lun}</strong></p>\n"
                             f"            </div>\n"
                             f"        </div>\n"
-                            f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 17px; margin-top: 25px; margin-bottom: 0; font-weight: 800; color: #000000; letter-spacing: 0.5px;'>{today_str}</p>\n"
-                            f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 24px; font-weight: 900; color: #000000; margin-top: 8px; margin-bottom: 0; letter-spacing: 1px;'>초연 전통명리 연구소</p>\n"
+                            f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 18px; margin-top: 32px; margin-bottom: 0; font-weight: 800; color: #000000; letter-spacing: 0.5px;'>{today_str}</p>\n"
+                            f"        <p style='font-family: \"Nanum Myeongjo\", serif; font-size: 24px; font-weight: 900; color: #1A237E; margin-top: 24px; margin-bottom: 0; letter-spacing: 1px;'>초연 전통명리 연구소</p>\n"
                             f"    </div>\n"
-                            f"</div>"
+                            f"</div>\n"
                         )
                         st.session_state['saved_report_gh_cover'] = cover_html
 
